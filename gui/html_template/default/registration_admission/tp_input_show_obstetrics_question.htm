@@ -1,0 +1,233 @@
+<table border=0 cellpadding=2 width=100%>
+    <tr bgcolor='#f6f6f6'>
+        <td colspan="2">
+            $TP_Warning
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td colspan="2">
+            <FONT SIZE=3  FACE='Arial' color='#000066'>
+                <b>1.$TP_LIST_SICK:</b>                
+            </FONT>
+        </td>        
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td colspan="2" style="padding-left:15px;">
+            <input name='list_sick' id='list_sick' size="110" readonly value='$TP_benhly' >
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td colspan="2">
+            <FONT SIZE=3  FACE='Arial' color='#000066'>
+                <b>
+                    2.$TP_HISTORY_SICK:
+                </b>                
+            </FONT>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td colspan="2" style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+            + &nbsp; $LDTSBenhCN <i>($note)</i>
+            </FONT>
+            <input name='banthan' id='banthan' size="110" readonly value='$TP_canhan' >
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td colspan="2" style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+            + &nbsp; $LDTSBenhGD
+            </FONT>
+            <input name='banthan' id='banthan' size="110" readonly value='$TP_giadinh' >
+        </td>
+    </tr>   
+    <tr bgcolor='#f6f6f6'>
+        <td colspan="2">
+            <FONT SIZE=3  FACE='Arial' color='#000066'>
+                <b>
+                    3.$TP_HISTORY_GYN:
+                </b>                
+            </FONT>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_batdauthaykinh
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <table border=0 cellpadding=2 width="100%">
+                <tr bgcolor='#f6f6f6'>
+                    <td width="50%">
+                        <input type='text' name='batdauthaykinh' id='batdauthaykinh' size=10 maxlength='255' value='$TP_thaykinh_input' onchange="checkYear('thaykinh',this.value)" />&nbsp;&nbsp;
+                    </td>
+                    <td width="20%">
+                        <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                            $TP_tuoithaykinh
+                        </FONT>
+                    </td>
+                    <td>
+                        <input type='text' name='tuoithaykinh' id='tuoithaykinh' size=10 maxlength='5' value='$TP_tuoithaykinh_input' onchange="checkTuoi('thaykinh',this.value)" />
+                    </td>                   
+                </tr>
+            </table>
+        </td>                
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_tinhchatkinh
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <table border=0 cellpadding=2 width="100%">
+                <tr bgcolor='#f6f6f6'>
+                    <td width="50%">
+                        <input type='text' name='tinhchatkinh' id='tinhchatkinh' size=20 maxlength='255' value='$TP_tinhchat_input' />
+                    </td>                    
+                    <td width="20%">
+                        <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                            $TP_luongkinh
+                        </FONT>                        
+                    </td>
+                    <td>
+                        <input type='text' name='luongkinh' id='luongkinh' size=20 maxlength='5' value='$TP_luongkinh_input' />
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td width="30%" style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_chuki
+            </FONT>            
+        </td>
+        <td style="padding-left:15px;">
+            <table border=0 cellpadding=2 width="100%">
+                <tr bgcolor='#f6f6f6'>
+                    <td width="50%">
+                        <input type='text' name='chuki' id='chuki' size=10 maxlength='5' value='$TP_chuki_input' onchange="CheckValue_number('chuki','$TP_chuki_input')"/>  $LDday1
+                    </td>                    
+                    <td width="20%">
+                        <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                            $TP_songaykinh
+                        </FONT>
+                    </td>
+                    <td>
+                        <input type='text' name='songaykinh' id='songaykinh' size=10 maxlength='5' value='$TP_songaykinh_input' onchange="CheckValue_number('songaykinh','$TP_chuki_input')"/>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_kinhcuoi_from
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <table border=0 cellpadding=2 width="100%">
+                <tr bgcolor='#f6f6f6'>
+                    <td width="50%">
+                        $TP_INPUT_DATE_FROM
+                    </td>
+                    <td width="20%">
+                        <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                            $TP_daubung
+                        </FONT>
+                    </td>
+                    <td>
+                        $TP_daubung_input
+                    </td>
+                </tr>
+            </table>
+        </td>                
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        $TP_TIME
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_laychongnam
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <table border=0 cellpadding=2 width="100%">
+                <tr bgcolor='#f6f6f6'>
+                    <td width="50%">
+                        <input type='text' name='namlaychong' id='namlaychong' size=20 maxlength='255' value='$TP_laychongnam_input' onchange="checkYear('laychong',this.value)" />
+                    </td>
+                    <td width="20%">
+                        <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                            $TP_tuoilaychong
+                        </FONT>
+                    </td>
+                    <td>
+                        <input type='text' name='tuoilaychong' id='tuoilaychong' size=10 maxlength=10 value='$TP_tuoilaychong_input' onchange="checkTuoi('laychong',this.value)" />
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_namhetkinh
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <table border=0 cellpadding=2 width="100%">
+                <tr bgcolor='#f6f6f6'>
+                    <td width="50%">
+                        <input type='text' name='namhetkinh' id='namhetkinh' size=20 maxlength='255' value='$TP_namhetkinh_input' onchange="checkYear('hetkinh',this.value)" />
+                    </td>
+                    <td width="20%">
+                        <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                            $TP_tuoihetkinh
+                        </FONT>
+                    </td>
+                    <td>
+                        <input type='text' name='tuoihetkinh' id='tuoihetkinh' size=10 maxlength=10 value='$TP_tuoihetkinh_input' onchange="checkTuoi('hetkinh',this.value)" />
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_benhphukhoa
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <textarea name="benhphukhoa" id="benhphukhoa" maxlength='255' cols="58" rows="1">$TP_benhphukhoa_input</textarea>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td colspan="2">
+            <FONT SIZE=3  FACE='Arial' color='#000066'>
+                <b>
+                    4.$TP_HISTORY_OBS:
+                </b>                
+            </FONT>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        $TP_TIENTHAI
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <font color=red>*</font>
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_DOCBY
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <input type='text' name='docu_by' id='docu_by' size="80" maxlength='80' value='$TP_DBY' readonly />
+        </td>
+    </tr>
+</table>

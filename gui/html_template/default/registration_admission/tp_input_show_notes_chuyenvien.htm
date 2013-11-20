@@ -1,0 +1,234 @@
+<table border=0 cellpadding=2 width=100%>
+    <tr bgcolor='#f6f6f6'>
+        <td colspan="2" align="center">
+            <FONT SIZE=-1  FACE='Arial' color='darkred'>
+            <b>
+                $TP_TOMTAT
+            </b>
+            </FONT>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                <b>
+                    $TP_LAMSANG
+                </b>
+            </FONT>
+        </td>
+        <td  style="padding-left:15px;">
+            <textarea name='lamsang_notes' id='lamsang_notes' cols=60 rows=2 wrap='physical'>$TP_LAMSANG_INPUT</textarea>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                <b>
+                    $TP_XETNGHIEM
+                </b>
+            </FONT>
+        </td>
+        <td  style="padding-left:15px;">
+            <textarea name='xetnghiem_notes' cols=60 rows=2 wrap='physical' readonly>$TP_XETNGHIEM_INPUT</textarea>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                <b>
+                    $TP_CHANDOAN
+                </b>
+            </FONT>
+        </td>
+        <td  style="padding-left:15px;">
+            <input type="text" name='chandoan_notes' id='chandoan_notes' size="81" value='$TP_CHANDOAN_INPUT' />
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                <b>
+                    $TP_THUOC
+                </b>
+            </FONT>
+        </td>
+        <td  style="padding-left:15px;">
+            <textarea name='thuoc_notes' id='thuoc_notes' cols=60 rows=2 wrap='physical'>$TP_THUOC_INPUT</textarea>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                <b>
+                    $TP_TINHTRANG
+                </b>
+            </FONT>
+        </td>
+        <td  style="padding-left:15px;">
+            <textarea name='tinhtrang_notes' id='tinhtrang_notes' cols=60 rows=2 wrap='physical'>$TP_TINHTRANG_INPUT</textarea>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                <b>
+                    $TP_LYDO
+                </b>
+            </FONT>
+        </td>
+        <td  style="padding-left:15px;">
+            <input type="text" name='lydo_notes' size="81" value='$TP_LYDO_INPUT' />
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                <b>
+                    $TP_NGAYNHAPVIEN
+                </b>
+            </FONT>
+        </td>
+        <td  style="padding-left:15px;">
+            <table cellpadding=0>
+                <tr>
+                    <td width='200px'>
+                        $TP_NGAYNHAPVIEN_INPUT
+                    </td>
+                    <td width="80px">
+                        <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                            <b>
+                                $TP_DATE
+                            </b>                            
+                        </FONT>
+                    </td>
+                    <td>
+                        $TP_DATE_INPUT
+                    </td>
+                </tr>
+            </table>            
+        </td>
+    </tr>
+    
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                <b>
+                    $TP_TIME_HOICHAN
+                </b>
+            </FONT>
+        </td>
+        <td  style="padding-left:15px;">
+            <table cellpadding=0>
+                <tr>
+                    <td width='200px'>
+                        <input type="text" name='time_hoichan' id='time_hoichan' size="15" value='$TP_TIME_HOICHAN_INPUT' onmouseover="setValueTime()" onmouseout="checkValue()"/>
+                    </td>
+                    <td width="80px">
+                        <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                            <b>
+                                $TP_DATE_HOICHAN
+                            </b>                            
+                        </FONT>
+                    </td>
+                    <td>
+                        $TP_DATE_HOICHAN_INPUT
+                    </td>
+                </tr>
+            </table>            
+        </td>
+    </tr>    
+    
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                <b>
+                    $TP_CHUTOA
+                </b>                
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <input type='text' name='chutoa_notes' id='chutoa_notes' size=50 maxlength=60 value='$TP_CHUTOA_INPUT' readonly/>$TP_CHUTOA_INPUT1
+            <br/>
+            <a href='javascript:popClassification("chutoa_notes")'><img $TP_IMG_ADD ></a>
+            <a href='javascript:clearClassification("chutoa_notes")'><img $TP_IMG_CLEAR ></a>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                <b>
+                    $TP_THUKI
+                </b>                
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <input type='text' name='thuki_notes' id='thuki_notes' size=50 maxlength=60 value='$TP_THUKI_INPUT' readonly />
+            <br/>
+            <a href='javascript:popClassification("thuki_notes")'><img $TP_IMG_ADD ></a>
+            <a href='javascript:clearClassification("thuki_notes")'><img $TP_IMG_CLEAR ></a>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                <b>
+                    $TP_THANHVIEN
+                </b>
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <textarea name='thanhvien_notes' id='thanhvien_notes' cols=60 rows=2 wrap='physical' readonly>$TP_THANHVIEN_INPUT</textarea>
+            <br/>
+            <a href='javascript:popClassification("thanhvien_notes")'><img $TP_IMG_ADD ></a>
+            <a href='javascript:clearClassification("thanhvien_notes")'><img $TP_IMG_CLEAR ></a>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                <b>
+                    $TP_TOMTAT
+                </b>
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <textarea name='tomtat_notes' id='tomtat_notes' cols=60 rows=5 wrap='physical'>$TP_TOMTAT_INPUT</textarea>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                <b>
+                    $TP_KETLUAN
+                </b>
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <textarea name='ketluan_notes' id='ketluan_notes' cols=60 rows=4 wrap='physical'>$TP_KETLUAN_INPUT</textarea>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                <b>
+                    $TP_HUONGDIEUTRI
+                </b>
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <textarea name='huongdieutri_notes' id='huongdieutri_notes' cols=60 rows=4 wrap='physical'>$TP_HUONGDIEUTRI_INPUT</textarea>
+        </td>
+    </tr>    
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                <b>
+                    $TP_DOCBY
+                </b>                
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <input type='text' name='docu_by' id='docu_by' size=50 maxlength=60 value='$TP_DBY' readonly />
+        </td>
+    </tr>
+</table>

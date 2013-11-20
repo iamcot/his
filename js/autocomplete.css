@@ -1,0 +1,47 @@
+#jSuggestContainer {
+position:absolute;
+font: 13px Tahoma;
+border:1px solid #ffb931 ; /* #15031e;*/
+border-top:none;
+background:#fff;
+height:150px;
+overflow: auto;
+}
+#jSuggestContainer a{
+font-size:13px;
+color:#715e37;
+}
+.jSuggestLoading {
+font-style:italic;
+padding: 10px;
+}
+
+#jSuggestContainer ul, #jSuggestContainer ul li{
+margin: 0;
+padding:0;
+list-style:none;
+color:#715e37;
+}
+
+
+
+#jSuggestContainer ul li{
+padding: 2px 4px;
+border-bottom: 1px dotted #ffb931;
+color:#715e37;
+background:#fff;
+cursor:pointer
+}
+
+#jSuggestContainer ul li.last{
+border-bottom: 0;
+}
+
+#jSuggestContainer ul li.jSuggestHover{
+background:#E9FFE0;
+color:#333;
+}
+.jSuggestHover  a{
+	text-decoration:none !important;
+	font-weight:bold;
+}

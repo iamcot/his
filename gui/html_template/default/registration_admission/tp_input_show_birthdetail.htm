@@ -1,0 +1,297 @@
+<table border=0 cellpadding=2 width=100%>   
+    <tr bgcolor='#f6f6f6'>
+        <td colspan="2">
+            $TP_Warning
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_PARENT_ENR 
+            </FONT>
+        </td>
+        <td style="padding-left:15px;"> 
+            <input type='text' name='parent_encounter_nr' size=15 maxlength=20 value='$TP_PARENT_ENR_NR' readonly class="text"/>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_DELIV_NR
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <input type='text' name='delivery_nr' size=15 maxlength=115 value='$TP_DELIV_PARA_NR' readonly class="text"/>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <font color=red>(*)</font>
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_SEX
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial'>
+                $TP_SEX_M
+                $TP_SEX_FM
+            </FONT>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_DELIV_PLACE
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <input type='text' name='delivery_place' size=50 maxlength=60 value='$TP_DPLACE' />
+        </td>
+    </tr>        
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_CES_REASON
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <textarea name="c_s_reason" maxlength=255 cols=40 rows=3 wrap="physical" >$TP_CREASON</textarea>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <font color=red>(*)</font>
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $LDDate
+            </FONT>
+	</td>
+        <td style="padding-left:15px;">
+            $TP_PREGDATE $TP_IMG_PDATE
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+            $LDTime
+            <input type='text' name='delivery_time' id="delivery_time" size=10 maxlength=10 value='$TP_PTIME' onBlur="checkTime(this)">
+            </font>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_BB_ARRIVAL
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial'>
+                $TP_BB_AR_YES
+                $TP_BB_AR_NO
+            </FONT>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_FACE_PRES
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial'>
+                $TP_FACE_PRES_YES
+                $TP_FACE_PRES_NO
+            </FONT>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_POS_OCCI
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial'>
+                $TP_POS_OCCI_YES
+                $TP_POS_OCCI_NO
+            </FONT>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_DELIV_RANK
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <input type='text' name='delivery_rank' size=10 maxlength=20 value='$TP_DRANK' />
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_APGAR1
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial'>
+                $TP_APGAR1_RADIOS
+            </FONT>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_APGAR5
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial'>
+                $TP_APGAR5_RADIOS
+            </FONT>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_APGAR10
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial'>
+                $TP_APGAR10_RADIOS
+            </FONT>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_SPONTANRESP
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial'>
+                <input type='text' name='time_to_spont_resp' size=10 maxlength=2 value='$TP_SP_RESP' />
+                &nbsp; $LDMinutes 
+            </FONT>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_CONDITION
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <input type='text' name='condition' size=50 maxlength=60 value='$TP_COND' />
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_WEIGHT
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <input type='text' name='weight' size=10 maxlength=10 value='$TP_WT' />gram
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_LENGTH
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <input type='text' name='length' size=10 maxlength=10 value='$TP_LEN' />cm
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_HEAD_CIRC
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <input type='text' name='head_circumference' size=10 maxlength=10 value='$TP_HCIRC' />cm
+        </td>
+    </tr>    
+    <tr bgcolor='#f6f6f6'>  
+        <td></td>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_CHR_BODY_T
+                $TP_CHRBODY_C
+            </FONT>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_CONG_ABNORM
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <textarea name='scored_gestational_disability' maxlength=255 rows="3" cols="37">$TP_GAGE</textarea>
+        </td>
+    </tr>    
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_FEEDING
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial'>
+                $TP_FEED_RADIOS
+            </FONT>
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_CLASSIFICATION
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <textarea name='classification' cols=40 rows=3 wrap='physical' readonly>$TP_CLASSIF</textarea>
+            <br/>
+            <a href='javascript:popClassification()'><img $TP_IMG_ADD ></a>
+            <a href='javascript:clearClassification()'><img $TP_IMG_CLEAR ></a>
+        </td>
+    </tr>
+
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <font color=red>(*)</font>
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_OUTCOME
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial'>
+                $TP_OUT_RADIOS
+            </FONT>
+        </td>
+    </tr>
+
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_DIS_CAT
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <FONT SIZE=-1  FACE='Arial'>
+                $TP_DISCAT_RADIOS
+            </FONT>
+        </td>
+    </tr>
+
+    <tr bgcolor='#f6f6f6'>
+        <td style="padding-left:15px;">
+            <font color=red>(*)</font>
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_DOCBY
+            </FONT>
+        </td>
+        <td style="padding-left:15px;">
+            <input type='text' name='docu_by' size=50 maxlength=60 value='$TP_DBY' readonly class="text"/>
+        </td>
+    </tr>
+</table>

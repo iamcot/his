@@ -1,0 +1,184 @@
+<table border=0 cellpadding=2 width=100%>
+    <tr bgcolor='#f6f6f6'>
+        <td colspan="2">
+            $TP_Warning
+        </td>
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+       $TP_RAU
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td>
+            <font color=red>(*)</font>
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $Date_So
+            </FONT>
+        </td>
+        <td>
+            <table border=0 cellpadding=2 width=100%>
+                <tr>
+                    <td width='43%'>
+                        <FONT SIZE=-1  FACE='Arial' color='#000066'>        
+                            <input type='text' name='time' id="time" size=7 maxlength=10 value='$TP_PTIME' onBlur="checkTime(this)">
+                            $LDDate
+                        </FONT>
+                        $TP_PREGDATE $TP_IMG_PDATE
+                    </td>
+                    <td align='left'>
+                        <font color=red>(*)</font>
+                        <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                            $TP_CACHSO
+                        </FONT>
+                    </td>
+                    <td width='40%'>
+                        <input type='text' name='cachsorau' id='cachsorau' size=30 maxlength='115' value='$TP_CACHSO_INPUT'/>
+                    </td>
+                </tr>
+            </table>
+        </td>        
+    </tr>
+    <tr bgcolor='#f6f6f6'>
+        <td width='15%'>
+            <font color=red>(*)</font>
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_MATMANG
+            </FONT>
+        </td>
+        <td>
+            <table width='100%'>
+                <tr bgcolor='#f6f6f6'>
+                    <td width='45%'>
+                        <input type='text' name='matmang' id='matmang' size=30 maxlength='115' value='$TP_MATMANG_INPUT' />
+                    </td>
+                    <td align='left'>
+                        <font color=red>(*)</font>
+                        <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                            $TP_MATMUI
+                        </FONT>
+                    </td>
+                    <td width='40%'>
+                        <input type='text' name='matmui' id='matmui' size=30 maxlength='115' value='$TP_MATMUI_INPUT' />
+                    </td>
+                </tr>
+            </table>
+        </td>        
+    </tr>
+    
+    <tr bgcolor='#f6f6f6'>
+        <td width='15%'>
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_BANHRAU
+            </FONT>
+        </td>
+        <td>
+            <table width='100%'>
+                <tr bgcolor='#f6f6f6'>
+                    <td width='45%'>
+                        <input type='text' name='banhrau' id='banhrau' size=30 maxlength='115' value='$TP_BANHRAU_INPUT' />
+                    </td>
+                    <td align='left'>
+                        <font color=red>(*)</font>
+                        <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                            $TP_CANNANG
+                        </FONT>
+                    </td>
+                    <td width='40%' align='left'>
+                        <input type='text' name='cannang' id='cannang' size=20 maxlength='10' value='$TP_CANNANG_INPUT' onchange='check_nr("cannang","$TP_CANNANG_INPUT")' />gram
+                    </td>
+                </tr>
+            </table>
+        </td>        
+    </tr>
+    
+    <tr bgcolor='#f6f6f6'>
+        <td width='15%'>
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_RAUCUONCO
+            </FONT>
+        </td>
+        <td>
+            <table width='100%'>
+                <tr bgcolor='#f6f6f6'>
+                    <td width='45%'>
+                        $TP_RAUCUONCO_INPUT
+                    </td>
+                    <td width='20%' align='left'>
+                        <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                            $TP_KSTC
+                        </FONT>
+                    </td>
+                    <td>
+                        $TP_KSTC_INPUT
+                    </td>
+                </tr>
+            </table>
+        </td>        
+    </tr>
+    
+    <tr bgcolor='#f6f6f6'>
+        <td width='15%'>
+            <font color=red>(*)</font>
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_CRDAI
+            </FONT>
+        </td>
+        <td>
+            <table width='100%'>
+                <tr bgcolor='#f6f6f6'>
+                    <td width='45%'>
+                        <input type='text' name='crdai' id='crdai' size=10 maxlength='10' value='$TP_CRDAI_INPUT' onchange="check_nr('crdai','$TP_CRDAI_INPUT')" />  Cm
+                    </td>
+                    <td width='20%' align='left'>
+                        <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                            $TP_CHAYMAU
+                        </FONT>
+                    </td>
+                    <td>
+                        $TP_CHAYMAU_INPUT
+                    </td>
+                </tr>
+            </table>
+        </td>        
+    </tr>
+    
+    <tr bgcolor='#f6f6f6'>
+        <td>
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_BLOODLOSS
+            </FONT>
+        </td>
+        <td>
+            <table width='100%'>
+                <tr bgcolor='#f6f6f6'>
+                    <td width='45%'>
+                        <input type='text' name='matmau' id='matmau' size=10 maxlength=20 value='$TP_BLOSS' onchange="check_nr('matmau','$TP_BLOSS')" />
+                        <select name='donvimau'>
+                            $TP_BLOSS_OPTIONS
+                        </select>
+                    </td>
+                    <td width='13%' align='left'>
+                        <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                            $TP_XULY
+                        </FONT>
+                    </td>
+                    <td>
+                        <textarea name='xuly' id='xuly' maxlength='115' cols='30' rows='1'>$TP_XULY_INPUT</textarea>
+                    </td>
+                </tr>
+            </table>
+            
+        </td>
+    </tr>
+    
+    <tr bgcolor='#f6f6f6'>
+        <td>
+            <font color=red>(*)</font>
+            <FONT SIZE=-1  FACE='Arial' color='#000066'>
+                $TP_DOCBY
+            </FONT>
+        </td>
+        <td>
+            <input type='text' name='docu_by' id='docu_by' size=50 maxlength=60 value='$TP_DBY' readonly />
+        </td>
+    </tr>
+</table>

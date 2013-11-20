@@ -1,0 +1,120 @@
+         <TABLE width=100% border=0 cellpadding="0" cellspacing=0>
+			<TBODY>
+			<TD>			
+				<blockquote>
+					<TABLE>
+					</TABLE>
+				</blockquote>			
+			
+				<blockquote>
+					<TABLE cellSpacing=0  width=500 class="submenu_frame" cellpadding="0">
+					<TBODY>							
+						<TR>
+							<TD>
+								<TABLE cellSpacing=1 cellPadding=3 width=500>
+								<TBODY class="submenu">
+												  
+									{{$LDPharmaPutIn}}
+
+									{{include file="common/submenu_row_spacer.tpl"}}
+								
+									{{$LDPharmaPayOut}}
+																					   
+								</TBODY>
+								</TABLE>
+							</TD>
+						</TR>
+					</TBODY>
+					</TABLE>			
+				</blockquote>		
+				
+				
+				<blockquote>
+					<TABLE cellSpacing=0  width=500 class="submenu_frame" cellpadding="0">
+					<TBODY>
+						<TR>
+							<TD>
+								<TABLE cellSpacing=1 cellPadding=3 width=500>
+								<TBODY class="submenu">
+						
+											{{$LDMedicineCatalogue}}
+
+											{{include file="common/submenu_row_spacer.tpl"}}
+
+											{{$LDVNMedicineCatalogue}}
+
+											{{include file="common/submenu_row_spacer.tpl"}}
+
+											{{$LDMedipotCatalogue}}
+
+											{{include file="common/submenu_row_spacer.tpl"}}
+
+											{{$LDGenericDrugCatalogue}}
+
+											{{include file="common/submenu_row_spacer.tpl"}}
+
+											{{$LDSupplierCatalogue}}
+										  
+
+									</TBODY>
+									</TABLE>
+								</TD>
+						</TR>
+					</TBODY>
+					</TABLE>					
+				</blockquote>							
+
+				<blockquote>
+					<TABLE cellSpacing=0  width=500 class="submenu_frame" cellpadding="0">
+					<TBODY>
+						<TR>
+							<TD>
+								<TABLE cellSpacing=1 cellPadding=3 width=500>
+								<TBODY class="submenu">
+					
+								{{$LDRaporteFarmaci}}
+
+								</TBODY>
+								</TABLE>
+							</TD>
+						</TR>
+					</TBODY>
+					</TABLE>			
+				</blockquote>
+				
+				<blockquote>
+					<TABLE cellSpacing=0  width=500 class="submenu_frame" cellpadding="0">
+					<TBODY>
+						<TR>
+							<TD>
+								<TABLE cellSpacing=1 cellPadding=3 width=500>
+								<TBODY class="submenu">
+
+								{{$LDRequestMedicinePatient}}
+								
+								{{include file="common/submenu_row_spacer.tpl"}}
+
+								{{$LDRequestMedicineWard}}
+
+								</TBODY>
+								</TABLE>
+							</TD>
+						</TR>
+					</TBODY>
+					</TABLE>
+				</blockquote>
+
+				<blockquote>			
+					<p>
+					<a href="{{$breakfile}}"><img {{$gifClose2}} alt="{{$LDCloseAlt}}" {{$dhtml}}></a>
+					<p>
+				</blockquote>   			
+			</TD>		
+			
+			
+			<TD>
+				
+				
+			</TD>
+		<TBODY>
+		</TABLE>

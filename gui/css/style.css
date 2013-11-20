@@ -1,0 +1,77 @@
+body{
+margin:0px;
+padding:0px;
+}
+#houter{
+background:url("../img/bg.png") ;
+overflow:hidden;
+font-family:tahoma;
+height:70px;
+border-bottom:2px solid #a4071a;
+}
+#rheader{
+background:url("../img/rbanner.png") right top no-repeat;
+height:70px;
+width:100%;
+display:block;
+}
+#logo{
+width:65px;
+height:65px;
+display:block;
+border: none;
+float:left;
+}
+#companyinfo{
+display:block;
+float:left;
+margin-left:20px;
+text-align:left;
+}
+#comname{
+height: 40px;
+color:#fff;
+font-weight:bold;
+font-size: 25px;
+padding-top:5px;
+}
+#comaddr{
+font-size:15px;
+color: #ddd;
+display:block;
+}
+.blackline{
+background: #eee;
+height:5px;
+width:100%;
+display:block;
+}
+body{
+background:#5f88be; /*url("../img/bg2.png") !important;*/
+color:#000;
+}
+#leftnav{
+padding:5px;
+font-size: 14px;
+background:#fff;
+}
+.dtree{
+padding: 20px 5px;
+background:#fff;
+margin:5px 0px 5px 10px;
+color:#333 !important;
+border-right:1px solid #aaa;
+border-radius: 5px 0 0 5px;
+}
+.block{
+margin: 2px 0px 2px 10px;
+padding:2px 5px 2px 10px;
+background:#fff;
+color:#333;
+border-radius: 5px 0 0 5px;
+}
+.depblock{
+margin: 5px 0px 5px 10px !important;
+padding:5px 5px 5px 10px !important;
+display:block;
+}
