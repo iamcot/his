@@ -36,8 +36,18 @@ require($root_path.'include/core/inc_css_a_hilitebu.php');
 <tr width=100%>
 <td  bgcolor=<?php echo $cfg['body_bgcolor'];?> >
 <FONT    SIZE=-1  FACE="Arial">
-<table width=100% border=0 cellspacing=1 cellpadding=2> 
- 
+<table width=100% border=0 cellspacing=1 cellpadding=2>
+    <tr width=100%>
+        <td bgcolor="#e9e9e9"><FONT  color="#0000cc" FACE="verdana,arial" size=2><b><?php echo 'Lịch trực toàn BV' ?></b> </FONT></td>
+    </tr>
+    <tr>
+        <td bgcolor="#ffffff" valign="top">
+            <FONT  color="#0000cc" FACE="verdana,arial" size=2>
+                &nbsp;&nbsp;&nbsp;<img <?php echo createComIcon($root_path,'redpfeil.gif','0','absmiddle') ?>> <a href="<?php echo $root_path; ?>modules/timekeeping/dfck_create_plan.php<?php echo URL_APPEND; ?>" target="SYSADMIN_WFRAME"><?php echo 'Lập lịch trực' ?></a><br>
+                &nbsp;&nbsp;&nbsp;<img <?php echo createComIcon($root_path,'redpfeil.gif','0','absmiddle') ?>> <a href="<?php echo $root_path; ?>modules/timekeeping/dfck_view_plan.php<?php echo URL_APPEND; ?>" target="SYSADMIN_WFRAME"><?php echo 'Xem lịch trực' ?></a><br>
+
+        </td>
+    </tr>
   <!-- gjergji new ward management -->
   <tr width=100%>
 	<td bgcolor="#e9e9e9"><FONT  color="#0000cc" FACE="verdana,arial" size=2><b><?php echo $LDStaffSchedule ?></b> </FONT></td>
