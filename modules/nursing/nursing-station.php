@@ -103,8 +103,8 @@ if(($mode=='')||($mode=='fresh')){
 		# Create personnel object
 		include_once($root_path.'include/care_api_classes/class_personell.php');
 		$pers_obj=new Personell;
-			
-		if($result=$pers_obj->getDOCDutyplan($ward_info['dept_nr'],$pyear,$pmonth,$elem)){
+		$role_nr =14;//dieu duong
+		if($result=$pers_obj->getDOCDutyplan($ward_info['dept_nr'],$role_nr,$pyear,$pmonth,$elem)){
 			$duty1=&unserialize($result['duty_1_pnr']);
 			if(SHOW_DOC_2) $duty2=&unserialize($result['duty_2_pnr']);
 					//echo $sql."<br>";

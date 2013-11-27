@@ -51,9 +51,9 @@ if($_POST['viewpropreport']){ //view
     $sql.= " from $view_prop where dept_mana=".$_POST['dept_mana']."";
 
     if(isset($_POST['importfromdate']) && ($_POST['importfromdate']!=''))
-        $sql .= " and importdate  >= '".$_POST['importfromdate']."' ";
+        $sql .= " and importdate  >= '".date("Y-m-d",strtotime($_POST['importfromdate']))."' ";
     if(isset($_POST['importtodate']) && ($_POST['importtodate']!=''))
-        $sql .= " and importdate  <= '".$_POST['importtodate']."' ";
+        $sql .= " and importdate  <= '".date("Y-m-d",strtotime($_POST['importtodate']))."' ";
     //echo $sql;
     $rs = $db->Execute($sql);
     if($rs->RecordCount()){
@@ -149,12 +149,13 @@ foreach ($propfield as $field){
     else $check = "";
     $propSelectField .= "<div><input type='checkbox' name='".$field[0]."'  $check > ".$field[1]." </div>";
 }
+
 include_once($root_path.'include/core/inc_date_format_functions.php');
 require_once ('../../js/jscalendar/calendar.php');
 $calendar = new DHTML_Calendar('../../js/jscalendar/', $lang, 'calendar-system', true);
 $calendar->load_files();
-$smarty->assign('importfromdate',$calendar->show_calendar($calendar,$date_format,'importfromdate',@formatDate2STD($_POST['importfromdate'],$date_format)));
-$smarty->assign('importtodate',$calendar->show_calendar($calendar,$date_format,'importtodate',@formatDate2STD($_POST['importtodate'],$date_format)));
+$smarty->assign('importfromdate','<input id="importfromdate" name="importfromdate" type="text" value="">');
+$smarty->assign('importtodate','<input id="importtodate" name="importtodate" type="text" value="">');
 $smarty->assign('LDDeptMana',$LDDeptMana);
 $smarty->assign('tbcontent',$tbcontent);
 $smarty->assign('deptmana',$deptmanastr);
@@ -162,5 +163,25 @@ $smarty->assign('LDPropSelect',$LDPropSelect);
 $smarty->assign('PropSelectList',$propSelectField);
 //render
 $smarty->assign('sMainBlockIncludeFile','property/property_export.tpl');
+?>
+    <link type="text/css" rel="stylesheet" href="<?php echo  $root_path;?>js/cssjquery/jquery-ui-1.7.2.custom.css" />
+    <script src="<?php echo $root_path;?>js/jquery-1.7.min.js"></script>
+    <script src="<?php echo $root_path;?>js/jquery-ui-1.7.2.custom.min.js"></script>
+    <script>
+    $(function() {
+        $("#importfromdate").datepicker({
+            changeMonth: true,
+            changeYear: true
+        });
+        $("#importtodate").datepicker({
+            changeMonth: true,
+            changeYear: true
+        });
+        $("#importfromdate").datepicker("option", "dateFormat","yy-mm-dd");
+        $("#importtodate").datepicker("option", "dateFormat","yy-mm-dd");
+    });
+
+    </script>
+<?
 $smarty->display('common/mainframe.tpl');
 

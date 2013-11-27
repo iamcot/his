@@ -25,7 +25,7 @@ switch($winid)
                     $function=4;
                     $search=$pers_obj->searchPersonellInfo($inputdata,$function);
                     $quicklist=$pers_obj->getDoctorsOfDept($dept_nr,$function,'5');
-                    $duty=$pers_obj->getDOCDutyplan($dept_nr,$pyear,$pmonth);
+                    $duty=$pers_obj->getDOCDutyplan($dept_nr,15,$pyear,$pmonth);
                     $a_pnr=unserialize($duty['duty_1_pnr']);
                     $r_pnr=unserialize($duty['duty_2_pnr']);
                     break;
@@ -36,7 +36,7 @@ switch($winid)
                     $function=8;
                     $search=$pers_obj->searchPersonellInfo($inputdata,$function);
                     $quicklist=$pers_obj->getDoctorsOfDept($dept_nr,$function,'5');
-                    $duty=$pers_obj->getDOCDutyplan($dept_nr,$pyear,$pday);
+                    $duty=$pers_obj->getDOCDutyplan($dept_nr,15,$pyear,$pday);
                     $a_pnr=unserialize($duty['duty_1_pnr']);
                     $r_pnr=unserialize($duty['duty_2_pnr']);
                     break;
@@ -47,7 +47,7 @@ switch($winid)
                     $function=4;//12;
                     $search=$pers_obj->searchPersonellInfo($inputdata,$function);
                     $quicklist=$pers_obj->getDoctorsOfDept($dept_nr,$function,'5');
-                    $duty=$pers_obj->getDOCDutyplan($dept_nr,$pyear,$pday);
+                    $duty=$pers_obj->getDOCDutyplan($dept_nr,15,$pyear,$pday);
                     $a_pnr=unserialize($duty['duty_1_pnr']);
                     $r_pnr=unserialize($duty['duty_2_pnr']);
                     break;
@@ -58,7 +58,7 @@ switch($winid)
                     $function=10;
                     $search=$pers_obj->searchPersonellInfo($inputdata,$function,'','','','');
                     $quicklist=$pers_obj->getNursesOfDept($dept_nr,$function,'5');
-                    $duty=$pers_obj->getNOCDutyplan($dept_nr,$pyear,$pday);
+                    $duty=$pers_obj->getNOCDutyplan($dept_nr,14,$pyear,$pday);
                     $a_pnr=unserialize($duty['duty_1_pnr']);
                     $r_pnr=unserialize($duty['duty_2_pnr']);
                     break;
@@ -69,7 +69,7 @@ switch($winid)
                     $function=7;//11;
                     $search=$pers_obj->searchPersonellInfo($inputdata,$function);
                     $quicklist=$pers_obj->getNursesOfDept($dept_nr,$function,'5');
-                    $duty=$pers_obj->getNOCDutyplan($dept_nr,$pyear,$pday);
+                    $duty=$pers_obj->getNOCDutyplan($dept_nr,14,$pyear,$pday);
                     $a_pnr=unserialize($duty['duty_1_pnr']);
                     $r_pnr=unserialize($duty['duty_2_pnr']);
                     break;
@@ -80,7 +80,7 @@ switch($winid)
                     $function=5;
                     $search=$pers_obj->searchPersonellInfo($inputdata,$function);
                     $quicklist=$pers_obj->getDoctorsOfDept($dept_nr,$function,'5');
-                    $duty=$pers_obj->getDOCDutyplan($dept_nr,$pyear,$pday);
+                    $duty=$pers_obj->getDOCDutyplan($dept_nr,15,$pyear,$pday);
                     $a_pnr=unserialize($duty['duty_1_pnr']);
                     $r_pnr=unserialize($duty['duty_2_pnr']);
                     break;
