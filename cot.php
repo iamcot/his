@@ -7,6 +7,7 @@ class test{
         //li cua cot
     }
     public  function tien(){
+        $_POST = new perf_db2(&conn)
     }
     public function Hien(){
       // abc xyzzzzzzzzzzzzzzzzzzz
