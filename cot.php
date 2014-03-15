@@ -16,7 +16,7 @@ class test{
         //...
     }
     public function Hien(){
-
+      // abc xyzzzzzzzzzzzzzzzzzzz
     }
     public function phuong() {
 //        hê hê
