@@ -6,7 +6,7 @@ class test{
     public function group(){
     }
     public  function tien(){
-        // Men khung =)))))))
+        hiendien
     }
     public function Hien(){
       // abc xyzzzzzzzzzzzzzzzzzzz
