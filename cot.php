@@ -15,8 +15,8 @@ class test{
 
 
     }
-    public function phuongkhung() {
-
+    public function phuongkhungabc() {
+       //
     }
     private  function  NgocMen()
     {
