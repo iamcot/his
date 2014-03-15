@@ -7,6 +7,7 @@ class test{
     }
     public  function tien(){
         //aaa
+        // bbbbb
     }
     public function Hien(){
           // abc xyz
