@@ -7,13 +7,20 @@ class test{
     }
     public  function tien(){
 
+      
     }
     public function Hien(){
     //abc
-    //abc
+      // abc xyzzzzzzzzzzzzzzzzzzz
+
+
     }
     public function phuongkhungabc() {
-
+       //
+    }
+    private  function  NgocMen()
+    {
+        //HÉ LÔ MẤY BẤY BI
     }
 
 }
