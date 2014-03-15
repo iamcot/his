@@ -4,7 +4,7 @@ class test{
 
     }
     public function group(){
-        //line cua cot
+        //li cua cot
     }
     public  function tien(){
 
@@ -16,6 +16,5 @@ class test{
 
     }
     public function heonai(){
-
     }
 }
