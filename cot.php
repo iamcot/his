@@ -7,8 +7,10 @@ class test{
         //line cua cot
     }
     public  function tien(){
+        // hien khung oi oi oi
         //aaa
-        // bbbbbb
+        //hienkhung
+        // bbbbb
     }
     public function Hien(){
 
