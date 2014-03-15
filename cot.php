@@ -6,5 +6,7 @@ class test{
     public function group(){
         //line cua cot
     }
-    public  function tien(){}
+    public  function tien(){
+        //aaa
+    }
 }
