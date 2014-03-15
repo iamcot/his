@@ -10,6 +10,7 @@ class test{
     }
     public function Hien(){
       // abc xyzzzzzzzzzzzzzzzzzzz
+        :O
     }
     public function phuongkhung() {
              gugugu
