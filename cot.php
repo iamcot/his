@@ -18,5 +18,9 @@ class test{
     public function phuongkhung() {
 
     }
+    private  function  NgocMen()
+    {
+        //HÉ LÔ MẤY BẤY BI
+    }
 
 }
