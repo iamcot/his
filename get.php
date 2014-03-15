@@ -1,5 +1,6 @@
 <?php
 include_once('classes/adodb/adodb.inc.php');
+
 $db =& ADONewConnection('access');
 	$dsn = "Driver={Microsoft Access Driver (*.mdb)};Dbq=//OK-PC/testdata/Database1.mdb;Uid=;Pwd=;";
 	$db->Connect($dsn);
