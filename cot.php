@@ -7,6 +7,7 @@ class test{
         //li cua cot
     }
     public  function tien(){
+        // Men khung =)))))))
     }
     public function Hien(){
       // abc xyzzzzzzzzzzzzzzzzzzz
