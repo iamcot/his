@@ -18,7 +18,7 @@ class test{
     public function Hien(){
 
     }
-    public function phuong() {
+    public function phuongkhung() {
 //        hê hê
         //CỨU VỚI HUHU
     }
