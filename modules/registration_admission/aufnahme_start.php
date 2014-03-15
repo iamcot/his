@@ -339,6 +339,7 @@ if($pid!='' || $encounter_nr!=''){
 												"login_id" => $_SESSION['sess_login_userid'],
 												"type_encounter" => $_POST['encounter_class_nr']
 												);
+                        $date_reg = @format2DateSTD($POST['dat_reg'], $date_format)." ".$_POST['time_reg'];
 						$encounter_obj->insertEncounterTransfer($encounter_transfer);
 
 						//insert temp Measurement
@@ -403,7 +404,6 @@ if($pid!='' || $encounter_nr!=''){
 				}
 			}
 		}
-
 	}
 	
  // edit de co the chon khoa phong
@@ -733,23 +733,30 @@ if(!isset($pid) || !$pid){
 		$smarty->assign('sFileBrowserInput','<input name="photo_filename" type="file" size="15"   onChange="showpic(this)" value="'.$pfile.'">');
 	}
 	//end : gjergji
-	$smarty->assign('LDAdmitDate',$LDAdmitDate);
-if(isset($encounter_date)){
-	 $smarty->assign('sAdmitDate',$calendar->show_calendar($calendar,$date_format,'dat_reg',@formatDate2Local($encounter_date,$date_format)));
-	 $smarty->assign('sAdmitTime','<input name="time_reg" id="time_reg" type="text" value="'.@convertTimeToLocal(formatDate2Local($encounter_date,$date_format,0,1)).'" size="5">');
-}else{
- $smarty->assign('sAdmitDate',$calendar->show_calendar($calendar,$date_format,'dat_reg',date("d/m/Y")));
- $smarty->assign('sAdmitTime','<input name="time_reg" id="time_reg" type="text" value="'.date("H:i").'" size="5">');
-}
-	$smarty->assign('LDAdmitTime',$LDAdmitTime);
-	$smarty->assign('LDInDate','Ngày nhập liệu');
 
-	//$smarty->assign('sAdmitTime','<input name="time_reg" id="time_reg" type="text" value="'.@convertTimeToLocal(formatDate2Local($encounter_date,$date_format,0,1)).'" size="5">');
-	if(!empty($encounter_in_date)){
-	$smarty->assign('sInDate',@formatDate2Local($encounter_in_date,$date_format)." ".@convertTimeToLocal(formatDate2Local($encounter_in_date,$date_format,0,1)));
+	$smarty->assign('LDAdmitDate',$LDAdmitDate);
+    if(isset($encounter_date)){
+        $smarty->assign('sAdmitDate',@formatDate2Local($encounter_in_date,$date_format)." ".@convertTimeToLocal(formatDate2Local($encounter_in_date,$date_format,0,1)));
+//        $smarty->assign('sAdmitDate', @formatDate2Local($encounter_date,$date_format));
+//        $smarty->assign('sAdmitTime',@formatDate2Local($encounter_date,$date_format,1,1));
+//         $smarty->assign('sAdmitDate',$calendar->show_calendar($calendar,$date_format,'dat_reg',@formatDate2Local($encounter_date,$date_format)));
+//         $smarty->assign('sAdmitTime','<input name="time_reg" id="time_reg" type="text" value="'.@convertTimeToLocal(formatDate2Local($encounter_date,$date_format,0,1)).'" size="5">');
+   }
+    else{
+     $smarty->assign('sAdmitDate',$calendar->show_calendar($calendar,$date_format,'dat_reg',date("d/m/Y")));
+     $smarty->assign('sAdmitTime','<input name="time_reg" id="time_reg" type="text" value="'.date("H:i").'" size="5">');
+    }
+	$smarty->assign('LDAdmitTime',$LDAdmitTime);
+
+
+	$smarty->assign('LDInDate','Ngày chỉnh sửa gần nhất');
+    if(!empty($encounter_in_date)){
+        $smarty->assign('sInDate',$calendar->show_calendar($calendar,$date_format,'dat_reg',date('d/m/Y')));
+        $smarty->assign('sInTime','<input name="time_reg" id="time_reg" type="text" value="'.date('H:i').'" size="5">');
 	}else{
-	$smarty->assign('sInDate',date('d/m/Y H:i:s').'<input name="encounter_in_date" type="hidden" value="'.date('Y-m-d H:i:s').'">');
-	}
+	    $smarty->assign('sInDate',date('d/m/Y H:i:s').'<input name="encounter_in_date" type="hidden" value="'.date('Y-m-d H:i:s').'">');
+	    }
+
 	$smarty->assign('LDTitle',$LDTitle);
 	$smarty->assign('title',$title);
 	$smarty->assign('LDLastName',$LDLastName);
