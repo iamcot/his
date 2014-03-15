@@ -4,7 +4,7 @@ class test{
 
     }
     public function group(){
-        //line cua cot
+        //li cua cot
     }
     public  function tien(){
         // hien khung oi oi oi
