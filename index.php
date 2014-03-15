@@ -27,7 +27,7 @@ Contact author at: elpidio@care2x.org
 This notice also applies to other scripts which are integral to the functioning of CARE 2X within this directory and its top level directory
 A copy of this notice is also available as file named copy_notice.txt under the top level directory.
 */
-error_reporting(E_ALL);
+error_reporting(E_COMPILE_ERROR|E_ERROR|E_CORE_ERROR);
 define('FROM_ROOT',1);
 
 if(!isset($mask)) $mask=false;
