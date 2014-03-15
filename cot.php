@@ -17,6 +17,7 @@ class test{
     }
     public function phuong() {
 //        hê hê
+        //HI
     }
 
 }
