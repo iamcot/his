@@ -8,8 +8,11 @@ class test{
     public  function tien(){
         // hien khung oi oi oi
         //aaa
-        //hienkhung
+        //hien
         // bbbbb
+        //aaabbbbbbb
+        // bbbbbb
+        //...
     }
     public function Hien(){
           // abc xyz
