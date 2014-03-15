@@ -12,7 +12,7 @@ class test{
       // abc xyzzzzzzzzzzzzzzzzzzz
     }
     public function phuongkhung() {
-             gugugu
+//             gugugu
     }
 
 }
