@@ -10,12 +10,12 @@ class test{
     }
     public function Hien(){
       // abc xyzzzzzzzzzzzzzzzzzzz
-        :O
+     //   :-w
     }
     public function phuongkhung() {
-             gugugu
-             ///akdakldhas
 
+             ///akdakldhas
+            // hu' hu'
     }
 
 }
