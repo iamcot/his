@@ -223,7 +223,7 @@ class Ward extends Encounter {
         // tim nhung khu phong co loai la "dieu tri"
         function getWardsItemsObject_dieutri(&$items, $dept_nr='0') {
 	    global $db;
-	    $this->sql="SELECT ward.$items, dept.LD_var,dept.name_formal AS dept_name 
+	    $this->sql="SELECT ward.$items, dept.LD_var,dept.name_formal AS dept_name
                         FROM $this->tb_ward AS ward
                         INNER JOIN $this->tb_dept AS dept ON dept.nr=ward.dept_nr
                         WHERE ward.type='2' AND ward.status NOT IN ($this->dead_stat) and is_temp_closed=0 and (select count(r.nr) from $this->tb_room r where r.ward_nr = ward.nr and r.type_nr = 1 AND r.is_temp_closed = 0) > 0 "; //khoa chuyen mon va la phong dieu tri
@@ -239,7 +239,7 @@ class Ward extends Encounter {
         //echo $this->sql;
         if($this->res['gawio']=$db->Execute($this->sql)) {
             if($this->rec_count=$this->res['gawio']->RecordCount()) {
-				 return $this->res['gawio'];	 
+				 return $this->res['gawio'];
 			} else { return false; }
 		} else { return false; }
 	}

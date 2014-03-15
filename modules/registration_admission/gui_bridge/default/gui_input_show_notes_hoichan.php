@@ -156,6 +156,50 @@
 	document.getElementById(name).value="";
 	document.getElementById(name).focus();
     }
+	
+	function ChangeCase(elem)
+	{
+		elem.value = elem.value.toUpperCase();
+	}
+	
+	function tabE(obj,e){ 
+		   var e=(typeof event!='undefined')?window.event:e;// IE : Moz 
+		   if(e.keyCode==13){ 
+
+		   	/*
+		     var ele = document.forms[0].elements; 
+		     for(var i=0;i<ele.length;i++){ 
+		       var q=(i==ele.length-1)?0:i+1;// if last element : if any other 
+		       if(obj==ele[i]){
+		       	console.log(ele[q]);
+		       	console.log(ele[q].getAttribute("display"));
+		       	ele[q].focus();
+		       	break
+		       } 
+		     } 
+		     */
+		
+		    var currentIndex = $(obj).attr("tabindex");		   
+         	var nextIndex = parseInt(currentIndex)+1;       
+         	var quit = true; 
+         		if($(obj).val()!= "1" && currentIndex==9) nextIndex=14;//truong hop rieng cua bao hiem
+         	//	console.log($("input[tabindex='"+nextIndex+"']"));
+         	//	console.log($("select[tabindex='"+nextIndex+"']"));
+	         	if (($("input[tabindex='"+nextIndex+"']").val() != undefined)){
+	         	$("input[tabindex='"+nextIndex+"']").focus();
+         		}
+         		else if (($("select[tabindex='"+nextIndex+"']").val() != undefined)){
+         		 	$("select[tabindex='"+currentIndex+"']").css("font-weight","normal");
+         			$("select[tabindex='"+nextIndex+"']").focus();
+         			$("select[tabindex='"+nextIndex+"']").css("font-weight","bold");
+         		}
+
+         	
+		  return false; 
+
+		  } 
+
+		 }
     
     $(function(){
         $("#time_hoichan").mask("**:**");

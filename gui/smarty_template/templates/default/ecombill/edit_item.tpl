@@ -2,7 +2,6 @@
 <div class="prompt">{{$FormTitle}}</div>
 <div style="float:left;margin-left:160px;">
 <select  id="item" style="color:blue;" onclick="show()">
-    <option value="*">All </option>
 	{{$OptionLine}}
 </select>
 </div><br>

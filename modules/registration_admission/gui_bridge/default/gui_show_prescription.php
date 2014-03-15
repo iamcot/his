@@ -159,6 +159,9 @@ if ($type=='pres')
 							$items_in_sheet = $medicine_result->FetchRow();
 							echo '<b>'.$items_in_sheet['product_name'].'</b><br>';
 							echo $items_in_sheet['desciption'].'/'.$LDUseTimes.' x '.$items_in_sheet['number_of_unit'].' '.$LDUseTimes.': '.$items_in_sheet['time_use'].'<br>';
+							if($items_in_sheet['morenote']){
+								echo $items_in_sheet['morenote'].'<br>';
+							}
 						}
 					}
 					echo '&nbsp<br>'.stripslashes($row_2['note']);
@@ -214,9 +217,9 @@ if ($type=='pres')
 							} else {
 								$date_pres = substr($row_2['date_time_create'],0,10);
 								$today = date("Y-m-d");
-								if ($date_pres<$today)
+								/*if ($date_pres<$today)
 									echo "javascript:alert('".$LDCannotEditSheet."')"; 
-								else
+								else*/
 									echo $thisfile.URL_APPEND.'&pid='.$_SESSION['sess_pid'].'&target='.$target.'&encounter_nr='.$encounter_nr.'&mode=update&todo=1&pres_id='.$row_2['prescription_id'];
 							}
 						?>"> 

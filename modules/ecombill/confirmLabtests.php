@@ -101,35 +101,35 @@ $strCut = $data."&";
 $from=1;
 $to=0;
 $flag = true;
-//itemcode152=&YHCT58&itemcode154=YHCT60&
-$aService = explode("&",$strCut);
-foreach($aService as $sRow){
-    if(trim($sRow)=="") continue;
-    $aParam = explode("=",$sRow);
-//while($flag){
-//    $tempStr=substr($strCut,$from);
-//	$to=strpos($tempStr, "&");
-//	$equalIndex=strpos($tempStr, "=");
-//
-//    if($to == 0)
-//        $flag = false;
-//
-//    $paramValue=substr($tempStr,$equalIndex+1,$to-$equalIndex-1);
-//    $paramNumber=substr($tempStr,strlen($paramName),$equalIndex - strlen($paramName));
-//
-//    $from = $from+$to+1;
+//itemcode152=YHCT58&itemcode154=YHCT60&
+while($flag){
+    $tempStr=substr($strCut,$from);
+	$to=strpos($tempStr, "&");
+	$equalIndex=strpos($tempStr, "=");
+
+    if($to == 0)
+        $flag = false;
+
+    $paramValue=substr($tempStr,$equalIndex+1,$to-$equalIndex-1);
+    $paramNumber=substr($tempStr,strlen($paramName),$equalIndex - strlen($paramName));
+
+    $from = $from+$to+1;
+	
+        //echo "$paramName - "; itemcode
+        //echo "$paramNumber - "; 1
+        //echo "$paramValue <br/>";	0001
 		
-	if($aParam[0]){
-		$resultlbqry = $eComBill->listServiceItemsByCode($aParam[0]);
+	if(strlen($paramValue)){
+		$resultlbqry = $eComBill->listServiceItemsByCode($paramValue);
 
 		if(is_object($resultlbqry)) $item=$resultlbqry->FetchRow();
 
 		$smarty->assign('itemName',$item['item_description']);
 		$smarty->assign('itemCode',$item['item_code']);
 		$smarty->assign('itemPrice',number_format($item['item_unit_cost']));
-		$smarty->assign('quantity',$aParam[1]);
+		$smarty->assign('quantity',$no[$paramNumber]);	
 
-		$noOfunits=$noOfunits.$aParam[1]."#";
+		$noOfunits=$noOfunits.$no[$paramNumber]."#";
 		$labcode=$labcode."#".$item['item_code'];
 
 		ob_start();

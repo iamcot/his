@@ -87,7 +87,7 @@ require($root_path.'include/core/inc_front_chain_lang.php');
  	urlholder="<?php echo $root_path ?>modules/pdfmaker/"+url+"<?php echo URL_APPEND ?>&datefrom="+$('#datefrom').val()+"&dateto="+$('#dateto').val()+"&id="+id+"";
     testprintout<?php echo $sid ?>=window.open(urlholder,"testprintout<?php echo $sid ?>","width=800,height=600,menubar=no,resizable=yes,scrollbars=yes");
  }
- function contentright(id){
+ function viewreportk(id){
 	if($('#datefrom').val() =="" || $('#dateto').val()=="") {
             alert("Vui lòng nhập đủ ngày bắt đầu và kết thúc"); 
             return;

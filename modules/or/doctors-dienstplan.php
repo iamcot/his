@@ -28,8 +28,7 @@ $dept_obj->preloadDept(39);
 
 require_once($root_path.'include/care_api_classes/class_personell.php');
 $pers_obj=new Personell;
-$role_nr = 15;
-$dutyplan=&$pers_obj->getDOCDutyplan(39,$role_nr,$pyear,$pmonth);
+$dutyplan=&$pers_obj->getDOCDutyplan(39,$pyear,$pmonth);
 
 
 $firstday=date("w",mktime(0,0,0,$pmonth,1,$pyear));

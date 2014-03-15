@@ -60,7 +60,7 @@
         $passwd = $_POST['passwd'];
         $name = $_POST['personell'];
         $rs = $role_obj->saveNewLoginID($personell,$user,$passwd);
-        var_dump($rs);
+       // var_dump($rs);
     }
     if(isset($_POST['updatepersonell'])){
         $login_id = $_POST['login_id'];
@@ -68,6 +68,12 @@
      //   var_dump($login_id.'@'.$personell);
         $rs = $role_obj->updatepersonell($login_id,$personell);
        // var_dump($rs);
+    }
+	if(isset($_POST['changepass'])){
+        $user = $_POST['user'];
+        $passwd = $_POST['newpass'];
+        
+        $rs = $role_obj->updateLogin($user,$passwd);
     }
 
     #Xu ly hien thi
@@ -98,7 +104,7 @@
         <table  style="width:90%"> 
         <tr><td colspan=2><select name="user" style="width:90%;display:block;padding:5px;margin-bottom:10px;clear:both;">'.$selectusers.'</select></td></tr>       
         <tr><td style="width:35%">'.$LDNewPass.':</td><td> <input type="text" name="newpass" style="width:90%;"/></td></tr>
-        <tr><td></td><td><input type="submit" value="OK" class="butbg"/></td></tr>
+        <tr><td></td><td><input type="submit" value="OK" class="butbg" name="changepass"/></td></tr>
         </table>
       </fieldset>
     </form>

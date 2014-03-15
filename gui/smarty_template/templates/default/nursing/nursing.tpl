@@ -12,6 +12,7 @@
                         {{$tblWardInfo}}
 
 					</TR>
+                    <tr><Td>TR Cua tui</td></tr>
 					{{include file="common/submenu_row_spacer.tpl"}}
 
 					{{$LDIssuePaper}}

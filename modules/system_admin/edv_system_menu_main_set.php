@@ -30,8 +30,7 @@ if(isset($mode)&&($mode=='save')){
 	for($i=1;$i<=$max_items;$i++){
 		$sort_nr='sort_nr_'.$i;
 		$is_visible='hide_it_'.$i;
-		$dept_list = 'dept_list_'.$i;
-		$core->sql="UPDATE care_menu_main SET sort_nr=".$$sort_nr.",is_visible='".$$is_visible."',hide_by='',dept_list = '".$$dept_list."' WHERE nr=$i";
+		$core->sql="UPDATE care_menu_main SET sort_nr=".$$sort_nr.",is_visible='".$$is_visible."',hide_by='' WHERE nr=$i";
 		//$sql="UPDATE care_menu_main SET sort_nr=".$$sort_nr.",is_visible='".$$is_visible."',hide_by='' WHERE nr=$i";
 		//$db->Execute($sql);
 		$core->Transact();
@@ -95,7 +94,6 @@ ob_start();
     <td><FONT  color="#000099"><b><?php echo $LDPath; ?></b></td>
     <td><FONT  color="#000099"><b><?php echo $LDStatus; ?></b></td>
     <td><FONT  color="#000099"><b><?php echo $LDHideBy; ?></b></td>
-    <td>Khoa hiển thị</td>
   </tr>
 
 <?php 
@@ -116,7 +114,6 @@ while($menu_item=$result->FetchRow())
 	<td>'.$menu_item['url'].'<br></td>  
 	<td class="wardlistrow1">'.$menu_item['status'].'<br></td>
 	<td><FONT  color="#0000cc"><b>'.$menu_item['hide_by'].'</b> </FONT></td>
-	<td><input type="text" name="dept_list_'.$menu_item['nr'].'"  value="'.$menu_item['dept_list'].'"></td>
 	</tr>';
 	$i++;
 }
@@ -129,7 +126,7 @@ if($not_trans_id){
 <?php
 }
 ?>
-<input type="hidden" name="max_items" value="<?php echo ($i); ?>">
+<input type="hidden" name="max_items" value="<?php echo ($i-1); ?>">
 <input type="hidden" name="lang" value="<?php echo $lang; ?>">
 <input type="hidden" name="mode" value="save">
 <input type="image" <?php echo createLDImgSrc($root_path,'savedisc.gif','0'); ?> border=0>

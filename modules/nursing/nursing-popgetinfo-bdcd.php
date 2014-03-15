@@ -107,7 +107,6 @@
     
     $(function(){
         $("#msr_time").mask("**:**");
-        $("#giooivo").mask("** tiếng");
     });
 </script>
 
@@ -240,7 +239,7 @@ onLoad="<?php if($saved) echo "parentrefresh();"; ?>if (window.focus) window.foc
                                 <?php
                                     echo $Mangoivo.'<br/>';
                                 ?>
-                                <input type="text" name="giooivo" id="giooivo" size="5" maxlength="5" value='<?php if($flag!=0) echo $row['giooivo'];?>'/>
+                                <input type="text" name="giooivo" id="giooivo" size="9" value='<?php if($flag!=0) echo $row['giooivo'];?>'/>
                                 <br/>
                             </td>
                             <td></td>

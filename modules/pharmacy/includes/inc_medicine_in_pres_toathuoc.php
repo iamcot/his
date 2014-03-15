@@ -58,7 +58,7 @@
 				
 				$totalcostmedicine = $medicine_pres['sum_number']*$giamacdinh;						
 				$strtext = $medicine_pres['desciption']; //howtouse count totalunits/per
-					$strtext = explode("/", $strtext);
+					$strtext = explode("-", $strtext);
 					$split_desciption = explode(" ", $strtext[0]);								
 							
 			echo '<tr bgcolor="#ffffff">

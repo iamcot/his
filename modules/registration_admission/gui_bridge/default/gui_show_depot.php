@@ -65,7 +65,7 @@ if(!isset($pres_obj)) $pres_obj=new PrescriptionMedipot;
 		</tr>
 		
 		<tr bgcolor="<?php echo $bgc; ?>" valign="top">
-			<td width="50%"><FONT SIZE=-1  FACE="Arial"><?php echo $LDDoctor.': '.$row['doctor']; ?></td>
+			<td width="50%"><FONT SIZE=-1  FACE="Arial"><?php echo $LDNurse.': '.$row['doctor']; ?></td>
 			<td width="35%"><FONT SIZE=-1  FACE="Arial"><?php echo $LDPrice.": ".number_format($row['total_cost']); ?></td>
 			<td width="15%" align="right">	
 				<a href="<?php	if($row['status_bill'])

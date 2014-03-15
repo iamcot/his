@@ -103,8 +103,8 @@ if(($mode=='')||($mode=='fresh')){
 		# Create personnel object
 		include_once($root_path.'include/care_api_classes/class_personell.php');
 		$pers_obj=new Personell;
-		$role_nr =14;//dieu duong
-		if($result=$pers_obj->getDOCDutyplan($ward_info['dept_nr'],$role_nr,$pyear,$pmonth,$elem)){
+			
+		if($result=$pers_obj->getDOCDutyplan($ward_info['dept_nr'],$pyear,$pmonth,$elem)){
 			$duty1=&unserialize($result['duty_1_pnr']);
 			if(SHOW_DOC_2) $duty2=&unserialize($result['duty_2_pnr']);
 					//echo $sql."<br>";
@@ -361,7 +361,8 @@ if($ward_ok){
 	$cflag=$ward_info['room_nr_start'];
 	
 	# Initialize list rows container string
-	$sListRows='';
+
+    $sListRows='';
 	
 	# Loop trough the ward rooms
 	for ($i=$ward_info['room_nr_start'];$i<=$ward_info['room_nr_end'];$i++)
@@ -393,6 +394,8 @@ if($ward_ok){
 			$smarty->assign('sTitle','');
 			$smarty->assign('sBirthDate','');
 			$smarty->assign('sPatNr','');
+
+
 			$smarty->assign('sAdmitDataIcon','');
 			$smarty->assign('sChartFolderIcon','');
 			$smarty->assign('sYellowPaper','');
@@ -507,7 +510,7 @@ if($ward_ok){
 				if(isset($sln) && $sln) $sFamNameBuffer = str_ireplace($sln,'<span style="background:yellow">'.ucfirst($sln).'</span>',ucfirst($bed['name_last']));
 					else $sFamNameBuffer = ucfirst($bed['name_last']);
 
-				if($bed['name_last']) $smarty->assign('cComma',',');
+				if($bed['name_last']) $smarty->assign('cComma',';');
 					else $smarty->assign('cComma','');
 
 				if(isset($sfn) && $sfn) $sNameBuffer = str_ireplace($sfn,'<span style="background:yellow">'.ucfirst($sln).'</span>',ucfirst($bed['name_first']));

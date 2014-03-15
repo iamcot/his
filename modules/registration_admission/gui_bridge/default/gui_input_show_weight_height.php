@@ -10,20 +10,15 @@ function chkform(d) {
 		alert("<?php echo $LDPlsEnterDate; ?>");
 		d.msr_date.focus();
 		return false;
-	}
-	/*
-	else if(d.weight.value==""&&d.height.value==""){
+	}else if(d.weight.value==""&&d.height.value==""){
 		alert("<?php echo $LDPlsEnterValue; ?>");
 		return false;
-	}
-	*/
-	else if(isNaN(d.weight.value)){
+	}else if(isNaN(d.weight.value)){
 		d.height.focus(); // patch for Konqueror
 		alert("<?php echo $LDEntryInvalidChar; ?>");
 		d.weight.focus();
 		return false;
-	}
-	else if(d.weight.value<0){
+	}else if(d.weight.value<0){
 		d.height.focus(); // patch for Konqueror
 		alert("<?php echo $LDNotNegValue; ?>");
 		d.weight.focus();
@@ -48,13 +43,11 @@ function chkform(d) {
 		alert("<?php echo $LDNotNegValue; ?>");
 		d.head_c.focus();
 		return false;
-	}
-	/*else if(d.measured_by.value==""){
+	}else if(d.measured_by.value==""){
 		alert("<?php echo $LDPlsEnterFullName; ?>");
 		d.measured_by.focus();
 		return false;
-	}
-	*/else{
+	}else{
 		return true;
 	}
 }

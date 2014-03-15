@@ -46,9 +46,7 @@
                     if($x=='status') break;
                     if($x=='nr'||$x=='encounter_nr'|| (empty($pregbuf[$show_preg_enc][$x]) && $x!='sieuam')) continue;
                     if($LD[$x]!='đến ngày'){
-                            if(formatDate2Local($pregbuf[$show_preg_enc][$x],$date_format)=='00/00/0000'){ 
-                                continue;
-                            }else{
+                            
                                 if($x=='sieuam'){
                                     echo '<tr bgcolor="yellow">
                                             <td width="30%"  style="padding-left:15px;">
@@ -60,7 +58,7 @@
 
                                 }
                                 echo $LD[$x];
-                            }
+                          
                                     
                                 ?>
                             </b>
@@ -77,19 +75,27 @@
                                     echo '<td width="20%"><FONT color="#006600"><b>'.$LD['kinhcuoiden'].'</b></FONT></td>';
                                     echo '<td>'.formatDate2Local($pregbuf[$show_preg_enc]['kinhcuoiden'],$date_format).'</td>';
                                     echo '</tr></table>';
-                                }                                
+                                }else{
+									echo '<table border=0 width=100%><tr>';
+                                    echo '<td colspan="3">Quên</td>';
+                                    echo '</tr></table>';
+                                }                             
                                 break;
-                            case 'kinhcuoiden': 
-                                break;
+							case 'kinhcuoiden':
+								break;
                             case 'tuoithai':
                                 echo $pregbuf[$show_preg_enc][$x].'   '.$LDWeek;
                                 break;
                             case 'ngaychuyenda':
-                                echo formatDate2Local($pregbuf[$show_preg_enc][$x],$date_format);
-                                break;
-                            case 'gio_chuyenda': 
-                                echo $pregbuf[$show_preg_enc][$x]; 
-                                break;
+                            case 'gio_chuyenda':
+								if($pregbuf[$show_preg_enc]['ngaychuyenda']!='0000-00-00' || $pregbuf[$show_preg_enc]['gio_chuyenda']!='00:00:00'){
+									echo formatDate2Local($pregbuf[$show_preg_enc][$x],$date_format);
+									echo $pregbuf[$show_preg_enc][$x]; 
+									break;
+								}else{
+									echo 'chưa chuyển dạ';
+									break;
+								}
                             case 'uongvan':
                                 if($pregbuf[$show_preg_enc][$x]) echo $LDYes_s;
                                 break;
@@ -324,7 +330,7 @@
                             echo '</td>';
                             echo '<td';
                             if($conhiensong[$i])
-                                echo ' bgcolor="yellow" align="center"><b>'.$LDYes_s.'</b>';
+                                echo ' bgcolor="yellow" align="center"><b>'.$conhiensong[$i].'</b>';
                             else
                                 echo $bg;
                             echo '</td>';

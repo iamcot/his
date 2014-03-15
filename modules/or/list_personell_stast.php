@@ -259,19 +259,24 @@
                             }else{
                                 echo '<td align="center" bgcolor="white">GV</td>';
                             }
+							$number_level_2='';
+							$color2='';
+							$number_level_3='';
+							$color3='';
                             for($i=1;$i<=$maxdays;$i++){
-                                if($i==substr($personell['date_request'],8,2)){  
-                                    if($personell["level_method"]=='II'){
-                                        $count_level_2=$enc_op_obj->list_doctor_op($personell['personell_nr'], "II", $personell['date_request']);
-                                        $number_level=$count_level_2->RecordCount();
-                                        echo '<td bgcolor="#5F9EA0" width="'.round($maxdays/2).'" align="center">'.$number_level.'</td>';
-                                        echo '<td bgcolor="white" width="'.round($maxdays/2).'"></td>';
-                                    }else{
-                                        $count_level_2=$enc_op_obj->list_doctor_op($personell['personell_nr'], "III", $personell['date_request']);
-                                        $number_level=$count_level_2->RecordCount();
-                                        echo '<td bgcolor="white" width="'.round($maxdays/2).'"></td>';
-                                        echo '<td bgcolor="#B0C4DE" width="'.round($maxdays/2).'" align="center">'.$number_level.'</td>';                                    
-                                    }
+                                if($i==substr($personell['date_request'],8,2)){ 
+                                        if($array_level[$t]=='II'){
+                                            $count_level_2=$enc_op_obj->list_doctor_op($personell['personell_nr'], "II", $array_date[$t]);
+                                            $number_level_2=$count_level_2->RecordCount();
+											$color2='#5F9EA0';
+                                        }else if($array_level[$t]=='III'){
+                                            $count_level_3=$enc_op_obj->list_doctor_op($personell['personell_nr'], "III", $array_date[$t]);
+                                            $number_level_3=$count_level_3->RecordCount();   
+											$color3='#B0C4DE';	
+                                        }
+										echo '<td bgcolor="'.$color2.'" width="'.round($maxdays/2).'">'.$number_level_2.'</td>';
+										echo '<td bgcolor="'.$color3.'" width="'.round($maxdays/2).'">'.$number_level_3.'</td>';										
+										break;
                                 }else{                                
                                     echo '<td bgcolor="white" width="'.round($maxdays/2).'"></td>';
                                     echo '<td bgcolor="white" width="'.round($maxdays/2).'"></td>';
@@ -318,29 +323,34 @@
                                 $len++;
                             }                            
                             $count_level_month=$enc_op_obj->list_doctor_op_flag($personell_nr['personell_nr'],"",$pmonth,$pyear);
+							
                             for($i=1;$i<=$maxdays;$i++){
                                 $temp=$len;
                                 for($t=1;$t<=($len-1);$t++){
                                     $temp--;
                                     if($i==substr($array_date[$t],8,2)){
-                                        if($array_level[$t]=='II'){
+										if($array_level[$t]=='II'){
                                             $count_level_2=$enc_op_obj->list_doctor_op($personell['personell_nr'], "II", $array_date[$t]);
-                                            $number_level=$count_level_2->RecordCount();
-                                            echo '<td bgcolor="#5F9EA0" width="'.round($maxdays/2).'" align="center">'.$number_level.'</td>';
-                                            echo '<td bgcolor="white" width="'.round($maxdays/2).'"></td>';
-                                            break;
+                                            $number_level_2=$count_level_2->RecordCount();
+											$color2='#5F9EA0';
+                                        }else if($array_level[$t]=='III'){
+                                            $count_level_3=$enc_op_obj->list_doctor_op($personell['personell_nr'], "III", $array_date[$t]);
+                                            $number_level_3=$count_level_3->RecordCount();   
+											$color3='#B0C4DE';	
                                         }else{
-                                            $count_level_2=$enc_op_obj->list_doctor_op($personell['personell_nr'], "III", $array_date[$t]);
-                                            $number_level=$count_level_2->RecordCount();
-                                            echo '<td bgcolor="white" width="'.round($maxdays/2).'"></td>';
-                                            echo '<td bgcolor="#B0C4DE" width="'.round($maxdays/2).'" align="center">'.$number_level.'</td>';
-                                            break;
-                                        }
-                                    }elseif($temp==1){
+											$number_level_2='';
+											$color2='';
+											$number_level_3='';
+											$color3='';
+										}
+										echo '<td bgcolor="'.$color2.'" width="'.round($maxdays/2).'">'.$number_level_2.'</td>';
+										echo '<td bgcolor="'.$color3.'" width="'.round($maxdays/2).'">'.$number_level_3.'</td>';
+										break;
+                                    }else if($temp==1){
                                         echo '<td bgcolor="white" width="'.round($maxdays/2).'"></td>';
                                         echo '<td bgcolor="white" width="'.round($maxdays/2).'"></td>';
                                     }
-                                }                                
+                                }
                             }
                             $temp=$len-1;
                             for($i=1;$i<($len-1);$i++){

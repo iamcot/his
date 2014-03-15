@@ -131,7 +131,6 @@
     
     $TP_TIME=$LDDate_break;
     if($pregnancy['time_oivo']) $TP_PTIME=$pregnancy['time_oivo'];
-    else $TP_PTIME=date('H:i:s');
     $TP_DATE=$LD['date_oivo'];    
     $TP_DATE_INPUT = $calendar->show_calendar($calendar,$date_format,'date_oivo',$pregnancy['date_oivo']);
     

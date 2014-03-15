@@ -76,7 +76,7 @@
                     //insert log
                     $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $enc_obj->getLastQuery(), date('Y-m-d H:i:s'));
                 }
-                if($_POST['camdoan']!=''){
+                if(isset($_POST['camdoan'])){
                     $array=explode("notes=",$data_array);
                     $data_array=$array[0]." notes='".$_POST['camdoan']."' ";           
                     $enc_obj->UpdateDischargeNotesFromArray($data_array,($nr+6));

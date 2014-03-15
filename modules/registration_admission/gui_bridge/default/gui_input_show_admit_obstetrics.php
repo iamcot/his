@@ -38,12 +38,12 @@
     }
     
     $TP_PHU=$LD['phu'];
-    $TP_PHU_INPUT='<input type="checkbox" name="phu" id="phu" value="';
+    $TP_PHU_INPUT='<textarea name="phu" id="phu" maxlength="255" cols=20 rows=1 wrap="physical" ';
     if($pregnancy['phu']) 
-        $TP_PHU_INPUT.=$pregnancy['phu'].'" checked';
+        $TP_PHU_INPUT.='>'.$pregnancy['phu'];
     else
-        $TP_PHU_INPUT.='"';
-    $TP_PHU_INPUT.=' onchange=setValue() />';
+        $TP_PHU_INPUT.='>';
+    $TP_PHU_INPUT.='</textarea>';
     
     $TP_TUANHOAN=$LD['tuanhoan_notes'];
     if($pregnancy['tuanhoan_notes']){

@@ -628,11 +628,11 @@
                             ImageLine($im,$ox2_1+($tabcols*2),$oy2-1,$ox2_1+($tabcols*2),$tabhi-1,$text_blue);
                             //ve duong day
                             ImageLine($im,$ox2_1,$tabhi-1,$ox2_1+($tabcols*2),$tabhi-1,$text_blue);
-                            if(20<=$bp['sogiay'] && $bp['sogiay']<=40){
-                                $src = imagecreatefrompng($root_path.'gui/img/common/default/soctrai_bdcd.png');
-                                imagecopyresized($im, $src, $ox2_1+1, $oy2+1, 0, 0, ($tabcols*2)-2, 151, 195, 151);           
-                            }else if($bp['sogiay']>40){
+                            if(20<$bp['soconco'] && $bp['soconco']<40){
                                 $src = imagecreatefrompng($root_path.'gui/img/common/default/socphai_bdcd.png');
+                                imagecopyresized($im, $src, $ox2_1+1, $oy2+1, 0, 0, ($tabcols*2)-2, 151, 195, 151);           
+                            }else if($bp['soconco']>40){
+                                $src = imagecreatefrompng($root_path.'gui/img/common/default/soctrai_bdcd.png');
                                 imagecopyresized($im, $src, $ox2_1+1, $oy2+1, 0, 0, ($tabcols*2)-2, 151, 195, 151);
                             }
                             $count++;
@@ -655,11 +655,11 @@
                         ImageLine($im,$ox2-2,$oy2,$ox2+($tabcols*2)+2,$oy2,$text_blue);
                         //ve duong ben phai
                         ImageLine($im,$ox2+($tabcols*2),$oy2-1,$ox2+($tabcols*2),$tabhi-1,$text_blue);
-                        if(20<=$bp['sogiay'] && $bp['sogiay']<=40){
-                            $src = imagecreatefrompng($root_path.'gui/img/common/default/soctrai_bdcd.png');
-                            imagecopyresized($im, $src, $ox2+1, $oy2+1, 0, 0, ($tabcols*2)-2, 151, 195, 151);           
-                        }else if($bp['sogiay']>40){
+                        if(20<$bp['soconco'] && $bp['soconco']<40){
                             $src = imagecreatefrompng($root_path.'gui/img/common/default/socphai_bdcd.png');
+                            imagecopyresized($im, $src, $ox2+1, $oy2+1, 0, 0, ($tabcols*2)-2, 151, 195, 151);           
+                        }else if($bp['soconco']>40){
+                            $src = imagecreatefrompng($root_path.'gui/img/common/default/soctrai_bdcd.png');
                             imagecopyresized($im, $src, $ox2+1, $oy2+1, 0, 0, ($tabcols*2)-2, 151, 195, 151);
                         }
                         $ox1=$ox2;

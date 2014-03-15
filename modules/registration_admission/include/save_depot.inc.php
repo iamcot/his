@@ -6,6 +6,7 @@ define('LANG_FILE','aufnahme.php');
 require_once($root_path.'include/core/inc_environment_global.php');
 include_once($root_path.'include/care_api_classes/class_prescription_medipot.php');
 //require_once($root_path.'include/core/inc_front_chain_lang.php');
+include_once($root_path.'include/core/inc_date_format_functions.php');
 
 $local_user='aufnahme_user';
 
@@ -13,7 +14,9 @@ if ($isdelete=="delete")
 	$mode = "delete";
 else
 	$mode = $_POST['mode'];
-
+	
+$thisfile=basename(__FILE__);
+$sepChars=array('-','.','/',':',',');
 	
 $patmenu="../show_depot.php".URL_REDIRECT_APPEND."&full_en=".$_SESSION['sess_full_en']."&encounter_nr=".$_POST['encounter_nr']."&lang=".$_POST['lang']."&target=$target&pid=".$_SESSION['sess_pid'];
 if(!isset($pres_obj)) $pres_obj=new PrescriptionMedipot;
@@ -22,6 +25,15 @@ $ward_nr=$_POST['ward_nr'];
 
 $a = explode('_',$_POST['prescription_type_nr']);
 $_POST['prescription_type_nr'] = $a[0];
+		
+$date_time = explode(" ",$_POST['inputdate']);
+$date_tp = formatDate2STD($date_time[0],'dd/mm/yyyy',$sepChars);	
+if (date('H:i:s',strtotime($date_time[1])) != $date_time[1]) {
+	$time_tp =date('H:i:s');
+} else $time_tp = $date_time[1];				
+$datetime = $date_tp.' '.$time_tp;
+
+
 		
 switch($mode){
 		case 'new':
@@ -32,8 +44,8 @@ switch($mode){
 					$id=1;
 				else
 					$id = $pres_id['prescription_id']+1;
-				$datetime = date("Y-m-d G:i:s"); //$_POST['prescribe_date']
-				
+				//$datetime = date("Y-m-d G:i:s"); //$_POST['prescribe_date']
+			
 				$pharma_prescription_info = array('prescription_id' => $id,
 					'prescription_type' => $_POST['prescription_type_nr'],	
 					'dept_nr' => $dept_nr,
@@ -97,7 +109,7 @@ switch($mode){
 			
 		case 'update': 
 				$id = $_POST['idpres'];
-				$datetime = date("Y-m-d G:i:s");
+				//$datetime = date("Y-m-d G:i:s");
 				$pharma_prescription_info = array('prescription_id' => $id,
 					'prescription_type' => $_POST['prescription_type_nr'],		
 					'dept_nr' => $dept_nr,

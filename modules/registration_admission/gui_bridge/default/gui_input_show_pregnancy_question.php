@@ -7,7 +7,7 @@
     require($root_path.'classes/datetimemanager/checktime.php'); 
 ?>
 <script language="JavaScript">
-    function chkform(){
+/*    function chkform(){
         var d = document.getElementById('report');
         if(isNaN(d.tuoithai.value)){
             alert("<?php echo $LDPlsEnterTuoithai; ?>");
@@ -41,7 +41,7 @@
             return true;                        
         }
     }
-        
+*/        
     function setValue_checkbox(name,value,i){
         var value_before=document.getElementById(name).value.split(";");
         if(value==value_before[i]){
@@ -105,6 +105,8 @@
                         break;
                     case "phuongphapde":          
                         break;
+					case "conhiensong":
+						break;
                     default:
                         setValue_checkbox(name,value,i);                        
                         break;                    
@@ -290,8 +292,8 @@
         $TP_duoctiem.="' $disabled/>&nbsp;&nbsp;$LDUseTimes</td></tr></table>";
     $TP_chuyendaluc=$LD['gio_chuyenda'];
     $TP_IMG_PDATE = $calendar->show_calendar($calendar,$date_format,'ngaychuyenda',$history_question['ngaychuyenda']);
-    if($history_question['gio_chuyenda']) $TP_PTIME=$history_question['gio_chuyenda'];
-    else $TP_PTIME=date('H:i:s');
+    if($history_question['gio_chuyenda']!='00:00:00')
+		$TP_PTIME=$history_question['gio_chuyenda'];
     $TP_dauhieu_bandau=$LD['dauhieulucdau'];
     if($history_question['dauhieulucdau']) $TP_dauhieu=$history_question['dauhieulucdau'];
     $TP_bienchuyen=$LD['bienchuyen'];
@@ -448,9 +450,9 @@
             $TP_WHILE.='"';
         $TP_WHILE.=' onchange=settable_history("thaichet",'.$i.') /></td>'; 
         
-        $TP_WHILE.='<td bgcolor="#ffffff" align="center"><input type="checkbox" id="conhiensong'.$i.'" name="conhiensong'.$i.'" value="';
+        $TP_WHILE.='<td bgcolor="#ffffff" align="center"><input type="text" size=3 id="conhiensong'.$i.'" name="conhiensong'.$i.'" value="';
         if($conhiensong[$i]) 
-            $TP_WHILE.=$conhiensong[$i].'" checked';
+            $TP_WHILE.=$conhiensong[$i].'"';
         else if(!$nammangthai[$i]) 
             $TP_WHILE.='" ';
         else

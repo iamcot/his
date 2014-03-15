@@ -57,57 +57,46 @@ $returnfile='patientbill.php'.URL_APPEND.'&patientno='.$patientno.'&full_en='.$f
 <SCRIPT language="JavaScript">
 <!--
 function submitform() {
-    //var sel = new Array(document.selectlab.elements.length);
-    //var temp;
-    //var tempstr;
-    //var counter;
-    //str = document.selectlab.hidden.value;
-    var querystr = "confirmLabtests.php?";
+	var sel = new Array(document.selectlab.elements.length);
+	var temp;
+	var tempstr;
+	var counter;
+	str = document.selectlab.hidden.value;
+	querystr = "confirmLabtests.php?";
 
-    //counter = 1;
-    var flag = true;
-    var trs = document.getElementById("selectlab").getElementsByTagName("tr");
-    for (var i = 0; i < trs.length; i++) {
-        var sname = "";
-        var svalue = "";
-        var inps = trs[i].getElementsByTagName("input");
-        for (var j = 0; j < inps.length; j++) {
-            if (inps[j].type == "checkbox" && inps[j].checked) {
-                sname = inps[j].getAttribute("id");
-            }
-            if (inps[j].type == "text" && inps[j].name == "count") {
-                svalue = inps[j].value;
-            }
-        }
-
-        if (sname != "" && svalue != "") {
-            querystr += sname + "=" + svalue + "&";
-        }
-        else if(sname !="" && svalue.trim() == ""){
-            alert("Chưa nhập số lần cho mã dịch vụ "+sname);
-            return false;
-        }
-    }
-    console.log(querystr);
-    document.selectlab.action = querystr;
-    document.selectlab.submit();
+	counter = 1;
+	for (i=0;i<document.selectlab.elements.length;i++) {	
+		temp = str.indexOf("#");
+		if(document.selectlab.elements[i].type=="checkbox") {
+			tempstr = str.substring(0,temp);
+			str=str.substring(temp+1,str.length);					
+			if(document.selectlab.elements[i].checked == true) 	querystr=querystr+"itemcode"+counter+"="+tempstr+"&";
+			counter = counter + 1;					
+		}		
+	}
+	document.selectlab.action = querystr;
+	document.selectlab.submit();
 }
-function show() {
-    var xmlhttp;
-    var str = document.getElementById("item").value;
-    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp = new XMLHttpRequest();
-    }
-    else {// code for IE6, IE5
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            document.getElementById("selectlab").innerHTML = xmlhttp.responseText;
-        }
-    }
-    xmlhttp.open("GET", "getservices.php?type=" + str + "&service=<?php echo $service ?>", true);
-    xmlhttp.send();
+function show(){
+var xmlhttp;
+var str=document.getElementById("item").value;
+if (window.XMLHttpRequest)
+	  {// code for IE7+, Firefox, Chrome, Opera, Safari
+	  xmlhttp=new XMLHttpRequest();
+	  }
+	else
+	  {// code for IE6, IE5
+	  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+	xmlhttp.onreadystatechange=function()
+	  {
+	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+		document.getElementById("selectlab").innerHTML=xmlhttp.responseText;
+		}
+	  }
+	xmlhttp.open("GET","getservices.php?type="+str+"&service=<?php echo $service ?>",true);
+	xmlhttp.send();
 }
 //-->
 </SCRIPT>
@@ -120,19 +109,19 @@ if($service=='LT') { $Title  = $LDPleaseSelectLaboratoryTestsforthePatient;}
 if($service=='HS') { $Title  = $LDPleaseSelectHospitalServicesforthePatient;}
 $smarty->assign('FormTitle', $Title);
 
-$smarty->assign('sFormTag','<form name="selectlab" id="" method="POST" action="" onSubmit="return submitform(this)">');
+$smarty->assign('sFormTag','<form name="selectlab" id="selectlab" method="POST" action="" onSubmit="return submitform(this)">');
 $smarty->assign('LDTestName',$LDTestName);
 $smarty->assign('LDTestCode',$LDTestCode);
 $smarty->assign('LDCostperunit',$LDCostperunit);
 $smarty->assign('LDNumberofUnits',$LDNumberofUnits);
 $smarty->assign('service',$service);
-$smarty->assign('pbSubmit','<input type="image"  style="float:left" '.createLDImgSrc($root_path,'savedisc.gif','0','middle').'>');
-$smarty->assign('pbCancel','<a href="'.$breakfile.'" style="margin-left:20px;float:left"><img '.createLDImgSrc($root_path,'close2.gif','0','middle').' title="'.$LDCancel.'" align="middle"></a>');
+$smarty->assign('pbSubmit','<input type="image"  '.createLDImgSrc($root_path,'savedisc.gif','0','middle').'>');
+$smarty->assign('pbCancel','<a href="'.$breakfile.'" ><img '.createLDImgSrc($root_path,'close2.gif','0','middle').' title="'.$LDCancel.'" align="middle"></a>');
 
-$cbx='<input type="text" name="count">' ;
-//for($j=1; $j<=15; $j++){
-//	$cbx .= '<option>'.$j.'</option>';
-//}
+$cbx='';
+for($j=1; $j<=15; $j++){
+	$cbx .= '<option>'.$j.'</option>';
+}
 /**
 * show Template
 */
@@ -142,11 +131,11 @@ if($cntLT){
 		$item=$resultqryLT->FetchRow();
 		$itemcode="";
 		$smarty->assign('itemName','selectitem' .$cnt);
-		$smarty->assign('itemID',$item['item_code']);		//checkbox: id=nounits1,2,3...
+		$smarty->assign('itemID','nounits' .$cnt);		//checkbox: id=nounits1,2,3...
 		$smarty->assign('itemName',$item['item_description']);
 		$smarty->assign('itemCode',$item['item_code']);
 		$smarty->assign('itemPrice',number_format($item['item_unit_cost']));
-		$smarty->assign('quantity',$cbx);
+		$smarty->assign('quantity','<select size="1" name="nounits' .$cnt .'" id="nounits' .$cnt .'">'.$cbx.'</select>');
 
 		$itemcode=$item['item_code'];
 		$itemcode1=$itemcode1.$itemcode;

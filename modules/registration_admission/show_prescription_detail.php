@@ -171,7 +171,8 @@ echo '<FONT SIZE=-1  FACE="Arial"><p><b>'.$LDPrescriptionId.': '.$pres_show['pre
 					$strtext = $medicine_pres['desciption']; //howtouse count totalunits/per
 						//$strtext = explode("/", $strtext);
 						$split_desciption = explode(" ", $strtext);								
-								
+				if($medicine_pres['morenote']!='')	
+					$medicine_pres['morenote'] = '<br>'.$medicine_pres['morenote'];				
 				echo '<tr bgcolor="#ffffff">
 						<td width="3%">'.$i.'.</td>
 						<td width="45%"><FONT SIZE=-1  FACE="Arial">
@@ -181,6 +182,7 @@ echo '<FONT SIZE=-1  FACE="Arial"><p><b>'.$LDPrescriptionId.': '.$pres_show['pre
 							<!-- Moi lan b vien-->
 							'.$LDEachTime.' '.$split_desciption[1].' '.$split_desciption[2].'<br>
 							'.$LDAtTime.' '.str_replace('-', ' - ', $medicine_pres['time_use']).'</i>
+							'.$medicine_pres['morenote'].'
 						</td>';
 						
 				echo	'<!-- So luong, don gia, thanh tien -->

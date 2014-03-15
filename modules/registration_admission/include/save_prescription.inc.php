@@ -41,9 +41,9 @@ switch($mode){
 					$id = $pres_id['prescription_id']+1;
 					
 				$date_time = explode(" ",$_POST['inputdate']);
-				if (date('d-m-Y',strtotime($date_time[0])) != $date_time[0]) {
+				/*if (date('d-m-Y',strtotime($date_time[0])) != $date_time[0]) {
 					$date_tp =date('Y-m-d');
-				} else 	$date_tp = formatDate2STD($date_time[0],'dd/mm/yyyy',$sepChars);	
+				} else 	*/$date_tp = formatDate2STD($date_time[0],'dd/mm/yyyy',$sepChars);	
 				
 				if (date('H:i:s',strtotime($date_time[1])) != $date_time[1]) {
 					$time_tp =date('H:i:s');
@@ -96,6 +96,8 @@ switch($mode){
 							$attime_save=$attime_save.'-'.$_POST['attime_'.$j.'_'.$k];
 						$attime_save=substr($attime_save, 1); 
 						
+						$attime_save = str_replace("'''","s",$attime_save); $attime_save = str_replace("''","p",$attime_save); $attime_save = str_replace("'","h",$attime_save);
+						
 						$pharma_prescription = array(
 							'nr' => $pres_obj->LastInsertPK('nr',$pk),
 							'prescription_id' => $id,
@@ -111,10 +113,11 @@ switch($mode){
 							'time_use' =>$attime_save,
 							'morenote'=>$_POST['morenote'.$j],
 							'speed'=>'',
-							'avai_pro_id' => $_POST['avai_id'.$j]
+							'avai_pro_id' => $_POST['avai_id'.$j],
+							'cost_dutinh' => $_POST['cost'.$j]
 						);
 						$pres_obj->insertDataFromArray($pharma_prescription);
-						$pres_obj->updateAvaiPro_TamTon_Sub($_POST['avai_id'.$j], $_POST['sum'.$j]);
+						$pres_obj->updateAvaiPro_Sub($_POST['avai_id'.$j], $_POST['sum'.$j]);
 					}
 				}
 				$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $pres_obj->getLastQuery(), date('Y-m-d H:i:s'));	
@@ -133,9 +136,9 @@ switch($mode){
 				$id = $_POST['idpres'];
 				$date_time = explode(" ",$_POST['inputdate']);
 				
-				if (date('d-m-Y',strtotime($date_time[0])) != $date_time[0]) {
+				/*if (date('d-m-Y',strtotime($date_time[0])) != $date_time[0]) {
 					$date_tp =date('Y-m-d');
-				} else 	$date_tp = formatDate2STD($date_time[0],'dd/mm/yyyy',$sepChars);	
+				} else*/ 	$date_tp = formatDate2STD($date_time[0],'dd/mm/yyyy',$sepChars);	
 				
 				if (date('H:i:s',strtotime($date_time[1])) != $date_time[1]) {
 					$time_tp =date('H:i:s');
@@ -175,7 +178,7 @@ switch($mode){
 					
 					$pres_obj->usePrescription('prescription');
 					//$pres_obj->updateAvaiPro_TamTon($_POST['avai_id'.$j], '+', $_POST['sum'.$j]);
-					$pres_obj->updateAvaiPro_TamTon_Plus($id);
+					$pres_obj->updateAvaiPro_Plus($id);
 					$pres_obj->deleteAllMedicineInPres($id);
 					$n = $_POST['theValue']; 
 					for ($j=1; $j<=$n; $j++)
@@ -186,6 +189,8 @@ switch($mode){
 							for ($k=1;$k<=$temp_n;$k++)
 								$attime_save=$attime_save.'-'.$_POST['attime_'.$j.'_'.$k];
 							$attime_save=substr($attime_save, 1); 
+							
+							$attime_save = str_replace("'''","s",$attime_save); $attime_save = str_replace("''","p",$attime_save); $attime_save = str_replace("'","h",$attime_save);
 						
 							$pharma_prescription = array(
 								'nr' => $pres_obj->LastInsertPK('nr',$pk),
@@ -202,11 +207,12 @@ switch($mode){
 								'time_use' => $attime_save,
 								'morenote' => $_POST['morenote'.$j],
 								'speed'=>'',
-								'avai_pro_id' => $_POST['avai_id'.$j]
+								'avai_pro_id' => $_POST['avai_id'.$j],
+								'cost_dutinh' => $_POST['cost'.$j]
 							);
 							//$pres_obj->setDataArray(&$pharma_prescription);
 							$pres_obj->insertDataFromArray($pharma_prescription);
-							$pres_obj->updateAvaiPro_TamTon_Sub($_POST['avai_id'.$j], $_POST['sum'.$j]);
+							$pres_obj->updateAvaiPro_Sub($_POST['avai_id'.$j], $_POST['sum'.$j]);
 						}				
 					}
 					$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $pres_obj->getLastQuery(), date('Y-m-d H:i:s'));					

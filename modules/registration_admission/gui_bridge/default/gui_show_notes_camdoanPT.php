@@ -21,7 +21,7 @@
         $time=$pregrancy['time'];
         $nr_dad=$pregrancy['nr'];
         $pregs1=&$obj->_getNotesKhac("notes.encounter_nr='$pn' AND notes.type_nr=types.nr AND types.sort_nr=32 AND notes.date='$date' AND notes.time='$time'", "ORDER BY notes.type_nr ASC");
-        $date_array=array();
+		$date_array=array();
         if($pregs1){
             while($row1=$pregs1->FetchRow()){
                 $nr=$row1['type_nr'];

@@ -53,14 +53,16 @@
                 <?php
                     switch($x){
                         case 'date_oivo':
-                            echo '<tr bgcolor="yellow">
+                            if($pregbuf[$show_preg_enc]['time_oivo']!='00:00:00'){
+                                echo '<tr bgcolor="yellow">
                                     <td  style="padding-left:15px;">
                                         <FONT color="#006600">
                                             <b>';
-                            echo $LDDate_break;
-                            echo '      </b>
-                                    </FONT>
-                                </td>';
+                                echo $LDDate_break;
+                                echo '      </b>
+                                        </FONT>
+                                    </td>';
+                            }
                             break;
                         case 'oi':
                         case 'oivo':
@@ -103,9 +105,11 @@
                                 case 'time_oivo':
                                     break;
                                 case 'date_oivo':
-                                    echo '<td style="padding-left:15px;"><table cellspacing=0><tr><td>'.$pregbuf[$show_preg_enc]['time_oivo'].'</td><td width="15%"></td>';				 
-                                    echo '<td>'.$LD['date_oivo'].':&nbsp;&nbsp;&nbsp;'.formatDate2Local($pregbuf[$show_preg_enc]['date_oivo'],$date_format).'</td>'; 
-                                    echo '</tr></table></td></tr>';
+                                    if($pregbuf[$show_preg_enc]['time_oivo']!='00:00:00'){
+                                        echo '<td style="padding-left:15px;"><table cellspacing=0><tr><td>'.$pregbuf[$show_preg_enc]['time_oivo'].'</td><td width="15%"></td>';				 
+                                        echo '<td>'.$LD['date_oivo'].':&nbsp;&nbsp;&nbsp;'.formatDate2Local($pregbuf[$show_preg_enc]['date_oivo'],$date_format).'</td>'; 
+                                        echo '</tr></table></td></tr>';
+                                    }
                                     break;
                                 case 'oi':
                                 case 'oivo':

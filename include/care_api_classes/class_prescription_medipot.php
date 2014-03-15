@@ -709,50 +709,5 @@ class PrescriptionMedipot extends Core {
 			}else{return 0;}
 		}else{return 0;}
 	}
-	
-	function getMedipotIssue($pres_id, $product_encoder){
-		global $db;
-		$this->sql="SELECT *, sum(number) AS sum FROM care_med_prescription_issue
-					WHERE pres_id='".$pres_id."' AND product_encoder='".$product_encoder."'
-					GROUP BY product_encoder";
-			
-		if ($this->result=$db->Execute($this->sql)) {
-		    if ($this->result->RecordCount()) {
-		        return $this->result->FetchRow();
-			}else{return false;}
-		}else{return false;}	
-	}
-	function setDongPhatThuoc($pres_id) {
-	    global $db;
-		if(!$pres_id) return FALSE;
-		//prescriprion_info
-		$this->sql="UPDATE $this->tb_phar_pres_info
-						SET dongphatthuoc='1' 
-						WHERE prescription_id='$pres_id'";
-		return $this->Transact($this->sql);	
-	}
-	function IssueMedicineForPatient($enc_nr, $date_issue, $encoder, $number, $pres_id) {
-	    global $db;
-		global $_SESSION;
-		if($encoder=='') return FALSE;
-		$this->sql="INSERT INTO care_med_prescription_issue 
-					(enc_nr, date_issue, product_encoder, number, pres_id, create_id)
-					VALUES
-					('".$enc_nr."', '".$date_issue."', '".$encoder."', '".$number."', '".$pres_id."', '".$_SESSION['sess_user_name']."');";
-		return $this->Transact($this->sql);	
-	}
-	function listMedipotIssueByPresId($pres_id){
-		global $db;
-		$this->sql="SELECT iss.*,main.product_name, SUM(iss.number) AS SUM FROM care_med_prescription_issue AS iss, care_med_products_main AS main
-					WHERE iss.pres_id='".$pres_id."' AND iss.product_encoder=main.product_encoder 
-					GROUP BY iss.product_encoder, iss.date_issue
-					ORDER BY iss.product_encoder, iss.date_issue";
-			
-		if ($this->result=$db->Execute($this->sql)) {
-		    if ($this->result->RecordCount()) {
-		        return $this->result;
-			}else{return false;}
-		}else{return false;}	
-	}	
 }
 ?>

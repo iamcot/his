@@ -31,14 +31,8 @@ $dept_obj= new Department;
 <script type="text/javascript">
 
 $(function() {
-	$("#datefrom").datepicker({
-        changeMonth: true,
-        changeYear: true
-    });
-	 $("#dateto").datepicker({
-         changeMonth: true,
-         changeYear: true
-     });
+	$("#datefrom").datepicker();
+	 $("#dateto").datepicker();
         $("#datefrom").datepicker("option", "dateFormat","yy-mm-dd");
        $("#dateto").datepicker("option", "dateFormat","yy-mm-dd");
     });

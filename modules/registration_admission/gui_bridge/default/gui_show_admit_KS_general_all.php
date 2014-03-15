@@ -56,7 +56,8 @@
     $smarty->assign('name_last',$name_last);
     $smarty->assign('LDFirstName',$LDFirstName);
     $smarty->assign('name_first',$name_first);
-
+	$smarty->assign('LDTuoi',$LDTuoi);
+	$smarty->assign('tuoi',$tuoi);
 # If person is dead show a black cross and assign death date
 
     if($death_date && $death_date != DBF_NODATE){

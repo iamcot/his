@@ -79,7 +79,7 @@ else if($as_old){
 }
 else
 {
-	$date_pres = date("Y-m-d G:i:s");
+	$date_pres = date("Y-m-d H:i:s");
 }
 
 
@@ -102,6 +102,9 @@ if($mode=='create' || $mode=='new')
 		$diagnosis='';
 	else{	
 		$diagnosis = $encounter_obj->RefererDiagnosis($en_nr);		//Chan doan
+		$benhphu = $encounter_obj->BenhPhu($en_nr);
+		if ($benhphu!='')
+			$diagnosis = $diagnosis."\n ".$LDBenhPhu.': '.$benhphu;
 		//$diagnosis = trim($diagnosis,'refferer_diagnosis');
 	}
 }
@@ -150,6 +153,18 @@ if($type!='sheet' && $mode!='update'){
 	if(strlen($text_NS)>2) $text_NS = substr($text_NS, 2); else $text_NS='';
 	$text_CLS= 'XQ: '.$text_XQ."\nSA: ".$text_SA."\n".$LDKhac.": ".$text_DT." ".$text_NS."\nXN: ".$text_XN; 
 	
+	//phau thuat, thu thuat
+	$sql_pttt= "SELECT bill.*,listitem.* FROM care_billing_bill_item AS bill, care_billing_item AS listitem 
+				WHERE bill.bill_item_encounter_nr='".$en_nr."' AND bill.bill_item_status='1'
+				AND  listitem.item_type='HS' AND listitem.item_group_nr IN (33,34)
+				AND bill.bill_item_code=listitem.item_code";
+				
+	if($result_pttt=$db->Execute($sql_pttt)){
+		while ($item_pttt = $result_pttt->FetchRow()){
+			$text_PTTT .= $item_pttt['item_description']."\n";
+		}
+		$text_CLS=$text_CLS." \nTT/PT: ".$text_PTTT;
+	}
 	
 	//type= mach:2, huyetap:1, cannang:6, nhietdo:3, 
 	$sql_sinhhieu="SELECT msr_type_nr, value, MAX(msr_date), MAX(msr_time) FROM care_encounter_measurement 
@@ -380,7 +395,7 @@ function calcost(x){
 	if(document.getElementsByName('totalcost'+i).length)
 		total = total + document.reportform['totalcost'+i].value*1;
   }
-  document.getElementById('totalpres').value = total;
+  document.getElementById('totalpres').value = total.toFixed(1);
 }
 
 
@@ -410,19 +425,19 @@ function ChangeAtTime(x){
 		defaulttime = temptime.split('h-');
 		var texthtml='';
 		for (i=1; i<=n; i++){
-			texthtml = texthtml + '<select name="attime_'+x+'_'+i+'" id="attime_'+x+'_'+i+'" >';
-			for (j=0; j<=23; j++){
+			texthtml = texthtml + '<input type="text" name="attime_'+x+'_'+i+'" id="attime_'+x+'_'+i+'" value="'+defaulttime[i-1]+'h" style="width:60px;">&nbsp;';
+			/*for (j=0; j<=23; j++){
 				if (j==defaulttime[i-1])
 					texthtml = texthtml + '<option value="'+j+'h" selected >'+j+'h</option>';
 				else 
 					texthtml = texthtml + '<option value="'+j+'h">'+j+'h</option>';	
 			}
-			texthtml = texthtml + '</select> &nbsp;';
+			texthtml = texthtml + '</select> &nbsp;';*/
 		}
 	}else{	//toa ngoai tru (type='pres')
 		switch(n){
 			case '1': temptime='<?php echo 'sáng'; ?>'; break;
-			case '2': temptime='<?php echo 'sáng-tối'; ?>'; break;
+			case '2': temptime='<?php echo 'sáng-chiều'; ?>'; break;
 			case '3': temptime='<?php echo 'sáng-trưa-tối'; ?>'; break;
 			case '4': temptime='<?php echo 'sáng-trưa-chiều-tối'; ?>'; break;
 			default: temptime='<?php echo 'sáng-trưa-chiều-tối'; ?>'; break;
@@ -482,6 +497,7 @@ function setSelectionId(div,li) {
 			
 			calcost(k); //document.getElementById('totalcost'+k).value = temp_cost[0]*document.getElementById('sum'+k).value;
 			CheckDuplicateMedicine();
+			CheckNumberRequest(k);
 			
 }
 function Fill_Data_Search(i){
@@ -513,6 +529,7 @@ function Fill_Data_Search(i){
 			//$('#caution'+i).val(a[5]);		
 			
 			CheckDuplicateMedicine();
+			CheckNumberRequest(i);
 		}
 	}
 	xmlhttp.open("GET",process_file+"&encoder="+document.getElementById('encoder'+i).value+"&search="+document.getElementById('medicinea'+i).value,true);
@@ -548,6 +565,7 @@ function Fill_Data(i)
 			//$('#caution'+i).val(a[5]);		
 			
 			CheckDuplicateMedicine();
+			CheckNumberRequest(i);
 		}
 	}
 	xmlhttp.open("GET",process_file+"&avai_id="+document.getElementById('avai_id'+i).value+"&search="+document.getElementById('medicinea'+i).value,true);
@@ -558,11 +576,13 @@ function Fill_Data(i)
 //Kiem tra thuoc trung 
 function CheckDuplicateMedicine(){
 	var n = document.getElementById('theValue').value;		
-	var enco_j, enco_k;
+	var enco_j, enco_k, warn_j, warn_k;
 	for (j=1; j<=n; j++){
 		enco_j = document.getElementById("encoder"+j);
-		if(enco_j)
-			enco_j.style.backgroundColor="white";
+		if(enco_j){
+			warn_j = document.getElementById("warning"+j);
+			warn_j.style.backgroundColor="white";
+		}	
 	}
 	for (j=1; j<=n; j++){	
 		enco_j = document.getElementById("encoder"+j);
@@ -571,13 +591,31 @@ function CheckDuplicateMedicine(){
 				enco_k = document.getElementById("encoder"+k);
 				if (k!=j && enco_k.value!='')
 					if (enco_j.value==enco_k.value){
-						enco_j.style.backgroundColor="gold";
-						enco_k.style.backgroundColor="gold";
+						warn_j = document.getElementById("warning"+j);
+						warn_k = document.getElementById("warning"+k);
+						warn_j.style.backgroundColor="gold";
+						warn_k.style.backgroundColor="gold";
 					}
 			}
 		}
 	}
 }
+
+//Kiem tra so luong thuoc
+function CheckNumberRequest(i){
+	var enco, warn, inventory, sum, color;
+	enco = document.getElementById("encoder"+i);
+	warn = document.getElementById("warning"+i);
+	inventory = document.getElementById("inventory"+i);
+	sum = document.getElementById("sum"+i);
+
+	if (enco.value=='' || (sum.value>inventory.value))
+		warn.style.backgroundColor="red";
+	//else warn.style.backgroundColor="white";
+	
+}
+
+
 </script>
 
 <script type="text/javascript">
@@ -684,7 +722,7 @@ function CheckDuplicateMedicine(){
    </tr>
     <tr>
 		<td><FONT color="#000066"><?php if($todo) echo $LDTreatment; else echo $LDDiagnosis; ?></td>
-		<td><FONT color="#000066"><textarea name="diagnosis" cols="35" rows="2" wrap="physical" > <?php echo $diagnosis; ?> </textarea> 	</td>
+		<td><FONT color="#000066"><textarea name="diagnosis" cols="35" rows="3" wrap="physical" > <?php echo $diagnosis; ?> </textarea> 	</td>
 <?php if($todo){
 		echo '<td colspan="2"></td>';
 	} else { ?>
@@ -780,8 +818,8 @@ function CheckDuplicateMedicine(){
 		<td><FONT color="#000066"><?php echo $LDNote; ?></font><br><br>
 			<?php echo '+ '.$LDLoiDan.':'; ?></td>
 		<td><br><textarea name="note" cols="35" rows="2" wrap="physical" ><?php if($mode=='update' || $as_old) echo $note; ?> </textarea></td>
-		<td><FONT color="#000066"><?php echo $LDTotal; ?></td>
-		<td><input type="text" id="totalpres" name="totalpres" size=11 value="<?php if($mode=='update' || $as_old) echo $totalcost_pres; else echo '0'; ?>" style="border:0px;" readonly></td>
+		<td><FONT color="#000066"><?php echo $LDTotalEstimate; ?></td>
+		<td><input type="text" id="totalpres" name="totalpres" size=11 value="<?php if($mode=='update' || $as_old) echo round($totalcost_pres,2); else echo '0'; ?>" style="border:0px;" readonly></td>
  	</tr> 
 <?php
 	}

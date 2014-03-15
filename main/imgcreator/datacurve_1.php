@@ -77,15 +77,22 @@
             if($ok){
                 $ox1=0;$ox2_1=0;$oy1=0;$count=1;
                 $time_bf=0;	
+				$date_bf=0;
                 $font = 'ARIAL.TTF';
                 #**************** begin of curve tracing  Blood Pressure***************                    
                 if($bprows){                        
                     for($i=0;$i<$bprows;$i++)
-                    {                        
+                    {  
                         $bp=$bp_obj->FetchRow();
                         if(empty($bp['msr_time'])||empty($bp['nhiptim'])||(!empty($bp['lanmangthai']) || !empty($bp['lansinh']) || !empty($bp['giooivo']))) continue;
                         $time=explode(':',$bp['msr_time']);
 						$time_b=explode(':',$time_bf);
+						if($date_bf!=0 && $date_bf != $bp['msr_date']){
+							if($time['0']=='00'){
+								$time['0']++;
+							}
+							$time['0'] = $time_b['0']+$time['0'];       
+						}
                         imagesetthickness($im, 5);  
                         if($bp['cotucung']>=3 && $i==0){
                             if(3<=$bp['cotucung'] && $bp['cotucung']<4){
@@ -189,6 +196,7 @@
 						}*/
                         $time_bf=$bp['msr_time'];//$time[0];
                         $value_ctc=$bp['cotucung'];
+						$date_bf=$bp['msr_date'];
                     }
                     $bp_obj->MoveFirst();
                 } // end of for $n
@@ -230,6 +238,7 @@
             if($ok){
                 $ox1=0;$ox2_1=0;$oy1=0;
                 $time_bf=0;$count=1;
+				$date_bf=0;
                 $font = 'ARIAL.TTF';
                 #**************** begin of curve tracing  Blood Pressure***************                    
                 if($bprows){                        
@@ -239,6 +248,12 @@
                         if(empty($bp['msr_time'])||(!empty($bp['lanmangthai']) || !empty($bp['lansinh']) || !empty($bp['giooivo']))) continue;
                         $time=explode(':',$bp['msr_time']);
 						$time_b=explode(':',$time_bf);
+						if($date_bf!=0 && $date_bf != $bp['msr_date']){
+							if($time['0']=='00'){
+								$time['0']++;
+							}
+							$time['0'] = $time_b['0']+$time['0'];     
+						}
                         imagesetthickness($im, 5);  
                         switch ($bp['nuocoi']){
                             case 'ối dẹt':
@@ -301,8 +316,8 @@
 							if((($time_sub/60)<=59 && (($time[1]<35 && $time_b[1]>=35 && $i!=$bprows-1) || ($i==$bprows-1 && $time_b[1]>=35))) || ($time_sub/60)>59 && $i==$bprows-1 && $h<2 && $time_b[1]>=35){
 								$ox2=$ox1;
 								$size=14;
-								$height=30;
-								$height1=52;
+								$height=32;
+								$height1=55;
 							}else if($time[1]>=35 && $i!=$bprows-1){                                    
 								$ox2=$ox1+($h+1)*$xoffs; 
 								$size=14;
@@ -355,14 +370,15 @@
                                 $ox2=$tabcols/3;
 								$size=14;
 								$height=18;
+								$height1=45;
                             }else{
 								$h=$time[0]-$time_b[0];
 								$time_sub=(($time[0]*3600)+($time[1]*60))-(($time_b[0]*3600)+($time_b[1]*60));
 								if((($time_sub/60)<=59 && (($time[1]<35 && $time_b[1]>=35 && $i!=$bprows-1) || ($i==$bprows-1 && $time_b[1]>=35))) || ($time_sub/60)>59 && $i==$bprows-1 && $h<2 && $time_b[1]>=35){
 									$ox2=$ox1;
 									$size=13;
-									$height=30;
-									$height1=52;
+									$height=32;
+									$height1=55;
 								}else if($time[1]>=35 && $i!=$bprows-1){                                    
 									$ox2=$ox1+($h+1)*$xoffs; 
 									$size=14;
@@ -393,6 +409,7 @@
                         $oy1=$oy2;
                         $time_bf=$bp['msr_time'];//$time[0];
                         $value_ctc=$bp['cotucung'];
+						$date_bf=$bp['msr_date'];
                     }                    
                     $bp_obj->MoveFirst();
                 }
@@ -469,6 +486,7 @@
             if($ok){
                 $ox1=0;$ox1_1=0;$oy1=0;$oy1_1=0;$count=1;
                 $time_bf=0;
+				$date_bf=0;
                 $font = 'ARIAL.TTF';
                 #**************** begin of curve tracing  Blood Pressure***************                    
                 if($bprows){                        
@@ -478,6 +496,12 @@
                         if(empty($bp['msr_time'])||empty($bp['cotucung'])||(!empty($bp['lanmangthai']) || !empty($bp['lansinh']) || !empty($bp['giooivo']))) continue;
                         $time=explode(':',$bp['msr_time']);
 						$time_b=explode(':',$time_bf);
+						if($date_bf!=0 && $date_bf != $bp['msr_date']){
+							if($time['0']=='00'){
+								$time['0']++;
+							}
+							$time['0'] = $time_b['0']+$time['0'];     
+						}
                         imagesetthickness($im, 5); 
                         //tinh tien den pha tich cuc vi ctc>3
                         if($bp['cotucung']>=3 && $i==0){
@@ -524,21 +548,25 @@
 							$time_sub=(($time[0]*3600)+($time[1]*60))-(($time_b[0]*3600)+($time_b[1]*60));
 							if((($time_sub/60)<=59 && (($time[1]<35 && $time_b[1]>=35 && $i!=$bprows-1) || ($i==$bprows-1 && $time_b[1]>=35))) || ($time_sub/60)>59 && $i==$bprows-1 && $h<2 && $time_b[1]>=35){                                  
 								$ox2=$ox1;
+								$ox2_CTC=$ox2;
 								$ox_time=$ox1;
 								$height=$tabhi-6;
 							}else if($time[1]>=35 && $i!=$bprows-1){								
-								$ox2=$ox1+($h+1)*$tabcols;   
+								$ox2=$ox1+($h+1)*$tabcols; 
+								$ox2_CTC=$ox2;
 								$ox_time=$ox1+($h+1)*$tabcols;
 								$height=$tabhi-27;
 							}else{
 								if($time_b[1]>=35 && $h>=2){
 									$h-=1;
 								}
-								$ox2=$ox1+$h*$tabcols; 
+								$ox2=$ox1+$h*$tabcols;
+								$ox2_CTC=$ox2;
 								$ox_time=$ox1+$h*$tabcols;
 								$height=$tabhi-16;
 							}
 							if($i==$bprows-1){
+								$ox2_CTC=$ox2;
 								$ox2+=$time[1]*$xunit;
 								$ox_time+=$time[1]*$xunit+5;
 							}
@@ -568,9 +596,11 @@
                                 $ox2_1=0;                                
                             }
                             if($i==0){
-                                $ox2=-4;
+                                $ox2=0;
+								$ox2_CTC=$ox2;
                                 if($time['1']>0){
-                                    imagettftext($im, 10, 0, $ox2, $tabhi-20, $text_color_1, $font, $time['0'].'g'.$time['1']);
+                                    imagettftext($im, 10, 0, $ox2, $tabhi-20, $text_color_1, $font, $time['0'].'g');
+									imagettftext($im, 10, 0, $ox2, $tabhi-7, $text_color_1, $font, $time['1'].'p');
                                 }else{
                                     imagettftext($im, 10, 0, $ox2, $tabhi-20, $text_color_1, $font, $time['0']);
                                 }
@@ -579,21 +609,25 @@
 								$time_sub=(($time[0]*3600)+($time[1]*60))-(($time_b[0]*3600)+($time_b[1]*60));
 								if((($time_sub/60)<=59 && (($time[1]<35 && $time_b[1]>=35 && $i!=$bprows-1) || ($i==$bprows-1 && $time_b[1]>=35))) || ($time_sub/60)>59 && $i==$bprows-1 && $h<2 && $time_b[1]>=35){                                       
 									$ox2=$ox1;
+									$ox2_CTC=$ox2;
 									$ox_time=$ox1;
 									$height=$tabhi-6;
 								}else if($time[1]>=35 && $i!=$bprows-1){
 									$ox2=$ox1+($h+1)*$tabcols;   
+									$ox2_CTC=$ox2;
 									$ox_time=$ox1+($h+1)*$tabcols;
 									$height=$tabhi-27;
 								}else{
 									if($time_b[1]>=35 && $h>=2){
 										$h-=1;
 									}
-									$ox2=$ox1+($h*$tabcols); 
+									$ox2=$ox1+($h*$tabcols);
+									$ox2_CTC=$ox2;
 									$ox_time=$ox1+($h*$tabcols);
 									$height=$tabhi-16;
 								}
 								if($i==$bprows-1){
+									$ox2_CTC=$ox2;
 									$ox2+=$time[1]*$xunit;
 									$ox_time+=$time[1]*$xunit;
 								}
@@ -602,7 +636,7 @@
                             $oy2=((10-$bp['cotucung'])*$tabcols)+5;
                             $oy2_1=((10-$bp['dolot'])*$tabcols)+5;
                         }                                                
-                        imagettftext($im, 12, 0, $ox2, $oy2, $text_red, $font, 'X');
+                        imagettftext($im, 12, 0, $ox2_CTC, $oy2, $text_red, $font, 'X');
                         imagettftext($im, 11, 0, $ox2, $oy2_1, $text_blue, $font, 'O');
                         if($i==($bprows-1)){
                             imagettftext($im, 11, 0, 600, 220, $text_color_1, $font, $bp['ghichu']);
@@ -610,7 +644,7 @@
                         if($ox1 || $oy1){
                             imagesetthickness($im, 1);
                             //vẽ đường liền
-                            ImageLine($im,$ox1+3,$oy1-3,$ox2+3,$oy2-3,$text_red);
+                            ImageLine($im,$ox1+2,$oy1-1,$ox2_CTC+2,$oy2-1,$text_red);
                             imageline($im, $ox1+5,$oy1_1-3,$ox2+5,$oy2_1-3, $text_blue);
                         }
                         $ox1=$ox2;
@@ -622,6 +656,7 @@
 						}*/
                         $time_bf=$bp['msr_time'];
                         $value_ctc=$bp['cotucung'];
+						$date_bf=$bp['msr_date'];
                     }                    
                     $bp_obj->MoveFirst();
                 }
@@ -669,6 +704,7 @@
             if($ok){
                 $ox1=0;$ox1_1=0;$oy1=0;$oy1_1=0;$count=1;
                 $time_bf=0;
+				$date_bf=0;
                 $font = 'ARIAL.TTF';                   
                 if($bprows){                        
                     for($i=0;$i<$bprows;$i++)
@@ -677,6 +713,12 @@
                         if(empty($bp['msr_time'])||empty($bp['soconco'])||empty($bp['sogiay'])||(!empty($bp['lanmangthai']) || !empty($bp['lansinh']) || !empty($bp['giooivo']))) continue;
                         $time=explode(':',$bp['msr_time']);
 						$time_b=explode(':',$time_bf);
+						if($date_bf!=0 && $date_bf != $bp['msr_date']){
+							if($time['0']=='00'){
+								$time['0']++;
+							}
+							$time['0'] = $time_b['0']+$time['0'];     
+						}
                         imagesetthickness($im, 5);
                         $oy2=(50-$bp['sogiay'])*2;
                         if($bp['cotucung']>=3 && $i==0){
@@ -735,7 +777,7 @@
                             //ve duong ben phai
                             ImageLine($im,$ox2_1+($tabcols*2),$oy2-1,$ox2_1+($tabcols*2),$tabhi-1,$text_blue);
                             $conco = $bp['soconco']*10;
-                            if( 20<=$bp['sogiay'] && $bp['sogiay']<=40){
+                            if( 20<$bp['sogiay'] && $bp['sogiay']<=40){
                                 $src = imagecreatefrompng($root_path.'gui/img/common/default/soctrai_bdcd.png');
                                 imagecopyresized($im, $src, $ox2_1+1, $oy2+1, 0, 0, ($tabcols*2)-2, 151, 195, 151);           
                             }else if($bp['sogiay']>40){
@@ -779,7 +821,7 @@
                         //ve duong ben phai
                         ImageLine($im,$ox2+($tabcols*2),$oy2-1,$ox2+($tabcols*2),$tabhi-1,$text_blue);                        
                         $conco = $bp['soconco']*10;
-                        if(20<=$bp['sogiay'] && $bp['sogiay']<=40){
+                        if(20<$bp['sogiay'] && $bp['sogiay']<=40){
                             $src = imagecreatefrompng($root_path.'gui/img/common/default/soctrai_bdcd.png');
                             imagecopyresized($im, $src, $ox2+1, $oy2+1, 0, 0, ($tabcols*2)-2, 151, 195, 151);           
                         }else if($bp['sogiay']>40){
@@ -798,6 +840,7 @@
 						}*/
                         $time_bf=$bp['msr_time'];
                         $value_ctc=$bp['cotucung'];
+						$date_bf=$bp['msr_date'];
                     }                    
                     $bp_obj->MoveFirst();
                 }
@@ -847,6 +890,7 @@
             if($ok){
                 $ox1=0;$ox1_1=0;$oy1=0;$oy1_1=0;$count=1;
                 $time_bf=0;
+				$date_bf=0;
                 $font = 'ARIAL.TTF';                   
                 if($bprows){                        
                     for($i=0;$i<$bprows;$i++)
@@ -855,6 +899,12 @@
                         if(empty($bp['msr_time'])||empty($bp['mach'])||empty($bp['huyetap'])||(!empty($bp['lanmangthai']) || !empty($bp['lansinh']) || !empty($bp['giooivo']))) continue;
                         $time=explode(':',$bp['msr_time']);
 						$time_b=explode(':',$time_bf);
+						if($date_bf!=0 && $date_bf != $bp['msr_date']){
+							if($time['0']=='00'){
+								$time['0']++;
+							}
+							$time['0'] = $time_b['0']+$time['0'];     
+						}
                         imagesetthickness($im, 5);
                         $oy2=(180-$bp['mach'])*5;  
                         $huyetap=explode("/",$bp['huyetap']);
@@ -976,6 +1026,7 @@
 						}*/
                         $time_bf=$bp['msr_time'];
                         $value_ctc=$bp['cotucung'];
+						$date_bf=$bp['msr_date'];
                     }                    
                     $bp_obj->MoveFirst();
                 }
@@ -1012,6 +1063,7 @@
             if($ok){
                 $ox1=0;$ox1_1=0;$oy1=0;$oy1_1=0;$count=1;
                 $time_bf=0;
+				$date_bf=0;
                 $font = 'ARIAL.TTF';
                 #**************** begin of curve tracing  Blood Pressure***************                    
                 if($bprows){                        
@@ -1021,6 +1073,12 @@
                         if(empty($bp['msr_time'])||(!empty($bp['lanmangthai']) || !empty($bp['lansinh']) || !empty($bp['giooivo']))) continue;
                         $time=explode(':',$bp['msr_time']);
 						$time_b=explode(':',$time_bf);
+						if($date_bf!=0 && $date_bf != $bp['msr_date']){
+							if($time['0']=='00'){
+								$time['0']++;
+							}
+							$time['0'] = $time_b['0']+$time['0'];     
+						}
                         imagesetthickness($im, 5);  
                         if($bp['cotucung']>=3 && $i==0){
                             if(3<=$bp['cotucung'] && $bp['cotucung']<4){
@@ -1077,6 +1135,7 @@
 								$height=$ox2_1+4;
 							}
                             imagettftext($im, 14, 90, $height, $tabhi-20, $text_color_1, $font, $bp['thuoc']);
+							imagettftext($im, 14, 90, $ox2, $tabhi-20, $text_color_1, $font, $bp['thuoc']);
                             $count++;
                             $ox1_1=$ox2_1;
                         }else{
@@ -1086,6 +1145,7 @@
                             }
                             if($i==0){
                                 $ox2=$ox1+$tabcols/4;
+								$height=$ox2+4;
                             }else{
                                 $h=$time[0]-$time_b[0];
 								$time_sub=(($time[0]*3600)+($time[1]*60))-(($time_b[0]*3600)+($time_b[1]*60));
@@ -1112,6 +1172,7 @@
 						}*/
                         $time_bf=$bp['msr_time'];
                         $value_ctc=$bp['cotucung'];
+						$date_bf=$bp['msr_date'];
                     }                    
                     $bp_obj->MoveFirst();
                 }
@@ -1151,6 +1212,7 @@
             if($ok){
                 $ox1=0;$ox1_1=0;$oy1=0;$oy1_1=0;$count=1;
                 $time_bf=0;
+				$date_bf=0;
                 $font = 'ARIAL.TTF';
                 #**************** begin of curve tracing  Blood Pressure***************                    
                 if($bprows){                        
@@ -1160,6 +1222,12 @@
                         if(empty($bp['msr_time'])||empty($bp['nhietdo'])||(!empty($bp['lanmangthai']) || !empty($bp['lansinh']) || !empty($bp['giooivo']))) continue;
                         $time=explode(':',$bp['msr_time']);
 						$time_b=explode(':',$time_bf);
+						if($date_bf!=0 && $date_bf != $bp['msr_date']){
+							if($time['0']=='00'){
+								$time['0']++;
+							}
+							$time['0'] = $time_b['0']+$time['0'];     
+						}
                         imagesetthickness($im, 5);  
                         if($bp['cotucung']>=3 && $i==0){
                             if(3<=$bp['cotucung'] && $bp['cotucung']<4){
@@ -1214,7 +1282,8 @@
 								$ox2=$ox1+$h*$tabcols; 
 								$height=$tabhi/3;
 							} 
-                            imagettftext($im, 15, 0, $ox2_1, $height, $text_color_1, $font, $bp['nhietdo'].'(C)');
+                            imagettftext($im, 15, 0, $ox2_1, $height, $text_color_1, $font, $bp['nhietdo']);
+							imagettftext($im, 15, 0, $ox2_1, $height+20, $text_color_1, $font, '(C)');
                             $count++;
                             $ox1_1=$ox2_1;
                         }else{
@@ -1224,6 +1293,7 @@
                             }
                             if($i==0){
                                 $ox2=$ox1;
+								$height=$tabhi/3;
                             }else{
                                 $h=$time[0]-$time_b[0];
 								$time_sub=(($time[0]*3600)+($time[1]*60))-(($time_b[0]*3600)+($time_b[1]*60));
@@ -1242,14 +1312,16 @@
 								}  
                             }
                         }
-                        imagettftext($im, 15, 0, $ox2-6, $height, $text_color_1, $font, $bp['nhietdo'].'C');
+                        imagettftext($im, 15, 0, $ox2, $height, $text_color_1, $font, $bp['nhietdo']);
+						imagettftext($im, 15, 0, $ox2, $height+20, $text_color_1, $font, '(C)');
                         $ox1=$ox2;                        
                         $oy1=$oy2;
 						/*if((int)$time[1]>=45){
 							$time[0]+=1;
 						}*/
                         $time_bf=$bp['msr_time'];
-                        $value_ctc=$bp['cotucung'];                        
+                        $value_ctc=$bp['cotucung'];
+						$date_bf=$bp['msr_date'];
                     }                    
                     $bp_obj->MoveFirst();
                 }
@@ -1285,6 +1357,7 @@
             if($ok){
                 $ox1=0;$ox1_1=0;$oy1=0;$oy1_1=0;$count=1;
                 $time_bf=0;
+				$date_bf=0;
                 $font = 'ARIAL.TTF';
                 #**************** begin of curve tracing  Blood Pressure***************                    
                 if($bprows){                        
@@ -1294,6 +1367,12 @@
                         if((empty($bp['msr_time'])||empty($bp['bdcd_by']))||(!empty($bp['lanmangthai']) || !empty($bp['lansinh']) || !empty($bp['giooivo']))) continue;
                         $time=explode(':',$bp['msr_time']);
 						$time_b=explode(':',$time_bf);
+						if($date_bf!=0 && $date_bf != $bp['msr_date']){
+							if($time['0']=='00'){
+								$time['0']++;
+							}
+							$time['0'] = $time_b['0']+$time['0'];     
+						}
                         imagesetthickness($im, 5);  
                         if($bp['cotucung']>=3 && $i==0){
                             if(3<=$bp['cotucung'] && $bp['cotucung']<4){
@@ -1350,6 +1429,7 @@
 								$height=$ox2_1;
 							} 
                             imagettftext($im, 12, 90, $height, $tabhi-20, $text_color_1, $font, $bp['bdcd_by']);
+							imagettftext($im, 12, 90, $ox2, $tabhi-20, $text_color_1, $font, $bp['bdcd_by']);
                             $count++;
                             $ox1_1=$ox2_1;
                         }else{
@@ -1359,6 +1439,7 @@
                             }   
                             if($i==0){
                                 $ox2=$ox1+$tabcols/2;
+								$height=$ox2;
                             }else{
                                 $h=$time[0]-$time_b[0];
 								$time_sub=(($time[0]*3600)+($time[1]*60))-(($time_b[0]*3600)+($time_b[1]*60));
@@ -1385,6 +1466,7 @@
 						}*/
                         $time_bf=$bp['msr_time'];
                         $value_ctc=$bp['cotucung'];
+						$date_bf=$bp['msr_date'];
                     }                       
                     $bp_obj->MoveFirst();
                 }
@@ -1457,6 +1539,7 @@
             if($ok){
                 $ox1=0;$ox1_1=0;$oy1=0;$oy1_1=0;$count=1;
                 $time_bf=0;
+				$date_bf=0;
                 $font = 'ARIAL.TTF';
                 #**************** begin of curve tracing  Blood Pressure***************                    
                 if($bprows){                        
@@ -1466,6 +1549,12 @@
                         //if(empty($bp['msr_time']) || (empty($bp['dam']) && empty($bp['acetone']) && empty($bp['luong']))) continue;
                         $time=explode(':',$bp['msr_time']);
 						$time_b=explode(':',$time_bf);
+						if($date_bf!=0 && $date_bf != $bp['msr_date']){
+							if($time['0']=='00'){
+								$time['0']++;
+							}
+							$time['0'] = $time_b['0']+$time['0'];     
+						}
                         imagesetthickness($im, 5);  
                         $str['1']=$bp['dam'];
                         $str['2']=$bp['acetone'];
@@ -1594,7 +1683,8 @@
 							$time[0]+=1;
 						}*/
                         $time_bf=$bp['msr_time'];
-                        $value_ctc=$bp['cotucung'];                        
+                        $value_ctc=$bp['cotucung'];         
+						$date_bf=$bp['msr_date'];
                     }                    
                     $bp_obj->MoveFirst();
                 }
@@ -1673,7 +1763,7 @@
                 $im = @ImageCreate ($tablen, $tabhi);
                 $background_color = ImageColorAllocate ($im, 255,255,255);
                 $text_color_1 = ImageColorAllocate ($im, 0, 0, 0);
-                $font = 'ARIAL.TTF';
+                $font = 'arial.ttf';
                 imagettftext($im, 12, 0, 6, 70, $text_color_1, $font, 'Mạch');
                 imagettftext($im, 12, 0, 11, 100, $text_color_1, $font, 'và');
                 imagettftext($im, 12, 0, 1, 130, $text_color_1, $font, 'Huyết áp');

@@ -2,20 +2,20 @@
   <tr bgcolor="#f6f6f6">
     <td <?php echo $tbg; ?>><FONT color="#000066"><?php echo $LDDate; ?></td>
     <td <?php echo $tbg; ?>><FONT color="#000066"><?php echo $LDTime; ?></td>
+    <td  <?php echo $tbg; ?>><FONT color="#000066"><?php echo $LDSystolic; ?></td>
+    <td <?php echo $tbg; ?>></td>
+    <td  <?php echo $tbg; ?>><FONT color="#000066"><?php echo $LDTemperature; ?></td>
+    <td <?php echo $tbg; ?>></td>
+    <td  <?php echo $tbg; ?>><FONT color="#000066"><?php echo $LDDiastolic; ?></td>
+    <td <?php echo $tbg; ?>></td>
+    <td  <?php echo $tbg; ?>><FONT color="#000066"><?php echo $LDbreathing; ?></td>
+    <td <?php echo $tbg; ?>></td>
      <td <?php echo $tbg; ?>><FONT color="#000066"><?php echo $LDWeight; ?></td>
 	 <td <?php echo $tbg; ?>></td>
     <td  <?php echo $tbg; ?>><FONT color="#000066"><?php echo $LDHeight; ?></td>
 <td <?php echo $tbg; ?>></td>
      <td  <?php echo $tbg; ?>><FONT color="#000066"><?php echo $LD['head_circumference']; ?></td>
-	 <td <?php echo $tbg; ?>></td>
-	 	    <td  <?php echo $tbg; ?>><FONT color="#000066"><?php echo $LDSystolic; ?></td>
-			<td <?php echo $tbg; ?>></td>
-		    <td  <?php echo $tbg; ?>><FONT color="#000066"><?php echo $LDDiastolic; ?></td>
-			<td <?php echo $tbg; ?>></td>
-			    <td  <?php echo $tbg; ?>><FONT color="#000066"><?php echo $LDTemperature; ?></td>
-				<td <?php echo $tbg; ?>></td>
-				    <td  <?php echo $tbg; ?>><FONT color="#000066"><?php echo $LDbreathing; ?></td>
-					<td <?php echo $tbg; ?>></td>
+	 <td <?php echo $tbg; ?>></td>			    
    <td  <?php echo $tbg; ?>><FONT color="#000066"><?php echo $LDEncounterNr; ?></td>
   </tr>
 
@@ -32,53 +32,113 @@ while(list($x,$row)=each($msr_comp)){
   <tr bgcolor="<?php echo $bgc; ?>">
     <td><?php echo @formatDate2Local($row['msr_date'],$date_format); ?></td>
     <td><?php echo strtr($row['msr_time'],'.',':'); ?></td>
+<!--    Huyet ap-->
+    <td>
+	<?php 
+		if($row[1]['notes']) echo '<a href="javascript:popNotes(\''.$row[1]['notes'].'\')" title="'.$row[1]['notes'].'">'.$row[1]['value'].'</a>';
+			else echo $row[1]['value']; 
+	?>
+    </td>
+    <td>
+        <FONT SIZE=1 >
+                        <?php echo $unit_ids[$row[1]['unit_nr']]; ?>
+    </td>
+<!--    Nhiet do-->
+    <td>
+	<?php 
+		if($row[3]['notes']) echo '<a href="javascript:popNotes(\''.$row[3]['notes'].'\')" title="'.$row[3]['notes'].'">'.$row[3]['value'].'</a>';
+			else echo $row[3]['value']; 
+	?>
+    </td>
+    <td>
+         <FONT SIZE=1 >
+                        <?php 
+//                            echo $unit_ids[$row[3]['unit_nr']]; 
+                            if($unit_ids[$row[3]['unit_nr']]=='celsius'){
+                                echo $LDCelsius;
+                            }else{
+                                echo $unit_ids[$row[3]['unit_nr']];
+                            }
+                        ?>
+    </td>
+<!--    Mach-->
+    <td>
+	<?php 
+		if($row[2]['notes']) echo '<a href="javascript:popNotes(\''.$row[2]['notes'].'\')" title="'.$row[2]['notes'].'">'.$row[2]['value'].'</a>';
+			else echo $row[2]['value']; 
+	?></td>
+     <td>
+         <FONT SIZE=1 >
+                        <?php 
+//                            echo $unit_ids[$row[2]['unit_nr']];
+                            if($unit_ids[$row[2]['unit_nr']]=='npm'){
+                                echo $LDnpm;
+                            }else{
+                                echo $unit_ids[$row[2]['unit_nr']];
+                            }
+                        ?>
+    </td>
+<!--    Nhip tho-->
+    <td>
+	<?php 
+		if($row[10]['notes']) echo '<a href="javascript:popNotes(\''.$row[10]['notes'].'\')" title="'.$row[10]['notes'].'">'.$row[10]['value'].'</a>';
+			else echo $row[10]['value']; 
+	?>
+    </td>
+    <td>
+         <FONT SIZE=1 >
+                        <?php 
+//                            echo $unit_ids[$row[10]['unit_nr']];
+                            if($unit_ids[$row[10]['unit_nr']]=='npm'){
+                                echo $LDnpm;
+                            }else{
+                                echo $unit_ids[$row[10]['unit_nr']];
+                            }
+                        ?>
+    </td>
+<!--    Can nang-->
     <td>
 	<?php 
 
 		if($row[6]['notes']) echo '<a href="javascript:popNotes(\''.$row[6]['notes'].'\')" title="'.$row[6]['notes'].'">'.$row[6]['value'].'</a>';
 			else echo $row[6]['value']; 
-	?></td>
-     <td><FONT SIZE=1 ><?php echo $unit_ids[$row[6]['unit_nr']]; ?></td>
+	?>
+    </td>
+     <td>
+         <font SIZE=1 >
+             <?php 
+                echo $unit_ids[$row[6]['unit_nr']]; 
+                
+             ?>
+         </font>
+    </td>
+<!--    Chieu cao-->
     <td>
 	<?php 
 		if($row[7]['notes']) echo '<a href="javascript:popNotes(\''.$row[7]['notes'].'\')" title="'.$row[7]['notes'].'">'.$row[7]['value'].'</a>';
 			else echo $row[7]['value']; 
-	?></td>
-     <td><FONT SIZE=1 ><?php echo $unit_ids[$row[7]['unit_nr']]; ?></td>
+	?>
+    </td>
+    <td>
+        <FONT SIZE=1 ><?php echo $unit_ids[$row[7]['unit_nr']]; ?>
+    </td>
+<!--    Chu vi vong dau-->
     <td>
 	<?php 
 		if($row[9]['notes']) echo '<a href="javascript:popNotes(\''.$row[9]['notes'].'\')" title="'.$row[9]['notes'].'">'.$row[9]['value'].'</a>';
 			else echo $row[9]['value']; 
-	?></td>
-     <td><FONT SIZE=1 ><?php echo $unit_ids[$row[9]['unit_nr']]; ?></td>
-	 <!-- HA-->
-	     <td>
-	<?php 
-		if($row[1]['notes']) echo '<a href="javascript:popNotes(\''.$row[1]['notes'].'\')" title="'.$row[1]['notes'].'">'.$row[1]['value'].'</a>';
-			else echo $row[1]['value']; 
-	?></td>
-     <td><FONT SIZE=1 ><?php echo $unit_ids[$row[1]['unit_nr']]; ?></td>
-	     <td>
-	<?php 
-		if($row[2]['notes']) echo '<a href="javascript:popNotes(\''.$row[2]['notes'].'\')" title="'.$row[2]['notes'].'">'.$row[2]['value'].'</a>';
-			else echo $row[2]['value']; 
-	?></td>
-     <td><FONT SIZE=1 ><?php echo $unit_ids[$row[2]['unit_nr']]; ?></td>
-	     <td>
-	<?php 
-		if($row[3]['notes']) echo '<a href="javascript:popNotes(\''.$row[3]['notes'].'\')" title="'.$row[3]['notes'].'">'.$row[3]['value'].'</a>';
-			else echo $row[3]['value']; 
-	?></td>
-     <td><FONT SIZE=1 ><?php echo $unit_ids[$row[3]['unit_nr']]; ?></td>
-	     <td>
-	<?php 
-		if($row[10]['notes']) echo '<a href="javascript:popNotes(\''.$row[10]['notes'].'\')" title="'.$row[10]['notes'].'">'.$row[10]['value'].'</a>';
-			else echo $row[10]['value']; 
-	?></td>
-     <td><FONT SIZE=1 ><?php echo $unit_ids[$row[10]['unit_nr']]; ?></td>
-   <td>
-   	<?php echo (($row['encounter_nr'])?$row['encounter_nr']:'Chưa nhận'); ?></td>
-  </tr>
+	?>
+    </td>
+    <td>
+         <FONT SIZE=1 >
+                        <?php 
+                            echo $unit_ids[$row[9]['unit_nr']]; 
+                        ?>
+    </td>
+    <td>
+   	<?php echo (($row['encounter_nr'])?$row['encounter_nr']:'Chưa nhận'); ?>
+    </td>
+ </tr>
 
 <?php
 }

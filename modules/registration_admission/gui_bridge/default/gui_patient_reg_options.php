@@ -230,13 +230,13 @@ function Spacer()
 				   </FONT></TD>
                 </TR>					
            <?php Spacer(); ?>
-				  <TR><td align=center><img <?php echo createComIcon($root_path,'icon_acro.gif','0','',FALSE) ?>></td>
+<!--				  <TR><td align=center><img <?php echo createComIcon($root_path,'icon_acro.gif','0','',FALSE) ?>></td>
                 <TD vAlign=top width=150><FONT 
                   face="Verdana,Helvetica,Arial" size=2> 
 				<a href="<?php echo $root_path."modules/pdfmaker/registration/regdata.php".URL_APPEND."&pid=".$pid ?>" target=_blank><?php echo $LDPrintPDFDoc ?></a>
 				   </FONT></TD>
                 </TR>
-
+-->
 				</TBODY>
 		</TABLE>
 		</TD></TR>

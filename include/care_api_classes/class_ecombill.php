@@ -44,7 +44,7 @@ class eComBill extends Core {
 					AND g.nr = i.item_group_nr 
 					AND g.item_group = t.item_group 
 					AND g.item_type = t.item_type
-					ORDER BY i.item_group_nr,i.item_code ";
+					ORDER BY i.item_group_nr";
 		if ($this->result=$db->Execute($this->sql)) {
 		    if ($this->result->RecordCount()) {
 		        return $this->result;

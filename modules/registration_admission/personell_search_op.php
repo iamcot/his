@@ -83,9 +83,9 @@ if (isset ( $target )) {
 			break;
                 case 'referrer_dr_1' :
 			$searchkey = str_replace(" ","%", $searchkey);
-			$sql = "SELECT pn.nr AS '".PNID.".value', CONCAT(p.name_last, ' ',p.name_first) AS '".PNAME.".value', 0 AS use_frequency, pns.location_nr FROM care_personell AS pn, care_person AS p, care_personell_assignment AS pns WHERE pn.pid = p.pid AND pn.nr=pns.personell_nr AND pns.role_nr=17";
+			$sql = "SELECT pn.nr AS '".PNID.".value', CONCAT(p.name_last, ' ',p.name_first) AS '".PNAME.".value', pns.location_nr FROM care_personell AS pn, care_person AS p, care_personell_assignment AS pns WHERE pn.pid = p.pid AND pn.nr=pns.personell_nr AND pn.job_function_title BETWEEN 1 AND 6";
 			if ($mode == 'search') {
-				$sql .= " AND ((nr $sql_LIKE '%$searchkey%') OR (CONCAT(p.name_last, ' ',p.name_first) $sql_LIKE '$searchkey%') OR (CONCAT(p.name_last, ' ', p.name_first) $sql_LIKE '%$searchkey%'))";
+				$sql .= " AND ((p.pid $sql_LIKE '%$searchkey%') OR (CONCAT(p.name_last, ' ',p.name_first) $sql_LIKE '%$searchkey%') OR (CONCAT(p.name_last, ' ', p.name_first) $sql_LIKE '%$searchkey%'))";
 				$sql .= " ORDER BY p.name_first DESC";
 			} else {
 				$sql .= " ORDER BY p.name_first DESC";

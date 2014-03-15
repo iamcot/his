@@ -63,10 +63,10 @@
             <FONT color="darkblue">
                 <b>
                 <?php 
-                    if($date_array[85]!='' || $date_array[86]!=''){
-                        echo $LDGiaiquyet['1'];
-                    }else{
+                    if($date_array[84]!=''){
                         echo $LDGiaiquyet['0'];
+                    }else{
+                        echo $LDGiaiquyet['1'];
                     }
                 ?>
                 </b>

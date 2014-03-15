@@ -58,7 +58,7 @@ require_once($root_path.'classes/tcpdf/tcpdf.php');
 $pdf = new TCPDF('L', 'mm', 'A4', true, 'UTF-8', false);
 
 // set document information
-$pdf->SetAuthor('BV Đa Khoa Dầu Tiếng');
+$pdf->SetAuthor('TT Y tế Tân Uyên');
 $pdf->SetTitle('Phiếu Công Khai Thuốc và Tổng Hợp Viện Phí');
 $pdf->SetMargins(5, 8, 3);
 
@@ -77,7 +77,7 @@ $pdf->AddPage();
 $pdf->SetFont('dejavusans', '', 10);
 $header_1='<table><tr>
 			<td width="25%"><b>SỞ Y TẾ BÌNH DƯƠNG<br>
-				BVĐK DẦU TIẾNG<br>
+				TT Y tế Tân Uyên<br>
 				KHOA: '.$wardname.'</b>
 			</td>
 			<td align="center" width="50%"><b><font size="14">PHIẾU CÔNG KHAI THUỐC VÀ TỔNG HỢP VIỆN PHÍ</font></b></td>

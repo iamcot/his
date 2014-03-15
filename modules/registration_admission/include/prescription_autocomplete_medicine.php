@@ -8,16 +8,17 @@ $search=$_GET["search"];
 $response="";
 switch($mode){
 	case 'auto': 
-				$sql=" SELECT khochan.product_encoder, khochan.product_name, khochan.unit_of_medicine, khole.price, khochan.caution, khochan.content, khochan.component, donvi.unit_name_of_medicine, khole.available_product_id, khole.product_lot_id, khole.exp_date, sum(khole.allocation_temp) AS allocation_temp, thuocgoc.generic_drug, thuocgoc.using_type    
+				$sql=" SELECT khole.product_encoder, khochan.product_name, khochan.unit_of_medicine, khole.price, khochan.caution, khochan.content, khochan.component, donvi.unit_name_of_medicine, khole.available_product_id, khole.product_lot_id, khole.exp_date, sum(khole.available_number) AS allocation_temp, thuocgoc.generic_drug, thuocgoc.using_type    
 						FROM care_pharma_available_product AS khole, care_pharma_generic_drug AS thuocgoc,
 						care_pharma_products_main AS khochan, care_pharma_unit_of_medicine AS donvi  
 						WHERE (khochan.product_name LIKE '".$search."%' or khochan.product_name LIKE '% ".$search."%') 	 
 						AND khochan.product_encoder=khole.product_encoder 
 						AND khochan.pharma_generic_drug_id=thuocgoc.pharma_generic_drug_id 
 						AND donvi.unit_of_medicine=khochan.unit_of_medicine 
-						AND khochan.pharma_type IN (1,3,4) 
-						GROUP BY khole.product_encoder 
-						ORDER BY khochan.product_name LIMIT 20 "; 
+						AND khochan.pharma_type IN (1,3,4) AND khole.available_number>0
+						GROUP BY khole.product_encoder, khole.price  
+						ORDER BY khochan.product_name ASC, khochan.price DESC  
+						LIMIT 20 "; 
 				
 				if($result = $db->Execute($sql)){
 					$n=$result->RecordCount();
@@ -38,7 +39,7 @@ switch($mode){
 			
 	case 'filldata': 
 				$avai_id =$_GET["avai_id"];
-				$sql="	SELECT khochan.product_encoder, khochan.product_name, khochan.unit_of_medicine, khochan.price, khochan.caution, khochan.component, donvi.unit_name_of_medicine, khole.product_lot_id, khole.exp_date, khole.allocation_temp   
+				$sql="	SELECT khole.product_encoder, khochan.product_name, khochan.unit_of_medicine, khole.price, khochan.caution, khochan.component, donvi.unit_name_of_medicine, khole.product_lot_id, khole.exp_date, khole.available_number AS allocation_temp   
 						FROM care_pharma_available_product AS khole, 
 						care_pharma_products_main AS khochan, care_pharma_unit_of_medicine AS donvi  				 
 						WHERE khole.available_product_id='".$avai_id."' 
@@ -52,6 +53,8 @@ switch($mode){
 						if ($medicine["allocation_temp"]=="")
 							$medicine["allocation_temp"]="0";
 						$response=$medicine["product_encoder"].'@#'.$medicine["allocation_temp"].'@#'.$medicine["unit_name_of_medicine"].'@#'.$medicine["price"].'@#'.$medicine["component"].'@#'.$medicine["caution"];	
+					}else{
+						//$response='@#0@#viên@#0@#@#';
 					}
 				}
 				echo $response;

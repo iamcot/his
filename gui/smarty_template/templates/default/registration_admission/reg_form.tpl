@@ -44,12 +44,12 @@
 				</tr>
 				<tr>
 					<td  class="adm_item" >
-						
+
 						{{$LDInputDate}}
 						</td>
 						<td class="adm_input">
 						{{$sInputDate}}&nbsp;{{$sInputTime}}
-					</td>			
+					</td>
 				</tr>
 				
 
@@ -370,7 +370,6 @@
 				<td class="adm_input">
 					{{$sRegByInput}}
 				</td>
-			</tr>
 		</table>
 
 		{{$sHiddenInputs}}

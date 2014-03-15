@@ -145,8 +145,12 @@ li.selected {
 <script type="text/javascript" src="<?php echo $root_path; ?>js/scriptaculous/src/controls.js"></script>
 <script type="text/javascript" src="<?php echo $root_path; ?>js/scriptaculous/src/builder.js"></script>
 <script src="<?php echo $root_path; ?>js/SpryAssets/SpryTabbedPanels.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?php echo $root_path; ?>js/jquery-1.7.min.js"></script>
+<script type="text/javascript" src="<?php echo $root_path; ?>js/jquery.maskedinput-1.3.js"></script>
 <script language="javascript">
 <!-- Script Begin
+$.noConflict();
+
 function chkform(d) {
 	if(d.totalday.value==""){
 		alert("<?php echo $LDPlsEnterTotalDay; ?>");
@@ -167,7 +171,7 @@ function chkform(d) {
 
 function deletePres()
 {
-	var r=confirm("<?php echo $LDWouldDeletePres1; ?>");
+	var r=confirm("<?php echo $LDWouldDeletePres; ?>");
 	if (r==true) {
 	  	document.reportform.action="include/save_chemical.inc.php?isdelete=delete";
 		document.reportform.submit();
@@ -374,7 +378,12 @@ function CheckDuplicateMedicine(){
 
 //  Script End -->
 </script>
-
+<script type="text/javascript">
+	jQuery(function($){
+        $("#inputdate").mask("**/**/**** **:**:**");
+    });
+//  Script End -->
+</script>
 <form method="post" name="reportform" onSubmit="return chkform(this)">
 
 <table border=0 cellpadding="2" width="100%">
@@ -410,10 +419,13 @@ function CheckDuplicateMedicine(){
    <tr>
 		<td><FONT color="#000066"><?php echo $LDDate1; ?></td>
 		<td><?php 
-				$textdate = date('Y-m-d H:i:s'); //date("Y-m-d");
+				if($mode=='update')
+					$textdate = $date_pres; 
+				else
+					$textdate = date('Y-m-d H:i:s'); //date("Y-m-d");
 				$texttime = substr($textdate,-8);
 				$textdate = formatDate2Local($textdate,"DD/MM/YYYY",false,false,$sepChars);
-				echo $textdate.' '.$texttime; ?>	 	 </td>
+				echo '<input type="text" name="inputdate" id="inputdate" value="'.$textdate.' '.$texttime.'" >'; ?>	 	 </td>
 		<td><FONT color="#000066"><?php echo $LDInsuranceNr; ?></td>
 		<td><?php echo $insurance_nr; ?></td>
    </tr>
@@ -527,7 +539,7 @@ function CheckDuplicateMedicine(){
 		<td><input type="text" id="totalpres" name="totalpres" size=11 value="<?php if($mode=='update') echo $totalcost_pres; else echo '0'; ?>" style="border:0px;" readonly></td>
  	</tr> 
 	<tr>
-		<td><FONT color="#000066"><?php echo $LDPrescribedBy; ?></td>
+		<td><FONT color="#000066"><?php echo $LDNurse; ?></td>
 		<td><input type="text" name="doctor" size=35 value="<?php echo $_SESSION['sess_user_name']; ?>" style="border:0px;" readonly></td>
 		<td></td>
 		<td></td>

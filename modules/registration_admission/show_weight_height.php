@@ -143,7 +143,7 @@ $sql="SELECT m.nr,m.value,m.msr_date,m.msr_time,m.unit_nr,m.encounter_nr,m.msr_t
 		FROM 	care_encounter AS e, 
 					care_person AS p, 
 					care_encounter_measurement AS m
-		WHERE p.pid=".$_SESSION['sess_pid']." 
+		WHERE e.encounter_nr=".$_SESSION['sess_en']."
 			AND p.pid=e.pid 
 			AND e.encounter_nr=m.encounter_nr  
 			AND (m.msr_type_nr=6 OR m.msr_type_nr=7 OR m.msr_type_nr=9 OR m.msr_type_nr=1 OR m.msr_type_nr=2 OR m.msr_type_nr=3  OR m.msr_type_nr=10 )

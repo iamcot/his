@@ -37,10 +37,8 @@
 	# Create own timestamp for cross db compatibility
 	if($_POST['kinhcuoitu']) $_POST['kinhcuoitu']=@formatDate2STD($_POST['kinhcuoitu'],$date_format);
         if($_POST['kinhcuoiden']) $_POST['kinhcuoiden']=@formatDate2STD($_POST['kinhcuoiden'],$date_format);
-        if(empty($_POST['ngaychuyenda'])) $_POST['ngaychuyenda']=date('Y-m-d');
-		else $_POST['ngaychuyenda']=@formatDate2STD($_POST['ngaychuyenda'],$date_format);
-	if(empty($_POST['gio_chuyenda'])) $_POST['gio_chuyenda']=date('H:i:s');
-		else $_POST['gio_chuyenda']=@convertTimeToStandard($_POST['gio_chuyenda']);
+        if($_POST['ngaychuyenda']) $_POST['ngaychuyenda']=@formatDate2STD($_POST['ngaychuyenda'],$date_format);
+		if($_POST['gio_chuyenda']) $_POST['gio_chuyenda']=@convertTimeToStandard($_POST['gio_chuyenda']);
         if(empty($_POST['uongvan'])){
             $_POST['uongvan']=0;
             $_POST['duoctiem']='';

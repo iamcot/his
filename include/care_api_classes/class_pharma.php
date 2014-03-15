@@ -1108,7 +1108,6 @@ class Pharma extends Core {
 					FROM care_pharma_khochan_ton_info  
 					 ".$condition."
 					ORDER BY yearreport, monthreport DESC";
-		//echo $this->sql;	
 		if ($this->result=$db->Execute($this->sql)) {
 			if ($this->result->RecordCount()) {				
 				return $this->result->FetchRow();
@@ -2510,7 +2509,7 @@ class Pharma extends Core {
 						$dongtayy_1 = ' AND pharma_type IN (4,8,9,10) ';
 						break;	
 		}		
-		$this->sql="SELECT DISTINCT source.monthreport, source.product_encoder, T.number AS ton, T.price AS giaton, N.number AS nhap, N.price AS gianhap, X.number AS xuat, X.price AS giaxuat, T.exp_date AS hanton, N.exp_date AS hannhap, X.exp_date AS hanxuat, T.lotid AS loton, N.lotid AS lonhap, X.lotid AS loxuat, main.product_name, unit.unit_name_of_medicine, main.nuocsx 
+		$this->sql="SELECT DISTINCT source.monthreport, source.product_encoder, T.number AS ton, T.price AS giaton, N.number AS nhap, N.price AS gianhap, X.number AS xuat, X.price AS giaxuat, T.exp_date AS hanton, N.exp_date AS hannhap, T.lotid AS loton, N.lotid AS lonhap, X.lotid AS loxuat, main.product_name, unit.unit_name_of_medicine, main.nuocsx 
 			FROM  ( SELECT * 
 					  FROM $view_ton WHERE $view_ton.monthreport='$ton_month' AND $view_ton.yearreport='$ton_year'
 					  UNION
@@ -2852,7 +2851,7 @@ class Pharma extends Core {
 						break;	
 		}		
 		$this->sql="SELECT DISTINCT source.monthreport, source.product_encoder, T.number AS ton, T.price AS giaton, 
-					N.number AS nhap, N.price AS gianhap, X.number AS xuat, X.price AS giaxuat, T.exp_date AS hanton, N.exp_date AS hannhap, X.exp_date AS hanxuat, T.lotid AS loton, N.lotid AS lonhap, X.lotid AS loxuat, 
+					N.number AS nhap, N.price AS gianhap, X.number AS xuat, X.price AS giaxuat, T.exp_date AS hanton, N.exp_date AS hannhap, T.lotid AS loton, N.lotid AS lonhap, X.lotid AS loxuat, 
 					main.product_name, unit.unit_name_of_medicine, main.nuocsx 
 			FROM  ( SELECT * 
 					  FROM ".$view_ton." WHERE DATE(date_time)='$last_date_report'
@@ -2912,7 +2911,6 @@ class Pharma extends Core {
 		}			
 		$this->sql="INSERT INTO ".$tbl_ton." (id, ton_id, product_encoder, lotid, typeput, exp_date, number, price, create_time)
 				VALUES ('', '$ton_id', '$product_encoder', '$lotid', '$typeput', '$exp_date', '$number', '$price', CURRENT_TIMESTAMP)";
-		//echo $this->sql;
 		return $this->Transact($this->sql);
 	}
 	function getLastTonKhoID($typedongtay){
@@ -2940,18 +2938,7 @@ class Pharma extends Core {
 					WHERE ton_id=$ton_id";
 		return $this->Transact($this->sql);	
 	}	
-	function deleteReportInTonKhoInfo($typedongtay, $ton_id) {
-	    global $db;
-		if(!$ton_id) return FALSE;
-		
-		switch($typedongtay){
-			case 'tayy': $tbl_ton ='care_pharma_khochan_ton_info';  break;	
-			case 'dongy': $tbl_ton ='care_pharma_khole_dongy_ton_info'; break;	
-		}						
-		$this->sql="DELETE FROM ".$tbl_ton." 
-					WHERE ton_id=$ton_id";
-		return $this->Transact($this->sql);	
-	}	
+	
 	function Khochan_vtyt_nhapxuatton_theongay($condition, $cond_typeput, $last_date_report, $date_show){
 		global $db;
 		

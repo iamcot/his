@@ -35,7 +35,7 @@
 	$_POST['date']=@formatDate2STD($_POST['date'],$date_format);
 	$_POST['hinhthai']=$_POST['hinhthai1'].'_'.$_POST['hinhthai2'].'_'.$_POST['hinhthai3'].'_'.$_POST['hinhthai4'].'_'.$_POST['hinhthai5'].'_'.$_POST['hinhthai6'];	
 	$_POST['thansac']=$_POST['sac1'].'_'.$_POST['sac2'].'_'.$_POST['sac3'].'_'.$_POST['sac4'].'_'.$_POST['sac5']
-	.'_'.$_POST['sac6'].'_'.$_POST['sac7'].'_'.$_POST['trach1'].'_'.$_POST['trach2'];
+	.'_'.$_POST['sac6'].'_'.$_POST['sac7'].'_'.$_POST['trach1'].'_'.$_POST['trach2'].'_'.$_POST['trach3'];
 	$_POST['luoi_notes']=$_POST['chatluoi_notes'].'_'.$_POST['sacluoi_notes'].'_'.$_POST['reuluoi_notes'];
 	$_POST['amthanh_notes']=$_POST['tiengnoi_notes'].'_'.$_POST['hoitho_notes'].'_'.$_POST['ho_notes'].'_'.$_POST['onac_notes'];
 	$_POST['mui_notes']=$_POST['chatthai_notes'].'_'.$_POST['hoinguoi_notes'];
@@ -51,17 +51,19 @@
 	$_POST['amthanh']=$_POST['tiengnoi1'].'_'.$_POST['tiengnoi2'].'_'.$_POST['tiengnoi3'].'_'.$_POST['tiengnoi4'].'_'.$_POST['tiengnoi5']
 	.'_'.$_POST['tiengnoi6'].'_'.$_POST['tiengnoi7'].'_'.$_POST['tiengnoi8'].'_'.$_POST['tiengnoi9'].'_'.$_POST['hoitho1']
 	.'_'.$_POST['hoitho2'].'_'.$_POST['hoitho3'].'_'.$_POST['hoitho4'].'_'.$_POST['hoitho5'].'_'.$_POST['hoitho6'].'_'.$_POST['hoitho7'].'_'.$_POST['hoitho8']
-	.'_'.$_POST['hoitho9'].'_'.$_POST['hoitho10'].'_'.$_POST['ho1'].'_'.$_POST['ho2'].'_'.$_POST['ho3'].'_'.$_POST['ho4'].'_'.$_POST['ho5'].'_'.$_POST['ho6'];
+	.'_'.$_POST['hoitho9'].'_'.$_POST['hoitho10'].'_'.$_POST['ho1'].'_'.$_POST['ho2'].'_'.$_POST['ho3'].'_'.$_POST['ho4'].'_'.$_POST['ho5'].'_'.$_POST['ho6'].'_'.$_POST['ho7'];
 	$_POST['mui']=$_POST['mui1'].'_'.$_POST['mui2'].'_'.$_POST['mui3'].'_'.$_POST['mui4'].'_'.$_POST['mui5'].'_'.$_POST['mui6'].'_'.$_POST['mui7'].'_'.$_POST['hoinguoi1']
 	.'_'.$_POST['hoinguoi2'].'_'.$_POST['hoinguoi3'].'_'.$_POST['hoinguoi4'].'_'.$_POST['hoinguoi5'].'_'.$_POST['hoinguoi6'];
-	$_POST['hannhiet']=$_POST['hannhietbl1'].'_'.$_POST['hannhietbl2'].'_'.$_POST['hannhietbl3'].'_'.$_POST['hannhietbl4'].'_'.$_POST['hannhietbl5'].'_'.$_POST['hannhietbl6'];
+	$_POST['hannhiet']=$_POST['hannhietbl1'].'_'.$_POST['hannhietbl2'].'_'.$_POST['hannhietbl3'].'_'.$_POST['hannhietbl4'].'_'.$_POST['hannhietbl5'].'_'.$_POST['hannhietbl6'].'_'.$_POST['hannhietbl7'].'_'.$_POST['hannhietbl8'].'_'.$_POST['hannhietbl9'];
 	$_POST['mohoi']=$_POST['mohoi1'].'_'.$_POST['mohoi2'].'_'.$_POST['mohoi3'].'_'.$_POST['mohoi4'].'_'.$_POST['mohoi5']
 	.'_'.$_POST['mohoi6'].'_'.$_POST['mohoi7'];
 	$_POST['daumat']=$_POST['daudau1'].'_'.$_POST['daudau2'].'_'.$_POST['daudau3'].'_'.$_POST['daudau4'].'_'.$_POST['daudau5']
 	.'_'.$_POST['daudau6'].'_'.$_POST['daudau7'].'_'.$_POST['daudau8'].'_'.$_POST['daudau9'].'_'.$_POST['daudau10'].'_'.$_POST['daudau11']
-	.'_'.$_POST['daudau12'].'_'.$_POST['daudau13'].'_'.$_POST['daudau14'].'_'.$_POST['daudau15'].'_'.$_POST['daudau16'].'_'.$_POST['daudau17'];
+	.'_'.$_POST['daudau12'].'_'.$_POST['daudau13'].'_'.$_POST['daudau14'].'_'.$_POST['daudau15'].'_'.$_POST['daudau16'].'_'.$_POST['daudau17']
+	.'_'.$_POST['daudau18'].'_'.$_POST['daudau19'].'_'.$_POST['daudau20'].'_'.$_POST['daudau21'].'_'.$_POST['daudau22'].'_'.$_POST['daudau23']
+	.'_'.$_POST['daudau24'].'_'.$_POST['daudau25'];
 	$_POST['bungnguc']=$_POST['bungnguc1'].'_'.$_POST['bungnguc2'].'_'.$_POST['bungnguc3'].'_'.$_POST['bungnguc4'].'_'.$_POST['bungnguc5']
-	.'_'.$_POST['bungnguc6'].'_'.$_POST['bungnguc7'].'_'.$_POST['bungnguc8'].'_'.$_POST['bungnguc9'];
+	.'_'.$_POST['bungnguc6'].'_'.$_POST['bungnguc7'].'_'.$_POST['bungnguc8'].'_'.$_POST['bungnguc9'].'_'.$_POST['bungnguc10'];
 	$_POST['an']=$_POST['an1'].'_'.$_POST['an2'].'_'.$_POST['an3'].'_'.$_POST['an4'].'_'.$_POST['an5']
 	.'_'.$_POST['an6'].'_'.$_POST['an7'].'_'.$_POST['an8'].'_'.$_POST['an9'].'_'.$_POST['an10'].'_'.$_POST['an11'];
 	$_POST['uong']=$_POST['uong1'].'_'.$_POST['uong2'].'_'.$_POST['uong3'].'_'.$_POST['uong4'].'_'.$_POST['uong5']
@@ -79,11 +81,15 @@
 	.'_'.$_POST['nu_sd3'].'_'.$_POST['nu_sd4'];
 	$_POST['dkxh']=$_POST['dkxuathien1'].'_'.$_POST['dkxuathien2'].'_'.$_POST['dkxuathien3'];
 	$_POST['xucchan']=$_POST['xucchan1'].'_'.$_POST['xucchan2'].'_'.$_POST['xucchan3'].'_'.$_POST['xucchan4'].'_'.$_POST['xucchan5'].'_'.$_POST['xucchan6'].'_'.$_POST['xucchan7'].'_'.$_POST['xucchan8']
-	.'_'.$_POST['xucchan9'].'_'.$_POST['xucchan10'].'_'.$_POST['xucchan11'].'_'.$_POST['xucchan12'].'_'.$_POST['conhuc1'].'_'.$_POST['conhuc2'].'_'.$_POST['conhuc3'].'_'.$_POST['conhuc4'].'_'.$_POST['conhuc5']
+	.'_'.$_POST['xucchan9'].'_'.$_POST['xucchan10'].'_'.$_POST['xucchan11'].'_'.$_POST['mohoi1'].'_'.$_POST['mohoi2'].'_'.$_POST['mohoi3'].'_'.$_POST['mohoi4'].'_'.$_POST['conhuc1'].'_'.$_POST['conhuc2'].'_'.$_POST['conhuc3'].'_'.$_POST['conhuc4'].'_'.$_POST['conhuc5']
 	.'_'.$_POST['conhuc6'].'_'.$_POST['conhuc7'].'_'.$_POST['bung1'].'_'.$_POST['bung2'].'_'.$_POST['bung3'].'_'.$_POST['bung4'].'_'.$_POST['bung5'].'_'.$_POST['bung6'].'_'.$_POST['bung7'];
-	$_POST['machchan']=$_POST['machchan1'].'_'.$_POST['machchan2'].'_'.$_POST['machchan3'].'_'.$_POST['machchan4'].'_'.$_POST['machchan5'].'_'.$_POST['machchan6'].'_'.$_POST['machchan7'].'_'.$_POST['machchan8']
-	.'_'.$_POST['machchan9'].'_'.$_POST['machchan10'].'_'.$_POST['machchan11'].'_'.$_POST['machtaytrai1'].'_'.$_POST['machtaytrai2'].'_'.$_POST['machtaytrai3'].'_'.$_POST['machtayphai1'].'_'.$_POST['machtayphai2'].'_'.$_POST['machtayphai3'];
-	
+	$_POST['machchan']=$_POST['machtaytrai1'].'_'.$_POST['machtaytrai2'].'_'.$_POST['machtaytrai3'].'_'.$_POST['machtaytrai4'].'_'.$_POST['machtaytrai5'].'_'.$_POST['machtaytrai6'].'_'.$_POST['machtaytrai7']
+	.'_'.$_POST['machtaytrai8'].'_'.$_POST['machtaytrai9']	
+	.'_'.$_POST['machtayphai1'].'_'.$_POST['machtayphai2'].'_'.$_POST['machtayphai3'].'_'.$_POST['machtayphai4'].'_'.$_POST['machtayphai5'].'_'.$_POST['machtayphai6']
+	.'_'.$_POST['machtayphai7'].'_'.$_POST['machtayphai8'].'_'.$_POST['machtayphai9'];
+	$_POST['chedoan']=$_POST['chedoan1'].'_'.$_POST['chedoan2'].'_'.$_POST['chedoan3'].'_'.$_POST['chedoan4'].'_'.
+	$_POST['chedoan5'].'_'.$_POST['chedoan6'];
+	$_POST['chedochamsoc']=$_POST['chedochamsoc1'].'_'.$_POST['chedochamsoc2'].'_'.$_POST['chedochamsoc3'];
 	if($allow_update){
             $_POST['modify_id']=$_SESSION['sess_user_name'];
             $_POST['modify_time']=date('YmdHis');

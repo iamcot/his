@@ -33,8 +33,11 @@ if(!isset($type))
 			$i=$_GET['i'];
 			
 					echo '<tr bgcolor="#ffffff">
-							<td valign="top" bgcolor="#ffffff"><table><tr><td><input id="encoder'.$i.'" name="encoder'.$i.'" type="text" value="'.$medicine_pres['product_encoder'].'" style="width:20px;" readonly><input type="hidden" id="avai_id'.$i.'" name="avai_id'.$i.'" value="'.$medicine_pres['avai_pro_id'].'" ></td></tr>
-							<tr><td align="center"><a href="javascript:searchMedicine('.$i.')"><img src="'.$root_path.'gui/img/common/default/search_radio.jpg"></a></td></tr>
+							<td valign="top" bgcolor="#ffffff"><table><tr><td><input type="text" id="warning'.$i.'" name="warning'.$i.'" style="width:20px;" readonly >
+							<input id="encoder'.$i.'" name="encoder'.$i.'" type="hidden" value="'.$medicine_pres['product_encoder'].'" >
+							<input type="hidden" id="avai_id'.$i.'" name="avai_id'.$i.'" value="'.$medicine_pres['avai_pro_id'].'" ></td>
+						</tr>
+						<tr><td align="center"><a href="javascript:searchMedicine('.$i.')"><img src="'.$root_path.'gui/img/common/default/search_radio.jpg"></a></td></tr>
 							</table></td>
 							<td bgcolor="#ffffff" height="130" valign="top">
 							<table width="100%" border="0"><tr><td>';
@@ -53,20 +56,16 @@ if(!isset($type))
 								}
 					echo		'</select> '.$LDUseTimes.'<br>';
 							//-- Moi lan b vien-->
-					echo		$LDEachTime.' '.'<select name="count'.$i.'" id="count'.$i.'" onChange="">';
+					echo		$LDEachTime.' <input type="text" name="count'.$i.'" id="count'.$i.'" value="'.$split_desciption[1].'" size="1">';
+								/*'<select name="count'.$i.'" id="count'.$i.'" onChange="">';
 								$array_moilanuong=array('1','2','3','4','5','1/2','1/3','1/4','2/3','3/4','6','7','8','9','10');
 
 								foreach ($array_moilanuong as $tempi) {
 									if ($tempi==$split_desciption[1])
 										echo '<option value="'.$tempi.'" selected >'.$tempi.'</option>';
 									else echo '<option value="'.$tempi.'">'.$tempi.'</option>';
-								}
-								/*for ($tempi=1; $tempi<=10; $tempi++){
-									if ($tempi==$split_desciption[1])
-										echo '<option value="'.$tempi.'" selected >'.$tempi.'</option>';
-									else echo '<option value="'.$tempi.'">'.$tempi.'</option>';	
-								}*/	
-					echo		'</select> ';					
+								}	
+					echo		'</select> ';		*/			
 					echo		'<input id="totalunits'.$i.'" name="totalunits'.$i.'" type="text" size="2" value="'.$split_desciption[2].'"><br> ';
 							//-- Vao luc -->
 								//ngay uong ($medicine_pres['number_of_unit']) lan
@@ -76,14 +75,17 @@ if(!isset($type))
 								if($type=='sheet'){
 									$defaulttime = explode('-',$medicine_pres['time_use'].'-');
 									for($tempi=1; $tempi<=$medicine_pres['number_of_unit']; $tempi++){
-										echo '<select name="attime_'.$i.'_'.$tempi.'" id="attime_'.$i.'_'.$tempi.'" >';
+										/*echo '<select name="attime_'.$i.'_'.$tempi.'" id="attime_'.$i.'_'.$tempi.'" >';
 										for ($tempj=0; $tempj<=23; $tempj++){
 											if ($tempj==$defaulttime[$tempi-1])
 												echo '<option value="'.$tempj.'h" selected >'.$tempj.'h</option>';
 											else echo '<option value="'.$tempj.'h">'.$tempj.'h</option>';	
 										}
-										echo '</select> &nbsp;';
+										echo '</select> &nbsp;';*/
+										echo '<input type="text" name="attime_'.$i.'_'.$tempi.'" id="attime_'.$i.'_'.$tempi.'" value="'.$defaulttime[$tempi-1].'" style="width:60px;"> ';
+										
 									}
+									
 								}else{
 									$defaulttime = explode('-',$medicine_pres['time_use'].'-');
 									$array_vaoluc=array('sáng','trưa','chiều','tối');
@@ -107,7 +109,7 @@ if(!isset($type))
 							<td bgcolor="#ffffff">
 								<input id="inventory'.$i.'" name="inventory'.$i.'" type="text" value="'.$inventory.'" size=5 style="text-align:center;border-color:white;border-style:solid;" readonly></td>
 							<td align="center" bgcolor="#ffffff">
-								<input name="sum'.$i.'" id="sum'.$i.'" type="text" size="1" value="'.$medicine_pres['sum_number'].'" onBlur="calcost('.$i.');" >
+								<input name="sum'.$i.'" id="sum'.$i.'" type="text" size="1" value="'.$medicine_pres['sum_number'].'" onBlur="calcost('.$i.');CheckNumberRequest('.$i.');" >
 								<input id="units'.$i.'" name="units'.$i.'" type="text" size=1 value="'.$medicine_pres['note'].'"></td>
 							<td align="right" bgcolor="#ffffff">
 								<input id="cost'.$i.'"  name="cost'.$i.'" type="text" style="width:70px;text-align:right;border:0px;" value="'.$medicine_pres['cost'].'" ></td>
@@ -120,7 +122,7 @@ if(!isset($type))
 							</tr></table>';
 							
 							//-- Row-up/down -->
-					echo	'<td align="center" bgcolor="#ffffff" valign="top"><textarea name="morenote'.$i.'" cols="7" rows="6"> </textarea></td>
+					echo	'<td align="center" bgcolor="#ffffff" valign="top"><textarea name="morenote'.$i.'" cols="7" rows="6">'.$medicine_pres['morenote'].'</textarea></td>
 							<td align="center" bgcolor="#ffffff">
 								<div id="divUpDown'.$i.'">
 								<p><a href="javascript:rowUp('.$i.')"> 

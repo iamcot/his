@@ -1436,6 +1436,7 @@ $this->smarty->assign('LDSelectOtherHospital',$LDSelectOtherHospital);
 		}
 		*/
 		$this->smarty->assign('LDRegBy',$LDRegBy);
+		$this->smarty->assign('LDThang1',$LDThang1);
 		if(isset($user_id) && $user_id) $buffer=$user_id; else  $buffer = $_SESSION['sess_user_name'];
 		$this->smarty->assign('sRegByInput','<input  onkeypress="return tabE(this,event)" name="user_id" type="text" value="'.$buffer.'"  style="width:96%" readonly>');
 

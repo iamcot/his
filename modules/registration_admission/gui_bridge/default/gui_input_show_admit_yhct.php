@@ -27,6 +27,8 @@ $knsdnotes=explode("_",$row['kn_sd_notes']);
 $dkxh=explode("_",$row['dkxh']);
 $xucchan=explode("_",$row['xucchan']);
 $machchan=explode("_",$row['machchan']);
+$chedoan=explode("_",$row['chedoan']);
+$chedochamsoc=explode("_",$row['chedochamsoc']);
 //var_dump($tienthai);
 //end : gjergji
 ?>	
@@ -77,6 +79,8 @@ $("#f-calendar-field-1").mask("99/99/9999");
 			<input type="checkbox" name="hinhthai4" value="4"  <?php if($hinhthai[3]!='')echo 'checked' ?> ><?php echo $LD['vongchan'][5]; ?>
 			<input type="checkbox" name="hinhthai5" value="5"  <?php if($hinhthai[4]!='')echo 'checked' ?> ><?php echo $LD['vongchan'][6]; ?>
 			<input type="checkbox" name="hinhthai6" value="6"  <?php if($hinhthai[5]!='')echo 'checked' ?> ><?php echo $LD['vongchan'][7]; ?>
+			<input type="checkbox" name="hinhthai7" value="7"  <?php if($hinhthai[6]!='')echo 'checked' ?> ><?php echo $LD['vongchan'][8]; ?>
+			<input type="checkbox" name="hinhthai8" value="8"  <?php if($hinhthai[7]!='')echo 'checked' ?> ><?php echo $LD['vongchan'][9]; ?>
 			
 		</td>
 	</tr>
@@ -125,6 +129,7 @@ $("#f-calendar-field-1").mask("99/99/9999");
 		<td colspan=3>
 			<input type="checkbox" name="trach1" value="1"  <?php if($thansac[7]!='')echo 'checked' ?> ><?php echo $LD['thansac'][11]; ?>
 			<input type="checkbox" name="trach2" value="2"  <?php if($thansac[8]!='')echo 'checked' ?> ><?php echo $LD['thansac'][12]; ?>
+			<input type="checkbox" name="trach3" value="3"  <?php if($thansac[9]!='')echo 'checked' ?> ><?php echo $LD['thansac'][13]; ?>
 		</td>
 	</tr>
 
@@ -302,6 +307,7 @@ $("#f-calendar-field-1").mask("99/99/9999");
 			<input type="checkbox" name="ho4" value="4" <?php if($amthanh[22]!='')echo 'checked' ?>   ><?php echo $LD['amthanh'][25]; ?>
 			<input type="checkbox" name="ho5" value="5" <?php if($amthanh[23]!='')echo 'checked' ?>   ><?php echo $LD['amthanh'][26]; ?>
 			<input type="checkbox" name="ho6" value="6" <?php if($amthanh[24]!='')echo 'checked' ?>   ><?php echo $LD['amthanh'][27]; ?>
+			<input type="checkbox" name="ho7" value="7" <?php if($amthanh[25]!='')echo 'checked' ?>   ><?php echo $LD['amthanh'][28]; ?>
 		</td>		
 	</tr>
 	<tr bgcolor="#f6f6f6">
@@ -314,7 +320,7 @@ $("#f-calendar-field-1").mask("99/99/9999");
 	</tr>
 	<tr bgcolor="#f6f6f6">
 		<td class="adm_item">
-			&nbsp;&nbsp;<?php echo $LD['amthanh'][28]; ?>
+			&nbsp;&nbsp;<?php echo $LD['amthanh'][29]; ?>
 		</td>
 		<td colspan=3>
 		<?php if(empty($row['onac_radio'])) { ?>
@@ -431,6 +437,9 @@ $("#f-calendar-field-1").mask("99/99/9999");
 			<input type="checkbox" name="hannhietbl4" value="4" <?php if($hannhiet[3]!='')echo 'checked' ?>   ><?php echo $LD['hannhiet'][5]; ?>
 			<input type="checkbox" name="hannhietbl5" value="5" <?php if($hannhiet[4]!='')echo 'checked' ?>   ><?php echo $LD['hannhiet'][6]; ?>
 			<input type="checkbox" name="hannhietbl6" value="6" <?php if($hannhiet[5]!='')echo 'checked' ?>   ><?php echo $LD['hannhiet'][7]; ?>			
+			<input type="checkbox" name="hannhietbl7" value="7" <?php if($hannhiet[6]!='')echo 'checked' ?>   ><?php echo $LD['hannhiet'][8]; ?>			
+			<input type="checkbox" name="hannhietbl8" value="8" <?php if($hannhiet[7]!='')echo 'checked' ?>   ><?php echo $LD['hannhiet'][9]; ?>			
+			<input type="checkbox" name="hannhietbl9" value="9" <?php if($hannhiet[8]!='')echo 'checked' ?>   ><?php echo $LD['hannhiet'][10]; ?>			
 		</td>		
 	</tr>
 	<tr bgcolor="#f6f6f6">
@@ -443,7 +452,7 @@ $("#f-calendar-field-1").mask("99/99/9999");
 	</tr>
 	<tr bgcolor="#f6f6f6">
 		<td class="adm_item">
-			<nobr>&nbsp;&nbsp;<?php echo $LD['hannhiet'][8]; ?></nobr>
+			<nobr>&nbsp;&nbsp;<?php echo $LD['hannhiet'][11]; ?></nobr>
 		</td>	
 					
 		<td colspan=3>			
@@ -494,7 +503,7 @@ $("#f-calendar-field-1").mask("99/99/9999");
 		</td>			
 		<td colspan=2>		
 		<?if(empty($row['daumatbl_radio'])) {?>		
-			<input type="radio" name="daumatbl_radio" value="yes" ><?php echo $LDYes1 ?> <input type="radio" name="daumattbl_radio" value="no" checked> <?php echo $LDNo ?>
+			<input type="radio" name="daumatbl_radio" value="yes" ><?php echo $LDYes1 ?> <input type="radio" name="daumatbl_radio" value="no" checked> <?php echo $LDNo ?>
 		<? } else { ?>	
 			<input type="radio" name="daumatbl_radio" <?php if($row['daumatbl_radio']=='yes') echo 'checked';?>  value="yes" ><?php echo $LDYes1 ?> <input type="radio" name="daumattbl_radio" value="no" <?php if($row['daumatbl_radio']=='no') echo 'checked';?>  > <?php echo $LDNo ?>
 		<? } ?>
@@ -512,38 +521,31 @@ $("#f-calendar-field-1").mask("99/99/9999");
 			<input type="checkbox" name="daudau4" value="4" <?php if($daumat[3]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][6]; ?>
 			<input type="checkbox" name="daudau5" value="5" <?php if($daumat[4]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][7]; ?>
 			<input type="checkbox" name="daudau6" value="6" <?php if($daumat[5]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][8]; ?>	
+			<input type="checkbox" name="daudau7" value="7" <?php if($daumat[6]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][9]; ?>	
+			<input type="checkbox" name="daudau8" value="8" <?php if($daumat[7]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][10]; ?>	
+			<input type="checkbox" name="daudau9" value="9" <?php if($daumat[8]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][11]; ?>	
 		</td>	
 	</tr>
 	<tr bgcolor="#f6f6f6">
 		<td class="adm_item">
-			<nobr>&nbsp;&nbsp;<?php echo $LD['daumat'][9]; ?></nobr>
+			<nobr>&nbsp;&nbsp;<?php echo $LD['daumat'][12]; ?></nobr>
 		</td>	
 					
 		<td colspan=3>
-			<input type="checkbox" name="daudau7" value="7"<?php if($daumat[6]!='')echo 'checked' ?> ><?php echo $LD['daumat'][10]; ?>			
+			<input type="checkbox" name="daudau10" value="10" <?php if($daumat[9]!='')echo 'checked' ?> ><?php echo $LD['daumat'][13]; ?>			
+			<input type="checkbox" name="daudau11" value="11" <?php if($daumat[10]!='')echo 'checked' ?> ><?php echo $LD['daumat'][14]; ?>			
 		</td>	
 	</tr>
 	<tr bgcolor="#f6f6f6">
 		<td class="adm_item">
-			<nobr>&nbsp;&nbsp;<?php echo $LD['daumat'][11]; ?></nobr>
+			<nobr>&nbsp;&nbsp;<?php echo $LD['daumat'][15]; ?></nobr>
 		</td>	
 					
 		<td colspan=3>
-			<input type="checkbox" name="daudau8" value="8" <?php if($daumat[7]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][12]; ?>			
-			<input type="checkbox" name="daudau9" value="9" <?php if($daumat[8]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][13]; ?>			
-			<input type="checkbox" name="daudau10" value="10" <?php if($daumat[9]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][14]; ?>			
-			<input type="checkbox" name="daudau11" value="11" <?php if($daumat[10]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][15]; ?>		
-		</td>	
-	</tr>
-	<tr bgcolor="#f6f6f6">
-		<td class="adm_item">
-			<nobr>&nbsp;&nbsp;<?php echo $LD['daumat'][16]; ?></nobr>
-		</td>	
-					
-		<td colspan=3>
-			<input type="checkbox" name="daudau12" value="12" <?php if($daumat[11]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][17]; ?>			
-			<input type="checkbox" name="daudau13" value="13" <?php if($daumat[12]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][18]; ?>			
-			<input type="checkbox" name="daudau14" value="14" <?php if($daumat[13]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][19]; ?>	
+			<input type="checkbox" name="daudau12" value="12" <?php if($daumat[11]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][16]; ?>			
+			<input type="checkbox" name="daudau13" value="13" <?php if($daumat[12]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][17]; ?>			
+			<input type="checkbox" name="daudau14" value="14" <?php if($daumat[13]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][18]; ?>			
+			<input type="checkbox" name="daudau15" value="15" <?php if($daumat[14]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][19]; ?>		
 		</td>	
 	</tr>
 	<tr bgcolor="#f6f6f6">
@@ -552,9 +554,32 @@ $("#f-calendar-field-1").mask("99/99/9999");
 		</td>	
 					
 		<td colspan=3>
-			<input type="checkbox" name="daudau15" value="15" <?php if($daumat[14]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][21]; ?>			
-			<input type="checkbox" name="daudau16" value="16" <?php if($daumat[15]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][22]; ?>			
-			<input type="checkbox" name="daudau17" value="17" <?php if($daumat[16]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][23]; ?>
+			<input type="checkbox" name="daudau16" value="16" <?php if($daumat[15]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][21]; ?>			
+			<input type="checkbox" name="daudau17" value="17" <?php if($daumat[16]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][22]; ?>			
+			<input type="checkbox" name="daudau18" value="18" <?php if($daumat[17]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][23]; ?>	
+			<input type="checkbox" name="daudau19" value="19" <?php if($daumat[18]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][24]; ?>	
+		</td>	
+	</tr>
+	<tr bgcolor="#f6f6f6">
+		<td class="adm_item">
+			<nobr>&nbsp;&nbsp;<?php echo $LD['daumat'][25]; ?></nobr>
+		</td>	
+					
+		<td colspan=3>
+			<input type="checkbox" name="daudau20" value="20" <?php if($daumat[19]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][26]; ?>			
+			<input type="checkbox" name="daudau21" value="21" <?php if($daumat[20]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][27]; ?>			
+		</td>	
+	</tr>
+	<tr bgcolor="#f6f6f6">
+		<td class="adm_item">
+			<nobr>&nbsp;&nbsp;<?php echo $LD['daumat'][28]; ?></nobr>
+		</td>	
+					
+		<td colspan=3>
+			<input type="checkbox" name="daudau22" value="22" <?php if($daumat[21]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][29]; ?>			
+			<input type="checkbox" name="daudau23" value="23" <?php if($daumat[22]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][30]; ?>			
+			<input type="checkbox" name="daudau24" value="24" <?php if($daumat[23]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][31]; ?>			
+			<input type="checkbox" name="daudau25" value="25" <?php if($daumat[24]!='')echo 'checked' ?>   ><?php echo $LD['daumat'][32]; ?>			
 		</td>	
 	</tr>
 	<tr bgcolor="#f6f6f6">
@@ -618,6 +643,7 @@ $("#f-calendar-field-1").mask("99/99/9999");
 			<input type="checkbox" name="bungnguc7" value="7" <?php if($bungnguc[6]!='')echo 'checked' ?>   ><?php echo $LD['bungnguc'][8]; ?>		
 			<input type="checkbox" name="bungnguc8" value="8" <?php if($bungnguc[7]!='')echo 'checked' ?>   ><?php echo $LD['bungnguc'][9]; ?>		
 			<input type="checkbox" name="bungnguc9" value="9" <?php if($bungnguc[8]!='')echo 'checked' ?>   ><?php echo $LD['bungnguc'][10]; ?>	
+			<input type="checkbox" name="bungnguc10" value="10" <?php if($bungnguc[9]!='')echo 'checked' ?>   ><?php echo $LD['bungnguc'][11]; ?>	
 		</td>	
 	</tr>
 	<tr bgcolor="#f6f6f6">
@@ -964,22 +990,27 @@ $("#f-calendar-field-1").mask("99/99/9999");
 			
 	</tr>
 	<tr bgcolor="#f6f6f6">
-		<td class="adm_item">
+		<td colspan=4 class="adm_item">
 			<nobr>&nbsp;<?php echo $LD['xucchan'][0]; ?></nobr>
+		</td>					
+		
+	</tr>
+		<tr bgcolor="#f6f6f6">
+		<td class="adm_item">
+			<nobr>&nbsp;<?php echo $LD['xucchan'][1]; ?></nobr>
 		</td>						
 		<td colspan=3>
-				<input type="checkbox" name="xucchan1" value="1" <?php if($xucchan[0]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][1]; ?>			
-			<input type="checkbox" name="xucchan2" value="2" <?php if($xucchan[1]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][2]; ?>			
-			<input type="checkbox" name="xucchan3" value="3" <?php if($xucchan[2]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][3]; ?>
-			<input type="checkbox" name="xucchan4" value="4" <?php if($xucchan[3]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][4]; ?>
-			<input type="checkbox" name="xucchan5" value="5" <?php if($xucchan[4]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][5]; ?>
-			<input type="checkbox" name="xucchan6" value="6" <?php if($xucchan[5]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][6]; ?>
-			<input type="checkbox" name="xucchan7" value="7" <?php if($xucchan[6]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][7]; ?>
-			<input type="checkbox" name="xucchan8" value="8" <?php if($xucchan[7]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][8]; ?>
-			<input type="checkbox" name="xucchan9" value="9" <?php if($xucchan[8]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][9]; ?>
-			<input type="checkbox" name="xucchan10" value="10" <?php if($xucchan[9]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][10]; ?>
-			<input type="checkbox" name="xucchan11" value="11" <?php if($xucchan[10]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][11]; ?>
-			<input type="checkbox" name="xucchan12" value="12" <?php if($xucchan[11]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][12]; ?>
+				<input type="checkbox" name="xucchan1" value="1" <?php if($xucchan[0]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][2]; ?>			
+			<input type="checkbox" name="xucchan2" value="2" <?php if($xucchan[1]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][3]; ?>			
+			<input type="checkbox" name="xucchan3" value="3" <?php if($xucchan[2]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][4]; ?>
+			<input type="checkbox" name="xucchan4" value="4" <?php if($xucchan[3]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][5]; ?>
+			<input type="checkbox" name="xucchan5" value="5" <?php if($xucchan[4]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][6]; ?>
+			<input type="checkbox" name="xucchan6" value="6" <?php if($xucchan[5]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][7]; ?>
+			<input type="checkbox" name="xucchan7" value="7" <?php if($xucchan[6]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][8]; ?>
+			<input type="checkbox" name="xucchan8" value="8" <?php if($xucchan[7]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][9]; ?>
+			<input type="checkbox" name="xucchan9" value="9" <?php if($xucchan[8]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][10]; ?>
+			<input type="checkbox" name="xucchan10" value="10" <?php if($xucchan[9]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][11]; ?>
+			<input type="checkbox" name="xucchan11" value="11" <?php if($xucchan[10]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][12]; ?>			
 		</td>	
 	</tr>
 	<tr bgcolor="#f6f6f6">
@@ -987,27 +1018,38 @@ $("#f-calendar-field-1").mask("99/99/9999");
 			<nobr>&nbsp;<?php echo $LD['xucchan'][13]; ?></nobr>
 		</td>						
 		<td colspan=3>
-			<input type="checkbox" name="conhuc1" value="1" <?php if($xucchan[12]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][14]; ?>			
-			<input type="checkbox" name="conhuc2" value="2" <?php if($xucchan[13]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][15]; ?>			
-			<input type="checkbox" name="conhuc3" value="3" <?php if($xucchan[14]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][16]; ?>
-			<input type="checkbox" name="conhuc4" value="4" <?php if($xucchan[15]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][17]; ?>
-			<input type="checkbox" name="conhuc5" value="5" <?php if($xucchan[16]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][18]; ?>
-			<input type="checkbox" name="conhuc6" value="6" <?php if($xucchan[17]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][19]; ?>
-			<input type="checkbox" name="conhuc7" value="7" <?php if($xucchan[18]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][20]; ?>
+			<input type="checkbox" name="mohoi1" value="1" <?php if($xucchan[12]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][14]; ?>			
+			<input type="checkbox" name="mohoi2" value="2" <?php if($xucchan[13]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][15]; ?>			
+			<input type="checkbox" name="mohoi3" value="3" <?php if($xucchan[14]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][16]; ?>
+			<input type="checkbox" name="mohoi4" value="4" <?php if($xucchan[15]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][17]; ?>
+			</td>	
+	</tr>
+	<tr bgcolor="#f6f6f6">
+		<td class="adm_item">
+			<nobr>&nbsp;<?php echo $LD['xucchan'][18]; ?></nobr>
+		</td>						
+		<td colspan=3>
+			<input type="checkbox" name="conhuc1" value="1" <?php if($xucchan[12]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][19]; ?>			
+			<input type="checkbox" name="conhuc2" value="2" <?php if($xucchan[13]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][20]; ?>			
+			<input type="checkbox" name="conhuc3" value="3" <?php if($xucchan[14]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][21]; ?>
+			<input type="checkbox" name="conhuc4" value="4" <?php if($xucchan[15]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][22]; ?>
+			<input type="checkbox" name="conhuc5" value="5" <?php if($xucchan[16]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][23]; ?>
+			<input type="checkbox" name="conhuc6" value="6" <?php if($xucchan[17]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][24]; ?>
+			<input type="checkbox" name="conhuc7" value="7" <?php if($xucchan[18]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][25]; ?>
 		</td>	
 	</tr>
 	<tr bgcolor="#f6f6f6">
 		<td class="adm_item">
-			<nobr>&nbsp;<?php echo $LD['xucchan'][21]; ?></nobr>
+			<nobr>&nbsp;<?php echo $LD['xucchan'][26]; ?></nobr>
 		</td>						
 		<td colspan=3>
-			<input type="checkbox" name="bung1" value="1" <?php if($xucchan[19]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][22]; ?>			
-			<input type="checkbox" name="bung2" value="2" <?php if($xucchan[20]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][23]; ?>			
-			<input type="checkbox" name="bung3" value="3" <?php if($xucchan[21]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][24]; ?>
-			<input type="checkbox" name="bung4" value="4" <?php if($xucchan[22]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][25]; ?>
-			<input type="checkbox" name="bung5" value="5" <?php if($xucchan[23]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][26]; ?>
-			<input type="checkbox" name="bung6" value="6" <?php if($xucchan[24]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][27]; ?>
-			<input type="checkbox" name="bung7" value="7" <?php if($xucchan[25]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][28]; ?>
+			<input type="checkbox" name="bung1" value="1" <?php if($xucchan[19]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][27]; ?>			
+			<input type="checkbox" name="bung2" value="2" <?php if($xucchan[20]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][28]; ?>			
+			<input type="checkbox" name="bung3" value="3" <?php if($xucchan[21]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][29]; ?>
+			<input type="checkbox" name="bung4" value="4" <?php if($xucchan[22]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][30]; ?>
+			<input type="checkbox" name="bung5" value="5" <?php if($xucchan[23]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][31]; ?>
+			<input type="checkbox" name="bung6" value="6" <?php if($xucchan[24]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][32]; ?>
+			<input type="checkbox" name="bung7" value="7" <?php if($xucchan[25]!='')echo 'checked' ?>   ><?php echo $LD['xucchan'][33]; ?>
 		</td>	
 	</tr>
 	<tr bgcolor="#f6f6f6">
@@ -1023,48 +1065,66 @@ $("#f-calendar-field-1").mask("99/99/9999");
 			<nobr>&nbsp;<?php echo $LD['machchan'][0]; ?></nobr>
 		</td>						
 		<td colspan=3>
-			<input type="checkbox" name="machchan1" value="1" <?php if($machchan[0]!='')echo 'checked' ?>   ><?php echo $LD['machchan'][1]; ?>			
-			<input type="checkbox" name="machchan2" value="2" <?php if($machchan[1]!='')echo 'checked' ?>   ><?php echo $LD['machchan'][2]; ?>			
-			<input type="checkbox" name="machchan3" value="3" <?php if($machchan[2]!='')echo 'checked' ?>   ><?php echo $LD['machchan'][3]; ?>
-			<input type="checkbox" name="machchan4" value="4" <?php if($machchan[3]!='')echo 'checked' ?>   ><?php echo $LD['machchan'][4]; ?>
-			<input type="checkbox" name="machchan5" value="5" <?php if($machchan[4]!='')echo 'checked' ?>   ><?php echo $LD['machchan'][5]; ?>
-			<input type="checkbox" name="machchan6" value="6" <?php if($machchan[5]!='')echo 'checked' ?>   ><?php echo $LD['machchan'][6]; ?>
-			<input type="checkbox" name="machchan7" value="7" <?php if($machchan[6]!='')echo 'checked' ?>   ><?php echo $LD['machchan'][7]; ?>
-			<input type="checkbox" name="machchan8" value="8" <?php if($machchan[7]!='')echo 'checked' ?>   ><?php echo $LD['machchan'][8]; ?>
-			<input type="checkbox" name="machchan9" value="9" <?php if($machchan[8]!='')echo 'checked' ?>   ><?php echo $LD['machchan'][9]; ?>
-			<input type="checkbox" name="machchan10" value="10" <?php if($machchan[9]!='')echo 'checked' ?>   ><?php echo $LD['machchan'][10]; ?>
-			<input type="checkbox" name="machchan11" value="11" <?php if($machchan[10]!='')echo 'checked' ?>   ><?php echo $LD['machchan'][11]; ?>
+			<?php echo $LD['machchan'][1]; ?>			
+			<?php echo $LD['machchan'][2]; ?>			
+			<?php echo $LD['machchan'][3]; ?>
+			<?php echo $LD['machchan'][4]; ?>
+			<?php echo $LD['machchan'][5]; ?>
+			<?php echo $LD['machchan'][6]; ?>
+			<?php echo $LD['machchan'][7]; ?>
+			<?php echo $LD['machchan'][8]; ?>
+			<?php echo $LD['machchan'][9]; ?>
+			<?php echo $LD['machchan'][10]; ?>
+			<?php echo $LD['machchan'][11]; ?>
+			<?php echo $LD['machchan'][12]; ?>
+			<?php echo $LD['machchan'][13]; ?>
 		</td>	
 	</tr>
 	<tr bgcolor="#f6f6f6">
 		<td class="adm_item">
-			<nobr>&nbsp;&nbsp;<?php echo $LD['machchan'][12]; ?></nobr>
+			<nobr>&nbsp;&nbsp;<?php echo $LD['machchan'][14]; ?></nobr>
+		</td>	
+		
+		<td colspan=3>
+		<nobr>
+			<input type="text" size="2" name="machtaytrai1" value="<?php echo $machchan[0]?>" >			
+			<input type="text" size="2" name="machtaytrai2" value="<?php echo $machchan[1]?>">		
+			<input type="text" size="2" name="machtaytrai3" value="<?php echo $machchan[2]?>"><?php echo $LD['machchan'][15]; ?>			
+			<input type="text" size="2" name="machtaytrai4" value="<?php echo $machchan[3]?>">		
+			<input type="text" size="2" name="machtaytrai5" value="<?php echo $machchan[4]?>">		
+			<input type="text" size="2" name="machtaytrai6" value="<?php echo $machchan[5]?>"><?php echo $LD['machchan'][16]; ?>			
+			<input type="text" size="2" name="machtaytrai7" value="<?php echo $machchan[6]?>" >			
+			<input type="text" size="2" name="machtaytrai8" value="<?php echo $machchan[7]?>">				
+			<input type="text" size="2" name="machtaytrai9" value="<?php echo $machchan[8]?>"><?php echo $LD['machchan'][17]; ?>					
+		</nobr>
+		</td>	
+		
+	</tr>
+	<tr bgcolor="#f6f6f6">
+		<td class="adm_item">
+			<nobr>&nbsp;&nbsp;<?php echo $LD['machchan'][18]; ?></nobr>
 		</td>						
 		<td colspan=3>
-			<input type="checkbox" name="machtaytrai1" value="1" <?php if($machchan[11]!='')echo 'checked' ?>   ><?php echo $LD['machchan'][13]; ?>			
-			<input type="checkbox" name="machtaytrai2" value="2" <?php if($machchan[12]!='')echo 'checked' ?>   ><?php echo $LD['machchan'][14]; ?>			
-			<input type="checkbox" name="machtaytrai3" value="3" <?php if($machchan[13]!='')echo 'checked' ?>   ><?php echo $LD['machchan'][15]; ?>					
+			<input type="text" size="2" name="machtayphai1" value="<?php echo $machchan[9]?>">		
+			<input type="text" size="2" name="machtayphai2" value="<?php echo $machchan[10]?>">			
+			<input type="text" size="2" name="machtayphai3" value="<?php echo $machchan[11]?>"><?php echo $LD['machchan'][15]; ?>			
+			<input type="text" size="2" name="machtayphai4" value="<?php echo $machchan[12]?>">		
+			<input type="text" size="2" name="machtayphai5" value="<?php echo $machchan[13]?>">		
+			<input type="text" size="2" name="machtayphai6" value="<?php echo $machchan[14]?>"><?php echo $LD['machchan'][16]; ?>			
+			<input type="text" size="2" name="machtayphai7" value="<?php echo $machchan[15]?>">		
+			<input type="text" size="2" name="machtayphai8" value="<?php echo $machchan[16]?>">			
+			<input type="text" size="2" name="machtayphai9" value="<?php echo $machchan[17]?>"><?php echo $LD['machchan'][17]; ?>			
 		</td>	
 	</tr>
 	<tr bgcolor="#f6f6f6">
 		<td class="adm_item">
-			<nobr>&nbsp;&nbsp;<?php echo $LD['machchan'][16]; ?></nobr>
-		</td>						
-		<td colspan=3>
-			<input type="checkbox" name="machtayphai1" value="1" <?php if($machchan[14]!='')echo 'checked' ?>   ><?php echo $LD['machchan'][13]; ?>			
-			<input type="checkbox" name="machtayphai2" value="2" <?php if($machchan[15]!='')echo 'checked' ?>   ><?php echo $LD['machchan'][14]; ?>			
-			<input type="checkbox" name="machtayphai3" value="3" <?php if($machchan[16]!='')echo 'checked' ?>   ><?php echo $LD['machchan'][15]; ?>			
-		</td>	
-	</tr>
-	<tr bgcolor="#f6f6f6">
-		<td class="adm_item">
-			<nobr>&nbsp;&nbsp;<?php echo $LD['machchan'][17]; ?></nobr>
+			<nobr>&nbsp;&nbsp;<?php echo $LD['machchan'][19]; ?></nobr>
 		</td>	
 				
 		<td colspan=3>
 		<? if(empty($row['tongkhan'])){?>
-			<textarea name="tongkhan" style="width:96%;"><?php echo $LD['machchan'][18]."\n"; ?>
-<?php echo $LD['machchan'][19]; ?></textarea>	
+			<textarea name="tongkhan" style="width:96%;"><?php echo $LD['machchan'][20]."\n"; ?>
+<?php echo $LD['machchan'][21]; ?></textarea>	
 		<? } else { ?>
 		<textarea name="tongkhan" style="width:96%;"><?php echo $row['tongkhan']; ?>
 </textarea>	
@@ -1082,7 +1142,7 @@ $("#f-calendar-field-1").mask("99/99/9999");
 	</tr>
 	<tr bgcolor="#f6f6f6">
 		<td class="adm_item" colspan=4>
-			V.BIỆN CHỨNG LUẬN TRỊ
+			V.TÓM TẮT TỨ CHẨN & BIỆN CHỨNG LUẬN TRỊ
 		</td>
 		
 	</tr>
@@ -1119,6 +1179,78 @@ $("#f-calendar-field-1").mask("99/99/9999");
 		</td>
 		
 	</tr>
+	<tr bgcolor="#f6f6f6">
+		<td class="adm_item" colspan=4>
+			VII.ĐIỀU TRỊ
+		</td>
+		
+	</tr>
+		<tr bgcolor="#f6f6f6">
+		<td class="adm_item">
+			1.Điều trị đơn thuần YHCT
+		</td>
+		<td>
+		<? if(empty($row['dieutri_radio'])) { ?>
+			<input type="radio" name="dieutri_radio" value="yes" >
+		</td>
+		<td class="adm_item">
+			Điều trị kết hợp YHCT với YHHĐ
+		</td>
+		<td><input type="radio" name="dieutri_radio" value="no" checked></td>
+		<? }else{ ?>	
+			<input type="radio" name="dieutri_radio" <?php if($row['dieutri_radio']=='yes') echo 'checked';?>  value="yes" >
+		</td> 
+		<td class="adm_item">
+				Điều trị kết hợp YHCT với YHHĐ
+		</td>
+		<td>
+			<input type="radio" name="dieutri_radio" value="no" <?php if($row['dieutri_radio']=='no') echo 'checked';?>  > 
+		</td>
+		<? } ?>
+		
+	</tr>
+	
+	<tr bgcolor="#f6f6f6">
+		<td class="adm_input" colspan="4">
+		<? if(empty($row['dieutri'])){?>
+			<textarea rows=4 style="width:98%;" name="dieutri">
+1-Pháp chữa:
+2-Phương thuốc:
+3-Phương huyệt:
+4-Xoa bóp dưỡng sinh:
+			</textarea>
+			<? } else { ?>
+			<textarea rows=4 style="width:98%;" name="dieutri">
+<?php echo $row['dieutri'] ?>	
+			</textarea>
+			<? } ?>
+		</td>
+		
+	</tr>
+	<tr bgcolor="#f6f6f6">
+		<td class="adm_item">
+		2.Chế độ ăn
+		</td>
+		<td class="adm_input" colspan=3>
+			<input type="checkbox" name="chedoan1" value="1" <?php if($chedoan[0]!='')echo 'checked' ?>   >1.Lỏng		
+			<input type="checkbox" name="chedoan2" value="2" <?php if($chedoan[1]!='')echo 'checked' ?>   >2.Nữa lỏng			
+			<input type="checkbox" name="chedoan3" value="3" <?php if($chedoan[2]!='')echo 'checked' ?>   >3.Đặc
+			<input type="checkbox" name="chedoan4" value="4" <?php if($chedoan[3]!='')echo 'checked' ?>   >4.Tự do
+			<input type="checkbox" name="chedoan5" value="5" <?php if($chedoan[4]!='')echo 'checked' ?>   >5.Kiêng muối, mỡ, đường
+			<input type="checkbox" name="chedoan6" value="6" <?php if($chedoan[5]!='')echo 'checked' ?>   >6.Khác
+		</td>	
+	</tr>
+	<tr bgcolor="#f6f6f6">
+		<td class="adm_item">
+		3.Chế độ chăm soc
+		</td>
+		<td class="adm_input" colspan=3>
+			<input type="checkbox" name="chedochamsoc1" value="1" <?php if($chedochamsoc[0]!='')echo 'checked' ?>   >1.Cấp I		
+			<input type="checkbox" name="chedochamsoc2" value="2" <?php if($chedochamsoc[1]!='')echo 'checked' ?>   >2.Cấp II			
+			<input type="checkbox" name="chedochamsoc3" value="3" <?php if($chedochamsoc[2]!='')echo 'checked' ?>   >3.Cấp III
+			
+		</td>	
+	</tr>
     <tr bgcolor="#f6f6f6">
 		<td class="adm_item"><?php echo $LDDate; ?></td>
 		<td style="width:115px">
@@ -1134,7 +1266,7 @@ $("#f-calendar-field-1").mask("99/99/9999");
 			<a href="javascript:popDocPer('doctor_nr')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>></nobr></td>
 	</tr>      
  </table>
- <input type="image" <?php echo createLDImgSrc($root_path,'savedisc.gif','0'); ?>>
+<input type="image" <?php echo createLDImgSrc($root_path,'savedisc.gif','0'); ?>>
 <input type="hidden" name="encounter_nr" value="<?php echo $_SESSION['sess_en']; ?>">
 <input type="hidden" name="pid" value="<?php echo $_SESSION['sess_pid']; ?>">
 <input type="hidden" name="modify_id" value="<?php echo $_SESSION['sess_user_name']; ?>">

@@ -1,19 +1,15 @@
 <style>
 #menuleft{
-    float:left;
-    width: 35%;
-    display: block;
-    border-right: 1px solid #e9e9e9;
-    min-height: 400px;
+	float:left;
+	width: 300px;
+	display: block;
+	border-right: 1px solid #e9e9e9;
+	min-height: 400px;
 }
 #contentright{
-    float: left;
-    display: block;
-    width: 60%;
-    padding: 10px;
-}
-#contentright select{
-    display:block;
+	float: left;
+	display: block;
+	padding: 10px;
 }
 .title{
 	background: #e9e9e9;
@@ -36,7 +32,7 @@
 		<tr><td class="item"><img width="4" height="7" border="0" align="absmiddle" src="../../gui/img/common/default/redpfeil.gif"> {{$aTKKNgT}}</td></tr>
 		<tr><td class="item"><img width="4" height="7" border="0" align="absmiddle" src="../../gui/img/common/default/redpfeil.gif"> {{$aTKKBday}}</td></tr>
 		<tr><td class="item"><img width="4" height="7" border="0" align="absmiddle" src="../../gui/img/common/default/redpfeil.gif"> {{$aTKHSCCday}}</td></tr>
-		<tr><td class="item"><img width="4" height="7" border="0" align="absmiddle" src="../../gui/img/common/default/redpfeil.gif"> {{$aTKYHCTday}}</td></tr>
+	<!--	<tr><td class="item"><img width="4" height="7" border="0" align="absmiddle" src="../../gui/img/common/default/redpfeil.gif"> {{$aTKYHCTday}}</td></tr> --!>
 			<tr class="title"><td>Báo cáo Bệnh tật tử vong</td></tr>
 		<tr><td class="item"><img width="4" height="7" border="0" align="absmiddle" src="../../gui/img/common/default/redpfeil.gif"> {{$aKKB}}</td></tr>
 		<tr><td class="item"><img width="4" height="7" border="0" align="absmiddle" src="../../gui/img/common/default/redpfeil.gif"> {{$aDTNT}}</td></tr>

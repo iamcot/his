@@ -13,7 +13,6 @@ $Pharma = new Pharma;
 
 $thisfile= basename(__FILE__);
 $breakfile=$root_path.'modules/pharmacy/apotheke.php'.URL_APPEND;
-$fileforward='includes/khochan_payout_save.php'.URL_APPEND;
 
 if (!isset($target))
 	$target='new';

@@ -283,11 +283,11 @@ if($id_dept['id']==7 || $id_dept['id']==6 && $encounter_class_nr==1){
 }
 
 //Billing
-if(!$enc_status['is_discharged']){
+//if(!$enc_status['is_discharged']){
 	$TP_BILLING="<a href=\"".$root_path."modules/ecombill/patientbill.php".URL_APPEND."&patientno=".$encounter_nr."&edit=$edit&full_en=".$_SESSION['sess_en']."&is_discharged=$is_discharged&target=nursing\">$LDBilling</a>";
-}else{
-	$TP_BILLING="<font color='#333333'>$LDBilling</font>";
-}
+//}else{
+	//$TP_BILLING="<font color='#333333'>$LDBilling</font>";
+//}
 
 # Load the template
 $TP_options=$TP_obj->load('registration_admission/tp_pat_admit_options.htm');

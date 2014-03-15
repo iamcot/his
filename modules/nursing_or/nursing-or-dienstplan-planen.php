@@ -37,7 +37,6 @@ require_once($root_path.'include/core/access_log.php');
     require_once($root_path.'include/care_api_classes/class_access.php');
     $logs = new AccessLog();
 /************** resolve dept only *********************************/
-$role_nr = 14;//y ta role nr = 14
 
 if ($pmonth=='') $pmonth=date('n');
 if ($pyear=='') $pyear=date('Y');
@@ -133,7 +132,7 @@ if($dblink_ok)
         $ref_buffer['month']=$pmonth;
         $ref_buffer['modify_id']=$_SESSION['sess_user_name'];
 
-        if($dpoc_nr=$pers_obj->NOCDutyplanExists($dept_nr,$role_nr,$pyear,$pmonth)){
+        if($dpoc_nr=$pers_obj->NOCDutyplanExists($dept_nr,$pyear,$pmonth)){
             //echo $dpoc_nr;
             $ref_buffer['history']=$pers_obj->ConcatHistory("Update: ".date('Y-m-d H:i:s')." = ".$_SESSION['sess_user_name']."\n");
             // Point to the internal data array
@@ -171,7 +170,7 @@ if($dblink_ok)
      }// end of if(mode==save)
     else
     {
-      if($dutyplan=&$pers_obj->getNOCDutyplan($dept_nr,$role_nr,$pyear,$pmonth)){
+      if($dutyplan=&$pers_obj->getNOCDutyplan($dept_nr,$pyear,$pmonth)){
 			
 				$aelems=unserialize($dutyplan['duty_1_txt']);
 				//var_dump($aelems);
@@ -255,7 +254,7 @@ div.a3 {font-family: arial; font-size: 14; margin-left: 3; margin-right:3; }
 
 .infolayer {
     position:static;
-    display: none;
+    visibility: hide;
     left: 10;
     top: 10;
 }
@@ -310,7 +309,7 @@ function delRow(mode,i,num)
   //alert(lastRow);
  
 if (lastRow >= num) tbl.deleteRow(num-1);
-document.getElementById("h"+mode+i+"_"+(num-1)).innerHTML = "";
+document.getElementById("h"+mode+i+"_"+(num-1))="";
 }
 function killchild()
 {

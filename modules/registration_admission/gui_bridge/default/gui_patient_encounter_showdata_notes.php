@@ -46,6 +46,11 @@
 	testprintout<?php echo $sid ?>=window.open(urlholder,"testprintout<?php echo $sid ?>","width=800,height=600,menubar=no,resizable=yes,scrollbars=yes");
     }
     
+	function printOut2(url) {
+	urlholder="<?php echo $root_path ?>"+url+"<?php echo URL_APPEND ?>&enc=<?php echo $_SESSION['sess_en'] ?>";
+	testprintout<?php echo $sid ?>=window.open(urlholder,"testprintout<?php echo $sid ?>","width=800,height=600,menubar=no,resizable=yes,scrollbars=yes");
+    }
+	
     function printkbvv(){
 	urlholder="<?php echo $root_path;?>modules/pdfmaker/khambenh/PhieuKhamBenhVaoVien.php<?php echo URL_APPEND; ?>&enc=<?php echo $_SESSION['sess_en'];?>";
 	testprintout<?php echo $sid ?>=window.open(urlholder,"testprintout<?php echo $sid ?>","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
@@ -61,6 +66,10 @@
 	function printbanoi(){
 	urlholder="<?php echo $root_path;?>modules/pdfmaker/benhan/Benhannoikhoa.php<?php echo URL_APPEND; ?>&enc=<?php echo $_SESSION['sess_en'];?>";
 	testprintout<?php echo $sid ?>=window.open(urlholder,"testprintout<?php echo $sid ?>","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
+    }
+    function printOP(url){
+        urlholder="<?php echo $root_path;?>"+url;
+        testprintout<?php echo $sid ?>=window.open(urlholder,"testprintout<?php echo $sid ?>","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
     }
 //-->
 </script>
@@ -79,6 +88,8 @@ if($dept){
     $id_dept=$dept->FetchRow();
 }
 
+$sql="SELECT * FROM care_test_request_or as test,care_person as p,care_encounter as e WHERE test.encounter_nr=e.encounter_nr AND e.pid=p.pid AND p.pid=$pid ORDER BY batch_nr DESC";
+$request=$db->SelectLimit($sql,1);
 # Create the template object
 if(!is_object($TP_obj)){
 	include_once($root_path.'include/care_api_classes/class_template.php');
@@ -104,18 +115,23 @@ if($data_entry){
         $TP_HOICHAN="<a href=\"show_notes_hoichan.php".URL_APPEND ."&pid=$pid&pn=".$_SESSION['sess_en']."&target=$target\">$LDConsultNotes1</a>";
         $TP_TUVONG="<a href='javascript:printOut1(".'"modules/pdfmaker/giaytokhac/GiayXacNhanBNTuVong.php"'.");'>$LDTuvong</a>";
         $TP_KHAMBENHVAOVIEN="<a href=\"javascript:printkbvv()\">$LDKhamBenhVaoVien</a>";
+		$TP_BANGOAITRU="<a href='javascript:printOut2(".'"modules/pdfmaker/benhangoaitru/BenhAnNgoaiTru.php"'.");'>$LDBenhAnNgoaiTru</a>";
+		$TP_CNTHUONGTIC="<a href=\"aufnahme_daten_zeigen_pdf.php".URL_APPEND ."&from=such&encounter_nr=".$_SESSION['sess_en']."&target=search\">$LDChungNhanThuongTich</a>";
         $TP_BENHANMAT="<a href=\"javascript:printbamat()\">Bệnh án mắt</a>";
         $TP_BENHANNHI="<a href=\"javascript:printbanhi()\">Bệnh án nhi</a>";
         $TP_BENHANNOIKHOA="<a href=\"javascript:printbanoi()\">Bệnh án nội khoa</a>";
         $TP_GIAYCAMDOAN="<a href=\"show_notes_camdoan.php".URL_APPEND."&pid=$pid&pn=".$_SESSION['sess_en']."&target=$target\">$LDGiayCamdoan</a>";
 		$TP_GIAYRAVIEN="<a href=\"show_notes_ravien.php".URL_APPEND."&pid=$pid&pn=".$_SESSION['sess_en']."&target=$target\">$LDRavien</a>";
         $TP_CAMDOANPT="<a href=\"show_notes_camdoanPT.php".URL_APPEND."&pid=$pid&pn=".$_SESSION['sess_en']."&target=$target\">$LDCamDoanPT</a>";
-        $TP_TUVONGTRUOC="<a href=\"show_notes_benhantuvong.php".URL_APPEND."&pid=$pid&pn=".$_SESSION['sess_en']."&target=$target\">$LDTuvongtruoc</a>";        
+        $TP_TUVONGTRUOC="<a href=\"show_notes_benhantuvong.php".URL_APPEND."&pid=$pid&pn=".$_SESSION['sess_en']."&target=$target\">$LDTuvongtruoc</a>"; 
+        $TP_BAOTU="<a href=\"show_notes_baotu.php".URL_APPEND."&pid=$pid&pn=".$_SESSION['sess_en']."&target=$target\">Giấy báo tử";
 }else{
-	$TP_KDTUVONG="<font color='#333333'>$LDOther1</font>";
+		$TP_KDTUVONG="<font color='#333333'>$LDOther1</font>";
         $TP_HOICHAN="<font color='#333333'>$LDConsultNotes1</font>";
         $TP_TUVONG="<font color='#333333'>$LDTuvong</font>";
         $TP_KHAMBENHVAOVIEN="<font color='#333333'>$LDKhamBenhVaoVien</font>";
+		$TP_BANGOAITRU="$LDBenhAnNgoaiTru";
+		$TP_CNTHUONGTIC="$LDChungNhanThuongTich";
         $TP_BENHANMAT="<font color='#333333'>Bệnh án mắt</font>";
         $TP_BENHANNHI="<font color='#333333'>Bệnh án nhi</font>";
         $TP_BENHANNOIKHOA="<font color='#333333'>Bệnh án nội khoa/font>";		
@@ -123,6 +139,7 @@ if($data_entry){
         $TP_TUVONGTRUOC="<font color='#333333'>$LDTuvongtruoc</font>";
         $TP_GIAYCAMDOAN="<font color='#333333'>$LDGiayCamdoan</font>";
 		$TP_GIAYRAVIEN="<font color='#333333'>$LDRavien</font>";
+        $TP_BAOTU="<font color='#333333'>Giấy báo tử</font>";
 }
 if($enc_status['discharged_type']=='2' || $is_discharged){
     $TP_CHUYENVIEN="<a href='javascript:printOut1(".'"modules/pdfmaker/chuyenvien/GiayChuyenVien.php'.URL_APPEND."&enc_nr=".$pn.'")'.";'>".$LDDischargeSummary1."</a>";
@@ -130,6 +147,11 @@ if($enc_status['discharged_type']=='2' || $is_discharged){
     $TP_CHUYENVIEN="<font color='#333333'>$LDDischargeSummary1</font>";
 }
 
+if($batch=$request->FetchRow()){
+    $TP_BAOMO="<a href='javascript:printOP(".'"modules/pdfmaker/emr_generic/report_op.php'.URL_APPEND."&enc=".$_SESSION['sess_en'].'&ses_en='.$_SESSION['sess_en'].'&batch_nr='.$batch['batch_nr'].'&subtarget=or")'.";'>".$LDRequestOP."</a>";
+}else{
+    $TP_BAOMO="<font color='#333333'>$LDRequestOP</font>";
+}
 if($encounter_class_nr!=1){
     $TP_XACNHANDTNGOAITRU="<a href='javascript:printOut1(".'"modules/pdfmaker/giaytokhac/GiayXacnhanDTngoaitru.php'.URL_APPEND."&enc_nr=".$pn.'")'.";'>".$LDXNDTNgoaitru."</a>";
 }else{
