@@ -7,7 +7,7 @@ class test{
     }
     public  function tien(){
 
-      
+        hiendien
     }
     public function Hien(){
     //abc
