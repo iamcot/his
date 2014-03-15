@@ -1,16 +1,20 @@
 <?php
 class test{
     public function cot(){
+
     }
     public function group(){
-        //li a cot
+        //line cua cot
     }
     public  function tien(){
         //aaa
         // bbbbbb
     }
     public function Hien(){
-          // abc xyz
+
+    }
+    public function phuong() {
+//        hê hê
     }
 
 }
