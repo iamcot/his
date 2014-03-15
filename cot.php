@@ -1,6 +1,7 @@
 <?php
 class test{
     public function cot(){
+
     }
     public function group(){
         //line cua cot
@@ -15,7 +16,11 @@ class test{
         //...
     }
     public function Hien(){
-          // abc xyz
+
+    }
+    public function phuong() {
+//        hê hê
+        //HI
     }
 
 }

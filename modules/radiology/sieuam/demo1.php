@@ -104,7 +104,8 @@ var requiredRevision = 124;
 // -->
 function closeWin(){
 	//document.action
-	location.href='<?php echo '../view_person_search.php'.URL_APPEND.'&searchkey='.$encounter_nr; ?>';
+<!--	location.href='--><?php //echo '../view_person_search.php'.URL_APPEND.'&searchkey='.$encounter_nr; ?><!--';-->
+    window.close();
 }
 </script>
 </head>
