@@ -8,13 +8,11 @@ class test{
     }
     public  function tien(){
 
+
     }
     public function Hien(){
 
     }
     public function phuong() {
 
-    }
-    public function heonai(){
-    }
 }
