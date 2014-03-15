@@ -3,7 +3,7 @@ class test{
     public function cot(){
     }
     public function group(){
-        //line cua cot
+        //li a cot
     }
     public  function tien(){
         //aaa
