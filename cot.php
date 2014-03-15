@@ -15,5 +15,7 @@ class test{
     public function phuong() {
 
     }
+    public function heonai(){
 
+    }
 }
