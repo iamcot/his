@@ -7,12 +7,10 @@ class test{
         //li cua cot
     }
     public  function tien(){
-
-
     }
     public function Hien(){
 
     }
     public function phuong() {
-
+    }
 }
