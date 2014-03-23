@@ -117,7 +117,7 @@ $smarty->assign('sFormTag','<form name="patientbill" method="POST">');
 
 $smarty->assign('LDGeneralInfo',$LDGeneralInfo);
 $smarty->assign('LDPatientName',$LDPatientName);
-$smarty->assign('LDPatientNameData',$Encounter->encounter['title'] . ' - ' . $Encounter->encounter['name_last'].' '.$Encounter->encounter['name_first']);
+$smarty->assign('LDPatientNameData',$Encounter->encounter['title']  . $Encounter->encounter['name_last'].' '.$Encounter->encounter['name_first']);
 $smarty->assign('LDReceiptNumber',$LDBillNo);
 if($billid == "currentbill") { 
 	$receiptid =  $billno; 
@@ -128,7 +128,7 @@ else {
 	$smarty->assign('LDReceiptNumberData',$receiptid);
 }
 $smarty->assign('LDPatientAddress',$LDPatientAddress);
-$smarty->assign('LDPatientAddressData',$Encounter->encounter['addr_str'].' '.$Encounter->encounter['addr_str_nr'].'<br>'.$Encounter->encounter['addr_zip'].' '.$Encounter->encounter['addr_citytown_nr']);
+$smarty->assign('LDPatientAddressData',$Encounter->encounter['addr_str'].' '.$Encounter->encounter['addr_str_nr'].'<br>'.$Encounter->encounter['addr_zip'].' '.$Encounter->encounter['citytown_name']);
 
 $smarty->assign('LDPaymentDate', $LDBillDate);
 
@@ -153,11 +153,15 @@ if($billid == "currentbill") {
 
 $smarty->assign('LDPaymentDateData', $billDate);
 $smarty->assign('LDPatientType', $LDPatientType );
-$smarty->assign('LDPatientTypeData', $Encounter->encounter['encounter_class_nr'] );
+
+if($Encounter->encounter['encounter_class_nr'] == 1) $smarty->assign('LDPatientTypeData', $LDInPatient );
+else if($Encounter->encounter['encounter_class_nr'] == 2) $smarty->assign('LDPatientTypeData', $LDOutPatient );
 $smarty->assign('LDDateofBirth', $LDDateofBirth );
 $smarty->assign('LDDateofBirthData', formatDate2Local($Encounter->encounter['date_birth'],$date_format) );
 $smarty->assign('LDSex', $LDSex );
-$smarty->assign('LDSexData', $Encounter->encounter['sex'] );
+if($Encounter->encounter['sex'] == 'f') $smarty->assign('LDSexData',$LDFemale);
+ else if($Encounter->encounter['sex'] == 'm') $smarty->assign('LDSexData',$LDMale);
+
 $smarty->assign('LDPatientNumber', $LDPatientNumber);
 $smarty->assign('LDPatientNumberData', $full_en);
 $smarty->assign('LDDateofAdmission', $LDDateofAdmission);
