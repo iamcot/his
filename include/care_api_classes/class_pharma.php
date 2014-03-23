@@ -1864,7 +1864,7 @@ class Pharma extends Core {
 	
         //**********************************************************************************************************************
         //**********************************************************************************************************************
-        //Hóa ch?t 05-04
+        //Hï¿½a ch?t 05-04
         //**********************************************************************************************************************
         //**********************************************************************************************************************
         function getLastPutInChemicalID(){
@@ -2509,9 +2509,9 @@ class Pharma extends Core {
 						$dongtayy_1 = ' AND pharma_type IN (4,8,9,10) ';
 						break;	
 		}		
-		$this->sql="SELECT DISTINCT source.monthreport, source.product_encoder, T.number AS ton, T.price AS giaton, N.number AS nhap, N.price AS gianhap, X.number AS xuat, X.price AS giaxuat, T.exp_date AS hanton, N.exp_date AS hannhap, T.lotid AS loton, N.lotid AS lonhap, X.lotid AS loxuat, main.product_name, unit.unit_name_of_medicine, main.nuocsx 
+		/*$this->sql="SELECT DISTINCT source.monthreport, source.product_encoder, T.number AS ton, T.price AS giaton, N.number AS nhap, N.price AS gianhap, X.number AS xuat, X.price AS giaxuat, T.exp_date AS hanton, N.exp_date AS hannhap, T.lotid AS loton, N.lotid AS lonhap, X.lotid AS loxuat, main.product_name unit.unit_name_of_medicine, main.nuocsx
 			FROM  ( SELECT * 
-					  FROM $view_ton WHERE $view_ton.monthreport='$ton_month' AND $view_ton.yearreport='$ton_year'
+					  FROM $view_ton WHERE $view_ton.monthreport='$month' AND $view_ton.yearreport='$year'
 					  UNION
 					  SELECT *
 					  FROM view_thuoc_nhap WHERE view_thuoc_nhap.monthreport='$month' AND view_thuoc_nhap.yearreport='$year' ".$dongtayy_1."
@@ -2519,13 +2519,48 @@ class Pharma extends Core {
 					  SELECT *
 					  FROM view_thuoc_xuat WHERE view_thuoc_xuat.monthreport='$month' AND view_thuoc_xuat.yearreport='$year' ".$dongtayy_1."
 					) AS source
-			LEFT JOIN $view_ton AS T ON source.product_encoder = T.product_encoder AND source.monthreport=T.monthreport AND source.price=T.price AND T.monthreport='$ton_month' AND T.yearreport='$ton_year'
+			LEFT JOIN view_thuoc_ton AS T ON source.product_encoder = T.product_encoder AND source.monthreport=T.monthreport AND source.price=T.price
 			LEFT JOIN view_thuoc_nhap AS N ON source.product_encoder = N.product_encoder AND source.monthreport = N.monthreport AND source.price=N.price AND N.monthreport='$month' AND N.yearreport='$year'
 			LEFT JOIN view_thuoc_xuat AS X ON source.product_encoder = X.product_encoder AND source.monthreport = X.monthreport AND source.price=X.price AND X.monthreport='$month' AND X.yearreport='$year'
-			JOIN care_pharma_products_main AS main ON main.product_encoder = source.product_encoder ".$dongtayy." ".$cond_typeput." 
+			JOIN care_pharma_products_main AS main ON main.product_encoder = source.product_encoder ".$dongtayy."
 			JOIN care_pharma_unit_of_medicine AS unit ON unit.unit_of_medicine=main.unit_of_medicine
-			ORDER BY main.product_name, source.product_encoder, source.monthreport ";
-		//echo $this->sql;		
+			ORDER BY main.product_name, source.product_encoder, source.monthreport ";   //AND T.monthreport='$ton_month' AND T.yearreport='$ton_year' */
+        $this->sql = "SELECT DISTINCT source.monthreport, source.product_encoder, T.number AS ton, T.price AS giaton, N.number AS nhap, N.price AS gianhap, X.number AS xuat, X.price AS giaxuat, T.exp_date AS hanton, N.exp_date AS hannhap, T.lotid AS loton, N.lotid AS lonhap, X.lotid AS loxuat, main.product_name
+			FROM  ( SELECT *
+					  FROM $view_ton WHERE $view_ton.monthreport='01' AND $view_ton.yearreport='2013'
+					  UNION
+					  SELECT *
+					  FROM view_thuoc_nhap WHERE view_thuoc_nhap.monthreport='01' AND view_thuoc_nhap.yearreport='2013'  AND pharma_type IN (1,2,3)
+					  UNION
+					  SELECT *
+					  FROM view_thuoc_xuat WHERE view_thuoc_xuat.monthreport='01' AND view_thuoc_xuat.yearreport='2013'  AND pharma_type IN (1,2,3)
+					) AS source
+			LEFT JOIN $view_ton AS T ON source.product_encoder = T.product_encoder AND source.monthreport=T.monthreport AND source.price=T.price
+			LEFT JOIN view_thuoc_nhap AS N ON source.product_encoder = N.product_encoder AND source.monthreport = N.monthreport AND source.price=N.price AND N.monthreport='01' AND N.yearreport='2013'
+			LEFT JOIN view_thuoc_xuat AS X ON source.product_encoder = X.product_encoder AND source.monthreport = X.monthreport AND source.price=X.price AND X.monthreport='01' AND X.yearreport='2013'
+			JOIN care_pharma_products_main AS main ON main.product_encoder = source.product_encoder  AND main.pharma_type IN (1,2,3)
+			JOIN care_pharma_unit_of_medicine AS unit ON unit.unit_of_medicine=main.unit_of_medicine
+			ORDER BY source.product_encoder";
+
+       /*SELECT DISTINCT source.monthreport, source.product_encoder, T.number AS ton, T.price AS giaton, N.number AS nhap, N.price AS gianhap, X.number AS xuat, X.price AS giaxuat,
+ T.exp_date AS hanton, N.exp_date AS hannhap, T.lotid AS loton, N.lotid AS lonhap, X.lotid AS loxuat, main.product_name
+			FROM  ( SELECT *
+					  FROM view_thuoc_ton WHERE view_thuoc_ton.monthreport='01' AND view_thuoc_ton.yearreport='2013'
+					  UNION
+					  SELECT *
+					  FROM view_thuoc_nhap WHERE view_thuoc_nhap.monthreport='01' AND view_thuoc_nhap.yearreport='2013'  AND pharma_type IN (1,2,3)
+					  UNION
+					  SELECT *
+					  FROM view_thuoc_xuat WHERE view_thuoc_xuat.monthreport='01' AND view_thuoc_xuat.yearreport='2013'  AND pharma_type IN (1,2,3)
+					) AS source
+			LEFT JOIN view_thuoc_ton AS T ON source.product_encoder = T.product_encoder AND source.monthreport=T.monthreport AND source.price=T.price
+			LEFT JOIN view_thuoc_nhap AS N ON source.product_encoder = N.product_encoder AND source.monthreport = N.monthreport AND source.price=N.price
+			LEFT JOIN view_thuoc_xuat AS X ON source.product_encoder = X.product_encoder AND source.monthreport = X.monthreport AND source.price=X.price AND X.monthreport='01' AND X.yearreport='2013'
+			JOIN care_pharma_products_main AS main ON main.product_encoder = source.product_encoder  AND main.pharma_type IN (1,2,3)
+			JOIN care_pharma_unit_of_medicine AS unit ON unit.unit_of_medicine=main.unit_of_medicine
+			ORDER BY source.product_encoder */
+
+		echo $this->sql;
 		if ($this->result=$db->Execute($this->sql)) {
 			if ($this->result->RecordCount()) {				
 				return $this->result;

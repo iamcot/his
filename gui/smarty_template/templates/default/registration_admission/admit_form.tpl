@@ -63,12 +63,22 @@
 				</tr>
 			
 				<tr>
-					<td  class="adm_item">
-						{{$LDInDate}}:
-					</td>
-					<td colspan=2 class="adm_input">
-						{{$sInDate}}
-					</td>
+                    <td  class="adm_item">
+                        {{$LDInDate}}:
+                    </td>
+                    <td colspan=2 class="adm_input">
+                        {{$sInDate}} &nbsp; {{ $sInTime}}
+                    </td>
+
+                   {{*
+                    <td  class="adm_item" >
+
+                    {{$LDInputDate}}
+                    </td>
+                    <td class="adm_input">
+                    {{$sInputDate}}&nbsp;{{$sInputTime}}
+                    </td>    *}}
+
 				</tr>
 				
 
@@ -352,7 +362,13 @@
 						{{$encoder}}
 					</td>
 				</tr>
-				{{$cbtcinsur}}
+				<tr>
+                    <td class="adm_input">
+                        {{$LDCbtcinsur}}
+                    </td>
+                    <td class='adm_input'>
+                        {{$cbtcinsur}}
+                </tr>
 				{{$sHiddenInputs}}
 
 				<tr>

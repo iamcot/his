@@ -1,7 +1,10 @@
 <?php
-error_reporting(E_COMPILE_ERROR|E_ERROR|E_CORE_ERROR);
 require('./roots.php');
 require($root_path.'include/core/inc_environment_global.php');
+$classpathFPDF=$root_path.'classes/fpdf/';
+$fontpathFPDF=$classpathFPDF.'font/unifont/';
+require_once($root_path.'classes/tcpdf/config/lang/eng.php');
+require_once($root_path.'classes/tcpdf/tcpdf.php');
 define('LANG_FILE','pharma.php');
 define('NO_CHAIN',1);
 require_once($root_path.'include/core/inc_front_chain_lang.php');
@@ -21,19 +24,16 @@ $Pharma = new Pharma;
 	}
 	
 	switch($typedongtay){
-		case 'tayy': $dongtayy =' AND main.pharma_type IN (1,2,3)'; 
+		case 'tayy': $dongtayy ='tayy';
 					$titlereport=' TÂY Y'.$titlereport; break;	
-		case 'dongy': $dongtayy = ' AND main.pharma_type IN (4,8,9,10) '; 
+		case 'dongy': $dongtayy = 'dongy';
 					$titlereport=' ĐÔNG Y'.$titlereport; break;
 		default: $dongtayy = ''; break;
 	}
-	
+
 	
 //$listItem = $Product->ShowKhoChanThuoc_Ton($dongtayy_cond, '', '', $cond_typeput, $todate);
 
-
-require_once($root_path.'classes/tcpdf/config/lang/eng.php');
-require_once($root_path.'classes/tcpdf/tcpdf.php');
 
 
 // create new PDF document
@@ -115,8 +115,9 @@ $congtondau = 0;
 $congnhap=0;
 $congxuat=0;
 $congtoncuoi=0;
-
-$listReport = $Pharma->Khochan_thuoc_nhapxuatton($dongtayy, $cond_typeput, $month, $year); 
+//echo $dongtayy.'@'.@$cond_typeput."@".$month.'@'.$year;
+$listReport = $Pharma->Khochan_thuoc_nhapxuatton($dongtayy, $cond_typeput, $month, $year);
+//var_dump($listReport);
 /*switch($flag){
 	case 'tonkho': 
 			$listReport = $Pharma->Thuoc_TonKhoChan($month, $year, $cond_typeput.$dongtayy);
@@ -315,12 +316,12 @@ $sTempDiv = $sTempDiv.'<tr bgColor="#ffffff">
 							<td colspan="3" align="right"><b>'.number_format($Tong_toncuoi).'</b></td>
 							<td></td>
 						</tr>';
-	
-$html = $html.$sTempDiv.'</table>';
-	
+
+$html = $html.'</table>'; // .$sTempDiv
+//echo $html;
+
 $pdf->writeHTML($html);
 $pdf->Ln();
-
 $pdf->SetFont('dejavusans', '', 10);
 //Ky ten
 $html2='<table width="100%">
@@ -332,7 +333,7 @@ $html2='<table width="100%">
 			<td align="center" width="150"><b>P.TÀI CHÍNH-KẾ TOÁN</b></td>
 			<td align="center"><b>TRƯỞNG KHOA DƯỢC</b></td>
 			<td align="center"><b>THỦ KHO</b></td>
-			<td align="center"><b>KẾ TOÁN KHO</b></td>	
+			<td align="center"><b>KẾ TOÁN KHO</b></td>
 		</tr>
 		<tr><td colspan="3"><br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;</td></tr>
 		<tr>
@@ -341,14 +342,14 @@ $html2='<table width="100%">
 			<td align="center">Họ tên.....................</td>
 			<td align="center">Họ tên.....................</td>
 			<td align="center">Họ tên.....................</td>
-		</tr>		
+		</tr>
 		</table>';
 $pdf->writeHTMLCell(0, 25, '', '', $html2, 0, 1, 0, true, 'L', true);
 
 // reset pointer to the last page
 $pdf->lastPage();
-
-// -----------------------------------------------------------------------------
+//
+//// -----------------------------------------------------------------------------
 
 //Close and output PDF document
 $pdf->Output('KhoChan_BaocaoXNTthuoc.pdf', 'I');

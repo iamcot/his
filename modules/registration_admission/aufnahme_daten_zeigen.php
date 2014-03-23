@@ -9,6 +9,7 @@ GNU GPL.
 For details read file "copy_notice.txt".
 */
 $lang_tables[]='prompt.php';
+
 $lang_tables[]='person.php';
 $lang_tables[]='departments.php';
 define('LANG_FILE','aufnahme.php');
@@ -25,7 +26,7 @@ require_once($root_path.'include/care_api_classes/class_personell.php');
 
 if(!isset($_SESSION['sess_parent_mod'])) $_SESSION['sess_parent_mod'] = "";
 # Create objects
-$encounter_obj=new Encounter($encounter_nr);
+$encounter_obj =new Encounter($encounter_nr);
 $person_obj=new Person();
 $insurance_obj=new Insurance;
 $eComBill_obj = new eComBill;
@@ -241,14 +242,17 @@ if(file_exists($root_path.'cache/barcodes/en_'.$encounter_nr.'.png')) {
 $smarty->assign('img_source',"<img $img_source>");
 
 $smarty->assign('LDAdmitDate',$LDAdmitDate);
-
-$smarty->assign('sAdmitDate', @formatDate2Local($encounter_date,$date_format));
+$smarty->assign('sAdmitDate',@formatDate2Local($encounter_in_date,$date_format)." ".@convertTimeToLocal(formatDate2Local($encounter_in_date,$date_format,0,1)));
 
 $smarty->assign('LDAdmitTime',$LDAdmitTime);
+//$smarty->assign('sAdmitTime',@formatDate2Local($encounter_date,$date_format,1,1));
 
-$smarty->assign('sAdmitTime',@formatDate2Local($encounter_date,$date_format,1,1));
-$smarty->assign('LDInDate','Ngày nhập liệu');
-$smarty->assign('sInDate',@formatDate2Local($encounter_in_date,$date_format)." ".@convertTimeToLocal(formatDate2Local($encounter_in_date,$date_format,0,1)));
+$smarty->assign('LDInDate','Ngày chỉnh sửa gần nhất');
+$smarty->assign('sInDate', @formatDate2Local($encounter_date,$date_format));
+$smarty -> assign('sInTime', @convertTimeToLocal(formatDate2Local($encounter_date, $date_format, 1,1)));
+
+//$smarty->assign('sInDate',@formatDate2Local($encounter_in_date,$date_format)." ".@convertTimeToLocal(formatDate2Local($encounter_in_date,$date_format,0,1)));
+
 $smarty->assign('LDTitle',$LDTitle);
 $smarty->assign('title',$title);
 $smarty->assign('LDLastName',$LDLastName);
@@ -398,13 +402,12 @@ $smarty->assign('quatrinhbenhly',$quatrinhbenhly);
 
 if($is_cbtc=='on'){
 $smarty->assign('sCanBoTrungCao','CBTC');
+$smarty->assign('LDCbtcinsur', 'Mã số CBTC');
+$smarty->assign('cbtcinsur', $cbtcinsur);
 }
 if($is_tngt=='on'){
 $smarty->assign('sTNGT','TNGT');
 }
-
-
-
 $smarty->assign('LDFrom',$LDFrom);
 $smarty->assign('LDTo',$LDTo);
 
