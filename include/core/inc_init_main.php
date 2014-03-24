@@ -21,10 +21,10 @@ $key_2level='32722630722432';
 $key_login='16217182067167';
 
 # Main host address or domain
-$main_domain='localhost';
+$main_domain='mywww.his';
 
 # Host address for images
-$fotoserver_ip='localhost';
+$fotoserver_ip='mywww.his';
 
 # Transfer protocol. Use https if this runs on SSL server
 $httprotocol='http';
@@ -35,4 +35,3 @@ $dbtype='mysql';
 # Set this to your timezone.
 $timezone = 'Asia/Ho_Chi_Minh';
 date_default_timezone_set($timezone);
-?>

@@ -58,7 +58,7 @@ $sql="SELECT * from dfck_admit_inout_dept where dept_to = $dept
  		$str .='</tr>';
  	}
  }
- $str .= "</tbody></table>";
+ $str .= "<tr><td colspan='10' style='text-align:left;padding-left:20px;'>Tổng bệnh: <b>".($j-1)."</b></td></tr></tbody></table>";
  ?>
 <meta charset="utf-8">
 <style>

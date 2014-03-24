@@ -60,7 +60,7 @@ function getDateFormat()
 * The function assumes that the dates are in correct formats
 * therefore a validation routine must be done at the client side
 */
-function formatDate2Local($stdDate, $localFormat, $retTime=FALSE, $timeOnly=FALSE, &$sepChars)
+function formatDate2Local($stdDate, $localFormat, $retTime=FALSE, $timeOnly=FALSE, &$sepChars=null)
 {
 if(strlen($stdDate)>4){
    global $lang;
@@ -105,7 +105,7 @@ if(strlen($stdDate)>4){
    else return $stdDate;
 }
 
-function formatShortDate2Local($month,$day,$localFormat)
+function formatShortDate2Local($month,$day,$localFormat,$sepChars=null)
 {
    if(!$sepChars) $sepChars=array('-','.','/',':',',');
    $localFormat=strtolower($localFormat); 
@@ -135,7 +135,7 @@ function formatShortDate2Local($month,$day,$localFormat)
 }
 
 
-function formatDate2STD($localDate,$localFormat,&$sepChars)
+function formatDate2STD($localDate,$localFormat,&$sepChars=null)
 {
 	if(strlen($localDate)>4){
    $finalDate=0;

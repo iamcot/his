@@ -262,10 +262,10 @@ if($pid!='' || $encounter_nr!=''){
 							$encounter_obj->updateCareServiceClass($care_class);
 						}
 						if(!$GLOBAL_CONFIG['patient_service_room_hide']){
-							$encounter_obj->updateRoomServiceClass($room_class);
+							$encounter_obj->updateRoomServiceClass($room_class,$encounter_nr);
 						}
 						if(!$GLOBAL_CONFIG['patient_service_att_dr_hide']){
-							$encounter_obj->updateAttDrServiceClass($att_dr_class);
+							$encounter_obj->updateAttDrServiceClass($att_dr_class,$encounter_nr);
 						}
 						header("Location: aufnahme_daten_zeigen.php".URL_REDIRECT_APPEND."&encounter_nr=$encounter_nr&origin=admit&target=entry&newdata=$newdata");
 						exit;
@@ -324,7 +324,7 @@ if($pid!='' || $encounter_nr!=''){
 						*/
 						//add 0310 - cot, benh nhan tiep nhan ngoai tru tu dong chuyen vao khoa
 						if($_POST['encounter_class_nr'] == 2)
-							$encounter_obj->assignInDept($encounter_nr,$_POST['current_dept_nr'],$_POST['current_dept_nr']);
+							$encounter_obj->assignInDept($encounter_nr,$_POST['current_dept_nr'],$_POST['current_dept_nr'],date("Y-m-d"),date("H:i:s"));
 						//insert encounter transfer
 						$encounter_transfer = array(
 												"nr" => "",
@@ -339,7 +339,7 @@ if($pid!='' || $encounter_nr!=''){
 												"login_id" => $_SESSION['sess_login_userid'],
 												"type_encounter" => $_POST['encounter_class_nr']
 												);
-                        $date_reg = @format2DateSTD($POST['dat_reg'], $date_format)." ".$_POST['time_reg'];
+//                        $date_reg = @format2DateSTD($POST['dat_reg'], $date_format)." ".$_POST['time_reg'];
 						$encounter_obj->insertEncounterTransfer($encounter_transfer);
 
 						//insert temp Measurement

@@ -626,7 +626,7 @@ class Encounter extends Notes {
 	* @return boolean
 	*/			
 	function updateRoomServiceClass(&$val_array,$nr) {
-		if(empty($val_array['sc_room_nr'])) return $this->saveRoomServiceClass($val_array);
+		if(empty($val_array['sc_room_nr'])) return $this->saveRoomServiceClass($val_array,$nr);
 	        else return $this->updateServiceClass('room',$val_array);
 	}
 	/**
