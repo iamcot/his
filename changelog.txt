@@ -1,4 +1,4 @@
-2014-03-24:
+2014-03-24: ----------------------
 + thêm chức năng hiển thị lịch trực trong ngày các khoa
 * sửa toàn bộ class personell
 * tắt hiển thị danh mục thuốc khi load khoa dược
