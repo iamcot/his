@@ -256,28 +256,29 @@ $smarty->assign('LDNote',$LDNote1);
 $i=0;
 
 //MAN HINH CHINH: LIET KE CAC THUOC TRONG KHO CHAN
-$list=new Product();
-if($result=$list->ShowExp()){	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! trong tat ca khoa???
-	while ($temp_result=$result->FetchRow())
-	{
-    $i++;
-	$temp_today = strtotime(date("Y-m-d"));
-	$temp_exp_date = strtotime($temp_result['exp_date']);
-	if($temp_exp_date < $temp_today)
-		$bgc="#FF9966";
-	else $bgc="#ffffff";
-    $sTempDiv=$sTempDiv.'<tr style="height:25px;" bgColor="'.$bgc.'">
-                            <td align="center" style="border-bottom: solid 1px #C3C3C3;">'.$i.'</td>
-                            <td style="border-bottom: solid 1px #C3C3C3;border-left: solid 1px #C3C3C3;"><a href="'."catalogue.php".URL_APPEND."&catalogue=medicine&obj_primary=".$temp_result["product_encoder"].'">'.$temp_result["product_name"].'</a>'.'</td>
-                            <td align="center" style="border-bottom: solid 1px #C3C3C3;border-left: solid 1px #C3C3C3;">'.$temp_result["unit_name_of_medicine"].'</td>
-                            <td align="center" style="border-bottom: solid 1px #C3C3C3;border-left: solid 1px #C3C3C3;">'.$temp_result["product_encoder"].'</td>
-                            <td align="center" style="border-bottom: solid 1px #C3C3C3;border-left: solid 1px #C3C3C3;">'.$temp_result["product_lot_id"].'</td>
-                            <td align="center" style="border-bottom: solid 1px #C3C3C3;border-left: solid 1px #C3C3C3;">'.$temp_result["DAY(exp_date)"].'/'.$temp_result["MONTH(exp_date)"].'/'.$temp_result["YEAR(exp_date)"].'</td>
-                            <td align="center" style="border-bottom: solid 1px #C3C3C3;border-left: solid 1px #C3C3C3;">'.$temp_result["available_number"].'</td>
-                            <td align="center" style="border-bottom: solid 1px #C3C3C3;border-left: solid 1px #C3C3C3;">'.$$temp_result['LD_var'].'</td>
-                        </tr>';
-	}
-}
+$sTempDiv="";
+//$list=new Product();
+//if($result=$list->ShowExp()){	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! trong tat ca khoa???
+//	while ($temp_result=$result->FetchRow())
+//	{
+//    $i++;
+//	$temp_today = strtotime(date("Y-m-d"));
+//	$temp_exp_date = strtotime($temp_result['exp_date']);
+//	if($temp_exp_date < $temp_today)
+//		$bgc="#FF9966";
+//	else $bgc="#ffffff";
+//    $sTempDiv=$sTempDiv.'<tr style="height:25px;" bgColor="'.$bgc.'">
+//                            <td align="center" style="border-bottom: solid 1px #C3C3C3;">'.$i.'</td>
+//                            <td style="border-bottom: solid 1px #C3C3C3;border-left: solid 1px #C3C3C3;"><a href="'."catalogue.php".URL_APPEND."&catalogue=medicine&obj_primary=".$temp_result["product_encoder"].'">'.$temp_result["product_name"].'</a>'.'</td>
+//                            <td align="center" style="border-bottom: solid 1px #C3C3C3;border-left: solid 1px #C3C3C3;">'.$temp_result["unit_name_of_medicine"].'</td>
+//                            <td align="center" style="border-bottom: solid 1px #C3C3C3;border-left: solid 1px #C3C3C3;">'.$temp_result["product_encoder"].'</td>
+//                            <td align="center" style="border-bottom: solid 1px #C3C3C3;border-left: solid 1px #C3C3C3;">'.$temp_result["product_lot_id"].'</td>
+//                            <td align="center" style="border-bottom: solid 1px #C3C3C3;border-left: solid 1px #C3C3C3;">'.$temp_result["DAY(exp_date)"].'/'.$temp_result["MONTH(exp_date)"].'/'.$temp_result["YEAR(exp_date)"].'</td>
+//                            <td align="center" style="border-bottom: solid 1px #C3C3C3;border-left: solid 1px #C3C3C3;">'.$temp_result["available_number"].'</td>
+//                            <td align="center" style="border-bottom: solid 1px #C3C3C3;border-left: solid 1px #C3C3C3;">'.$$temp_result['LD_var'].'</td>
+//                        </tr>';
+//	}
+//}
 $smarty->assign('divMedicine',$sTempDiv);
 
 //'LDRequestMedicinePatient' => "<a href=\"apotheke-pass.php".URL_APPEND."&mode=pres\">$LDRequestMedicinePatient</a>", //Tuyen--- cap phat thuoc

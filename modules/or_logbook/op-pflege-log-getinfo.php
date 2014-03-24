@@ -24,14 +24,14 @@
                         //$maxelement=10;
                         $quickid='doctor';
                         $function='Bác sĩ phẫu thuật';
-                        $role_nr = 15;
+                        $role_nr = ROLE_NR_DOCTOR;
                         $quicklist=$pers_obj->getDoctorsOfDept($dept_nr,$function,'5');
                         $duty=$pers_obj->getDOCDutyplan($dept_nr,$role_nr,$pyear,$pmonth);
                         $a_pnr=unserialize($duty['duty_1_pnr']);
                         $r_pnr=unserialize($duty['duty_2_pnr']);
                         break;
         case 'assist':
-                        $role_nr = 15;
+                        $role_nr = ROLE_NR_DOCTOR;
                         $element='assistant';
                         //$maxelement=10;
                         $quickid='doctor';
@@ -42,7 +42,7 @@
                         $r_pnr=unserialize($duty['duty_2_pnr']);
                         break;
         case 'scrub':
-                        $role_nr=14;
+                        $role_nr=ROLE_NR_NURSER;
                         $element='scrub_nurse';
                         //$maxelement=10;
                         $quickid='nurse';
@@ -53,7 +53,7 @@
                         $r_pnr=unserialize($duty['duty_2_pnr']);
                         break;
         case 'rotating':
-            $role_nr=14;
+            $role_nr=ROLE_NR_NURSER;
                         $element='rotating_nurse';
                         //$maxelement=10;
                         $quickid='nurse';
@@ -64,7 +64,7 @@
                         $r_pnr=unserialize($duty['duty_2_pnr']);
                         break;
         case 'ana':
-            $role_nr = 14;
+            $role_nr = ROLE_NR_NURSER;
                         $element='anesthesia';
                         //$maxelement=10;
                         $quickid='doctor';
@@ -75,7 +75,7 @@
                         $r_pnr=unserialize($duty['duty_2_pnr']);
                         break;
         case 'ana_assist':
-            $role_nr = 14;
+            $role_nr = ROLE_NR_NURSER;
                         $element='an_doctor';
                         //$maxelement=10;
                         $quickid='doctor';

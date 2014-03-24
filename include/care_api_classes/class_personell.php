@@ -468,12 +468,12 @@ class Personell extends Core {
 	* @param int Year
 	* @param int Month
 	*/
-	function DOCDutyplanExists($dept_nr,$year,$month){
-		return $this->_OCDutyplanExists(15,$dept_nr,$year,$month); // 15 = doctor_on_call (role)
+	function DOCDutyplanExists($dept_nr,$role_nr,$year,$month){
+		return $this->_OCDutyplanExists($role_nr,$dept_nr,$year,$month); // 15 = doctor_on_call (role)
 	}
 	//
-	function DChamCongExists($dept_nr,$year,$month){
-		return $this->_ChamcongExists(15,$dept_nr,$year,$month); // 15 = doctor_on_call (role)
+	function DChamCongExists($dept_nr,$role_nr,$year,$month){
+		return $this->_ChamcongExists($role_nr,$dept_nr,$year,$month); // 15 = doctor_on_call (role)
 	}
 	/**
 	* Checks if the  nurses' on-call duty plan of a given department number, year and month exists in the databank.
@@ -715,14 +715,14 @@ class Personell extends Core {
 	* @param int Month
 	* @return mixed array  or boolean
 	*/
-	function getDOCQuicklist(&$depts,$year,$month){
+	function getDOCQuicklist(&$depts,$role_nr,$year,$month){
 		$this->depts=$depts;
-		return $this->_getOCQuicklist(15,$year,$month);
+		return $this->_getOCQuicklist($role_nr,$year,$month);
 	}
 	///
-	function getDChamcongQuicklist(&$depts,$year,$month){
+	function getDChamcongQuicklist(&$depts,$role_nr,$year,$month){
 		$this->depts=$depts;
-		return $this->_getChamcongQuicklist(15,$year,$month);
+		return $this->_getChamcongQuicklist($role_nr,$year,$month);
 	}
 	/**
 	* Gets a list of departments with Nurses' on-call duty plan of a given  year and month.
@@ -734,9 +734,9 @@ class Personell extends Core {
 	* @param int Month
 	* @return mixed array  or boolean
 	*/
-	function getNOCQuicklist(&$depts,$year,$month){
+	function getNOCQuicklist(&$depts,$role_nr,$year,$month){
 		$this->depts=$depts;
-		return $this->_getOCQuicklist(14,$year,$month);
+		return $this->_getOCQuicklist($role_nr,$year,$month);
 	}	
 	/**
 	* Searches and returns basic personnel information.

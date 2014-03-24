@@ -22,6 +22,7 @@ if(!isset($dept_nr)||!$dept_nr){
     exit;
 }
 
+$role_nr = 14;//dieu duong
 $thisfile=basename(__FILE__);
 $breakfile="nursing-or-dienstplan.php".URL_APPEND."&dept_nr=$dept_nr&pmonth=$pmonth&pyear=$pyear&retpath=$retpath";
 $_SESSION['sess_file_return']=$thisfile;
@@ -132,7 +133,7 @@ if($dblink_ok)
         $ref_buffer['month']=$pmonth;
         $ref_buffer['modify_id']=$_SESSION['sess_user_name'];
 
-        if($dpoc_nr=$pers_obj->NOCDutyplanExists($dept_nr,$pyear,$pmonth)){
+        if($dpoc_nr=$pers_obj->NOCDutyplanExists($dept_nr,ROLE_NR_NURSER,$pyear,$pmonth)){
             //echo $dpoc_nr;
             $ref_buffer['history']=$pers_obj->ConcatHistory("Update: ".date('Y-m-d H:i:s')." = ".$_SESSION['sess_user_name']."\n");
             // Point to the internal data array
@@ -170,7 +171,7 @@ if($dblink_ok)
      }// end of if(mode==save)
     else
     {
-      if($dutyplan=&$pers_obj->getNOCDutyplan($dept_nr,$pyear,$pmonth)){
+      if($dutyplan=&$pers_obj->getNOCDutyplan($dept_nr,ROLE_NR_NURSER,$pyear,$pmonth)){
 			
 				$aelems=unserialize($dutyplan['duty_1_txt']);
 				//var_dump($aelems);
@@ -309,7 +310,7 @@ function delRow(mode,i,num)
   //alert(lastRow);
  
 if (lastRow >= num) tbl.deleteRow(num-1);
-document.getElementById("h"+mode+i+"_"+(num-1))="";
+document.getElementById("h"+mode+i+"_"+(num-1)).innerHTML="";
 }
 function killchild()
 {

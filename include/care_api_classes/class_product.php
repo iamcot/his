@@ -753,7 +753,7 @@ class Product extends Core {
                 return ($db->Execute($this->sql));
         }		
         //hàm lấy select box nhóm thuốc
-        function GetPharmaGroupName($group_key){
+        function GetPharmaGroupName($group_key=''){
 			global $db;
                 if ($group_key=='')
 					$this->sql="SELECT pharma_group_id, pharma_group_name

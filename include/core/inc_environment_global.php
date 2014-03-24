@@ -41,6 +41,9 @@ define('ADMISSION_EXT_TABS',TRUE);
 define('PDF_HOSNAME','TTYT TÂN UYÊN');
 $cell='TRUNG TÂM Y TẾ TÂN UYÊN';
 $cell_address='TT Uyên Hưng';
+
+define('ROLE_NR_NURSER',14);
+define('ROLE_NR_DOCTOR',15);
 #
 # Template theme for Care2x`s own template object
 # Set the default template theme

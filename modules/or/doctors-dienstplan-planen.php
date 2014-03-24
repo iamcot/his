@@ -79,7 +79,7 @@ if($dblink_ok)
 					$ref_buffer['month']=$pmonth;
 					$ref_buffer['modify_id']=$_SESSION['sess_user_name'];
 
-					if($dpoc_nr=$pers_obj->DOCDutyplanExists(87,$pyear,$pmonth)){
+					if($dpoc_nr=$pers_obj->DOCDutyplanExists(87,ROLE_NR_DOCTOR,$pyear,$pmonth)){
 						$ref_buffer['history']=$pers_obj->ConcatHistory("Update: ".date('Y-m-d H:i:s')." = ".$_SESSION['sess_user_name']."\n");
 						$ref_buffer['modify_time']=date('YmdHis');
 						// Point to the internal data array

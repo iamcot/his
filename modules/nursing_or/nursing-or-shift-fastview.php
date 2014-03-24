@@ -83,7 +83,7 @@ if(!$is_cached || ($is_cached && $force_no_cache)){
 	$dept_OC=$dept_obj->getAllActiveWithNOC();
 	include_once($root_path.'include/care_api_classes/class_personell.php');
 	$pers_obj=new Personell;
-	$quicklist=&$pers_obj->getNOCQuicklist($dept_OC,$pyear,$pmonth);
+	$quicklist=&$pers_obj->getNOCQuicklist($dept_OC,ROLE_NR_NURSER,$pyear,$pmonth);
 }
 $role_nr = 14;//y ta role nr = 14
 

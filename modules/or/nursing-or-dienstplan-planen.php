@@ -82,7 +82,7 @@ if($dblink_ok)
         $ref_buffer['month']=$pmonth;
         $ref_buffer['modify_id']=$_SESSION['sess_user_name'];
 
-        if($dpoc_nr=$pers_obj->NOCDutyplanExists(87,$pyear,$pmonth)){
+        if($dpoc_nr=$pers_obj->NOCDutyplanExists(87,ROLE_NR_NURSER,$pyear,$pmonth)){
             //echo $dpoc_nr;
             $ref_buffer['history']=$pers_obj->ConcatHistory("Update: ".date('Y-m-d H:i:s')." = ".$_SESSION['sess_user_name']."\n");
             // Point to the internal data array
@@ -118,7 +118,7 @@ if($dblink_ok)
      }// end of if(mode==save)
     else
     {
-        $dutyplan=&$pers_obj->getNOCDutyplan(87,$pyear,$pmonth);
+        $dutyplan=&$pers_obj->getNOCDutyplan(87,ROLE_NR_NURSER,$pyear,$pmonth);
     }
 }
 else { echo "$LDDbNoLink<br>"; } 

@@ -25,7 +25,7 @@ if(!isset($dept_nr)||!$dept_nr){
 
 $thisfile=basename(__FILE__);
 $breakfile="doctors-dienstplan.php".URL_APPEND."&dept_nr=$dept_nr&pmonth=$pmonth&pyear=$pyear&retpath=$retpath";
-$role_nr = 15;//bsi role nr = 15
+$role_nr = ROLE_NR_DOCTOR;//bsi role nr = 15
 require_once($root_path.'include/care_api_classes/class_department.php');
 $dept_obj=new Department;
 $dept_obj->preloadDept($dept_nr);

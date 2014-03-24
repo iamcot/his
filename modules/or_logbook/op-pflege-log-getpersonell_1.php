@@ -58,7 +58,7 @@ switch($winid)
                     $function=10;
                     $search=$pers_obj->searchPersonellInfo($inputdata,$function,'','','','');
                     $quicklist=$pers_obj->getNursesOfDept($dept_nr,$function,'5');
-                    $duty=$pers_obj->getNOCDutyplan($dept_nr,$pyear,$pday);
+                    $duty=$pers_obj->getNOCDutyplan($dept_nr,ROLE_NR_NURSER,$pyear,$pday);
                     $a_pnr=unserialize($duty['duty_1_pnr']);
                     $r_pnr=unserialize($duty['duty_2_pnr']);
                     break;
@@ -69,7 +69,7 @@ switch($winid)
                     $function=7;//11;
                     $search=$pers_obj->searchPersonellInfo($inputdata,$function);
                     $quicklist=$pers_obj->getNursesOfDept($dept_nr,$function,'5');
-                    $duty=$pers_obj->getNOCDutyplan($dept_nr,$pyear,$pday);
+                    $duty=$pers_obj->getNOCDutyplan($dept_nr,ROLE_NR_NURSER,$pyear,$pday);
                     $a_pnr=unserialize($duty['duty_1_pnr']);
                     $r_pnr=unserialize($duty['duty_2_pnr']);
                     break;
@@ -244,8 +244,8 @@ onLoad="<?php if($saved) echo "parentrefresh();"; ?>if (window.focus) window.foc
                             switch($winid){
                                 case 'operator':
                                 case 'assist':
-                                    $dutyplan_doc=&$pers_obj->getDOCDutyplan($dept_nr,substr($date_request, 0,4),substr($date_request, 5,2));
-                                    $dutyplan_nur=&$pers_obj->getNOCDutyplan($dept_nr,substr($date_request, 0,4),substr($date_request, 5,2));
+                                    $dutyplan_doc=&$pers_obj->getDOCDutyplan($dept_nr,ROLE_NR_NURSER,substr($date_request, 0,4),substr($date_request, 5,2));
+                                    $dutyplan_nur=&$pers_obj->getNOCDutyplan($dept_nr,ROLE_NR_NURSER,substr($date_request, 0,4),substr($date_request, 5,2));
                                     $flag=strpos($dutyplan_doc[duty_1_pnr],$qlist[nr]);
                                     $flag_1=strpos($dutyplan_doc[duty_2_pnr],$qlist[nr]);
                                     $flag_2=strpos($dutyplan_doc[duty_3_pnr],$qlist[nr]);
@@ -258,7 +258,7 @@ onLoad="<?php if($saved) echo "parentrefresh();"; ?>if (window.focus) window.foc
                                     }
                                     break;
                                 default:
-                                    $dutyplan_nur=&$pers_obj->getNOCDutyplan($dept_nr,substr($date_request, 0,4),substr($date_request, 5,2));
+                                    $dutyplan_nur=&$pers_obj->getNOCDutyplan($dept_nr,ROLE_NR_NURSER,substr($date_request, 0,4),substr($date_request, 5,2));
                                     $flag=strpos($dutyplan_nur[duty_1_pnr],$qlist[nr]);
                                     $flag_1=strpos($dutyplan_nur[duty_2_pnr],$qlist[nr]);
                                     $flag_2=strpos($dutyplan_nur[duty_3_pnr],$qlist[nr]);

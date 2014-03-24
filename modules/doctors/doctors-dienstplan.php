@@ -10,7 +10,7 @@ require($root_path.'include/core/inc_environment_global.php');
 *
 * See the file "copy_notice.txt" for the licence notice
 */
-$role_nr = 15;//doctor
+$role_nr = ROLE_NR_DOCTOR;//doctor
 $lang_tables[]='departments.php';
 define('LANG_FILE','doctors.php');
 define('NO_2LEVEL_CHK',1);

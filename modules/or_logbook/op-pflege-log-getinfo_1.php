@@ -56,7 +56,7 @@
                         $quickid='nurse';
                         $function=10;
                         $quicklist=$pers_obj->getNursesOfDept($dept_nr,$function,'5');
-                        $duty=$pers_obj->getNOCDutyplan($dept_nr,$pyear,$pmonth);
+                        $duty=$pers_obj->getNOCDutyplan($dept_nr,ROLE_NR_NURSER,$pyear,$pmonth);
                         $a_pnr=unserialize($duty['duty_1_pnr']);
                         $r_pnr=unserialize($duty['duty_2_pnr']);
                         break;
@@ -66,7 +66,7 @@
                         $quickid='nurse';
                         $function=7;//11;
                         $quicklist=$pers_obj->getNursesOfDept($dept_nr,$function,'5');
-                        $duty=$pers_obj->getNOCDutyplan($dept_nr,$pyear,$pmonth);
+                        $duty=$pers_obj->getNOCDutyplan($dept_nr,ROLE_NR_NURSER,$pyear,$pmonth);
                         $a_pnr=unserialize($duty['duty_1_pnr']);
                         $r_pnr=unserialize($duty['duty_2_pnr']);
                         break;
@@ -269,7 +269,7 @@ window.focus();document.infoform.inputdata.focus();" >
                                     }
                                     break;
                                 default:
-                                    $dutyplan_nur=&$pers_obj->getNOCDutyplan($dept_nr,substr($date_request, 0,4),substr($date_request, 5,2));
+                                    $dutyplan_nur=&$pers_obj->getNOCDutyplan($dept_nr,ROLE_NR_NURSER,substr($date_request, 0,4),substr($date_request, 5,2));
                                     $flag=strpos($dutyplan_nur[duty_1_pnr],$qlist[personell_nr]);
                                     $flag_1=strpos($dutyplan_nur[duty_2_pnr],$qlist[personell_nr]);
                                     $flag_2=strpos($dutyplan_nur[duty_3_pnr],$qlist[personell_nr]);
