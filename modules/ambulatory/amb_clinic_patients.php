@@ -109,12 +109,13 @@ if(($mode=='')||($mode=='fresh')){
 		#### Start of routine to fetch doctors on duty
 		$elem='duty_1_pnr';
 		if(SHOW_DOC_2) $elem.=',duty_2_pnr';
-		
+
+        $role_nr = 15;
 		# Create personnel object
 		include_once($root_path.'include/care_api_classes/class_personell.php');
 		$pers_obj=new Personell;
 			
-		if($result=$pers_obj->getDOCDutyplan($dept_nr,$pyear,$pmonth,$elem)){
+		if($result=$pers_obj->getDOCDutyplan($dept_nr,$role_nr,$pyear,$pmonth,$elem)){
 			$duty1=&unserialize($result['duty_1_pnr']);
 			if(SHOW_DOC_2) $duty2=&unserialize($result['duty_2_pnr']);
 					//echo $sql."<br>";

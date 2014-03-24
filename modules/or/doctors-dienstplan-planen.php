@@ -120,7 +120,8 @@ if($dblink_ok)
 		 }// end of if(mode==save)
 		 else
 		 {
-		 	if($dutyplan=&$pers_obj->getDOCDutyplan(87,$pyear,$pmonth)){
+             $role_nr = 15;//bac si
+		 	if($dutyplan=&$pers_obj->getDOCDutyplan(87,$role_nr,$pyear,$pmonth)){
 			
 				$aelems=unserialize($dutyplan['duty_1_txt']);
 				$relems=unserialize($dutyplan['duty_2_txt']);
