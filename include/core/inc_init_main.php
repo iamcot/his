@@ -21,10 +21,10 @@ $key_2level='32722630722432';
 $key_login='16217182067167';
 
 # Main host address or domain
-$main_domain='mywww.his';
+$main_domain='localhost';
 
 # Host address for images
-$fotoserver_ip='mywww.his';
+$fotoserver_ip='localhost';
 
 # Transfer protocol. Use https if this runs on SSL server
 $httprotocol='http';

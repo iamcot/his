@@ -1,3 +1,6 @@
+2014-03-25:-----------------
++ thêm tính năng sửa giá thuốc cho BHYT trước khi tính viện phí và phát thuốc, tuy nhiên hóa đơn đang lấy tổng tiền thuốc sai
+
 2014-03-24: ----------------------
 + thêm chức năng hiển thị lịch trực trong ngày các khoa
 * sửa toàn bộ class personell

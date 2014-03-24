@@ -27,8 +27,6 @@
 				$cbx_price='';
 				
 				//Ton kho le gia tien + so luong
-                //CoT bo select chon gia vi khong phu hop voi thuc trang, BHYT se nhap vao o nay
-//            $cbx_price = '<input type="text" value="'.$medicine_pres['cost'].'" name="cost'.$i.'" id="cost'.$i.'" onFocus="startCalc('.$i.');" onBlur="stopCalc();">';
 				$khole_result = $Pres->findInventoryKhoLe_ToaThuoc($medicine_pres['product_encoder'],$pres_show['typeput']);
 				$cbx_price = '<select name="cost'.$i.'" id="cost'.$i.'" onFocus="startCalc('.$i.');" onBlur="stopCalc();">';
 				if (is_object($khole_result)){
@@ -86,13 +84,13 @@
 						'.$medicine_pres['note'].'</b>
 					</td>
 					<td align="right" width="12%">
-						<input name="cost_dutinh'.$i.'" type="text" size=8 value="'.$medicine_pres['cost'].'" style="text-align:center;border-color:white;border-style:solid;" readonly>
+						<input name="cost_dutinh'.$i.'" type="text" size=8 value="'.number_format($medicine_pres['cost'],0,'.',',').'" style="text-align:center;border-color:white;border-style:solid;" readonly>
 					</td>
 					<td align="right" width="12%">
 						'.$cbx_price.' <input type="hidden" id="hidden_tonkho'.$i.'" value="'.$text_tonkhole_hidden.'">
 					</td>
 					<td align="right" width="13%">
-						<input name="sumcost'.$i.'" id="sumcost'.$i.'"  type="text" size=8 value="'.$totalcostmedicine.'" style="text-align:center;border-color:white;border-style:solid;" readonly>
+						<input name="sumcost'.$i.'" id="sumcost'.$i.'"  type="text" size=8 value="'.number_format($totalcostmedicine,0,'.',',').'" style="text-align:center;border-color:white;border-style:solid;" readonly>
 					</td>
 				</tr>';
 

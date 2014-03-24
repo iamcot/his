@@ -158,14 +158,19 @@ div.fa2_ml3 {font-family: arial; font-size: 12; margin-left: 3; }
 </style>
 
 <script language="javascript">
-<!-- 
+<!--
+Number.prototype.format = function(n, x) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+    return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+};
 function mysubmit(type,pres_id){
     console.log(type);
     if(type=='send'){
         FinishPres(pres_id);
     }
     else if(type=='edit'){
-        return false;
+        document.form_test_request.action="includes/inc_pres_edit.php?pres_id="+ pres_id+"&radiovalue=<?php echo $radiovalue; ?>&user_origin=<?php echo $user_origin; ?>";
+        document.form_test_request.submit();
     }
     else   {
         return false;
@@ -225,7 +230,7 @@ function calc(x){
   var idx=document.getElementById("cost"+x).selectedIndex;
   var opt=document.getElementById("cost"+x).options;
   var b = opt[idx].text*1;
-  document.getElementById('sumcost'+x).value = a*b;
+  document.getElementById('sumcost'+x).value = (a*b).format();
   
   //totalcost
   var n = document.getElementById('countpres').value;
@@ -233,9 +238,9 @@ function calc(x){
   for (i = 1; i <= n; i++)
   {
 	if(document.getElementById('sumcost'+i))
-		total = total + document.getElementById('sumcost'+i).value*1;
+		total = total + document.getElementById('sumcost'+i).value.replace(/,/g,'') * 1;
   }
-  document.getElementById('totalcost').value = total;
+  document.getElementById('totalcost').value = total.format();
   
   //change inventory
 
@@ -392,7 +397,7 @@ require('includes/inc_pres_request_lister_fx.php');
 								<td width="20%"><FONT SIZE=-1   color="#000066"><?php echo $LDTotalDay; ?></td>
 								<td width="20%"><?php echo $pres_show['sum_date']; ?></td>
 								<td width="24%"><FONT SIZE=-1   color="#000066"><?php echo $LDTotalCostPres; ?></td>
-								<td width="36%"><input id="totalcost" name="totalcost" type="text" size=15 value="<?php echo $pres_show['total_cost']; ?>" style="text-align:left;border-color:white;border-style:solid;" readonly></td>
+								<td width="36%"><input id="totalcost" name="totalcost" type="text" size=15 value="<?php echo number_format($pres_show['total_cost'],'0','.',','); ?>" style="text-align:left;border-color:white;border-style:solid;" readonly></td>
 							</tr>
 						   <tr>
 								<td><FONT SIZE=-1   color="#000066"><?php echo $LDSymptoms; ?></td>
@@ -434,11 +439,12 @@ require('includes/inc_pres_request_lister_fx.php');
    </tr>
  </table>
 
-<p>
-		<input onclick="mysubmit('send',<?php echo $pres_id; ?>)" type="image" <?php echo createLDImgSrc($root_path,'abschic.gif','0') ?>  title="<?php echo $LDFinishEntry; ?>">
+<div style="line-height: 28px;vertical-align: top;overflow: hidden">
+    <input style="float:left;" onclick="mysubmit('send',<?php echo $pres_id; ?>)" type="image" <?php echo createLDImgSrc($root_path,'abschic.gif','0') ?>  title="<?php echo $LDFinishEntry; ?>">
+    <a style="float:left;padding: 0 5px" href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut; ?>"></a>
+    <input style="float:left;" type="button" onclick="mysubmit('edit',<?php echo $pres_id; ?>)" value="Cập nhật giá">
+</div>
 
-    <a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut; ?>"></a>
-    <input type="button" onclick="mysubmit('edit',<?php echo $pres_id; ?>)" value="Cập nhật giá">
 
 <!--   ***************     HIDDEN  INPUT   ***************    -->
 <input type="hidden" name="sid" value="<?php echo $sid ?>">

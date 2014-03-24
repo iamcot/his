@@ -819,6 +819,7 @@ class Product extends Core {
                  if (is_object($catalogue_info))
                  {
                       $i=0;
+                     $sCatalogueInfo="";
                        while($object=$catalogue_info->FetchRow())
                       {
                             $i++;
@@ -1031,6 +1032,7 @@ class Product extends Core {
                  if (is_object($catalogue_info))
                  {
                        $i=0;
+                     $sCatalogueInfo = "";
                        while($object=$catalogue_info->FetchRow())
                       {
                             $i++;
@@ -1181,6 +1183,7 @@ class Product extends Core {
                   if (is_object($catalogue_info))
                  {
                        $i=0;
+                     $sCatalogueInfo = "";
                        while($object=$catalogue_info->FetchRow())
                       {
                             $i++;
@@ -2024,7 +2027,7 @@ class Product extends Core {
 		global $db;
 		$this->sql="SELECT *
                     FROM care_pharma_available_product 
-                    WHERE product_encoder='$product_encoder' AND product_lot_id='$lotid' AND typeput='$typeput'";		
+                    WHERE product_encoder='$encoder' AND product_lot_id='$lotid' AND typeput='$typeput'";
 		if($this->result=$db->Execute($this->sql)) {
 			if($this->result->RecordCount()){
 				return $this->result->FetchRow();
@@ -2061,7 +2064,7 @@ class Product extends Core {
 		global $db;
 		$this->sql="SELECT *
                     FROM care_med_available_product 
-                    WHERE product_encoder='$product_encoder' AND product_lot_id='$lotid' AND typeput='$typeput'";		
+                    WHERE product_encoder='$encoder' AND product_lot_id='$lotid' AND typeput='$typeput'";
 		if($this->result=$db->Execute($this->sql)) {
 			if($this->result->RecordCount()){
 				return $this->result->FetchRow();
@@ -2088,7 +2091,7 @@ class Product extends Core {
 		global $db;
 		$this->sql="SELECT *
                     FROM care_pharma_products_main_sub
-                    WHERE product_encoder='$product_encoder' AND lotid='$lotid' AND typeput='$typeput'";			
+                    WHERE product_encoder='$encoder' AND lotid='$lotid' AND typeput='$typeput'";
 		if($this->result=$db->Execute($this->sql)) {
 			if($this->result->RecordCount()){
 				return $this->result->FetchRow();
@@ -2120,7 +2123,7 @@ class Product extends Core {
 		global $db;
 		$this->sql="SELECT *
                     FROM care_med_products_main_sub1
-                    WHERE product_encoder='$product_encoder' AND lotid='$lotid'  AND typeput='$typeput'";			
+                    WHERE product_encoder='$encoder' AND lotid='$lotid'  AND typeput='$typeput'";
 		if($this->result=$db->Execute($this->sql)) {
 			if($this->result->RecordCount()){
 				return $this->result->FetchRow();
@@ -2159,6 +2162,7 @@ class Product extends Core {
                 if (is_object($catalogue_info))
                 {
                     $i=0;
+                    $sCatalogueInfo = "";
                     while($object=$catalogue_info->FetchRow())
                     {
                         $i++;
@@ -2386,7 +2390,7 @@ class Product extends Core {
             global $db;
             $this->sql="SELECT *
                     FROM care_chemical_products_main_sub
-                    WHERE product_encoder='$product_encoder' AND lotid='$lotid' AND typeput='$typeput'";
+                    WHERE product_encoder='$encoder' AND lotid='$lotid' AND typeput='$typeput'";
 
             if($this->result=$db->Execute($this->sql)) {
                     if($this->result->RecordCount()){

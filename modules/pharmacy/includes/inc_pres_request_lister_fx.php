@@ -1,4 +1,10 @@
-
+<style>
+    a{
+        line-height: 16px;
+        padding: 2px;
+        display: block;
+    }
+</style>
 <script language="javascript" src="../../js/wz_tooltip/wz_tooltip.js"></script>
 
 <?php
@@ -30,6 +36,8 @@ $send_date="";
 
 /* Display the list of pending requests */
 $list_pres->MoveFirst();
+$odd = 'style="background:#f6f6f6;"';
+$i=0;
 while($pres_show =$list_pres->FetchRow())
 {
   //echo $tracker."<br>";
@@ -61,12 +69,12 @@ while($pres_show =$list_pres->FetchRow())
   	   	$result=&$enc_obj->encounter;							//Lay info benh nhan
   	   	$info = $result['name_last']. " " . $result['name_first'] . "<br>" . $timepres . "<br> PID: " . $result['pid']. "<br>" 		.$typepres. "<br>" .$LDPayBill.": ".$payment;
 		
-        echo "<img src=\"".$root_path."gui/img/common/default/pixel.gif\" border=0 width=4 height=7> <a href=\"".$thisfile.URL_APPEND."&user_origin=".$user_origin."&radiovalue=".$radiovalue."&pn=".$pres_show['encounter_nr']."&pres_id=".$pres_show['prescription_id']."&typeInOut=".$typeInOut."&tracker=".$tracker."\" onmouseover=\"Tip('". $info ."',BGCOLOR,'". $bgcolor ."')\" >".$pres_show['prescription_id']."</a><br>";
+        echo " <a ".(($i%2==1)?$odd:'')." href=\"".$thisfile.URL_APPEND."&user_origin=".$user_origin."&radiovalue=".$radiovalue."&pn=".$pres_show['encounter_nr']."&pres_id=".$pres_show['prescription_id']."&typeInOut=".$typeInOut."&tracker=".$tracker."\" onmouseover=\"Tip('". $info ."',BGCOLOR,'". $bgcolor ."')\" >".$pres_show['prescription_id']."</a>";
    }
    else
    {
    	
-        echo "<img ".createComIcon($root_path,'redpfeil.gif','0','',TRUE)."> <FONT onmouseover=\"Tip('". $info ."',BGCOLOR,'". $bgcolor ."')\"  size=1 color=\"red\">".$pres_show['prescription_id']."</font><br>";
+        echo "<img ".createComIcon($root_path,'redpfeil.gif','0','',TRUE)."> <FONT  onmouseover=\"Tip('". $info ."',BGCOLOR,'". $bgcolor ."')\"  size=3 color=\"red\">".$pres_show['prescription_id']."</font>";
         $track_item=$tracker;
    }
    /* Check for the barcode png image, if nonexistent create it in the cache */
@@ -74,7 +82,7 @@ while($pres_show =$list_pres->FetchRow())
    {
 	  echo "<img src='".$root_path."classes/barcode/image.php?code=".$pres_show['encounter_nr']."&style=68&type=I25&width=180&height=50&xres=2&font=5&label=2&form_file=en' border=0 width=0 height=0>";
 	}
-   
+   $i++;
   $tracker++;
 }
 /* Reset tracker to the actual request being shown */

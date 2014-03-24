@@ -80,6 +80,7 @@ if(!$no_redirect){
 	$Pres->setPresStatusFinish($pres_id,'1');
 	$Pres->setInfoPersonWhenIssuePres($pres_id,$issue_user,$noteissue,$receive_user);
 	$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $Pres->getLastQuery(), date('Y-m-d H:i:s'));
+    $totalcost = preg_replace('/,/','',$totalcost);
 	$Pres->setCostPres($pres_id,$totalcost);
 	//$no_redirect=$Pres->getLastQuery();
 }

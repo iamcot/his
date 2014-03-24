@@ -791,7 +791,16 @@ class Prescription extends Core {
 
 		return $this->Transact($this->sql);	
 	}
-	
+	/** 2014/03/26
+     * Update cost for 1 medicine in pres
+     * */
+    function updateCostOneMedicine($medicine_nr,$cost){
+        global $db;
+        $this->sql="UPDATE ".$this->tb_phar_pres."
+                        SET cost = '$cost'
+                        WHERE nr = $medicine_nr";
+        return $this->Transact($this->sql);
+    }
 	/** 5/12/2011
 	 * Updates the cost all medicine in prescription, based on the prescription_id and product_name
 	 * @param int prescription id
@@ -939,7 +948,7 @@ class Prescription extends Core {
         //Hoa chat
         //**********************************************************************
         //**********************************************************************
-        //cho t?t c? các lo?i b?nh nhân
+        //cho t?t c? cï¿½c lo?i b?nh nhï¿½n
         function getAllChemicalPresByTypePatient($in_out_patient, $status_finish, $in_issuepaper){
 	    global $db;
             $if_type='';

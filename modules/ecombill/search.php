@@ -30,7 +30,7 @@ $entry_body_bgcolor='#ffffff';
 if(!isset($searchkey)) $searchkey='';
 if(!isset($mode)) $mode='';
 
-# Initialize page´s control variables
+# Initialize pageï¿½s control variables
 if($mode=='paginate'){
 	$searchkey=$_SESSION['sess_searchkey'];
 	
@@ -79,14 +79,15 @@ if(($mode=='search'||$mode=='paginate')&&!empty($searchkey)){
 	$sqlselect="SELECT enc.encounter_nr,enc.encounter_class_nr, enc.is_discharged, enc.is_transfer,  reg.name_last, reg.name_first, reg.date_birth, reg.addr_zip, reg.sex";
 	$sqlfrom ="	FROM care_encounter as enc,care_person as reg ";
 	$sqlwhere2= " AND enc.pid=reg.pid  
-				AND enc.is_discharged NOT IN (1) 
+
 				AND enc.status  IN ('','normal')";
 	$orderby = " ORDER BY $oprep.$oitem $odir";
+    //	AND enc.is_discharged NOT IN (1)
 		
 	if(is_numeric($suchwort)){
 		$suchwort=(int) $suchwort;
 		$numeric=1;
-		$sqlwhere1=" WHERE enc.encounter_nr='$suchwort' ";
+		$sqlwhere1=" WHERE enc.encounter_nr LIKE '%$suchwort%' ";
 	}else{
 		$sqlwhere1="WHERE (reg.name_last $sql_LIKE '".addslashes($suchwort)."%' 
 							OR reg.name_first $sql_LIKE '".addslashes($suchwort)."%'";
