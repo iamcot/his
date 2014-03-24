@@ -159,7 +159,18 @@ div.fa2_ml3 {font-family: arial; font-size: 12; margin-left: 3; }
 
 <script language="javascript">
 <!-- 
-
+function mysubmit(type,pres_id){
+    console.log(type);
+    if(type=='send'){
+        FinishPres(pres_id);
+    }
+    else if(type=='edit'){
+        return false;
+    }
+    else   {
+        return false;
+    }
+}
 function FinishPres(pres_id)
 { 
 	if(pres_id=='')
@@ -272,7 +283,7 @@ require('includes/inc_pres_request_lister_fx.php');
 
     <td>
 
-	<form name="form_test_request" method="post" onSubmit="return FinishPres(<?php echo $pres_id; ?>)">
+	<form name="form_test_request" method="post" >
 		<input type="image" <?php echo createLDImgSrc($root_path,'abschic.gif','0') ?>  title="<?php echo $LDFinishEntry; ?>"> 
 		<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut; ?>"></a>
         <p>
@@ -424,8 +435,10 @@ require('includes/inc_pres_request_lister_fx.php');
  </table>
 
 <p>
-		<input type="image" <?php echo createLDImgSrc($root_path,'abschic.gif','0') ?>  title="<?php echo $LDFinishEntry; ?>"> 
-		<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut; ?>"></a>
+		<input onclick="mysubmit('send',<?php echo $pres_id; ?>)" type="image" <?php echo createLDImgSrc($root_path,'abschic.gif','0') ?>  title="<?php echo $LDFinishEntry; ?>">
+
+    <a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut; ?>"></a>
+    <input type="button" onclick="mysubmit('edit',<?php echo $pres_id; ?>)" value="Cập nhật giá">
 
 <!--   ***************     HIDDEN  INPUT   ***************    -->
 <input type="hidden" name="sid" value="<?php echo $sid ?>">

@@ -24,7 +24,7 @@
     if(!isset($_SESSION['sess_path_referer'])) $_SESSION['sess_path_referer'] = "";
     if(!isset($_SESSION['sess_user_origin'])) $_SESSION['sess_user_origin'] = "";
 
-
+   // $thisfile= basename(__FILE__);
     $breakfile=$root_path.'main/logout_confirm.php'.URL_APPEND."&sid=$sid";
 
     $_SESSION['sess_path_referer']=$top_dir.basename(__FILE__);
@@ -39,7 +39,7 @@
 
 ?>
 <script language="javascript">
-<!--
+
     function closewin() {
             location.href='startframe.php?sid=<?php echo "$sid&lang=$lang";?>';
     }

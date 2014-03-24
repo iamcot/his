@@ -27,31 +27,33 @@
 				$cbx_price='';
 				
 				//Ton kho le gia tien + so luong
+                //CoT bo select chon gia vi khong phu hop voi thuc trang, BHYT se nhap vao o nay
+//            $cbx_price = '<input type="text" value="'.$medicine_pres['cost'].'" name="cost'.$i.'" id="cost'.$i.'" onFocus="startCalc('.$i.');" onBlur="stopCalc();">';
 				$khole_result = $Pres->findInventoryKhoLe_ToaThuoc($medicine_pres['product_encoder'],$pres_show['typeput']);
 				$cbx_price = '<select name="cost'.$i.'" id="cost'.$i.'" onFocus="startCalc('.$i.');" onBlur="stopCalc();">';
 				if (is_object($khole_result)){
 					$giamacdinh =0; $text_tonkhole_hidden='';
 					for ($i1=1;$i1<=$khole_result->RecordCount();$i1++){
 						$temp_price = $khole_result->FetchRow();
-						if (abs($temp_price['price']-$medicine_pres['cost'])<=0.1){	
+						if (abs($temp_price['price']-$medicine_pres['cost'])<=0.1){
 							$cbx_price .='<option value="'.$temp_price['price'].'" selected>'.$temp_price['price'].'</option>';
 							$giamacdinh = $temp_price['price'];
 							$tonkhole = $temp_price['available_number'];
 						}
 						else {
 							$cbx_price .='<option value="'.$temp_price['price'].'">'.$temp_price['price'].'</option>';
-							if($giamacdinh==0){ 
+							if($giamacdinh==0){
 								$giamacdinh = $temp_price['price'];
 								$tonkhole = $temp_price['available_number'];
 							}
 						}
 						$text_tonkhole_hidden .= '@'.$temp_price['sum'];
-					}											
+					}
 				}else {
-					$cbx_price .='<option value="0">0</option>'; 
+					$cbx_price .='<option value="0">0</option>';
 					$giamacdinh =0; $tonkhole =0;
 				}
-				
+
 				$cbx_price .= '</select>';
 				//$tonkhole
 				
