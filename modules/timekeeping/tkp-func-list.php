@@ -35,7 +35,8 @@ require($root_path.'include/core/inc_css_a_hilitebu.php');
 </tr>
 <tr width=100%>
 <td  bgcolor=<?php echo $cfg['body_bgcolor'];?> >
-<table width=100% border=0 cellspacing=1 cellpadding=2>
+<FONT    SIZE=-1  FACE="Arial">
+<table width=100% border=0 cellspacing=1 cellpadding=2> 
  
   <!-- gjergji new ward management -->
   <tr width=100%>
@@ -93,5 +94,6 @@ require($root_path.'include/core/inc_css_a_hilitebu.php');
 <p>
 <a href="<?php echo $breakfile ?>" target="_parent"><img <?php echo createLDImgSrc($root_path,'close2.gif','0') ?>></a>
 
+</FONT>
 </BODY>
 </HTML>
