@@ -85,7 +85,6 @@ if(!$is_cached || ($is_cached && $force_no_cache)){
 	$pers_obj=new Personell;
 	$quicklist=&$pers_obj->getNOCQuicklist($dept_OC,$pyear,$pmonth);
 }
-$role_nr = 14;//y ta role nr = 14
 
 # Start Smarty templating here
  /**
@@ -175,7 +174,7 @@ if(!$force_no_cache&&$is_cached){
 	while(list($x,$v)=each($dept_OC)){
 	
 		if(in_array($v['nr'],$quicklist)){
-		if($dutyplan=$pers_obj->getDOCDutyplan($v['nr'],$role_nr,$pyear,$pmonth)){
+		if($dutyplan=$pers_obj->getDOCDutyplan($v['nr'],$pyear,$pmonth)){
 	
 			$a=unserialize($dutyplan['duty_1_txt']);	
 			$ao=unserialize($dutyplan['duty_3_txt']);

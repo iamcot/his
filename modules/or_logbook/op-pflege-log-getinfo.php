@@ -24,64 +24,58 @@
                         //$maxelement=10;
                         $quickid='doctor';
                         $function='BÃ¡c sÄ© pháº«u thuáº­t';
-                        $role_nr = 15;
                         $quicklist=$pers_obj->getDoctorsOfDept($dept_nr,$function,'5');
-                        $duty=$pers_obj->getDOCDutyplan($dept_nr,$role_nr,$pyear,$pmonth);
+                        $duty=$pers_obj->getDOCDutyplan($dept_nr,$pyear,$pmonth);
                         $a_pnr=unserialize($duty['duty_1_pnr']);
                         $r_pnr=unserialize($duty['duty_2_pnr']);
                         break;
         case 'assist':
-                        $role_nr = 15;
                         $element='assistant';
                         //$maxelement=10;
                         $quickid='doctor';
                         $function='Phá»¥ má»•';
                         $quicklist=$pers_obj->getDoctorsOfDept($dept_nr,$function,'5');
-                        $duty=$pers_obj->getDOCDutyplan($dept_nr,$role_nr,$pyear,$pmonth);
+                        $duty=$pers_obj->getDOCDutyplan($dept_nr,$pyear,$pmonth);
                         $a_pnr=unserialize($duty['duty_1_pnr']);
                         $r_pnr=unserialize($duty['duty_2_pnr']);
                         break;
         case 'scrub':
-                        $role_nr=14;
                         $element='scrub_nurse';
                         //$maxelement=10;
                         $quickid='nurse';
                         $function='Y tÃ¡ vÃ²ng trong';
                         $quicklist=$pers_obj->getNursesOfDept($dept_nr,$function,'5');
-                        $duty=$pers_obj->getNOCDutyplan($dept_nr,$role_nr,$pyear,$pmonth);
+                        $duty=$pers_obj->getNOCDutyplan($dept_nr,$pyear,$pmonth);
                         $a_pnr=unserialize($duty['duty_1_pnr']);
                         $r_pnr=unserialize($duty['duty_2_pnr']);
                         break;
         case 'rotating':
-            $role_nr=14;
                         $element='rotating_nurse';
                         //$maxelement=10;
                         $quickid='nurse';
                         $function='Y tÃ¡ vÃ²ng ngoÃ i';
                         $quicklist=$pers_obj->getNursesOfDept($dept_nr,$function,'5');
-                        $duty=$pers_obj->getNOCDutyplan($dept_nr,$role_nr,$pyear,$pmonth);
+                        $duty=$pers_obj->getNOCDutyplan($dept_nr,$pyear,$pmonth);
                         $a_pnr=unserialize($duty['duty_1_pnr']);
                         $r_pnr=unserialize($duty['duty_2_pnr']);
                         break;
         case 'ana':
-            $role_nr = 14;
                         $element='anesthesia';
                         //$maxelement=10;
                         $quickid='doctor';
                         $function='BÃ¡c sÄ© gÃ¢y mÃª';
                         $quicklist=$pers_obj->getDoctorsOfDept($dept_nr,$function,'5');
-                        $duty=$pers_obj->getDOCDutyplan($dept_nr,$role_nr,$pyear,$pmonth);
+                        $duty=$pers_obj->getDOCDutyplan($dept_nr,$pyear,$pmonth);
                         $a_pnr=unserialize($duty['duty_1_pnr']);
                         $r_pnr=unserialize($duty['duty_2_pnr']);
                         break;
         case 'ana_assist':
-            $role_nr = 14;
                         $element='an_doctor';
                         //$maxelement=10;
                         $quickid='doctor';
                         $function='BÃ¡c sÄ© gÃ¢y mÃª phá»¥';
                         $quicklist=$pers_obj->getDoctorsOfDept($dept_nr,$function,'5');
-                        $duty=$pers_obj->getDOCDutyplan($dept_nr,$role_nr,$pyear,$pmonth);
+                        $duty=$pers_obj->getDOCDutyplan($dept_nr,$pyear,$pmonth);
                         $a_pnr=unserialize($duty['duty_1_pnr']);
                         $r_pnr=unserialize($duty['duty_2_pnr']);
                         break;
@@ -118,7 +112,7 @@
         $dbtable1='care_personell_op';
         if($fileexist)
         {
-            //bi?n $delitem cï¿½ giï¿½ tr? khi nh?n nï¿½t delete
+            //bi?n $delitem có giá tr? khi nh?n nút delete
             if($delitem!="")
             {
                 $personell_op=$pers_obj->insertPersonelltemp($personell_nr,$result['nr'],'');
@@ -183,7 +177,7 @@
     }
     function savedata_bytime(iln,ifn,inx,ipr,ipnr,time,check,status)
     {
-        //khi chua delete thï¿½ status=chosed s? thï¿½ng bï¿½o cho ngu?i dï¿½ng bi?t ngu?i dï¿½ cï¿½ l?ch lï¿½m ï¿½-kï¿½p nï¿½o d? ngu?i ta xem xï¿½t
+        //khi chua delete thì status=chosed s? thông báo cho ngu?i dùng bi?t ngu?i dó có l?ch làm ê-kíp nào d? ngu?i ta xem xét
         if(status!=''){
             var answer = confirm ("<?php echo $LDNote4 ?>"+check+"\n"+"<?php echo $LDWarning ?>");
             if (answer){
@@ -196,7 +190,7 @@
                 d.time_chose.value=time;
                 d.submit();
             }
-        //khi ch?n r?i delete di thï¿½ khï¿½ng c?n thï¿½ng bï¿½o cho ngu?i ta ch?n l?i li?n
+        //khi ch?n r?i delete di thì không c?n thông báo cho ngu?i ta ch?n l?i li?n
         }else{
             d=document.quickselect;
             d.ln.value=iln;

@@ -484,11 +484,11 @@ class Personell extends Core {
 	* @param int Year
 	* @param int Month
 	*/
-	function NOCDutyplanExists($dept_nr,$role_nr,$year,$month){
-		return $this->_OCDutyplanExists($role_nr,$dept_nr,$year,$month); // 14 = nurse_on_call (role)
+	function NOCDutyplanExists($dept_nr,$year,$month){
+		return $this->_OCDutyplanExists(14,$dept_nr,$year,$month); // 14 = nurse_on_call (role)
 	}
-	function NChamcongExists($dept_nr,$role_nr,$year,$month){
-		return $this->_ChamcongExists($role_nr,$dept_nr,$year,$month); // 14 = nurse_on_call (role)
+	function NChamcongExists($dept_nr,$year,$month){
+		return $this->_ChamcongExists(14,$dept_nr,$year,$month); // 14 = nurse_on_call (role)
 	}
 	/**#@-*/
 	
@@ -547,15 +547,15 @@ class Personell extends Core {
 	* @param int Month
 	* @param string Field names of items to be fetched
 	*/
-	function getDOCDutyplan($dept_nr,$role_nr,$year,$month,$elems='*'){
-		return $this->_getOCDutyplan($role_nr,$dept_nr,$year,$month,$elems);
+	function getDOCDutyplan($dept_nr,$year,$month,$elems='*'){
+		return $this->_getOCDutyplan(15,$dept_nr,$year,$month,$elems);
 	}
 	//
-	function getDChamcong($dept_nr,$role_nr,$year,$month,$elems='*'){
-		return $this->_getChamcong($role_nr,$dept_nr,$year,$month,$elems);
+	function getDChamcong($dept_nr,$year,$month,$elems='*'){
+		return $this->_getChamcong(15,$dept_nr,$year,$month,$elems);
 	}
-	function getNChamcong($dept_nr,$role_nr,$ward_nr,$year,$month,$elems='*'){
-		return $this->_getChamcong($role_nr,$dept_nr,$year,$month,$elems);
+	function getNChamcong($dept_nr,$ward_nr,$year,$month,$elems='*'){
+		return $this->_getChamcong(14,$dept_nr,$year,$month,$elems);
 	}
 	/**
 	* Gets the  Nurses' on-call duty plan of a  department number, year and month.
@@ -566,8 +566,8 @@ class Personell extends Core {
 	* @param int Month
 	* @param string Field names of items to be fetched
 	*/
-	function getNOCDutyplan($dept_nr,$role_nr,$year,$month,$elems='*'){
-		return $this->_getOCDutyplan($role_nr,$dept_nr,$year,$month,$elems);
+	function getNOCDutyplan($dept_nr,$year,$month,$elems='*'){
+		return $this->_getOCDutyplan(14,$dept_nr,$year,$month,$elems);
 	}
 	/**#@-*/
 	

@@ -85,8 +85,6 @@ if($force_no_cache || (!$force_no_cache && !$is_cached)){
 	$quicklist=&$pers_obj->getDOCQuicklist($dept_DOC,$pyear,$pmonth);
 }
 
-$role_nr = 15;//bsi role nr = 15
-
 # Start Smarty templating here
  /**
  * LOAD Smarty
@@ -178,7 +176,7 @@ if(!$force_no_cache&&$is_cached){
 	while(list($x,$v)=each($dept_DOC)){
 	
 	if(in_array($v['nr'],$quicklist)){
-		if($dutyplan=$pers_obj->getDOCDutyplan($v['nr'],$role_nr,$pyear,$pmonth)){
+		if($dutyplan=$pers_obj->getDOCDutyplan($v['nr'],$pyear,$pmonth)){
 	
 			$a=unserialize($dutyplan['duty_1_txt']);	
 			$ao=unserialize($dutyplan['duty_3_txt']);
