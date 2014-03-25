@@ -1,5 +1,6 @@
 2014-03-25:-----------------
-+ thêm tính năng sửa giá thuốc cho BHYT trước khi tính viện phí và phát thuốc, tuy nhiên hóa đơn đang lấy tổng tiền thuốc sai
++ thêm tính năng sửa giá thuốc cho BHYT trước khi tính viện phí và phát thuốc,
+* patient_due_first: khong tinh lai gia tien khi thanh toan vi BHYT da chinh gia roi
 
 2014-03-24: ----------------------
 + thêm chức năng hiển thị lịch trực trong ngày các khoa

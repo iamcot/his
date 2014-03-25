@@ -284,13 +284,14 @@ if($billid == "currentbill") {
 		}
 	}
 	//FOR PRESCRIPTION
-	$presresult = $Pres->getAllPresOfEncounterByBillId($patientno,'0');		//list cac toa chua thanh toan
-	if(is_object($presresult)) {	//update currrent medicine cost, total cost of this pres
-		for($i=0;$i<$presresult->RecordCount();$i++) {
-			$pres = $presresult->FetchRow();
-			$Pres->updateCostPres($pres['prescription_id']);
-		}
-	}
+    //2014-03-25: CoT, khong can phai tinh lai gia hien tai vi BHYT da chinh sua trong toa
+//	$presresult = $Pres->getAllPresOfEncounterByBillId($patientno,'0');		//list cac toa chua thanh toan
+//	if(is_object($presresult)) {	//update currrent medicine cost, total cost of this pres
+//		for($i=0;$i<$presresult->RecordCount();$i++) {
+//			$pres = $presresult->FetchRow();
+//			$Pres->updateCostPres($pres['prescription_id']);
+//		}
+//	}
 	
 	$presresult = $Pres->getAllPresOfEncounterByBillId($patientno,'0');	  //list lai cac toa chua thanh toan, da duoc cap nhat gia
 	if(is_object($presresult))
