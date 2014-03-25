@@ -329,13 +329,14 @@ if($billid == "currentbill") {
 	}
 	
 	//FOR MEDIPOT
-	$medresult = $PresMed->getAllPresOfEncounterByBillId($patientno,'0');		//list cac toa chua thanh toan
-	if(is_object($medresult)) {	//update currrent medicine cost, total cost of this pres
-		for($i=0;$i<$medresult->RecordCount();$i++) {
-			$pres = $medresult->FetchRow();
-			$PresMed->updateCostPres($pres['prescription_id']);
-		}
-	}	
+    //2014-03-25: CoT, khong can phai tinh lai gia hien tai vi BHYT da chinh sua trong toa
+//	$medresult = $PresMed->getAllPresOfEncounterByBillId($patientno,'0');		//list cac toa chua thanh toan
+//	if(is_object($medresult)) {	//update currrent medicine cost, total cost of this pres
+//		for($i=0;$i<$medresult->RecordCount();$i++) {
+//			$pres = $medresult->FetchRow();
+//			$PresMed->updateCostPres($pres['prescription_id']);
+//		}
+//	}
 	$medresult = $PresMed->getAllPresOfEncounterByBillId($patientno,'0');	  //list lai cac toa chua thanh toan, da duoc cap nhat gia
 	if(is_object($medresult))
 	{
@@ -372,13 +373,14 @@ if($billid == "currentbill") {
 	}
 	
 	//FOR CHEMICAL
-	$cheresult = $Pres->getAllChemicalOfEncounterByBillId($patientno,'0');		//list cac toa chua thanh toan
-	if(is_object($cheresult)) {	//update currrent medicine cost, total cost of this pres
-		for($i=0;$i<$cheresult->RecordCount();$i++) {
-			$pres = $cheresult->FetchRow();
-			$Pres->updateCostChemical($pres['prescription_id']);
-		}
-	}	
+    //2014-03-25: CoT, khong can phai tinh lai gia hien tai vi BHYT da chinh sua trong toa
+//	$cheresult = $Pres->getAllChemicalOfEncounterByBillId($patientno,'0');		//list cac toa chua thanh toan
+//	if(is_object($cheresult)) {	//update currrent medicine cost, total cost of this pres
+//		for($i=0;$i<$cheresult->RecordCount();$i++) {
+//			$pres = $cheresult->FetchRow();
+//			$Pres->updateCostChemical($pres['prescription_id']);
+//		}
+//	}
 	$cheresult = $Pres->getAllChemicalOfEncounterByBillId($patientno,'0');	  //list lai cac toa chua thanh toan, da duoc cap nhat gia
 	if(is_object($cheresult))
 	{
