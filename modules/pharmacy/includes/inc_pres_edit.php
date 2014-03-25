@@ -31,7 +31,7 @@ foreach ($medicine_nr AS $nr)
 { 
 	$ix++; $dxcost = 'cost'.$ix; $dxencoder = 'encoder'.$ix;
 //    $medicine_nr = 'medicine_nr['.$ix.']';
-    $Pres->updateCostOneMedicine($medicine_nr[$ix],$$dxcost);
+    $Pres->updateCostOneMedicine($medicine_nr[$ix],$$dxcost,$receive_med[$nr]);
 //	$Product->updateMedicineAvaiProduct_ToaThuoc($$dxencoder,$$dxcost,$receive_med[$nr],'-', $typeput);
 }
 

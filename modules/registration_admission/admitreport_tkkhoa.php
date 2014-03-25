@@ -23,6 +23,7 @@ foreach($allMeDept as $dept){
 	echo '<option value="'.$dept['nr'].'">'.$$dept['LD_var'].'</option>';
 }
 ?>
+    <br>
 <span>Từ ngày: </span>
 <input id="datefrom" type="text" value="">
 <span> Đến ngày: </span>

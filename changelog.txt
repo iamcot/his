@@ -1,6 +1,7 @@
 2014-03-25:-----------------
 + thêm tính năng sửa giá thuốc cho BHYT trước khi tính viện phí và phát thuốc,
 * patient_due_first: khong tinh lai gia tien khi thanh toan vi BHYT da chinh gia roi
+* sửa lại class apointment để order lại lịch hẹn khám và tìm kiếm theo khoa hoặc tên bác sĩ
 
 2014-03-24: ----------------------
 + thêm chức năng hiển thị lịch trực trong ngày các khoa

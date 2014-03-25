@@ -150,7 +150,7 @@ class Appointment extends Core {
 	*/
 	function _getAll($y=0,$m=0,$d=0,$by='',$val=''){
 		global $db, $sql_LIKE;
-		
+		$utf8val = utf8_encode($val);
 		# Set to defaults if empty
 		if(!$y) $y=date('Y');
 		if(!$m) $b=date('m');
@@ -159,11 +159,11 @@ class Appointment extends Core {
 				FROM $this->tb_appt AS a LEFT JOIN $this->tb_person AS p ON a.pid=p.pid
 				WHERE a.date='$y-$m-$d'";
 		switch($by){
-			case '_DEPT': $this->sql.=" AND (a.to_dept_nr=$val OR a.create_id = '".$_SESSION['sess_login_userid']."' )"; break;
-			case '_DOC': $this->sql.=" AND (a.to_personell_name  $sql_LIKE '%$val%' OR a.create_id = '".$_SESSION['sess_login_userid']."' )"; break;
+			case '_DEPT': $this->sql.=" AND (a.to_dept_nr=$val )"; break;
+			case '_DOC': $this->sql.=" AND (a.to_personell_name  $sql_LIKE '%$val%' OR a.to_personell_name  $sql_LIKE '%$utf8val%' )"; break;
 			case '_DOCNR': $this->sql.=" AND (a.to_personell_nr=$val OR a.create_id = '".$_SESSION['sess_login_userid']."' )"; break;
 		}
-		$this->sql.=" AND a.status NOT IN ($this->dead_stat) ORDER BY a.urgency DESC,a.date DESC,a.time DESC";
+		$this->sql.=" AND a.status NOT IN ($this->dead_stat) ORDER BY a.appt_status DESC, a.urgency DESC,a.date DESC,a.time DESC";
 		//echo $this->sql;
 		if($this->res['_ga']=$db->Execute($this->sql)){
 			if($this->count=$this->res['_ga']->RecordCount()){

@@ -794,10 +794,10 @@ class Prescription extends Core {
 	/** 2014/03/26
      * Update cost for 1 medicine in pres
      * */
-    function updateCostOneMedicine($medicine_nr,$cost){
+    function updateCostOneMedicine($medicine_nr,$cost,$recv){
         global $db;
         $this->sql="UPDATE ".$this->tb_phar_pres."
-                        SET cost = '$cost'
+                        SET cost = '$cost', number_receive = '$recv'
                         WHERE nr = $medicine_nr";
         return $this->Transact($this->sql);
     }
