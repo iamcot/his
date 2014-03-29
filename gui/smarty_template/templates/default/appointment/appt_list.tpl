@@ -25,7 +25,14 @@
 				{{* Do not move the $sByDocHiddenInputs outside of the form *}}
 				{{$sByDocHiddenInputs}}
 			</form>
-
+            <form name="bydoc1">
+                {{$LDListApptByDoc1}}<br>
+                <nobr>
+                    {{$sByDocSelect1}} {{$pbByDocGo}}
+                </nobr>
+                {{* Do not move the $sByDocHiddenInputs outside of the form *}}
+                {{$sByDocHiddenInputs1}}
+            </form>
 		</td>
 	</tr>
 	<tr>

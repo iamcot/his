@@ -495,7 +495,8 @@ if(isset($pid) && $pid){
 
 function chkform(d) {
 	encr=<?php if ($encounter_class_nr) {echo $encounter_class_nr; } else {echo '0';} ?>;
-	if(d.encounter_class_nr[0]&&d.encounter_class_nr[1]&&!d.encounter_class_nr[0].checked&&!d.encounter_class_nr[1].checked){
+	//*
+    if(d.encounter_class_nr[0]&&d.encounter_class_nr[1]&&!d.encounter_class_nr[0].checked&&!d.encounter_class_nr[1].checked){
 		alert("<?php echo $LDPlsSelectAdmissionType; ?>");
 		return false;
 	}else if(!d.current_dept_nr.value){
@@ -799,7 +800,9 @@ if(!isset($pid) || !$pid){
 		$smarty->assign('blood_group',$$buf);
 	}
 $smarty->assign('LDPlsEnterReferer',$LDPlsEnterReferer);
+    //*
 $smarty->assign('LDPlsEnterRefererDiagnosis',$LDPlsEnterRefererDiagnosis);
+    $smarty->assign('LDPlsSelectAdmissionType', $LDPlsSelectAdmissionType);
 	$smarty->assign('LDAddress',$LDAddress);
 
 	$smarty->assign('addr_str',$addr_str);
@@ -847,7 +850,7 @@ $smarty->assign('LDPlsEnterRefererDiagnosis',$LDPlsEnterRefererDiagnosis);
 			}
 			$sTemp = $sTemp.'</select>';	
 		$smarty->assign('sDeptInput',$sTemp);
-		
+
 		if ($errorward) $smarty->assign('LDWard',"<font color=red>$LDPavijon</font>");
 		$smarty->assign('LDWard',$LDWard);
 	if(!empty($current_ward_nr)){

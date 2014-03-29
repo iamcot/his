@@ -162,8 +162,15 @@ class Appointment extends Core {
 			case '_DEPT': $this->sql.=" AND (a.to_dept_nr=$val )"; break;
 			case '_DOC': $this->sql.=" AND (a.to_personell_name  $sql_LIKE '%$val%' OR a.to_personell_name  $sql_LIKE '%$utf8val%' )"; break;
 			case '_DOCNR': $this->sql.=" AND (a.to_personell_nr=$val OR a.create_id = '".$_SESSION['sess_login_userid']."' )"; break;
+<<<<<<< Updated upstream
 		}
 		$this->sql.=" AND a.status NOT IN ($this->dead_stat) ORDER BY a.appt_status DESC, a.urgency DESC,a.date DESC,a.time DESC";
+=======
+            //sửa code
+           // case '_DOCHO': $this->sql.="AND (p.to_personell_nr=$val OR a.create_id = '".$_SESSION['sess_login_userid']."')"; break;
+        }
+		$this->sql.=" AND a.status NOT IN ($this->dead_stat) ORDER BY a.urgency DESC,a.date DESC,a.time DESC";
+>>>>>>> Stashed changes
 		//echo $this->sql;
 		if($this->res['_ga']=$db->Execute($this->sql)){
 			if($this->count=$this->res['_ga']->RecordCount()){

@@ -404,7 +404,7 @@ $LDChartsRecords='Phiếu theo dõi lâm sàng'; //'Charts folder';
 # 2003-07-26 EL
 $LDMode='Mode';
 $LDPatientIsDischarged='Bệnh nhân đã xuất/chuyển viện'; //'This patient is already discharged';
-$LDShow='Xem'; //'Show';
+$LDShow='Xem';//'Show';
 $LDPlannedEncType='Hình thức khám chữa bệnh'; //'Planned admission type';
 
 # 2003-08-01 EL
@@ -424,6 +424,8 @@ $LDMeasurements='Chiều cao-cân nặng'; //'Measurements';
 #2003-08-28 eL
 $LDPlsEnterReferer='Xin nhập tên bác sỹ gửi bệnh'; //'Please enter refering physician';
 $LDPlsEnterRefererDiagnosis='Xin nhập chẩn đoán của bác sỹ'; //'Please enter referal diagnosis';
+//$LDPlsXetnhanbenh ='Xin chọn nội trú hoặc nội trú';
+$LDPlsSelectAdmissionType ='Xin chọn nội trú hoặc ngoại trú';
 $LDPlsEnterRefererTherapy='Xin nhập phương pháp điều trị của bác sỹ'; //'Please enter referer\'s recommended therapy';
 $LDPlsEnterRefererNotes='Xin nhập phần ghi nhận của bác sỹ'; //'Please enter referer\'s notes';
 $LDPlsEnterTotalDay = 'Xin nhập tổng ngày sử dụng thuốc của toa';
