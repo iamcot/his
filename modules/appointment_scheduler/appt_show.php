@@ -205,6 +205,7 @@ $smarty->assign('sByDocHiddenInputs','<input type="submit" value="'.$LDShow.'">
 			<input type="hidden"  name="sid" value="'.$sid.'">
 			<input type="hidden"  name="lang" value="'.$lang.'">');
  //  sửa code theo o textbox va button xem
+/*
 $smarty->assign('LDListApptByDoc1',$LDListApptByDoc1);
 $smarty->assign('sByDocSelect1','<input type="text" name="aux" size=35 maxlength=40 value="'.$aux.'">');
 $smarty->assign('sByDocHiddenInputs1','<input type="submit" value="'.$LDShow.'">
@@ -216,7 +217,7 @@ $smarty->assign('sByDocHiddenInputs1','<input type="submit" value="'.$LDShow.'">
 			<input type="hidden"  name="currMonth" value="'.$currMonth.'">
 			<input type="hidden"  name="currDay" value="'.$currDay.'">
 			<input type="hidden"  name="sid" value="'.$sid.'">
-			<input type="hidden"  name="lang" value="'.$lang.'">');
+			<input type="hidden"  name="lang" value="'.$lang.'">'); */
 /* show the appointments */
 if($appt_obj->count){
 	# Buffer output
