@@ -105,7 +105,9 @@ var requiredRevision = 124;
 function closeWin(){
 	//document.action
 <!--	location.href='--><?php //echo '../view_person_search.php'.URL_APPEND.'&searchkey='.$encounter_nr; ?><!--';-->
+//    myWindow=window.close(){};
     window.close();
+
 }
 </script>
 </head>
@@ -169,6 +171,7 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 		"type", "application/x-shockwave-flash",
 		"pluginspage", "http://www.adobe.com/go/getflashplayer"
 	);
+
 } else if (hasRequestedVersion) {
 	// if we've detected an acceptable version
 	// embed the Flash Content SWF when all tests are passed
@@ -191,9 +194,12 @@ if ( hasProductInstall && !hasRequestedVersion ) {
   	+ 'This content requires the Adobe Flash Player. '
    	+ '<a href=http://www.adobe.com/go/getflash/>Get Flash</a>';
     document.write(alternateContent);  // insert non-flash content
+
   }
 // -->
+
 </script>
+
 <noscript>
   	<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 			id="demo1" width="997" height="553"
@@ -219,3 +225,4 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 </table>
 </body>
 </html>
+

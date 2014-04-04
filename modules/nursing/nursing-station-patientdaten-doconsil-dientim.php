@@ -307,6 +307,11 @@ function sendLater()
    if(chkForm(document.form_test_request)) document.form_test_request.submit(); 
 }
 
+function popDocPer(target,obj_val,obj_name){     //đã thêm
+    urlholder="<?php echo $root_path; ?>modules/laboratory/personell_search.php<?php echo URL_REDIRECT_APPEND; ?>&target="+target+"&obj_val="+obj_val+"&obj_name="+obj_name;  //đã thêm
+    DSWIN<?php echo $sid ?>=window.open(urlholder,"wblabel<?php echo $sid ?>","menubar=no,width=400,height=550,resizable=yes,scrollbars=yes");                                //đã thêm
+}
+
 function printOut()
 {
 	urlholder="<?php echo $root_path ?>modules/laboratory/labor_test_request_printpop.php?sid=<?php echo $sid ?>&lang=<?php echo $lang ?>&user_origin=<?php echo $user_origin ?>&subtarget=<?php echo $target ?>&batch_nr=<?php echo $batch_nr ?>&pn=<?php echo $pn; ?>";
@@ -455,7 +460,9 @@ echo '
 
 			
  		echo $LDRequestingDoc ?>:
-		<input type="text" name="send_doctor" size=40 maxlength=40 value="<?php echo $_SESSION['sess_user_name']; ?>"></div><br>
+<!-- gốc		<input type="text" name="send_doctor" size=40 maxlength=40 value="--><?php //echo $_SESSION['sess_user_name']; ?><!--"></div><br>-->
+        <input type="text" name="send_doctor" size=37 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['send_doctor'];else echo $pers_name;?>">
+        <input type="hidden" name="send_doctor_nr" value="<?php if(!empty( $stored_request['send_doctor_nr'])) echo $stored_request['send_doctor_nr'];else echo $pers_nr; ?>"> <a href="javascript:popDocPer('doctor_nr','send_doctor_nr','send_doctor')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
 		</td>
     </tr>
 	

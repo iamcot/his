@@ -23,7 +23,8 @@ if($user_origin=='lab')
   $local_user='aufnahme_user';
   //if($target=="radio") $breakfile=$root_path.'modules/radiology/radiolog.php'.URL_APPEND;
    //else $breakfile=$root_path.'modules/laboratory/labor.php'.URL_APPEND; 
-   $breakfile=$root_path."modules/registration_admission/aufnahme_daten_zeigen.php".URL_APPEND."&edit=$edit&station=$station&encounter_nr=$pn";
+   //$breakfile=$root_path."modules/registration_admission/aufnahme_daten_zeigen.php".URL_APPEND."&edit=$edit&station=$station&encounter_nr=$pn";
+   $breakfile=$root_path."modules/nursing/nursing-station-patientdaten-doconsil-radio.php".URL_APPEND."&pid=".$_SESSION['sess_pid'].'&pn='.$pn.'&edit='.$edit.'&target='.$target.'&user_origin='.$user_origin.'&noresize='.$noresize;
 }
 else
 {
@@ -394,6 +395,11 @@ function chkForm(d){
 	}
 }
 
+function popDocPer(target,obj_val,obj_name){  //đã thêm hàm popDocPer
+    urlholder="<?php echo $root_path; ?>modules/laboratory/personell_search.php<?php echo URL_REDIRECT_APPEND; ?>&target="+target+"&obj_val="+obj_val+"&obj_name="+obj_name;
+    DSWIN<?php echo $sid ?>=window.open(urlholder,"wblabel<?php echo $sid ?>","menubar=no,width=400,height=550,resizable=yes,scrollbars=yes");
+}
+
 function sendLater()
 {
    document.form_test_request.status.value="draft";
@@ -676,7 +682,9 @@ echo '
 		</td>
 		<td>
 			<?php echo $LDRequestingDoc ?>:
-			<input type="text" name="send_doctor" size=37 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['send_doctor']; else echo $_SESSION['sess_user_name']; ?>"></div><br>
+<!--	gốc		<input type="text" name="send_doctor" size=37 maxlength=40 value="--><?php //if($edit_form || $read_form) echo $stored_request['send_doctor']; else echo $_SESSION['sess_user_name']; ?><!--"></div><br>-->
+            <input type="text" name="send_doctor" size=37 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['send_doctor'];else echo $pers_name;?>">
+            <input type="hidden" name="send_doctor_nr" value="<?php if(!empty( $stored_request['send_doctor_nr'])) echo $stored_request['send_doctor_nr'];else echo $pers_nr; ?>"> <a href="javascript:popDocPer('doctor_nr','send_doctor_nr','send_doctor')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
 		</td>
     </tr>
 	<tr bgcolor="<?php echo $bgc1 ?>">

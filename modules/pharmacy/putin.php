@@ -415,6 +415,7 @@ $smarty->assign('sTypePutInInput','<input type="text" value="'.$TypePutInMedicin
 
 $smarty->assign('AddRow','<a href="javascript:;" onclick="insertRow();">&nbsp;[+]&nbsp;'.$LDAddRowMedicine.'</a>');
 
+
 if(!isset($target) || ($target=='new') || ($target=='create')){
 		$target='new';
 		
@@ -431,10 +432,11 @@ if(!isset($target) || ($target=='new') || ($target=='create')){
 		$create_id = $_SESSION['sess_user_name'];		
 		for ($i=1;$i<=$maxid;$i++){
 			if($flag) {
-				$condition = " AND khole.product_encoder='".$listid[$i]."' ";
-				if($listReport = $Product->SearchCatalogKhoLe($condition)){
+				$condition = " AND khochan.product_encoder='".$listid[$i]."' ";
+				if($listReport = $Product->SearchCatalogKhoChan($condition)){
 					$rowReport = $listReport->FetchRow();
 					$rowReport['exp_date'] = formatDate2Local($rowReport['exp_date'],'dd/mm/yyyy');
+					$rowReport['number']="";  //ko can dua ra so luong ton trong form nhap kho chan
 				}
 			}
 			ob_start();

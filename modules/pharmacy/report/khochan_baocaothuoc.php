@@ -168,7 +168,7 @@ $smarty->assign('LDMonthReport',$LDMonth.': '.$showmonth.'/'.$showyear);
 	
 $Tong_tondau =0; $Tong_nhap=0; $Tong_xuat=0; $Tong_toncuoi=0;
 
-echo $type.'@'.@$cond_typeput."@".$showmonth.'@'.$showyear;
+//echo $type.'@'.@$cond_typeput."@".$showmonth.'@'.$showyear;
 $listReport = $Pharma->Khochan_thuoc_nhapxuatton($type, $cond_typeput, $showmonth, $showyear);
 //var_dump($listReport);
 if(is_object($listReport)){

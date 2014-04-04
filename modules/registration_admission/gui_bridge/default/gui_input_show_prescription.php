@@ -62,8 +62,10 @@ else if($as_old){
 	$detail_pres = $pres_obj->getOldPrescriptionInfo($en_nr);
 	if($detail_pres){
 		$pres_id = $detail_pres['prescription_id'];
-		$status_bill = $detail_pres['status_bill'];
-		$status_finish = $detail_pres['status_finish'];
+//		$status_bill = $detail_pres['status_bill'];
+//		$status_finish = $detail_pres['status_finish'];
+        $status_bill=false;
+        $status_finish=false;
 		$diagnosis = stripslashes($detail_pres['diagnosis']);
 		$symptoms = stripslashes($detail_pres['symptoms']);
 		$note = $detail_pres['note'];
