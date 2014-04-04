@@ -386,5 +386,35 @@ class IssueMedipot extends Core {
                     } else { return 0; } 
             } else { return 0; } 
 	}	
+
+	function setMedipotReceiveOfPresInIssue($issue_Id, $encoder, $number) {
+	    global $db;
+		if(!$issue_Id) return FALSE;
+		$sql="	SELECT prsinfo.prescription_id, prs.sum_number
+				FROM care_med_prescription_info AS prsinfo, care_med_prescription AS prs
+				WHERE prsinfo.in_issuepaper='".$issue_Id."' AND prsinfo.prescription_id= prs.prescription_id
+					AND prs.product_encoder='".$encoder."'";
+		if($tmp_result=$db->Execute($sql)){
+			while($item = $tmp_result->FetchRow()){
+				//echo $number.' '.$item['sum_number'];
+				if($number>$item['sum_number']){
+					$sql1="UPDATE care_med_prescription
+						SET number_receive=sum_number
+						WHERE prescription_id='".$item['prescription_id']."' AND product_encoder='".$encoder."'";
+					$db->Execute($sql1);
+					$number = $number - $item['sum_number'];
+				}else{
+					$sql1="UPDATE care_med_prescription
+						SET number_receive=".$item['sum_number']."
+						WHERE prescription_id='".$item['prescription_id']."' AND product_encoder='".$encoder."'";
+					$db->Execute($sql1);
+					//echo $sql1;
+					break;
+				}
+				//echo $item['sum_number'];
+			}
+		}
+
+	}
 }
 ?>

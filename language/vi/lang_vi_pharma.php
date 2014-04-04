@@ -617,5 +617,7 @@ $LDKetThuc='Kết thúc';
 $LDWarningClosePres='Có chắc chắn đã phát hết thuốc trong toa / Hay đã có toa thuốc mới thay thế?';
 $LDChotTonCuoi='Chốt tồn cuối cho tháng: ';
 
+$LDSortName='Sắp xếp theo tên';
+
 
 ?>

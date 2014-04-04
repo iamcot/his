@@ -63,7 +63,7 @@ class ChanDoanHA extends Core {
 		
 		$start_from =($current_page-1)*$number_items_per_page; 
 		
-		$this->sql="SELECT per.name_first, per.name_last, per.tuoi, per.sex , re.*  
+		$this->sql="SELECT per.name_first, per.name_last, per.tuoi, per.sex ,per.pid, re.*
 				FROM care_encounter_diagnostics_report AS re, care_test_request_radio AS test, care_person AS per, care_encounter AS en
 				WHERE re.report_nr=test.batch_nr AND re.reporting_dept LIKE 'XQ%'  
 					AND en.pid=per.pid AND en.encounter_nr=re.encounter_nr ".$condition."
@@ -80,7 +80,7 @@ class ChanDoanHA extends Core {
 	function listResultsXQ($condition){
 	    global $db;
 		
-		$this->sql="SELECT per.name_first, per.name_last, per.tuoi, per.sex , re.*  
+		$this->sql="SELECT per.name_first, per.name_last, per.tuoi, per.sex, per.pid, re.*
 				FROM care_encounter_diagnostics_report AS re, care_test_request_radio AS test, care_person AS per, care_encounter AS en
 				WHERE re.report_nr=test.batch_nr AND re.reporting_dept LIKE 'XQ%'  
 					AND en.pid=per.pid AND en.encounter_nr=re.encounter_nr ".$condition." 
@@ -115,7 +115,7 @@ class ChanDoanHA extends Core {
 		
 		$start_from =($current_page-1)*$number_items_per_page; 
 		
-		$this->sql="SELECT per.name_first, per.name_last, per.tuoi, per.sex , re.*  
+		$this->sql="SELECT per.name_first, per.name_last, per.tuoi, per.sex ,per.pid, re.*
 				FROM care_encounter_diagnostics_report AS re, care_test_request_radio AS test, care_person AS per, care_encounter AS en
 				WHERE re.report_nr=test.batch_nr AND re.reporting_dept LIKE 'Si%'  
 					AND en.pid=per.pid AND en.encounter_nr=re.encounter_nr ".$condition."
@@ -132,7 +132,7 @@ class ChanDoanHA extends Core {
 	function listResultsSA($condition){
 	    global $db;
 		
-		$this->sql="SELECT per.name_first, per.name_last, per.tuoi, per.sex , re.*  
+		$this->sql="SELECT per.name_first, per.name_last, per.tuoi, per.pid, per.sex , re.*
 				FROM care_encounter_diagnostics_report AS re, care_test_request_radio AS test, care_person AS per, care_encounter AS en
 				WHERE re.report_nr=test.batch_nr AND re.reporting_dept LIKE 'Si%'  
 					AND en.pid=per.pid AND en.encounter_nr=re.encounter_nr ".$condition." 
@@ -167,7 +167,7 @@ class ChanDoanHA extends Core {
 		
 		$start_from =($current_page-1)*$number_items_per_page; 
 		
-		$this->sql="SELECT per.name_first, per.name_last, per.tuoi, per.sex , re.*  
+		$this->sql="SELECT per.name_first, per.name_last, per.tuoi, per.sex ,per.pid,  re.*
 				FROM care_encounter_diagnostics_report AS re, care_test_request_dientim AS test, care_person AS per, care_encounter AS en
 				WHERE re.report_nr=test.batch_nr AND re.reporting_dept LIKE '%n Tim'  
 					AND en.pid=per.pid AND en.encounter_nr=re.encounter_nr ".$condition."
@@ -184,7 +184,7 @@ class ChanDoanHA extends Core {
 	function listResultsDT($condition){
 	    global $db;
 		
-		$this->sql="SELECT per.name_first, per.name_last, per.tuoi, per.sex , re.*  
+		$this->sql="SELECT per.name_first, per.name_last, per.tuoi, per.sex, per.pid, re.*
 				FROM care_encounter_diagnostics_report AS re, care_test_request_dientim AS test, care_person AS per, care_encounter AS en
 				WHERE re.report_nr=test.batch_nr AND re.reporting_dept LIKE '%n Tim'  
 					AND en.pid=per.pid AND en.encounter_nr=re.encounter_nr ".$condition." 

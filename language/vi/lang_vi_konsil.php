@@ -339,7 +339,9 @@ $LDrecordEntry='Hồ sơ bệnh nhân';
 $LDrecordSurgery='Ghi nhận ca Phẫu thuật';
 $LDPendingTestRequest1='Các yêu cầu ghi nhận quá trình Phẫu thuật';
 $LDPlsEnterDiagnosisQuiry1='Xin nhập Hình thức yêu cầu Phẫu thuật';
-$LDPlsEnterDoctorName1='Xin cho biết tên người quyết định đưa ra yêu cầu này';$LDPlsEnterNurseName='Xin cho biết tên người tạo yêu cầu này';$LDPlsEnterDoctorSurgery='Xin nhập tên bác sĩ được chỉnh định vào Phẫu thuật';
+$LDPlsEnterDoctorName1='Xin cho biết tên người quyết định đưa ra yêu cầu này';
+$LDPlsEnterNurseName='Xin cho biết tên người tạo yêu cầu này';
+$LDPlsEnterDoctorSurgery='Xin nhập tên bác sĩ được chỉnh định vào Phẫu thuật';
 $LDPlsEntermethodOp='Xin chọn phương pháp Phẫu thuật';
 $LDPendingTestRequest1='Các yêu cầu ghi nhận quá trình mổ';
 //////////////////////////////////
@@ -413,4 +415,8 @@ $LDChanDoanHinhAnh='Chẩn đoán hình ảnh';
 $LDDuonghuyet='Xét nghiệm đường huyết';
 $LDXQuang='XQuang';
 $LDSieuAm='Siêu âm';
+$LDThanhToan='Thanh toán';
+$LDFinish='Xong';
+$LDNotYet='Chưa';
+
 ?>

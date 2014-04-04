@@ -1516,11 +1516,12 @@ class Product extends Core {
 				$limit_number ='LIMIT '.$start_from.', '.$number_items_per_page;
 			}
 			
-			$this->sql="SELECT DISTINCT khochan.product_name, khochan.sodangky, donvi.unit_name_of_medicine, khochan.product_encoder, khochan.care_supplier, source.* 
+			$this->sql="SELECT khochan.product_name, khochan.sodangky, donvi.unit_name_of_medicine, khochan.product_encoder, khochan.care_supplier, source.*, SUM(source.number) AS numbersum
 					FROM care_pharma_products_main_sub AS source, care_pharma_products_main AS khochan, care_pharma_unit_of_medicine AS donvi
 					WHERE khochan.product_encoder=source.product_encoder 
 						AND donvi.unit_of_medicine=khochan.unit_of_medicine ".$dongtayy."	
-					ORDER BY source.number ".$updown." 
+					GROUP BY source.product_encoder, source.price, source.exp_date
+					ORDER BY numbersum ".$updown."
 					".$limit_number; 
 				
 			if($this->result=$db->Execute($this->sql)) {
@@ -1529,17 +1530,40 @@ class Product extends Core {
 				} else { return false; }
 			} else { return false; }                   
         }
-		
+		function ShowNumberCatalogKhoChan_OrderByName($dongtayy, $current_page, $number_items_per_page)
+        {
+            global $db;
+			if ($current_page!='' && $number_items_per_page!='') {
+				$start_from =($current_page-1)*$number_items_per_page;
+				$limit_number ='LIMIT '.$start_from.', '.$number_items_per_page;
+			}
+
+			$this->sql="SELECT khochan.product_name, khochan.sodangky, donvi.unit_name_of_medicine, khochan.product_encoder, khochan.care_supplier, source.*, SUM(source.number) AS numbersum
+					FROM care_pharma_products_main_sub AS source, care_pharma_products_main AS khochan, care_pharma_unit_of_medicine AS donvi
+					WHERE khochan.product_encoder=source.product_encoder
+						AND donvi.unit_of_medicine=khochan.unit_of_medicine ".$dongtayy."
+					GROUP BY source.product_encoder, source.price, source.exp_date
+					ORDER BY khochan.product_name
+					".$limit_number;
+			//echo $this->sql;
+			if($this->result=$db->Execute($this->sql)) {
+				if($this->result->RecordCount()) {
+					 return $this->result;
+				} else { return false; }
+			} else { return false; }
+        }
+
 		function SearchNumberCatalogKhoChan($condition, $updown)
 		{
 			global $db;
 				
-			$this->sql="SELECT DISTINCT khochan.product_name, khochan.sodangky, donvi.unit_name_of_medicine, khochan.product_encoder, khochan.care_supplier, sub.* 
+			$this->sql="SELECT khochan.product_name, khochan.sodangky, donvi.unit_name_of_medicine, khochan.product_encoder, khochan.care_supplier, sub.*, SUM(sub.number) AS numbersum
 					FROM care_pharma_products_main_sub AS sub, care_pharma_products_main AS khochan, care_pharma_unit_of_medicine AS donvi
 					WHERE khochan.product_encoder=sub.product_encoder 
 						AND donvi.unit_of_medicine=khochan.unit_of_medicine 	
 						".$condition." 
-					ORDER BY sub.number ".$updown;
+					GROUP BY sub.product_encoder, sub.price, sub.exp_date
+					ORDER BY numbersum ".$updown;
 			//echo $this->sql;	
 			if($this->result=$db->Execute($this->sql)) {
 				if($this->result->RecordCount()) {
@@ -1548,6 +1572,25 @@ class Product extends Core {
 			} else { return false; }      
 		}
 		
+		function SearchNumberCatalogKhoChan_OrderByName($condition)
+		{
+			global $db;
+
+			$this->sql="SELECT khochan.product_name, khochan.sodangky, donvi.unit_name_of_medicine, khochan.product_encoder, khochan.care_supplier, sub.*, SUM(sub.number) AS numbersum
+					FROM care_pharma_products_main_sub AS sub, care_pharma_products_main AS khochan, care_pharma_unit_of_medicine AS donvi
+					WHERE khochan.product_encoder=sub.product_encoder
+						AND donvi.unit_of_medicine=khochan.unit_of_medicine
+						".$condition."
+					GROUP BY sub.product_encoder, sub.price, sub.exp_date
+					ORDER BY khochan.product_name ";
+			//echo $this->sql;
+			if($this->result=$db->Execute($this->sql)) {
+				if($this->result->RecordCount()) {
+					 return $this->result;
+				} else { return false; }
+			} else { return false; }
+		}
+
 		//VTYT
 		function ShowExpMedipotCabinet($dept_nr, $ward_nr, $current_page, $number_items_per_page)
         {

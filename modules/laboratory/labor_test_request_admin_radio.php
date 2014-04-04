@@ -241,6 +241,7 @@ function doneRequest(){
 		return false;
 }
 function saveResult(){
+    var r=alert ('<?php echo $LDAlertBeforeSave; ?> ');
 	document.form_test_request.action="<?php echo 'labor_test_findings_'.$subtarget.'.php?sid='.$sid.'&lang='.$lang.'&batch_nr='.$batch_nr.'&pn='.$pn.'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin.'&mode=save'; ?>";
 	document.form_test_request.submit();
 }	
@@ -261,6 +262,11 @@ function viewallresults(){
 	document.form_test_request.action="<?php echo '../radiology/viewresults_radio.php?sid='.$sid.'&lang='.$lang.'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin; ?>";
 	document.form_test_request.submit();
 }	
+
+function popDocPer(target,obj_val,obj_name){     //đã thêm
+    urlholder="<?php echo $root_path; ?>modules/laboratory/personell_search.php<?php echo URL_REDIRECT_APPEND; ?>&target="+target+"&obj_val="+obj_val+"&obj_name="+obj_name;  //đã thêm
+    DSWIN<?php echo $sid ?>=window.open(urlholder,"wblabel<?php echo $sid ?>","menubar=no,width=400,height=550,resizable=yes,scrollbars=yes");                                //đã thêm
+}
 
 <?php require($root_path.'include/core/inc_checkdate_lang.php'); ?>
 
@@ -385,17 +391,41 @@ require('includes/inc_test_request_lister_fx.php');
 				</td>
 		</tr>	
 	<tr bgcolor="<?php echo $bgc1 ?>">
-		<td colspan=2><div class=fva2_ml10><?php echo $LDReqTest ?>:
+		<td colspan=2><div class=fva2_ml10>
+
 		<?php
-			$note="";
+			echo '<table width="100%"><tr><td>'.$LDReqTest.': </td><td align="right">'.$LDThanhToan.': </td></tr></table>';
+			echo '<table width="100%" style="font-family:courier;font-size:small;" >';
+			//$note="";
 			if (is_object($item_test)){
 				for ($i=0;$i<$item_test->RecordCount();$i++){
 					$item = $item_test->FetchRow();
-					$note=$note."<br>".$item['item_bill_name'];
+					echo "<tr><td><a href=\"javascript:ShowResult('".$item['item_bill_code']."')\">".$item['item_bill_name'].'</a></td><td align="right">';
+					if($item_code=='' && $i==0){
+						$item_code=$item['item_bill_code'];
+				}
+					$sql_bill="SELECT * FROM care_billing_bill_item
+							WHERE bill_item_code='".$item['item_bill_code']."' AND bill_item_encounter_nr='".$pn."' AND bill_item_date='".$stored_request['bill_time']."'";
+					//echo $sql_bill;
+					if($bill=$db->Execute($sql_bill)){
+						if($bill->RecordCount()){
+							$bill_row=$bill->FetchRow();
+						}else $bill_row['bill_item_status']=0;
+			}
+
+					if($bill_row['bill_item_status']){
+						$tempfinish=$LDFinish; $tempfinish1='check-r.gif';
+					}
+					else{
+						$tempfinish=$LDNotYet; $tempfinish1='warn.gif';
+					}
+					echo $tempfinish.' ';
+					echo '<img '.createComIcon($root_path,$tempfinish1,'0','',TRUE).'> </td></tr>';
 				}
 			}
-		?>		
-		<font face="courier" size=2 color="#000099"><?php echo $note; ?></font>
+			echo '</table>';
+		?>
+
 		<br><br><?php echo $LDAddFindings.":<br><font face=
 		\"courier\" size=2 color=\"#000099\">".$stored_request['test_request']."</font>"; ?>
 		
@@ -467,9 +497,11 @@ require('includes/inc_test_request_lister_fx.php');
 		?>
 				  
   <?php echo $LDReportingDoc ?>
-        <input type="text" name="results_doctor" value="<?php 
-			if($read_form && $stored_request['results_doctor']) echo $stored_request['results_doctor']; 
-			else echo $_SESSION['sess_user_name']; ?>" size=35 maxlength=35> 
+        <!--    gốc                <input type="text" name="results_doctor" value="--><?php
+//                    if($read_form && $stored_request['results_doctor']) echo $stored_request['results_doctor'];
+//                    else echo $_SESSION['sess_user_name']; ?><!--" size=35 maxlength=35>            -->
+      <input type="text" name="results_doctor" size=37 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['results_doctor'];else echo $pers_name;?>">
+      <input type="hidden" name="results_doctor_nr" value="<?php if(!empty( $stored_request['results_doctor_nr'])) echo $stored_request['results_doctor_nr'];else echo $pers_nr; ?>"> <a href="javascript:popDocPer('doctor_nr','results_doctor_nr','results_doctor')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
 		</td>
     </tr>
 		</table> 
