@@ -175,21 +175,36 @@ $smarty->assign('LDMaKCB', $LDMaKCB);
 require_once($root_path.'include/care_api_classes/class_person.php');
 $Person = new Person();
 if($re_person = $Person->getInfoInsurEnc($Encounter->encounter['pid'])){
-	$insurance_nr = $re_person['insurance_nr'];
-	$insurance_start = $re_person['insurance_start'];
-	$insurance_exp = $re_person['insurance_exp'];
-	$madk_kcbbd = $re_person['madkbd'];
-	$is_traituyen = $re_person['is_traituyen'];
+    $insurance_nr = $re_person['insurance_nr'];
+    if($insurance_nr){
+        $insurance_start = $re_person['insurance_start'];
+        $insurance_exp = $re_person['insurance_exp'];
+        $smarty->assign('Insurance_start', formatDate2Local($insurance_start,$date_format));
+        $smarty->assign('Insurance_exp', formatDate2Local($insurance_exp,$date_format));
+    }
+    else
+    {$smarty->assign('LDInsurance_start', $LDInsurance_start);
+        $smarty->assign('LDInsurance_exp', $LDInsurance_exp);}
+    $madk_kcbbd = $re_person['madkbd'];
+    $is_traituyen = $re_person['is_traituyen'];
 }else{
-	$insurance_nr = $Encounter->encounter['insurance_nr'];
-	$insurance_start = $Encounter->encounter['insurance_start'];
-	$insurance_exp = $Encounter->encounter['insurance_exp'];
-	$madk_kcbbd = $Encounter->encounter['madk_kcbbd'];
-	$is_traituyen = $Encounter->encounter['is_traituyen'];
+    $insurance_nr = $Encounter->encounter['insurance_nr'];
+    if($insurance_nr){
+        $insurance_start = $Encounter->encounter['insurance_start'];
+        $insurance_exp = $Encounter->encounter['insurance_exp'];
+        $smarty->assign('Insurance_start', formatDate2Local($insurance_start,$date_format));
+        $smarty->assign('Insurance_exp', formatDate2Local($insurance_exp,$date_format));
+    }
+    else
+    {$smarty->assign('LDInsurance_start', $LDInsurance_start);
+        $smarty->assign('LDInsurance_exp', $LDInsurance_exp);}
+    $madk_kcbbd = $Encounter->encounter['madk_kcbbd'];
+    $is_traituyen = $Encounter->encounter['is_traituyen'];
+
 }
 $smarty->assign('Insurance', $insurance_nr);
-$smarty->assign('Insurance_start', formatDate2Local($insurance_start,$date_format));
-$smarty->assign('Insurance_exp', formatDate2Local($insurance_exp,$date_format));
+//$smarty->assign('Insurance_start', formatDate2Local($insurance_start,$date_format));
+//$smarty->assign('Insurance_exp', formatDate2Local($insurance_exp,$date_format));
 $smarty->assign('makcb', $madk_kcbbd);
 
 $smarty->assign('LDBillList', TRUE);
@@ -598,7 +613,7 @@ if($billid == "currentbill"){
 	if($target=='nursing')
 		$smarty->assign('outstd','<b>'.number_format($LDTotalBillAmountData - $discount).'</b>'); 
 	else
-		$smarty->assign('outstd', '<input type="text" id="outstd" name="outstd" value="'.($LDTotalBillAmountData - $discount).'" size="10">'); 
+		$smarty->assign('outstd', '<input type="text" id="outstd" name="outstd" value="'.($LDTotalBillAmountData - $discount).'" size="10">');
 } else {
 	$smarty->assign('LDOldBill', TRUE);
 	$smarty->assign('outstd',number_format($oldbilloutstanding));
