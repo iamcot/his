@@ -62,9 +62,10 @@ function chkform(d) {
 	document.reportform.action="<?php echo $thisfile; ?>";
 	document.reportform.submit();
 }
-function printOut(type_month,month,year,flag,lastmonth,lastyear)
+function printOut(type_month,month,year,pharma_group_id)
 {
-	urlholder="<?php echo $root_path;?>modules/pdfmaker/duoc/khochan_thuoc_nhapxuatton.php<?php echo URL_APPEND; ?>&type_month="+type_month+"&typedongtay=<?php echo $type;?>"+"&month="+month+"&year="+year+"&lastmonth="+lastmonth+"&lastyear="+lastyear+"&flag="+flag;
+	var title = document.getElementById("subtitle").value;
+    urlholder="<?php echo $root_path;?>modules/pdfmaker/duoc/khochan_sudungthuoc_baocaokhac.php<?php echo URL_APPEND; ?>&type_month="+type_month+"&typedongtay=<?php echo $type;?>"+"&showmonth="+month+"&showyear="+year+"&pharma_group_id="+pharma_group_id+"&subtitle="+title;
 	testprintpdf=window.open(urlholder,"NhapXuatTon","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
 }
 function Save(alertsave){
@@ -207,7 +208,7 @@ switch($type_month){
 						if($flag) $bgc="#EFEFEF";
 						else $bgc="#FFFFFF";
 						
-						echo '<tr bgColor="'.$bgc.'"><td>'.$i.'</td>';
+						echo '<tr bgColor="'.$bgc.'"><td align="center">'.$i.'</td>';
 						echo '<td>'.$rowReport['product_name'].'</td>';
 						echo '<td>'.$rowReport['unit_name_of_medicine'].'</td>';
 						echo '<td align="right">'.number_format($rowReport['xuat']).'</td>';						
@@ -238,7 +239,7 @@ switch($type_month){
 							if($flag) $bgc="#EFEFEF";
 							else $bgc="#FFFFFF";
 							
-							echo '<tr bgColor="'.$bgc.'"><td>'.$i.'</td>';
+							echo '<tr bgColor="'.$bgc.'"><td align="center">'.$i.'</td>';
 							echo '<td>'.$rowReport['product_name'].'</td>';
 							echo '<td>'.$rowReport['unit_name_of_medicine'].'</td>';
 							echo '<td align="right">'.number_format($rowReport['xuat']).'</td>';						
@@ -282,7 +283,7 @@ switch($type_month){
 						if($flag) $bgc="#EFEFEF";
 						else $bgc="#FFFFFF";
 						
-						echo '<tr bgColor="'.$bgc.'"><td>'.$i.'</td>';
+						echo '<tr bgColor="'.$bgc.'"><td align="center">'.$i.'</td>';
 						echo '<td>'.$rowReport['product_name'].'</td>';
 						echo '<td>'.$rowReport['unit_name_of_medicine'].'</td>';
 						echo '<td align="right">'.number_format($rowReport['xuat']).'</td>';						
@@ -312,7 +313,7 @@ switch($type_month){
 							if($flag) $bgc="#EFEFEF";
 							else $bgc="#FFFFFF";
 							
-							echo '<tr bgColor="'.$bgc.'"><td>'.$i.'</td>';
+							echo '<tr bgColor="'.$bgc.'"><td align="center">'.$i.'</td>';
 							echo '<td>'.$rowReport['product_name'].'</td>';
 							echo '<td>'.$rowReport['unit_name_of_medicine'].'</td>';
 							echo '<td align="right">'.number_format($rowReport['xuat']).'</td>';						
@@ -355,7 +356,7 @@ switch($type_month){
 						if($flag) $bgc="#EFEFEF";
 						else $bgc="#FFFFFF";
 						
-						echo '<tr bgColor="'.$bgc.'"><td>'.$i.'</td>';
+						echo '<tr bgColor="'.$bgc.'"><td align="center">'.$i.'</td>';
 						echo '<td>'.$rowReport['product_name'].'</td>';
 						echo '<td>'.$rowReport['unit_name_of_medicine'].'</td>';
 						echo '<td align="right">'.number_format($rowReport['xuat']).'</td>';						
@@ -385,7 +386,7 @@ switch($type_month){
 							if($flag) $bgc="#EFEFEF";
 							else $bgc="#FFFFFF";
 							
-							echo '<tr bgColor="'.$bgc.'"><td>'.$i.'</td>';
+							echo '<tr bgColor="'.$bgc.'"><td align="center">'.$i.'</td>';
 							echo '<td>'.$rowReport['product_name'].'</td>';
 							echo '<td>'.$rowReport['unit_name_of_medicine'].'</td>';
 							echo '<td align="right">'.number_format($rowReport['xuat']).'</td>';						
@@ -418,7 +419,7 @@ $sTempHidden = '<input type="hidden" name="sid" value="'.$sid.'">
 		<input type="hidden" name="maxid" value="'.$maxid.'">
 		<input type="hidden" name="group_cb" value="'.$group_cb.'">
 		<input type="hidden" id="type_month" name="type_month" value="'.$type_month.'">
-		<input type="hidden" name="subtitle" value="'.$subtitle.'">
+		<input type="hidden" id="subtitle" name="subtitle" value="'.$subtitle.'">
 		<input type="hidden" name="user_report" value="'.$_SESSION['sess_user_name'].'">';
 
 $smarty->assign('sHiddenInputs',$sTempHidden);
@@ -429,7 +430,7 @@ $smarty->assign('sHiddenInputs',$sTempHidden);
 
 $smarty->assign('pbSubmit','<input type="image" '.createLDImgSrc($root_path,'showreport.gif','0','middle').'>');
 //$smarty->assign('pbSave','<a href="javascript:Save(\''.$alertsave.'\');"><img '.createLDImgSrc($root_path,'savedisc.gif','0','middle').' align="middle"></a>');
-$smarty->assign('pbPrint','<a href="#"><img '.createLDImgSrc($root_path,'printout.gif','0','middle').' align="middle" onclick="printOut(\''.$type_month.'\',\''.$showmonth.'\',\''.$showyear.'\',\''.$flag.'\',\''.$lastmonth.'\',\''.$lastyear.'\')"></a>');
+$smarty->assign('pbPrint','<a href="#"><img '.createLDImgSrc($root_path,'printout.gif','0','middle').' align="middle" onclick="printOut(\''.$type_month.'\',\''.$showmonth.'\',\''.$showyear.'\',\''.$pharma_group_id.'\')"></a>');
 $smarty->assign('pbCancel','<a href="'.$breakfile.'" ><img '.createLDImgSrc($root_path,'close2.gif','0','middle').' title="'.$LDBackTo.'" align="middle"></a>');
 
 # Assign the page template to mainframe block

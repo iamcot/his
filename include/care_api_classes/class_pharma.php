@@ -2560,7 +2560,7 @@ class Pharma extends Core {
 			JOIN care_pharma_unit_of_medicine AS unit ON unit.unit_of_medicine=main.unit_of_medicine
 			ORDER BY source.product_encoder */
 
-		echo $this->sql;
+		//echo $this->sql;
 		if ($this->result=$db->Execute($this->sql)) {
 			if ($this->result->RecordCount()) {				
 				return $this->result;
