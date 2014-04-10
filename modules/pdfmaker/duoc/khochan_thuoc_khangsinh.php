@@ -78,6 +78,7 @@ $header='<table width="100%">
 				<font size="13"><b>THUỐC'.$titlereport.'</b></font></td><td></td>
 		</tr>
 		</table>';
+
 $pdf->writeHTML($header);
 $pdf->Ln();
 
@@ -98,40 +99,44 @@ $html='	<table cellpadding="2" border="1">
 					<th colspan="3" align="center" width="155">Đơn Giá</th>
 					<th colspan="3" align="center" width="155">Thành Tiền</th>
 				</tr>
-				<tr bgColor="#F2F2F2">	
-					<th align="center" width="40">SL</th>		
+				<tr bgColor="#F2F2F2">
+					<th align="center" width="40">SL</th>
 					<th align="center" width="55">Đơn giá</th>
 					<th align="center" width="60">Thành tiền</th>
-					<th align="center" width="40">SL</th>		
+					<th align="center" width="40">SL</th>
 					<th align="center" width="55">Giá nhập</th>
 					<th align="center" width="60">Thành tiền</th>
-					<th align="center" width="40">SL</th>		
+					<th align="center" width="40">SL</th>
 					<th align="center" width="55">Giá xuất</th>
 					<th align="center" width="60">Thành tiền</th>
-					<th align="center" width="40">SL</th>		
+					<th align="center" width="40">SL</th>
 					<th align="center" width="55">Giá tồn</th>
-					<th align="center" width="60">Thành tiền</th>	
+					<th align="center" width="60">Thành tiền</th>
 				</tr>';
 
+
+//echo $html;
 //Load du lieu bang
 $congtondau = 0;
 $congnhap=0;
 $congxuat=0;
 $congtoncuoi=0;
 
-$listReport = $Pharma->Khochan_thuoc_nhapxuatton($dongtayy, $cond_typeput, $month, $year);
+
+//$listReport = $Pharma->Khochan_thuoc_nhapxuatton($dongtayy, $cond_typeput, $month, $year);
+$listReport=$Pharma -> Khochan_sudungthuockhangsinh_thang($dongtayy, $pharma_group_id, $nuocsx, $month, $year);
 /*switch($flag){
-	case 'tonkho': 
+case 'tonkho':
 			$listReport = $Pharma->Thuoc_TonKhoChan($month, $year, $cond_typeput.$dongtayy);
 			break;
-	case 'xuatnhapton':	
-			
+	case 'xuatnhapton':
+
 			//Khochan_baocaothuoc_nhapxuatton($month, $year, $cond_typeput.$dongtayy);
-			break;	
-	default: break;		
+			break;
+	default: break;
 }*/
 $Tong_tondau =0; $Tong_nhap=0; $Tong_xuat=0; $Tong_toncuoi=0;
-
+//
 if(is_object($listReport)){
     //$maxid=$listReport->RecordCount();
     $sTempDiv=''; $stt=1;
@@ -250,7 +255,7 @@ if(is_object($listReport)){
         }
 
     }
-    //$sTempDiv .=  last $list_encoder
+//   $sTempDiv .=  last $list_encoder
     foreach ($list_encoder as $value) {
         $sTempDiv .=  '<tr bgColor="#ffffff" >';
         $sTempDiv .= 	'<td align="center">'. $stt.'<input type="hidden" name="encoder'.$stt.'" value="'.$value['encoder'].'"></td>'; //STT
@@ -335,7 +340,7 @@ $html2='<table width="100%">
 			<td align="center" width="150"><b>P.TÀI CHÍNH-KẾ TOÁN</b></td>
 			<td align="center"><b>TRƯỞNG KHOA DƯỢC</b></td>
 			<td align="center"><b>THỦ KHO</b></td>
-			<td align="center"><b>KẾ TOÁN KHO</b></td>	
+			<td align="center"><b>KẾ TOÁN KHO</b></td>
 		</tr>
 		<tr><td colspan="3"><br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;</td></tr>
 		<tr>
@@ -344,7 +349,7 @@ $html2='<table width="100%">
 			<td align="center">Họ tên.....................</td>
 			<td align="center">Họ tên.....................</td>
 			<td align="center">Họ tên.....................</td>
-		</tr>		
+		</tr>
 		</table>';
 $pdf->writeHTMLCell(0, 25, '', '', $html2, 0, 1, 0, true, 'L', true);
 

@@ -59,6 +59,7 @@ if(isset($current_encounter) && $current_encounter) {
 //type= 0401: phieu linh thuoc (dieu tri ngoai tru)
 
 
+//echo $current_encounter."aaaaaaaaaa";
 if($type=='pres') {
 	$sql="SELECT pr.*, grp.group_pres 
 			  FROM care_encounter AS e, 
@@ -103,19 +104,13 @@ if($type=='pres') {
 	$noitru_ngoaitru =1;
 }
 
-
 $notestype='prescription';
 
 $_SESSION['sess_file_return']=$returnfile;
 
 $buffer=str_replace('~tag~',$title.' '.$name_last,$LDNoRecordFor);
-$norecordyet=str_replace('~obj~',strtolower($subtitle),$buffer); 
-
+$norecordyet=str_replace('~obj~',strtolower($subtitle),$buffer);
 
 /* Load GUI page */
 require('./gui_bridge/default/gui_show.php');
-
-
-
-
 ?>
