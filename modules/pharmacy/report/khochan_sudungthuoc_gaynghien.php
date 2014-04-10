@@ -59,9 +59,9 @@ function chkform(d) {
 	document.reportform.action="<?php echo $thisfile; ?>";
 	document.reportform.submit();
 }
-function printOut(type_month,month,year,flag,lastmonth,lastyear)
+function printOut(type_month,month,year)
 {
-	urlholder="<?php echo $root_path;?>modules/pdfmaker/duoc/khochan_thuoc_nhapxuatton.php<?php echo URL_APPEND; ?>&type_month="+type_month+"&typedongtay=<?php echo $type;?>"+"&month="+month+"&year="+year+"&lastmonth="+lastmonth+"&lastyear="+lastyear+"&flag="+flag;
+	urlholder="<?php echo $root_path;?>modules/pdfmaker/duoc/khochan_sudungthuoc_gaynghien.php<?php echo URL_APPEND; ?>&type_month="+type_month+"&showmonth="+month+"&showyear="+year;
 	testprintpdf=window.open(urlholder,"NhapXuatTon","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
 }
 function Save(alertsave){
@@ -382,7 +382,7 @@ switch($type_month){
 			break;
 		
 	case 3:	// bao cao tung thang cac khoa khac
-			$sTempDiv='<tr bgColor="#ffffff"><td colspan="15">'.$LDNotReportThisMonth.'</td></tr>';
+			$sTempDiv='<tr bgColor="#ffffff"><td colspan="10">'.$LDNotReportThisMonth.'</td></tr>';
 			break;
 			
 	case 4:	// bao cao qui cac khoa khac
@@ -412,7 +412,7 @@ $smarty->assign('sHiddenInputs',$sTempHidden);
 
 $smarty->assign('pbSubmit','<input type="image" '.createLDImgSrc($root_path,'showreport.gif','0','middle').'>');
 //$smarty->assign('pbSave','<a href="javascript:Save(\''.$alertsave.'\');"><img '.createLDImgSrc($root_path,'savedisc.gif','0','middle').' align="middle"></a>');
-$smarty->assign('pbPrint','<a href="#"><img '.createLDImgSrc($root_path,'printout.gif','0','middle').' align="middle" onclick="printOut(\''.$type_month.'\',\''.$showmonth.'\',\''.$showyear.'\',\''.$flag.'\',\''.$lastmonth.'\',\''.$lastyear.'\')"></a>');
+$smarty->assign('pbPrint','<a href="#"><img '.createLDImgSrc($root_path,'printout.gif','0','middle').' align="middle" onclick="printOut(\''.$type_month.'\',\''.$showmonth.'\',\''.$showyear.'\')"></a>');
 $smarty->assign('pbCancel','<a href="'.$breakfile.'" ><img '.createLDImgSrc($root_path,'close2.gif','0','middle').' title="'.$LDBackTo.'" align="middle"></a>');
 
 # Assign the page template to mainframe block
