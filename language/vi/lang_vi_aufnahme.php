@@ -521,6 +521,7 @@ $LDEachTime = 'Mỗi lần';
 $LDMedicineUse = 'uống';
 $LDMedicineUnit = 'viên';
 $LDCannotEdit = 'Toa thuốc đã thanh toán, không thể chỉnh sửa. ';
+$LDNotifySave='Kết quả đã được lưu.';
 $LDDbNoSave = 'Không lưu được!';
 $LDWouldDeletePres = 'Có thật sự muốn xóa toa thuốc này?';
 $LDLoiDan='Lời dặn chung';
