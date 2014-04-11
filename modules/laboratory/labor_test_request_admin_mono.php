@@ -243,7 +243,8 @@ function saveResult(){
 		}else itemid = '_'+ document.form_test_request.gr_monoimg.value;
 	}
 
-    var r=alert ('<?php echo $LDAlertBeforeSave; ?>');
+<!--    var r=alert ('--><?php //echo $LDNotifySave; ?><!--');-->
+    alert('Kết quả đã được lưu.');
 	document.form_test_request.action="<?php echo 'labor_test_findings_'.$subtarget.'.php?sid='.$sid.'&lang='.$lang.'&batch_nr='.$batch_nr.'&pn='.$pn.'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin.'&tracker='.$tracker.'&mode=save&itemid='; ?>"+itemid;
 	document.form_test_request.submit();
 }
