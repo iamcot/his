@@ -241,7 +241,8 @@ function doneRequest(){
 		return false;
 }
 function saveResult(){
-    var r=alert ('<?php echo $LDAlertBeforeSave; ?> ');
+<!--    var r=alert ('--><?php //echo $LDAlertBeforeSave; ?><!-- ');-->
+    alert('Kết quả đã được lưu.');
 	document.form_test_request.action="<?php echo 'labor_test_findings_'.$subtarget.'.php?sid='.$sid.'&lang='.$lang.'&batch_nr='.$batch_nr.'&pn='.$pn.'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin.'&mode=save'; ?>";
 	document.form_test_request.submit();
 }	
