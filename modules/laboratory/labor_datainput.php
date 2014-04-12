@@ -105,12 +105,18 @@ if( isset($mode) && $mode=='save' ){
 			include_once($root_path.'include/core/inc_visual_signalling_fx.php');
 			# Set the visual signal
 			setEventSignalColor($encounter_nr,SIGNAL_COLOR_DIAGNOSTICS_REPORT);
-			header("location:$thisfile?sid=$sid&lang=$lang&saved=1&batch_nr=$batch_nr&encounter_nr=$encounter_nr&job_id=$job_id&parameterselect=$parameterselect&allow_update=1&user_origin=$user_origin&mode=show");
-			exit;
+//	gốc		header("location:$thisfile?sid=$sid&lang=$lang&saved=1&batch_nr=$batch_nr&encounter_nr=$encounter_nr&job_id=$job_id&parameterselect=$parameterselect&allow_update=1&user_origin=$user_origin&mode=show");
+//update  thêm
+            header('Content-Type: text/html; charset=utf-8');       //đã thêm
+            echo "<script type='text/javascript'>";                 //đã thêm
+            echo "alert('Kết quả đã được lưu.');";                           //đã thêm
+//            echo "alert('$LDNotifySave');";                                         //đã thêm
+            echo "window.location.replace('labor_test_request_admin_chemlabor.php".URL_APPEND."&pn=".$encounter_nr."&batch_nr=".$job_id."&user_origin=lab')";//đã thêm
+            echo "</script>";
+//thêm
+            exit;
 		}
 		//$saved=true;
-
-
 
 	}else{
 		# Hide old job record if it exists
@@ -160,8 +166,16 @@ if( isset($mode) && $mode=='save' ){
 		include_once($root_path.'include/core/inc_visual_signalling_fx.php');
 		# Set the visual signal
 		setEventSignalColor($encounter_nr,SIGNAL_COLOR_DIAGNOSTICS_REPORT);
-		header("location:$thisfile?sid=$sid&lang=$lang&saved=1&batch_nr=$batch_nr&encounter_nr=$encounter_nr&job_id=$job_id&parameterselect=$parameterselect&allow_update=1&user_origin=$user_origin");
-		exit;
+//gốc		header("location:$thisfile?sid=$sid&lang=$lang&saved=1&batch_nr=$batch_nr&encounter_nr=$encounter_nr&job_id=$job_id&parameterselect=$parameterselect&allow_update=1&user_origin=$user_origin");
+//thêm  save
+        header('Content-Type: text/html; charset=utf-8');       //đã thêm
+        echo "<script type='text/javascript'>";                 //đã thêm
+        echo "alert('Kết quả đã được lưu.');";                           //đã thêm
+//            echo "alert('$LDNotifySave');";                                         //đã thêm
+        echo "window.location.replace('labor_test_request_admin_chemlabor.php".URL_APPEND."&pn=".$encounter_nr."&batch_nr=".$job_id."&user_origin=lab')";//đã thêm
+        echo "</script>";
+//thêm
+        exit;
 	}
 	# end of if(mode==save)
 	#If mode is not "save" then get the basic personal data

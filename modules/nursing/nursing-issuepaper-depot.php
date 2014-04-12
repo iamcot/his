@@ -323,7 +323,7 @@ $smarty->assign('LDIssue',$LDIssue);
 $smarty->assign('LDNote',$LDNote);
 $smarty->assign('LDTotal',$LDTotal);
 $smarty->assign('LDInventory',$LDInventory);
-
+$smarty->assign('LDDate',$LDDay);//đã thêm
 $smarty->assign('LDTYPE',$LDTypePutIn1);
 
 
@@ -568,6 +568,21 @@ if($target=='depot')
 
 //*********************************************************************************
 
+include_once($root_path.'include/core/inc_date_format_functions.php');
+//mp
+if($date_time=='')
+    $date_time=date('Y-m-d');
+//gjergji : new calendar
+require_once ($root_path.'js/jscalendar/calendar.php');
+$calendar = new DHTML_Calendar($root_path.'js/jscalendar/', $lang, 'calendar-system', true);
+$calendar->load_files();
+echo $date_format;
+$smarty->assign('sCalendar',$calendar->show_calendar($calendar,$date_format,'date',$date_time));
+
+//$smarty->assign('sCalendar',$calendar->show_calendar($calendar,$date_format,'date_time',''));
+//$smarty->assign('calendar',$LDDateIssue.': '.$calendar->show_calendar($calendar,$date_format,'dateissue',date('Y-m-d')));
+//end gjergji
+
 //$rowIssue ['note'];
 $smarty->assign('UserName',$LDUserIssue.': '.$create_id);
 $smarty->assign('NoteOfCreator',$LDNoteOfCreator.':<br> <textarea name="notecreator" cols="50" rows="2" wrap="physical" >'.$rowIssue['generalnote'].'</textarea>');
@@ -578,13 +593,13 @@ $smarty->assign('pbCancel','<a href="'.$breakfile.'" ><img '.createLDImgSrc($roo
 //$smarty->assign('test',$target.' '.$data.' '.$mode.' '.$ward_nr.' '.$maxid);
 
 
-//sHiddenInputs
+//sHiddenInputs                đã xóa dòng name="date_time" , sau name="mode"
 	$sTempHidden = '<input type="hidden" name="sid" value="'.$sid.'">
 		<input type="hidden" name="lang" value="'.$lang.'">
 		<input type="hidden" id="maxid" name="maxid" value="'.$maxid.'">
 		<input type="hidden" name="type" value="'.$type.'">
 		<input type="hidden" name="mode" value="'.$mode.'">
-		<input type="hidden" name="date_time" value="'.$date_time.'">
+        <input type="hidden" name="date_time" value="'.$date_time.'">
 		<input type="hidden" name="target" value="'.$target.'">
 		<input type="hidden" name="list_presid" value="'.$list_id.'">
 		<input type="hidden" name="create_id" value="'.$create_id.'">

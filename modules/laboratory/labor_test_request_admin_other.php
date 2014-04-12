@@ -160,8 +160,16 @@ switch($mode){
 								  }
 			}
 			$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql, date('Y-m-d H:i:s'));	
-			header("location:".$thisfile."?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&batch_nr=$batch_nr&noresize=$noresize");
-			exit;
+//			header("location:".$thisfile."?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&batch_nr=$batch_nr&noresize=$noresize");
+
+            header('Content-Type: text/html; charset=utf-8');                                          //đã thêm
+            echo "<script type='text/javascript'>";                                                   //đã thêm
+            echo "alert('Kết quả đã được lưu');";                                                      //đã thêm
+//            echo "alert('$LDNotifySave');";                                                           //đã thêm
+            echo "window.location.replace('".$thisfile."?sid=".$sid."&lang=".$lang."&edit=".$edit."&saved=update&pn=".$pn."&station=".$station."&user_origin=".$user_origin."&status=".$status."&target=".$target."&subtarget=".$subtarget."&batch_nr=".$batch_nr."&noresize=".$noresize."')"; //đã thêm
+            echo "</script>";
+
+            exit;
 			
 		} else {
 			echo "<p>$sql<p>$LDDbNoSave";

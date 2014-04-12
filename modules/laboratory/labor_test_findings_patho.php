@@ -28,11 +28,14 @@ $bgc1 = '#cde1ec' ;
 $edit = 1 ; /* Assume to edit first */
 
 $formtitle = $LDPathology ;
-$dept_nr = 8 ; // 8 = department nr. of pathology
+$dept_nr = 8 ; // 8 = department nr. of pathology
 
-//$db_request_table=$subtarget;$db_request_table = 'patho' ;
 
-//$db->debug=1;
+//$db_request_table=$subtarget;
+$db_request_table = 'patho' ;
+
+//$db->debug=1;
+
 
 require_once ($root_path . 'include/care_api_classes/class_encounter.php') ;
 $enc_obj = new Encounter ( ) ;
@@ -103,13 +106,23 @@ switch ( $mode) {
 			if ($ergebnis = $enc_obj->Transact ( $sql )) {
 				
 				signalNewDiagnosticsReportEvent ( $findings_date ) ;
-				//echo $sql;				header ( "location:$thisfile" . URL_REDIRECT_APPEND . "&edit=$edit&saved=insert&mode=edit&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize&batch_nr=$batch_nr&entry_date=$entry_date" ) ;
-				exit () ;
+				//echo $sql;
+//	gốc			header ( "location:$thisfile" . URL_REDIRECT_APPEND . "&edit=$edit&saved=insert&mode=edit&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize&batch_nr=$batch_nr&entry_date=$entry_date" ) ;
+
+                header('Content-Type: text/html; charset=utf-8');                                         //đã thêm
+                echo "<script type='text/javascript'>";                                                   //đã thêm
+//                echo "alert('$LDNotifySave');";                                                           //đã thêm
+                echo "alert('Kết quả đã được lưu');";
+                echo "window.location.replace('".$thisfile.URL_REDIRECT_APPEND."&edit=".$edit."&saved=insert&mode=edit&pn=".$pn."&station=".$station."&user_origin=".$user_origin."&status=".$status."&target=".$target."&subtarget=".$subtarget."&noresize=".$noresize."&batch_nr=".$batch_nr."&entry_date=".$entry_date."')"; //đã thêm
+                echo "</script>";
+
+                exit () ;
 			} else {
 				echo "<p>$sql<p>$LDDbNoSave" ;
 				$mode = "" ;
 			}
-			break ; // end of case 'save'		}
+			break ; // end of case 'save'
+		}
 	
 	case 'update' :
 		{
@@ -126,15 +139,25 @@ switch ( $mode) {
 			
 			if ($ergebnis = $enc_obj->Transact ( $sql )) {
 				signalNewDiagnosticsReportEvent ( $findings_date ) ;
-				//echo $sql;				
+				//echo $sql;
+				
 
-				header ( "location:$thisfile?sid=$sid&lang=$lang&edit=$edit&saved=insert&mode=edit&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize&batch_nr=$batch_nr&entry_date=$entry_date" ) ;
-				exit () ;
+//	gốc			header ( "location:$thisfile?sid=$sid&lang=$lang&edit=$edit&saved=insert&mode=edit&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize&batch_nr=$batch_nr&entry_date=$entry_date" ) ;
+
+                header('Content-Type: text/html; charset=utf-8');                                         //đã thêm
+                echo "<script type='text/javascript'>";                                                   //đã thêm
+//                echo "alert('$LDNotifySave');";                                                           //đã thêm
+                echo "alert('Kết quả đã được lưu');";
+                echo "window.location.replace('".$thisfile."?sid=".$sid."&lang=".$lang."&edit=".$edit."&saved=insert&mode=edit&pn=".$pn."&station=".$station."&user_origin=".$user_origin."&status=".$status."&target=".$target."&subtarget=".$subtarget."&noresize=".$noresize."&batch_nr=".$batch_nr."&entry_date=".$entry_date."')"; //đã thêm
+                echo "</script>";
+
+                exit () ;
 			} else {
 				echo "<p>$sql<p>$LDDbNoSave" ;
 				$mode = "" ;
 			}
-			break ; // end of case 'save'		}
+			break ; // end of case 'save'
+		}
 	
 	case 'done' :
 		{
@@ -144,14 +167,19 @@ switch ( $mode) {
 						   modify_time='" . date ( 'YmdHis' ) . "'
 						   WHERE batch_nr = '" . $batch_nr . "'" ;
 			
-			# Update the findings record first			
+			# Update the findings record first
+			
 
 			if ($ergebnis = $enc_obj->Transact ( "UPDATE care_test_findings_" . $db_request_table . $sqlbuffer )) {
-				//echo $sql;				
-				# Then update the request record
+				//echo $sql;
+				
+				# Then update the request record
+
 				if ($ergebnis = $enc_obj->Transact ( "UPDATE care_test_request_" . $db_request_table . $sqlbuffer )) {
-					// Load the visual signalling functions					include_once ($root_path . 'include/core/inc_visual_signalling_fx.php') ;
-					// Set the visual signal					setEventSignalColor ( $pn, SIGNAL_COLOR_DIAGNOSTICS_REPORT ) ;
+					// Load the visual signalling functions
+					include_once ($root_path . 'include/core/inc_visual_signalling_fx.php') ;
+					// Set the visual signal
+					setEventSignalColor ( $pn, SIGNAL_COLOR_DIAGNOSTICS_REPORT ) ;
 					
 					header ( "location:$thisfile?sid=$sid&lang=$lang&edit=$edit&saved=insert&mode=edit&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize&batch_nr=$batch_nr&entry_date=$entry_date" ) ;
 					exit () ;
@@ -163,7 +191,8 @@ switch ( $mode) {
 				echo "<p>$sql<p>$LDDbNoSave" ;
 				$mode = "save" ;
 			}
-			break ; // end of case 'save'		}
+			break ; // end of case 'save'
+		}
 	/* If mode is edit, get the stored test findings
 		*/
 	case 'edit' :
@@ -186,37 +215,49 @@ switch ( $mode) {
 			} else {
 				$mode = "save" ;
 			}
-			break ; ///* End of case 'edit': */		}
+			break ; ///* End of case 'edit': */
+		}
 	
 	default :
 		$mode = "" ;
 
-} // end of switch($mode)
+} // end of switch($mode)
+
 
 if ($edit)
 	$returnfile .= '&batch_nr=' . $batch_nr . '&pn=' . $pn . '&tracker=' . $tracker ;
 	
-# Prepare title$sTitle = $LDDiagnosticTest . " (" . $batch_nr . ")" ;
+# Prepare title
+$sTitle = $LDDiagnosticTest . " (" . $batch_nr . ")" ;
 
-# Start Smarty templating here/**
+# Start Smarty templating here
+/**
  * LOAD Smarty
  */
-# Note: it is advisable to load this after the inc_front_chain_lang.php so# that the smarty script can use the user configured template theme
+# Note: it is advisable to load this after the inc_front_chain_lang.php so
+# that the smarty script can use the user configured template theme
+
 
 require_once ($root_path . 'gui/smarty_template/smarty_care.class.php') ;
 $smarty = new smarty_care ( 'common' ) ;
 
-# Title in toolbar$smarty->assign ( 'sToolbarTitle', $sTitle ) ;
+# Title in toolbar
+$smarty->assign ( 'sToolbarTitle', $sTitle ) ;
 
-# href for help button$smarty->assign ( 'pbHelp', "javascript:gethelp('pending_patho_findings.php')" ) ;
+# href for help button
+$smarty->assign ( 'pbHelp', "javascript:gethelp('pending_patho_findings.php')" ) ;
 
-# href for return  button$smarty->assign ( 'pbBack', $returnfile ) ;
+# href for return  button
+$smarty->assign ( 'pbBack', $returnfile ) ;
 
-# href for close button$smarty->assign ( 'breakfile', $breakfile ) ;
+# href for close button
+$smarty->assign ( 'breakfile', $breakfile ) ;
 
-# Window bar title$smarty->assign ( 'sWindowTitle', $sTitle ) ;
+# Window bar title
+$smarty->assign ( 'sWindowTitle', $sTitle ) ;
 
-# collect extra javascript codeob_start () ;
+# collect extra javascript code
+ob_start () ;
 ?>
 
 <style type="text/css">
@@ -339,7 +380,8 @@ ob_end_clean () ;
 
 $smarty->append ( 'JavaScript', $sTemp ) ;
 
-# Buffer page output
+# Buffer page output
+
 
 ob_start () ;
 
@@ -378,7 +420,8 @@ echo '</ul>' ;
 $sTemp = ob_get_contents () ;
 ob_end_clean () ;
 
-# Assign the page output to main frame template
+# Assign the page output to main frame template
+
 
 $smarty->assign ( 'sMainFrameBlockData', $sTemp ) ;
 

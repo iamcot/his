@@ -156,8 +156,15 @@ switch($mode){
 								  }
 			}
 			$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql, date('Y-m-d H:i:s'));	
-			header("location:".$thisfile."?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&batch_nr=$batch_nr&noresize=$noresize");
-			exit;
+//			header("location:".$thisfile."?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&batch_nr=$batch_nr&noresize=$noresize");
+            header('Content-Type: text/html; charset=utf-8');                                          //đã thêm
+            echo "<script type='text/javascript'>";                                                   //đã thêm
+            echo "alert('Kết quả đã được lưu');";                                                      //đã thêm
+//            echo "alert('$LDNotifySave');";                                                           //đã thêm
+            echo "window.location.replace('".$thisfile."?sid=".$sid."&lang=".$lang."&edit=".$edit."&saved=update&pn=".$pn."&station=".$station."&user_origin=".$user_origin."&status=".$status."&target=".$target."&subtarget=".$subtarget."&batch_nr=".$batch_nr."&noresize=".$noresize."')"; //đã thêm
+            echo "</script>";
+
+            exit;
 			
 		} else {
 			echo "<p>$sql<p>$LDDbNoSave";
@@ -463,9 +470,11 @@ require('includes/inc_test_request_lister_fx.php');
 		?>
 				  
   <?php echo 'Bác sĩ xét nghiệm' ?>
-        <input type="text" name="results_doctor" value="<?php if($read_form && $stored_request['results_doctor']) echo $stored_request['results_doctor'];else echo $pers_name; ?>" size=35 maxlength=35> 
-        <input type="hidden" name="results_doctor_nr" value="<?php if($read_form && $stored_request['results_doctor_']) echo $stored_request['results_doctor_nr']; else echo $pers_nr;?>"> <a href="javascript:popDocPer('doctor_nr')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
-		</td>
+<!--        <input type="text" name="results_doctor" value="--><?php //if($read_form && $stored_request['results_doctor']) echo $stored_request['results_doctor'];else echo $pers_name; ?><!--" size=35 maxlength=35> -->
+<!--        <input type="hidden" name="results_doctor_nr" value="--><?php //if($read_form && $stored_request['results_doctor_']) echo $stored_request['results_doctor_nr']; else echo $pers_nr;?><!--"> <a href="javascript:popDocPer('doctor_nr')"><img --><?php //echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?><!-->-->
+            <input type="text" name="send_doctor" size=40 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['send_doctor'];else echo $pers_name;?>">
+            <input type="hidden" name="send_doctor_nr" value="<?php if(!empty( $stored_request['send_doctor_nr'])) echo $stored_request['send_doctor_nr'];else echo $pers_nr; ?>"> <a href="javascript:popDocPer('doctor_nr','send_doctor_nr','send_doctor')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
+        </td>
     </tr>
 		</table> 
 		

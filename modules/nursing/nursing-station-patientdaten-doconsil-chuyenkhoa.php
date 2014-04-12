@@ -287,6 +287,11 @@ function chkForm(d){
 	else return true;
 }
 
+function popDocPer(target,obj_val,obj_name){  //đã thêm hàm popDocPer
+    urlholder="<?php echo $root_path; ?>modules/laboratory/personell_search.php<?php echo URL_REDIRECT_APPEND; ?>&target="+target+"&obj_val="+obj_val+"&obj_name="+obj_name;
+    DSWIN<?php echo $sid ?>=window.open(urlholder,"wblabel<?php echo $sid ?>","menubar=no,width=400,height=550,resizable=yes,scrollbars=yes");
+}
+
 function sendLater()
 {
    document.form_test_request.status.value="draft";
@@ -299,6 +304,7 @@ function printOut()
 	testprintout<?php echo $sid ?>=window.open(urlholder,"testprintout<?php echo $sid ?>","width=800,height=600,menubar=no,resizable=yes,scrollbars=yes");
     testprintout<?php echo $sid ?>.print();
 }
+
 
 
 <?php require($root_path.'include/core/inc_checkdate_lang.php'); ?>
@@ -437,8 +443,10 @@ echo '
 		//end gjergji
 				  
  		echo $LDRequestingDoc ?>:
-		<input type="text" name="send_doctor" size=40 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['send_doctor'] ?>"></div><br>
-		</td>
+<!--		<input type="text" name="send_doctor" size=40 maxlength=40 value="--><?php //if($edit_form || $read_form) echo $stored_request['send_doctor'] ?><!--"></div><br>-->
+                    <input type="text" name="send_doctor" size=40 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['send_doctor'];else echo $pers_name;?>">
+                    <input type="hidden" name="send_doctor_nr" value="<?php if(!empty( $stored_request['send_doctor_nr'])) echo $stored_request['send_doctor_nr'];else echo $pers_nr; ?>"> <a href="javascript:popDocPer('doctor_nr','send_doctor_nr','send_doctor')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
+        </td>
     </tr>
 	
 	

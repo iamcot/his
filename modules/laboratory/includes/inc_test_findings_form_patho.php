@@ -26,6 +26,13 @@ function createInputBlock ( $param , $value ) {
 }
 ?>
 
+<script language="javascript">          //đã thêm
+    function popDocPer(target,obj_val,obj_name){     //đã thêm
+        urlholder="<?php echo $root_path; ?>modules/laboratory/personell_search.php<?php echo URL_REDIRECT_APPEND; ?>&target="+target+"&obj_val="+obj_val+"&obj_name="+obj_name;  //đã thêm
+        DSWIN<?php echo $sid ?>=window.open(urlholder,"wblabel<?php echo $sid ?>","menubar=no,width=400,height=550,resizable=yes,scrollbars=yes");                                //đã thêm
+    }
+</script>
+
 <table cellpadding="0" cellspacing=1 border="0" width=700>
 	<tr valign="top" bgcolor="<?php
 	echo $bgc1 ?>">
@@ -157,8 +164,10 @@ $calendar->load_files();
 		<?php
 		echo $LDReportingDoc ?>:
 		<?php
-		createInputBlock ( 'doctor_id', $stored_findings [ 'doctor_id' ] ) ;
+//		createInputBlock ( 'doctor_id', $stored_findings [ 'doctor_id' ] ) ;
 		?>
+                <input type="text" name="doctor_id" size=37 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_findings['doctor_id'];else echo $pers_name;?>">
+                <input type="hidden" name="doctor_id_nr" value="<?php if(!empty( $stored_findings['doctor_id_nr'])) echo $stored_findings['doctor_id_nr'];else echo $pers_nr; ?>"> <a href="javascript:popDocPer('doctor_nr','doctor_id_nr','doctor_id')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
         &nbsp;&nbsp;
 		</div>
 		</td>
