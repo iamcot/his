@@ -59,7 +59,6 @@ if(isset($current_encounter) && $current_encounter) {
 //type= 0401: phieu linh thuoc (dieu tri ngoai tru)
 
 
-//echo $current_encounter."aaaaaaaaaa";
 if($type=='pres') {
 	$sql="SELECT pr.*, grp.group_pres 
 			  FROM care_encounter AS e, 

@@ -38,8 +38,8 @@ if($parent_admit) $sTitleNr= ($_SESSION['sess_full_en']);
  $smarty->assign('pbHelp',"javascript:gethelp('notes_router.php','echo $notestype','".strtr($subtitle,' ','+')."','$mode','$rows')");
 
   # href for return button
-# $smarty->assign('pbBack',$returnfile.URL_APPEND.'&pid='.$_SESSION['sess_pid'].'&target='.$target.'&mode=show&type_nr='.$type_nr);
-$smarty->assign('pbBack',$root_path."modules/registration_admission/aufnahme_daten_zeigen.php".URL_APPEND."&from=such&encounter_nr=".$_SESSION['sess_en']."&target=search");
+ $smarty->assign('pbBack',$returnfile.URL_APPEND.'&pid='.$_SESSION['sess_pid'].'&target='.$target.'&mode=show&type_nr='.$type_nr);
+
 # Start buffering extra javascript output
 ob_start();
 

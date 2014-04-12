@@ -83,7 +83,7 @@ if(($mode=='search'||$mode=='paginate')&&!empty($searchkey)){
 				AND enc.status  IN ('','normal')";
 	$orderby = " ORDER BY $oprep.$oitem $odir";
     //	AND enc.is_discharged NOT IN (1)
-		
+
 	if(is_numeric($suchwort)){
 		$suchwort=(int) $suchwort;
 		$numeric=1;

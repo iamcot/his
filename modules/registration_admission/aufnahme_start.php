@@ -262,10 +262,10 @@ if($pid!='' || $encounter_nr!=''){
 							$encounter_obj->updateCareServiceClass($care_class);
 						}
 						if(!$GLOBAL_CONFIG['patient_service_room_hide']){
-							$encounter_obj->updateRoomServiceClass($room_class,$encounter_nr);
+							$encounter_obj->updateRoomServiceClass($room_class);
 						}
 						if(!$GLOBAL_CONFIG['patient_service_att_dr_hide']){
-							$encounter_obj->updateAttDrServiceClass($att_dr_class,$encounter_nr);
+							$encounter_obj->updateAttDrServiceClass($att_dr_class);
 						}
 						header("Location: aufnahme_daten_zeigen.php".URL_REDIRECT_APPEND."&encounter_nr=$encounter_nr&origin=admit&target=entry&newdata=$newdata");
 						exit;
@@ -324,7 +324,7 @@ if($pid!='' || $encounter_nr!=''){
 						*/
 						//add 0310 - cot, benh nhan tiep nhan ngoai tru tu dong chuyen vao khoa
 						if($_POST['encounter_class_nr'] == 2)
-							$encounter_obj->assignInDept($encounter_nr,$_POST['current_dept_nr'],$_POST['current_dept_nr'],date("Y-m-d"),date("H:i:s"));
+							$encounter_obj->assignInDept($encounter_nr,$_POST['current_dept_nr'],$_POST['current_dept_nr']);
 						//insert encounter transfer
 						$encounter_transfer = array(
 												"nr" => "",
@@ -339,7 +339,6 @@ if($pid!='' || $encounter_nr!=''){
 												"login_id" => $_SESSION['sess_login_userid'],
 												"type_encounter" => $_POST['encounter_class_nr']
 												);
-//                        $date_reg = @format2DateSTD($POST['dat_reg'], $date_format)." ".$_POST['time_reg'];
 						$encounter_obj->insertEncounterTransfer($encounter_transfer);
 
 						//insert temp Measurement
@@ -404,6 +403,7 @@ if($pid!='' || $encounter_nr!=''){
 				}
 			}
 		}
+
 	}
 	
  // edit de co the chon khoa phong
@@ -495,8 +495,7 @@ if(isset($pid) && $pid){
 
 function chkform(d) {
 	encr=<?php if ($encounter_class_nr) {echo $encounter_class_nr; } else {echo '0';} ?>;
-	//*
-    if(d.encounter_class_nr[0]&&d.encounter_class_nr[1]&&!d.encounter_class_nr[0].checked&&!d.encounter_class_nr[1].checked){
+	if(d.encounter_class_nr[0]&&d.encounter_class_nr[1]&&!d.encounter_class_nr[0].checked&&!d.encounter_class_nr[1].checked){
 		alert("<?php echo $LDPlsSelectAdmissionType; ?>");
 		return false;
 	}else if(!d.current_dept_nr.value){
@@ -734,30 +733,23 @@ if(!isset($pid) || !$pid){
 		$smarty->assign('sFileBrowserInput','<input name="photo_filename" type="file" size="15"   onChange="showpic(this)" value="'.$pfile.'">');
 	}
 	//end : gjergji
-
 	$smarty->assign('LDAdmitDate',$LDAdmitDate);
-    if(isset($encounter_date)){
-        $smarty->assign('sAdmitDate',@formatDate2Local($encounter_in_date,$date_format)." ".@convertTimeToLocal(formatDate2Local($encounter_in_date,$date_format,0,1)));
-//        $smarty->assign('sAdmitDate', @formatDate2Local($encounter_date,$date_format));
-//        $smarty->assign('sAdmitTime',@formatDate2Local($encounter_date,$date_format,1,1));
-//         $smarty->assign('sAdmitDate',$calendar->show_calendar($calendar,$date_format,'dat_reg',@formatDate2Local($encounter_date,$date_format)));
-//         $smarty->assign('sAdmitTime','<input name="time_reg" id="time_reg" type="text" value="'.@convertTimeToLocal(formatDate2Local($encounter_date,$date_format,0,1)).'" size="5">');
-   }
-    else{
-     $smarty->assign('sAdmitDate',$calendar->show_calendar($calendar,$date_format,'dat_reg',date("d/m/Y")));
-     $smarty->assign('sAdmitTime','<input name="time_reg" id="time_reg" type="text" value="'.date("H:i").'" size="5">');
-    }
+if(isset($encounter_date)){
+	 $smarty->assign('sAdmitDate',$calendar->show_calendar($calendar,$date_format,'dat_reg',@formatDate2Local($encounter_date,$date_format)));
+	 $smarty->assign('sAdmitTime','<input name="time_reg" id="time_reg" type="text" value="'.@convertTimeToLocal(formatDate2Local($encounter_date,$date_format,0,1)).'" size="5">');
+}else{
+ $smarty->assign('sAdmitDate',$calendar->show_calendar($calendar,$date_format,'dat_reg',date("d/m/Y")));
+ $smarty->assign('sAdmitTime','<input name="time_reg" id="time_reg" type="text" value="'.date("H:i").'" size="5">');
+}
 	$smarty->assign('LDAdmitTime',$LDAdmitTime);
+	$smarty->assign('LDInDate','Ngày nhập liệu');
 
-
-	$smarty->assign('LDInDate','Ngày chỉnh sửa gần nhất');
-    if(!empty($encounter_in_date)){
-        $smarty->assign('sInDate',$calendar->show_calendar($calendar,$date_format,'dat_reg',date('d/m/Y')));
-        $smarty->assign('sInTime','<input name="time_reg" id="time_reg" type="text" value="'.date('H:i').'" size="5">');
+	//$smarty->assign('sAdmitTime','<input name="time_reg" id="time_reg" type="text" value="'.@convertTimeToLocal(formatDate2Local($encounter_date,$date_format,0,1)).'" size="5">');
+	if(!empty($encounter_in_date)){
+	$smarty->assign('sInDate',@formatDate2Local($encounter_in_date,$date_format)." ".@convertTimeToLocal(formatDate2Local($encounter_in_date,$date_format,0,1)));
 	}else{
-	    $smarty->assign('sInDate',date('d/m/Y H:i:s').'<input name="encounter_in_date" type="hidden" value="'.date('Y-m-d H:i:s').'">');
-	    }
-
+	$smarty->assign('sInDate',date('d/m/Y H:i:s').'<input name="encounter_in_date" type="hidden" value="'.date('Y-m-d H:i:s').'">');
+	}
 	$smarty->assign('LDTitle',$LDTitle);
 	$smarty->assign('title',$title);
 	$smarty->assign('LDLastName',$LDLastName);
@@ -800,9 +792,7 @@ if(!isset($pid) || !$pid){
 		$smarty->assign('blood_group',$$buf);
 	}
 $smarty->assign('LDPlsEnterReferer',$LDPlsEnterReferer);
-    //*
 $smarty->assign('LDPlsEnterRefererDiagnosis',$LDPlsEnterRefererDiagnosis);
-    $smarty->assign('LDPlsSelectAdmissionType', $LDPlsSelectAdmissionType);
 	$smarty->assign('LDAddress',$LDAddress);
 
 	$smarty->assign('addr_str',$addr_str);
@@ -850,7 +840,7 @@ $smarty->assign('LDPlsEnterRefererDiagnosis',$LDPlsEnterRefererDiagnosis);
 			}
 			$sTemp = $sTemp.'</select>';	
 		$smarty->assign('sDeptInput',$sTemp);
-
+		
 		if ($errorward) $smarty->assign('LDWard',"<font color=red>$LDPavijon</font>");
 		$smarty->assign('LDWard',$LDWard);
 	if(!empty($current_ward_nr)){
