@@ -77,8 +77,8 @@ switch($mode){
 //	gốc		header("location:".$thisfile."?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&batch_nr=$batch_nr&noresize=$noresize");
             header('Content-Type: text/html; charset=utf-8');       //đã thêm
             echo "<script type='text/javascript'>";                 //đã thêm
-//            echo "alert('Kết quả đã được lưu.');";                           //đã thêm
-            echo "alert('$LDAlertBeforeSave');";                                         //đã thêm
+            echo "alert('Kết quả đã được lưu.');";                           //đã thêm
+//            echo "alert('$LDNotifySave');";                                        //đã thêm
             echo "window.location.replace('".$thisfile."?sid=".$sid."&lang=".$lang."&edit=".$edit."&saved=update&pn=".$pn."&station=".$station."&user_origin=".$user_origin."&status=".$status."&target=".$target."&subtarget=".$subtarget."&batch_nr=".$batch_nr."&noresize=".$noresize."')";//đã thêm
             echo "</script>";
 			exit;
@@ -237,7 +237,8 @@ function saveDone()
 }
 function saveResult()
 {
-    var r=alert('<?php echo $LDAlertBeforeSave;?>');
+<!--    var r=alert('--><?php //echo $LDAlertBeforeSave;?><!--');-->
+    var r=alert('<?php echo $LDNotifySave;?>');
     document.form_test_request.action="<?php echo 'labor_test_findings_'.$subtarget.'.php?sid='.$sid.'&lang='.$lang.'&batch_nr='.$batch_nr.'&pn='.$pn.'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin.'&tracker='.$tracker.'&mode=save'; ?>";
     document.form_test_request.submit();
 }
