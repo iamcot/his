@@ -8,7 +8,7 @@
 		<td class="wardlisttitlerow">{{$LDRoom}}</td>
                 <td class="wardlisttitlerow">{{$LDRoomname}}</td>
 		<td class="wardlisttitlerow">{{$LDBed}}</td>
-		<td class="wardlisttitlerow">{{$LDFamilyName}} ,  {{$LDName}}</td>
+		<td class="wardlisttitlerow">{{$LDFamilyName}} -  {{$LDName}}</td>
 		<td class="wardlisttitlerow">{{$LDBirthDate}}</td>
 		<td class="wardlisttitlerow">{{$LDPatNr}}</td>
 		<td class="wardlisttitlerow">{{$LDInsuranceType}}</td>
