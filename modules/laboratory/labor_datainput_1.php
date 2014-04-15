@@ -49,8 +49,6 @@ if($result=&$lab_obj->getResult($job_id,$parameterselect)){
 	while($row=$result->FetchRow()) {
 		$batch_nr = $row['batch_nr'];
 		$pdata[$row['paramater_name']] = $row['parameter_value'];
-		$sub_id[$row['paramater_name']] = $row['sub_id'];
-		$status[$row['paramater_name']] = $row['status'];
 	}
 }
 
@@ -83,47 +81,36 @@ if( isset($mode) && $mode=='save' ){
 		if($_POST['std_date']==DBF_NODATE) $dbuf['test_date']=date('Y-m-d');
 
 		foreach( $nbuf as $key => $value) {
-			if(isset($value) && !empty($value) && ($value!=$pdata[$key])){// && ){// && !array_key_exists($key, $pdata)) {
-				$parsedParamList['sub_id'] 		    = $sub_id[$key];
+			if(isset($value) && !empty($value) && !array_key_exists($key, $pdata)) {
+				$parsedParamList['test_date']		= date('Y-m-d');
 				$parsedParamList['batch_nr'] 		= $batch_nr;
 				$parsedParamList['job_id'] 			= $job_id;
 				$parsedParamList['encounter_nr'] 	= $encounter_nr;
 				$parsedParamList['paramater_name']	= $key;
 				$parsedParamList['parameter_value']	= $value;
-				$parsedParamList['status'] 		    = $status[$key];
-				$parsedParamList['history']			= "Update ".date('Y-m-d H:i:s')." ".$_SESSION['sess_user_name']."\n";
-				$parsedParamList['test_date']		= formatDate2STD($_POST['test_date'],$date_format);
 				$parsedParamList['test_time']		= date('H:i:s');
+				$parsedParamList['history']			= "Create ".date('Y-m-d H:i:s')." ".$_SESSION['sess_user_name']."\n";
 				$parsedParamList['create_id']		= $_SESSION['sess_user_name'];
 				$parsedParamList['create_time']		= date('YmdHis');
-				$array=array('sub_id','batch_nr','job_id','encounter_nr','paramater_name','parameter_value','status','history','test_date','test_time','create_id','create_time');
-				$lab_obj_sub->setWhereCondition('sub_id='.$parsedParamList['sub_id']);
-				$lab_obj_sub->setRefArray($array);
 				$lab_obj_sub->setDataArray($parsedParamList);
-				if($lab_obj_sub->updateDataFromInternalArray($parsedParamList['sub_id'])){
+				if($lab_obj_sub->insertDataFromInternalArray()){
 					$saved = TRUE;
-					$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $lab_obj_sub->getLastQuery(), date('Y-m-d H:i:s'));
+				$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $lab_obj_sub->getLastQuery(), date('Y-m-d H:i:s'));
 				}else{echo "<p>".$lab_obj->getLastQuery()."$LDDbNoSave";}
-			}$i++;
-}
+			}
+		}
 
 		# If save successful, jump to display values
 		if($saved){
 			include_once($root_path.'include/core/inc_visual_signalling_fx.php');
 			# Set the visual signal
 			setEventSignalColor($encounter_nr,SIGNAL_COLOR_DIAGNOSTICS_REPORT);
-//	gốc		header("location:$thisfile?sid=$sid&lang=$lang&saved=1&batch_nr=$batch_nr&encounter_nr=$encounter_nr&job_id=$job_id&parameterselect=$parameterselect&allow_update=1&user_origin=$user_origin&mode=show");
-//update  thêm
-            header('Content-Type: text/html; charset=utf-8');       //đã thêm
-            echo "<script type='text/javascript'>";                 //đã thêm
-            echo "alert('Kết quả đã được lưu.');";                           //đã thêm
-//            echo "alert('$LDNotifySave');";                                         //đã thêm
-            echo "window.location.replace('labor_test_request_admin_chemlabor.php".URL_APPEND."&pn=".$encounter_nr."&batch_nr=".$job_id."&user_origin=lab')";//đã thêm
-            echo "</script>";
-//thêm
-            exit;
+			header("location:$thisfile?sid=$sid&lang=$lang&saved=1&batch_nr=$batch_nr&encounter_nr=$encounter_nr&job_id=$job_id&parameterselect=$parameterselect&allow_update=1&user_origin=$user_origin&mode=show");
+			exit;
 		}
 		//$saved=true;
+
+
 
 	}else{
 		# Hide old job record if it exists
@@ -141,9 +128,9 @@ if( isset($mode) && $mode=='save' ){
 		$dbuf['test_date']=formatDate2STD($_POST['test_date'],$date_format);
 		$dbuf['test_time']=date('H:i:s');
 
-		//$dbuf['history']="Create ".date('Y-m-d H:i:s')." ".$_SESSION['sess_user_name']."\n";
-		//$dbuf['create_id']=$_SESSION['sess_user_name'];
-		//$dbuf['create_time']=date('YmdHis');
+		$dbuf['history']="Create ".date('Y-m-d H:i:s')." ".$_SESSION['sess_user_name']."\n";
+		$dbuf['create_id']=$_SESSION['sess_user_name'];
+		$dbuf['create_time']=date('YmdHis');
 
 		# Insert new job record
 		$lab_obj->setDataArray($dbuf);
@@ -151,23 +138,16 @@ if( isset($mode) && $mode=='save' ){
 			$pk_nr=$db->Insert_ID();
 			$batch_nr=$lab_obj->LastInsertPK('batch_nr',$pk_nr);
 			foreach( $nbuf as $key => $value) {
-				//if(isset($value) && !empty($value)) {
+				if(isset($value) && !empty($value)) {
 					$parsedParamList['batch_nr']=$batch_nr;
 					$parsedParamList['encounter_nr']=$encounter_nr;
 					$parsedParamList['job_id']=$job_id;
 					$parsedParamList['paramater_name']=$key;
 					$parsedParamList['parameter_value']=$value;
-					$parsedParamList['history']			= "Create ".date('Y-m-d H:i:s')." ".$_SESSION['sess_user_name']."\n";
-					$parsedParamList['test_date']		= $dbuf['test_date'];
-					$parsedParamList['test_time']		= $dbuf['test_time'];
-					$parsedParamList['create_id']		= $_SESSION['sess_user_name'];
-					$parsedParamList['create_time']		= date('YmdHis');
-					$array=array('sub_id','batch_nr','job_id','encounter_nr','paramater_name','parameter_value','status','history','test_date','test_time','create_id','create_time');
-					$lab_obj_sub->setRefArray($array);
 					$lab_obj_sub->setDataArray($parsedParamList);
 					$lab_obj_sub->insertDataFromInternalArray();
 				 $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $lab_obj_sub->getLastQuery(), date('Y-m-d H:i:s'));
-				//}
+				}
 			}
 			$saved=true;
 		
@@ -180,16 +160,8 @@ if( isset($mode) && $mode=='save' ){
 		include_once($root_path.'include/core/inc_visual_signalling_fx.php');
 		# Set the visual signal
 		setEventSignalColor($encounter_nr,SIGNAL_COLOR_DIAGNOSTICS_REPORT);
-//gốc		header("location:$thisfile?sid=$sid&lang=$lang&saved=1&batch_nr=$batch_nr&encounter_nr=$encounter_nr&job_id=$job_id&parameterselect=$parameterselect&allow_update=1&user_origin=$user_origin");
-//thêm  save
-        header('Content-Type: text/html; charset=utf-8');       //đã thêm
-        echo "<script type='text/javascript'>";                 //đã thêm
-        echo "alert('Kết quả đã được lưu.');";                           //đã thêm
-//            echo "alert('$LDNotifySave');";                                         //đã thêm
-        echo "window.location.replace('labor_test_request_admin_chemlabor.php".URL_APPEND."&pn=".$encounter_nr."&batch_nr=".$job_id."&user_origin=lab')";//đã thêm
-        echo "</script>";
-//thêm
-        exit;
+		header("location:$thisfile?sid=$sid&lang=$lang&saved=1&batch_nr=$batch_nr&encounter_nr=$encounter_nr&job_id=$job_id&parameterselect=$parameterselect&allow_update=1&user_origin=$user_origin");
+		exit;
 	}
 	# end of if(mode==save)
 	#If mode is not "save" then get the basic personal data
@@ -251,7 +223,7 @@ $smarty = new smarty_care('common');
 $smarty->assign('sToolbarTitle',$sTitle);
 
 # href for help button
-//$smarty->assign('pbHelp',"javascript:gethelp('lab.php','input','main','$job_id')");
+$smarty->assign('pbHelp',"javascript:gethelp('lab.php','input','main','$job_id')");
 
 # hide return  button
 $smarty->assign('pbBack',FALSE);
@@ -367,7 +339,7 @@ else $sCancelBut='<img  '.createLDImgSrc($root_path,'cancel.gif','0','absmiddle'
 
 $smarty->assign('pbCancel',"<a href=\"$breakfile\">$sCancelBut</a>");
 
-//$smarty->assign('sAskIcon',"<img ".createComIcon($root_path,'small_help.gif','0').">");
+$smarty->assign('sAskIcon',"<img ".createComIcon($root_path,'small_help.gif','0').">");
 
 $smarty->assign('sFormAction',$thisfile);
 
@@ -427,7 +399,7 @@ echo '
 		echo '<input name="'.$pId.'" type="text" size="8" ';
 		echo 'value="';
 		if(isset($pdata[$pId])&&!empty($pdata[$pId])) {
-			echo trim($pdata[$pId]). "\" >" ;// . "\" readonly >";
+			echo trim($pdata[$pId]) . "\" readonly >";
 		} else echo '">';
 
 		echo '</td>
@@ -501,7 +473,7 @@ ob_end_clean();
 
 $smarty->assign('sSelectGroupHiddenInputs',$sTemp);*/
 
-/*
+
 # Assign help items
 $smarty->assign('LDParamNoSee',"<a href=\"Javascript:gethelp('lab.php','input','param')\">$LDParamNoSee</a>");
 $smarty->assign('LDOnlyPair',"<a href=\"Javascript:gethelp('lab.php','input','few')\">$LDOnlyPair</a>");
@@ -509,7 +481,7 @@ $smarty->assign('LDHow2Save',"<a href=\"Javascript:gethelp('lab.php','input','sa
 $smarty->assign('LDWrongValueHow',"<a href=\"Javascript:gethelp('lab.php','input','correct')\">$LDWrongValueHow</a>");
 $smarty->assign('LDVal2Note',"<a href=\"Javascript:gethelp('lab.php','input','note')\">$LDVal2Note</a>");
 $smarty->assign('LDImDone',"<a href=\"Javascript:gethelp('lab.php','input','done')\">$LDImDone</a>");
-*/
+
 # Assign the include file to mainframe
 
 $smarty->assign('sMainBlockIncludeFile','laboratory/chemlab_data_results.tpl');

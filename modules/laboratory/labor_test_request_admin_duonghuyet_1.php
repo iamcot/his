@@ -60,7 +60,7 @@ if($temp->recordcount())
 		$pers_name=$result['name'];
 	}else{
 		$pers_nr='';
-		$pers_name=$_SESSION['user_name'];
+		$pers_name='';
 	}
 }
 /* Here begins the real work */
@@ -77,8 +77,8 @@ switch($mode){
 		include_once($root_path.'include/core/inc_front_chain_lang.php');
 		$core = & new Core;
 
-		$sql="UPDATE care_test_request_".$db_request_table." SET
-
+		$sql="UPDATE care_test_request_".$db_request_table." SET										 
+                                          
 										  results='".addslashes(htmlspecialchars($results))."',
                                           results_date='".formatDate2STD($results_date,$date_format)."',
 										  results_doctor='".htmlspecialchars($results_doctor)."',
@@ -96,10 +96,10 @@ switch($mode){
 			if($temp->recordcount()){
 				//echo'33333';
 							      $sql3="UPDATE care_test_findings_".$db_request_table."  SET										  
-										   findings='".addslashes(htmlspecialchars($results))."',	
+										   findings='".addslashes(htmlspecialchars($result))."',	
 										   doctor_id='".htmlspecialchars($results_doctor)."',
-										   doctor_id_nr='".$results_doctor_nr."',
-										   findings_date='".formatDate2STD($results_date,$date_format)."',
+										   doctor_id_nr='".$results_doctor_nr."'
+										   findings_date='".formatDate2STD($result_date,$date_format)."',
 										   findings_time='".$findings_time."', 
 										   history=".$core->ConcatHistory("Update: ".date('Y-m-d H:i:s')." = ".$_SESSION['sess_user_name']."\n").",
 										   modify_id = '".$_SESSION['sess_user_name']."',
@@ -155,16 +155,9 @@ switch($mode){
 									// $mode='';
 								  }
 			}
-			$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql, date('Y-m-d H:i:s'));
-//			header("location:".$thisfile."?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&batch_nr=$batch_nr&noresize=$noresize");
-            header('Content-Type: text/html; charset=utf-8');                                          //đã thêm
-            echo "<script type='text/javascript'>";                                                   //đã thêm
-            echo "alert('Kết quả đã được lưu');";                                                      //đã thêm
-//            echo "alert('$LDNotifySave');";                                                           //đã thêm
-            echo "window.location.replace('".$thisfile."?sid=".$sid."&lang=".$lang."&edit=".$edit."&saved=update&pn=".$pn."&station=".$station."&user_origin=".$user_origin."&status=".$status."&target=".$target."&subtarget=".$subtarget."&batch_nr=".$batch_nr."&noresize=".$noresize."')"; //đã thêm
-            echo "</script>";
-
-            exit;
+			$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql, date('Y-m-d H:i:s'));	
+			header("location:".$thisfile."?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&batch_nr=$batch_nr&noresize=$noresize");
+			exit;
 			
 		} else {
 			echo "<p>$sql<p>$LDDbNoSave";
@@ -224,11 +217,6 @@ if($batchrows && $pn){
 				}
 			}else{
 				echo "<p>$sql<p>$LDDbNoRead";
-			}
-			
-			$sql1="SELECT findings_time FROM care_test_findings_".$db_request_table." WHERE batch_nr='".$batch_nr."'";
-			if($ergebnis1=$db->Execute($sql1)){
-				$stored_finding=$ergebnis1->FetchRow();
 			}
 		}
 	}else{
@@ -329,10 +317,10 @@ function printOut()
 	testprintout<?php echo $sid ?>=window.open(urlholder,"testprintout<?php echo $sid ?>","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
     //testprintout<?php echo $sid ?>.print();
 }
-function popDocPer(target,obj_val,obj_name){  //đã thêm hàm popDocPer
-    urlholder="<?php echo $root_path; ?>modules/laboratory/personell_search.php<?php echo URL_REDIRECT_APPEND; ?>&target="+target+"&obj_val="+obj_val+"&obj_name="+obj_name;
-    DSWIN<?php echo $sid ?>=window.open(urlholder,"wblabel<?php echo $sid ?>","menubar=no,width=400,height=550,resizable=yes,scrollbars=yes");
-}
+function popDocPer(target,obj_val,obj_name){
+			urlholder="./personell_search.php<?php echo URL_REDIRECT_APPEND; ?>&target="+target+"&obj_val="+obj_val+"&obj_name="+obj_name;
+			DSWIN<?php echo $sid ?>=window.open(urlholder,"wblabel<?php echo $sid ?>","menubar=no,width=400,height=550,resizable=yes,scrollbars=yes");
+		}
 		$(function(){
 $("#f-calendar-field-1").mask("99/99/9999");
 $("#findings_time").mask("99:99");
@@ -467,17 +455,17 @@ require('includes/inc_test_request_lister_fx.php');
 			echo $calendar->show_calendar($calendar,$date_format,'results_date',date("d/m/Y"));
 			}
 			//end : gjergji	
-			if(isset($stored_finding['findings_time'])&&($stored_finding['findings_time']!='00:00:00')){
-			echo '<input type="text" size="5" id="findings_time" name="findings_time" value="'.$stored_finding['findings_time'].'">';
+			if(isset($stored_request['findings_time'])&&($stored_request['findings_time']!='00:00:00')){
+			echo '<input type="text" size="5" id="findings_time" name="findings_time" value="'.$findings_time.'">';
 			}else{
 			echo '<input type="text" size="5" id="findings_time" name="findings_time" value="'.date("H:i").'">';
 			}
 		?>
 				  
   <?php echo 'Bác sĩ xét nghiệm' ?>
-			<input type="text" name="results_doctor" size=37 maxlength=40 value="<?php if($stored_request['results_doctor']) echo $stored_request['results_doctor'];else echo $pers_name;?>">
-			<input type="hidden" name="results_doctor_nr" value="<?php if(!empty( $stored_request['results_doctor_nr'])) echo $stored_request['results_doctor_nr'];else echo $pers_nr; ?>"> <a href="javascript:popDocPer('doctor_nr','results_doctor_nr','results_doctor')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
-        </td>
+        <input type="text" name="results_doctor" value="<?php if($read_form && $stored_request['results_doctor']) echo $stored_request['results_doctor'];else echo $pers_name; ?>" size=35 maxlength=35> 
+        <input type="hidden" name="results_doctor_nr" value="<?php if($read_form && $stored_request['results_doctor_']) echo $stored_request['results_doctor_nr']; else echo $pers_nr;?>"> <a href="javascript:popDocPer('doctor_nr')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
+		</td>
     </tr>
 		</table> 
 		

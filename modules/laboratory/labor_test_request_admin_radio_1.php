@@ -36,25 +36,26 @@ require_once($root_path.'include/core/inc_front_chain_lang.php'); ///* invoke th
 require_once($root_path.'global_conf/inc_global_address.php');
 
 $thisfile= basename(__FILE__);
+$uploadfile= $root_path.'modules/radiology/upload.php'.URL_APPEND.'&user_origin='.$local_user.'&encounter_nr=';
 
 $bgc1='#ffffff'; /* The main background color of the form */
 $edit_form=0; /* Set form to non-editable*/
 $read_form=1; /* Set form to read */
 $edit=0; /* Set script mode to no edit*/
 
-$formtitle=$LDDienTim;
+$formtitle=$LDRadiology;
 
 //$db_request_table=$subtarget;
-$db_request_table='dientim';
-$subtarget='dientim';
+$db_request_table='radio';
+
 //$db->debug=1;
 
 /* Here begins the real work */
 require_once($root_path.'include/core/inc_date_format_functions.php');
   
 
-if(!isset($mode))   $mode='';
-
+$mode='';
+/*
 switch($mode){
 	case 'update':
 	{
@@ -62,7 +63,11 @@ switch($mode){
 		include_once($root_path.'include/core/inc_front_chain_lang.php');
 		$core = & new Core;
 
-		$sql="UPDATE care_test_request_".$db_request_table." SET										                                           
+		$sql="UPDATE care_test_request_".$db_request_table." SET
+										  xray_nr='".$xray_nr."',
+										  r_cm_2='".$r_cm_2."',
+										  mtr='".$mtr."',
+                                          xray_date='".formatDate2STD($xray_date,$date_format)."',
 										  results='".addslashes(htmlspecialchars($results))."',
                                           results_date='".formatDate2STD($results_date,$date_format)."',
 										  results_doctor='".htmlspecialchars($results_doctor)."',
@@ -74,13 +79,7 @@ switch($mode){
 
 		if($ergebnis=$core->Transact($sql)){
 			//echo $sql;
-//	gốc		header("location:".$thisfile."?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&batch_nr=$batch_nr&noresize=$noresize");
-            header('Content-Type: text/html; charset=utf-8');       //đã thêm
-            echo "<script type='text/javascript'>";                 //đã thêm
-            echo "alert('Kết quả đã được lưu.');";                           //đã thêm
-//            echo "alert('$LDNotifySave');";                                        //đã thêm
-            echo "window.location.replace('".$thisfile."?sid=".$sid."&lang=".$lang."&edit=".$edit."&saved=update&pn=".$pn."&station=".$station."&user_origin=".$user_origin."&status=".$status."&target=".$target."&subtarget=".$subtarget."&batch_nr=".$batch_nr."&noresize=".$noresize."')";//đã thêm
-            echo "</script>";
+			header("location:".$thisfile."?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&batch_nr=$batch_nr&noresize=$noresize");
 			exit;
 		} else {
 			echo "<p>$sql<p>$LDDbNoSave";
@@ -90,11 +89,12 @@ switch($mode){
 	}
 	default: $mode='';
 }// end of switch($mode)
-
+*/
 /* Get the pending test requests */
-if(!$mode) {
+if(!$mode || $mode=='') {
 	$sql="SELECT batch_nr,encounter_nr,send_date,dept_nr FROM care_test_request_".$db_request_table."
-				WHERE status='pending' OR status='received' ORDER BY  send_date DESC";
+				WHERE (xray='1' OR ct='1' OR mrt='1')
+				AND (status='pending' OR status='received') ORDER BY  send_date DESC";
 	if($requests=$db->Execute($sql)){
 		$batchrows=$requests->RecordCount();
 	 	if($batchrows && (!isset($batch_nr) || !$batch_nr)){
@@ -102,12 +102,12 @@ if(!$mode) {
 			/* Check for the patietn number = $pn. If available get the patients data */
 		 	$pn=$test_request['encounter_nr'];
 			$batch_nr=$test_request['batch_nr'];
+			
 		}
 	}else{
 		echo "<p>$sql<p>$LDDbNoRead";
 		exit;
 	}
-	$mode='update';
 }
 
 /* Check for the patient number = $pn. If available get the patients data */
@@ -132,24 +132,30 @@ if($batchrows && $pn){
 		if( $enc_obj->is_loaded){
 			$result=&$enc_obj->encounter;
 
-			$sql="SELECT * FROM care_test_request_".$db_request_table." WHERE batch_nr='".$batch_nr."'";
+			$sql="SELECT * FROM care_test_request_radio WHERE batch_nr='".$batch_nr."'";
 			if($ergebnis=$db->Execute($sql)){
 				if($editable_rows=$ergebnis->RecordCount()){
 					$stored_request=$ergebnis->FetchRow();
 					$edit_form=1;
+					
+					$sql1="SELECT * FROM care_test_request_radio_sub WHERE batch_nr=".$batch_nr;
+					$item_test=$db->Execute($sql1);
 				}
 			}else{
 				echo "<p>$sql<p>$LDDbNoRead";
 			}
 		}
+		$uploadfile= $uploadfile.$pn.'&pid='.$enc_obj->encounter['pid'];
+		
 	}else{
 		$mode='';
 		$pn='';
 	}
 }
 
+
 # Prepare title
-$sTitle = $LDDienTim.': '.$LDPendingTestRequest;
+$sTitle = $LDXQuang.': '.$LDPendingTestRequest;
 if($batchrows) $sTitle = $sTitle." (".$batch_nr.")";
 
 # Start Smarty templating here
@@ -182,6 +188,8 @@ if($batchrows) $sTitle = $sTitle." (".$batch_nr.")";
 
  $smarty->assign('pbAux1',"javascript:viewallresults()");
  $smarty->assign('gifAux1',createLDImgSrc($root_path,'showreport.gif','0'));
+ 
+ # Body onLoad javascript code
 
 $smarty->assign('sOnLoadJs','onLoad="if (window.focus) window.focus();"');
 
@@ -223,40 +231,37 @@ function chkForm(d)
 		}
 		else return true; 
 }
-function saveDone()
-{
-    var r=confirm('<?php echo $LDSaveBeforeDone;?>');
-    if(r==true)
-    {
-        window.location="<?php echo 'labor_test_findings_'.$subtarget.'.php?sid='.$sid.'&lang='.$lang.'&batch_nr='.$batch_nr.'&pn='.$pn.'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin.'&tracker='.$tracker.'&mode=done'; ?>";
-    }
-    else
-    {
-        return false;
-    }
+
+function doneRequest(){
+	var r=confirm('<?php echo $LDSaveBeforeDone; ?>');
+	if (r==true) {
+		document.form_test_request.action="<?php echo 'labor_test_findings_radio.php?sid='.$sid.'&lang='.$lang.'&batch_nr='.$batch_nr.'&pn='.$pn.'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin.'&mode=done'; ?>";
+		document.form_test_request.submit();		
+	} else
+		return false;
 }
-function saveResult()
-{
-<!--    var r=alert('--><?php //echo $LDAlertBeforeSave;?><!--');-->
-    var r=alert('<?php echo $LDNotifySave;?>');
-    document.form_test_request.action="<?php echo 'labor_test_findings_'.$subtarget.'.php?sid='.$sid.'&lang='.$lang.'&batch_nr='.$batch_nr.'&pn='.$pn.'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin.'&tracker='.$tracker.'&mode=save'; ?>";
-    document.form_test_request.submit();
-}
+function saveResult(){
+	document.form_test_request.action="<?php echo 'labor_test_findings_'.$subtarget.'.php?sid='.$sid.'&lang='.$lang.'&batch_nr='.$batch_nr.'&pn='.$pn.'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin.'&mode=save'; ?>";
+	document.form_test_request.submit();
+}	
 function printOut()
 {
-	urlholder="<?php echo $root_path;?>modules/pdfmaker/dientim/PhieuDienTim.php<?php echo URL_APPEND; ?>&enc=<?php echo $pn;?>";
-	testprintout<?php echo $sid ?>=window.open(urlholder,"testprintout<?php echo $sid ?>","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
-    //testprintout<?php echo $sid ?>.print();
+	urlholder="<?php echo $root_path;?>modules/pdfmaker/xquang/PhieuChieuChupXQuang.php<?php echo URL_APPEND; ?>&enc=<?php echo $pn;?>&batch_nr=<?php echo $batch_nr ?>";
+	testprintpdf<?php echo $sid ?>=window.open(urlholder,"testprintpdf<?php echo $sid ?>","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
+	
 }
+function PopupGetImage()
+{
+	var win = '<?php echo $uploadfile; ?>';
+	myWindow=window.open( win , 'Upload' , 'height=650,width=700' );
+	myWindow.focus();
+}
+
 function viewallresults(){
-	document.form_test_request.action="<?php echo '../radiology/viewresults_dientim.php?sid='.$sid.'&lang='.$lang.'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin; ?>";
+	document.form_test_request.action="<?php echo '../radiology/viewresults_radio.php?sid='.$sid.'&lang='.$lang.'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin; ?>";
 	document.form_test_request.submit();
 }	
 
-function popDocPer(target,obj_val,obj_name){     //đã thêm
-    urlholder="<?php echo $root_path; ?>modules/laboratory/personell_search.php<?php echo URL_REDIRECT_APPEND; ?>&target="+target+"&obj_val="+obj_val+"&obj_name="+obj_name;  //đã thêm
-    DSWIN<?php echo $sid ?>=window.open(urlholder,"wblabel<?php echo $sid ?>","menubar=no,width=400,height=550,resizable=yes,scrollbars=yes");                                //đã thêm
-}
 <?php require($root_path.'include/core/inc_checkdate_lang.php'); ?>
 
 //-->
@@ -288,12 +293,10 @@ require('includes/inc_test_request_lister_fx.php');
 
     <td>
 
-	<form name="form_test_request" method="post" action="<?php echo $thisfile ?>" onSubmit="return chkForm(this)">
-<!-- 		<input type="image" <?php echo createLDImgSrc($root_path,'savedisc.gif','0') ?>  title="<?php echo $LDSaveEntry ?>" onclick="saveResult();">
-			<a href="#" onclick="saveDone();"><img <?php echo createLDImgSrc($root_path,'done.gif','0') ?> alt="<?php echo $LDEnterResult ?>"></a> -->
-
-		<input type="image" <?php echo createLDImgSrc($root_path,'savedisc.gif','0') ?>  title="<?php echo $LDSaveEntry ?>">
-  <a href="<?php echo 'labor_test_findings_'.$subtarget.'.php?sid='.$sid.'&lang='.$lang.'&batch_nr='.$batch_nr.'&pn='.$pn.'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin.'&tracker='.$tracker.'&mode=done'; ?>"><img <?php echo createLDImgSrc($root_path,'enter_result.gif','0') ?> alt="<?php echo $LDEnterResult ?>"></a>
+	<form name="form_test_request" method="post" action="<?php echo $thisfile ?>" >
+		<input type="image" <?php echo createLDImgSrc($root_path,'savedisc.gif','0') ?>  title="<?php echo $LDSaveEntry ?>" onclick="saveResult()"> 
+		<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut ?>"></a>
+        <a href="#" onclick="doneRequest();"><img <?php echo createLDImgSrc($root_path,'done.gif','0') ?> alt="<?php echo $LDEnterResult ?>"></a>
 
 	   <!--  outermost table creating form border -->
 <table border=0 bgcolor="#000000" cellpadding=1 cellspacing=0>
@@ -304,7 +307,7 @@ require('includes/inc_test_request_lister_fx.php');
    <tr>
      <td>
 	
-	   <table   cellpadding=0 cellspacing=1 border=0 width=700>
+	   <table   cellpadding=2 cellspacing=2 border=0 width=700>
    <tr  valign="top">
    <td  bgcolor="<?php echo $bgc1 ?>" rowspan=2>
  <?php
@@ -314,7 +317,7 @@ require('includes/inc_test_request_lister_fx.php');
 		}
 		?></td>
       <td bgcolor="<?php echo $bgc1 ?>"  class=fva2_ml10><div   class=fva2_ml10><font size=5 color="#0000ff"><b><?php echo $formtitle ?></b></font>
-		 <br>
+		 <br><?php echo $global_address[$subtarget].'<br>'.$LDTel.'&nbsp;'.$global_phone[$subtarget]; ?>
 		 </td>
 		 </tr>
 	 <tr>
@@ -330,13 +333,46 @@ require('includes/inc_test_request_lister_fx.php');
 		<td  valign="top" colspan=2 >
 		
 		<table border=0 cellpadding=1 cellspacing=1 width=100%>
-    
+    <tr>
+      <td align="right"><div class=fva2_ml10><?php echo $LDXrayTest ?></td><br>
+      <td>&nbsp;<?php printRadioButton('xray',1); ?></td>
+      <td align="right"><div class=fva2_ml10><?php echo $LDSonograph ?></td>
+      <td>&nbsp;<?php printRadioButton('sono',1); ?></td>
+    </tr>
+    <tr>
+      <td align="right"><div class=fva2_ml10><?php echo $LDCT ?></td>
+      <td>&nbsp;<?php printRadioButton('ct',1); ?></td>
+      <td align="right"><div class=fva2_ml10><?php echo $LDMammograph ?></td>
+      <td>&nbsp;<?php printRadioButton('mammograph',1); ?></td>
+    </tr>
+    <tr>
+      <td align="right"><div class=fva2_ml10><?php echo $LDMRT ?></td>
+      <td>&nbsp;<?php printRadioButton('mrt',1); ?></td>
+      <td align="right"><div class=fva2_ml10><?php echo $LDNuclear ?></td>
+      <td>&nbsp;<?php printRadioButton('nuclear',1); ?></td>
+    </tr>
 	
     <tr>
       <td colspan=4><hr></td>
     </tr>
 
-    
+    <tr>
+      <td align="right"><div class=fva2_ml10><?php echo $LDPatMobile ?> &nbsp;<?php echo $LDYes ?></td>
+      <td><font size=2 face="verdana,arial">&nbsp;<?php printRadioButton('if_patmobile',1); ?>&nbsp;<?php echo $LDNot ?>
+	  &nbsp;<?php printRadioButton('if_patmobile',0); ?></td>
+      <td align="right"><div class=fva2_ml10><?php echo $LDAllergyKnown ?> &nbsp;<?php echo $LDYes ?></td>
+      <td><font size=2 face="verdana,arial">&nbsp;<?php printRadioButton('if_allergy',1); ?>&nbsp;<?php echo $LDNot ?>
+	  &nbsp;<?php printRadioButton('if_allergy',0); ?></td>
+    </tr>
+    <tr>
+      <td align="right"><div class=fva2_ml10><?php echo $LDHyperthyreosisKnown ?> &nbsp;<?php echo $LDYes ?></td>
+      <td><font size=2 face="verdana,arial">&nbsp;<?php printRadioButton('if_hyperten',1); ?>&nbsp;<?php echo $LDNot ?>
+	  &nbsp;<?php printRadioButton('if_hyperten',0); ?></td>
+      <td align="right"><div class=fva2_ml10><?php echo $LDPregnantPossible ?> &nbsp;<?php echo $LDYes ?></td>
+      <td><font size=2 face="verdana,arial">&nbsp;<?php printRadioButton('if_pregnant',1); ?>&nbsp;<?php echo $LDNot ?>
+	  &nbsp;<?php printRadioButton('if_pregnant',0); ?>
+	  </td>
+    </tr>
   </table>
   &nbsp;<br>
 		
@@ -344,13 +380,25 @@ require('includes/inc_test_request_lister_fx.php');
 </tr>
 		 
 	<tr bgcolor="<?php echo $bgc1 ?>">
-		<td colspan=2><div class=fva2_ml10><?php echo $LDChandoan ?>:<p><img src="../../gui/img/common/default/pixel.gif" border=0 width=20 height=45 align="left">
-		<font face="courier" size=2 color="#000099">&nbsp;&nbsp;<?php echo stripslashes($stored_request['clinical_info']) ?></font>
+		<td colspan=2><div class=fva2_ml10><?php echo $LDClinicalInfo ?>:<br>
+		<font face="courier" size=2 color="#000099"><?php echo stripslashes($stored_request['clinical_info']) ?></font><p>
 				</td>
 		</tr>	
 	<tr bgcolor="<?php echo $bgc1 ?>">
-		<td colspan=2><div class=fva2_ml10><?php echo $LDReqTestTim ?>:<p><img src="../../gui/img/common/default/pixel.gif" border=0 width=20 height=45 align="left">
-		<font face="courier" size=2 color="#000099">&nbsp;&nbsp;<?php echo stripslashes($stored_request['test_request']) ?></font>
+		<td colspan=2><div class=fva2_ml10><?php echo $LDReqTest ?>:
+		<?php
+			$note="";
+			if (is_object($item_test)){
+				for ($i=0;$i<$item_test->RecordCount();$i++){
+					$item = $item_test->FetchRow();
+					$note=$note."<br>".$item['item_bill_name'];
+				}
+			}
+		?>		
+		<font face="courier" size=2 color="#000099"><?php echo $note; ?></font>
+		<br><br><?php echo $LDAddFindings.":<br><font face=
+		\"courier\" size=2 color=\"#000099\">".$stored_request['test_request']."</font>"; ?>
+		
 				</td>
 		</tr>	
 
@@ -369,12 +417,39 @@ require('includes/inc_test_request_lister_fx.php');
 		<font face="courier" size=2 color="#000000">&nbsp;<?php echo $stored_request['send_doctor'] ?></font></div><br>
 		</td>
     </tr>
+	<tr bgcolor="#9E7BFF" >
+		<td colspan="2"><a href="javascript:PopupGetImage()"><font color="#ffffff"><b>&nbsp;>>&nbsp;<?php echo $LDUploadImageRadio; ?></b></font></a></td>
+	</tr>	
 	<tr bgcolor="<?php echo $bgc1 ?>">
-		
-    </tr>	
+		<td  colspan=2 bgcolor="#cccccc"><div class=fva2_ml10>
+        <nobr>
+		<font color="#000099">
+		<?php echo $LDXrayNumber ?>
+        <input type="text" name="xray_nr" value="<?php if($read_form && $stored_request['xray_nr']) echo $stored_request['xray_nr']; ?>" size=9 maxlength=9> 
+		<?php echo $LD_r_cm2 ?>
+        <input type="text" name="r_cm_2" value="<?php if($read_form && $stored_request['r_cm_2']) echo $stored_request['r_cm_2']; ?>" size=7 maxlength=15> 
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		 <?php echo $LDXrayTechnician ?>&nbsp;
+        <input type="text" name="mtr" value="<?php if($read_form && $stored_request['mtr']) echo $stored_request['mtr']; ?>" size=25 maxlength=35> 
+		<?php echo $LDDate ?>&nbsp;
+		<?php
+			if($stored_request['xray_date']=='0000-00-00')
+				$stored_request['xray_date']=date('Y-m-d');
+			//echo $stored_request['xray_date'];
+			//gjergji : new calendar
+			require_once ('../../js/jscalendar/calendar.php');
+			$calendar = new DHTML_Calendar('../../js/jscalendar/', $lang, 'calendar-system', true);
+			$calendar->load_files();
+			
+			echo $calendar->show_calendar($calendar,$date_format,'xray_date',$stored_request['xray_date']);
+			//end : gjergji	
+		?>
+		</nobr>
+	  </div>
+    </tr>
 	<tr bgcolor="<?php echo $bgc1 ?>">
 		<td colspan=2> 
-		 <div class=fva2_ml10>&nbsp;<br><font color="#000099"><?php echo $LDKqDienTim; ?></font><br>
+		 <div class=fva2_ml10>&nbsp;<br><font color="#000099"><?php echo $LDKqXQuang ?></font><br>
          <textarea name="results" cols=80 rows=5 wrap="physical"><?php if($read_form && $stored_request['results']) echo stripslashes($stored_request['results']) ?></textarea>				
 		 </td>
 		</tr>	
@@ -382,25 +457,19 @@ require('includes/inc_test_request_lister_fx.php');
 	<tr bgcolor="<?php echo $bgc1 ?>">
 		<td colspan=2 align="right"><div class=fva2_ml10><font color="#000099">
 		 <?php echo $LDDate ?>
-		
+
 		<?php
 			if($stored_request['results_date']=='0000-00-00')
 				$stored_request['results_date']=date('Y-m-d');
-		
-		//gjergji : new calendar
-			require_once ('../../js/jscalendar/calendar.php');
-			$calendar = new DHTML_Calendar('../../js/jscalendar/', $lang, 'calendar-system', true);
-			$calendar->load_files();
 			//gjergji : new calendar
 			echo $calendar->show_calendar($calendar,$date_format,'results_date',$stored_request['results_date']);
 			//end : gjergji	
 		?>
 				  
   <?php echo $LDReportingDoc ?>
-        <!--  gốc      <input type="text" name="results_doctor" value="--><?php //if($read_form && $stored_request['results_doctor']) echo $stored_request['results_doctor']; else echo $_SESSION['sess_user_name']; ?><!--" size=35 maxlength=35> -->
-
-  <input type="text" name="results_doctor" size=37 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['results_doctor'];else echo $pers_name;?>">
-  <input type="hidden" name="results_doctor_nr" value="<?php if(!empty( $stored_request['results_doctor_nr'])) echo $stored_request['results_doctor_nr'];else echo $pers_nr; ?>"> <a href="javascript:popDocPer('doctor_nr','results_doctor_nr','results_doctor')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
+        <input type="text" name="results_doctor" value="<?php 
+			if($read_form && $stored_request['results_doctor']) echo $stored_request['results_doctor']; 
+			else echo $_SESSION['sess_user_name']; ?>" size=35 maxlength=35> 
 		</td>
     </tr>
 		</table> 
@@ -414,15 +483,31 @@ require('includes/inc_test_request_lister_fx.php');
   </tr>
 </table> 
 <p>
-		<input type="image" <?php echo createLDImgSrc($root_path,'savedisc.gif','0') ?>  title="<?php echo $LDSaveEntry ?>">
-		<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut ?>"></a>
-		<a href="<?php echo 'labor_test_findings_'.$subtarget.'.php?sid='.$sid.'&lang='.$lang.'&batch_nr='.$batch_nr.'&pn='.$pn.'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin.'&tracker='.$tracker.'&mode=done'; ?>"><img <?php echo createLDImgSrc($root_path,'enter_result.gif','0') ?> alt="<?php echo $LDEnterResult ?>"></a>
+		<a href="#"><img <?php echo createLDImgSrc($root_path,'savedisc.gif','0') ?>  title="<?php echo $LDSaveEntry ?>" onclick="saveResult()"></a> 
+		<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> title="<?php echo $LDPrintOut ?>"></a>
+        <a href="#"><img <?php echo createLDImgSrc($root_path,'done.gif','0') ?> title="<?php echo $LDEnterResult ?>" onclick="doneRequest();"></a>
 
+<input type="hidden" name="sid" value="<?php echo $sid ?>">
+<input type="hidden" name="lang" value="<?php echo $lang ?>">
+<input type="hidden" name="station" value="<?php echo $station ?>">
+<input type="hidden" name="ward_nr" value="<?php echo $ward_nr ?>">
 <?php
-
-require($root_path.'modules/laboratory/includes/inc_test_request_hiddenvars.php');
-
+if($target!='generic'){
 ?>
+<input type="hidden" name="dept_nr" value="<?php echo $dept_nr; ?>">
+<?php
+}
+?>
+<input type="hidden" name="pn" value="<?php echo $pn ?>">
+<input type="hidden" name="batch_nr" value="<?php echo $batch_nr ?>">
+<input type="hidden" name="edit" value="<?php echo $edit ?>">
+<input type="hidden" name="target" value="<?php echo $target ?>">
+<input type="hidden" name="subtarget" value="<?php echo $subtarget ?>">
+<input type="hidden" name="tracker" value="<?php echo $tracker ?>">
+<input type="hidden" name="noresize" value="<?php echo $noresize ?>">
+<input type="hidden" name="user_origin" value="<?php echo $user_origin ?>">
+<input type="hidden" name="status" value="pending">
+<input type="hidden" name="formtitle" value="<?php echo $formtitle; ?>">
 			</form>
 		</td>
 	</tr>

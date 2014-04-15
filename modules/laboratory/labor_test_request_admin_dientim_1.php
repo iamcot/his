@@ -22,7 +22,7 @@ define('LANG_FILE','konsil.php');
 */
 if($user_origin=='lab'){
 	$local_user='ck_lab_user';
-	$breakfile=$root_path.'modules/laboratory/labor.php'.URL_APPEND;
+	$breakfile=$root_path.'modules/radiology/radiolog.php'.URL_APPEND;
 }elseif($user_origin=='amb'){
 	$local_user='ck_lab_user';
 	$breakfile=$root_path.'modules/ambulatory/ambulatory.php'.URL_APPEND;
@@ -34,9 +34,7 @@ if($user_origin=='lab'){
 require_once($root_path.'include/core/inc_front_chain_lang.php'); ///* invoke the script lock*/
 
 require_once($root_path.'global_conf/inc_global_address.php');
-require_once($root_path.'include/core/access_log.php');
-    require_once($root_path.'include/care_api_classes/class_access.php');
-    $logs = new AccessLog();
+
 $thisfile= basename(__FILE__);
 
 $bgc1='#ffffff'; /* The main background color of the form */
@@ -44,31 +42,18 @@ $edit_form=0; /* Set form to non-editable*/
 $read_form=1; /* Set form to read */
 $edit=0; /* Set script mode to no edit*/
 
-$formtitle='Xét nghiệm đường huyết';
+$formtitle=$LDDienTim;
 
 //$db_request_table=$subtarget;
-$db_request_table='duonghuyet';
-//echo $subtarget;
+$db_request_table='dientim';
+$subtarget='dientim';
 //$db->debug=1;
-$sql="select personell_nr,name from care_users  where login_id='".$_SESSION['sess_login_userid']."'";
-//echo $sql;
-$temp=$db->execute($sql);
-if($temp->recordcount())
-{
-	if($result=$temp->fetchrow()){
-		$pers_nr=$result['personell_nr'];
-		$pers_name=$result['name'];
-	}else{
-		$pers_nr='';
-		$pers_name=$_SESSION['user_name'];
-	}
-}
+
 /* Here begins the real work */
 require_once($root_path.'include/core/inc_date_format_functions.php');
-   require_once ('includes/inc_diagnostics_report_fx.php');
+  
 
 if(!isset($mode))   $mode='';
-//echo $thisfile;
 
 switch($mode){
 	case 'update':
@@ -77,12 +62,10 @@ switch($mode){
 		include_once($root_path.'include/core/inc_front_chain_lang.php');
 		$core = & new Core;
 
-		$sql="UPDATE care_test_request_".$db_request_table." SET
-
+		$sql="UPDATE care_test_request_".$db_request_table." SET										                                           
 										  results='".addslashes(htmlspecialchars($results))."',
                                           results_date='".formatDate2STD($results_date,$date_format)."',
 										  results_doctor='".htmlspecialchars($results_doctor)."',
-										  results_doctor_nr='".$results_doctor_nr."',
 										  status='received',
 										  history=".$core->ConcatHistory("Update ".date('Y-m-d H:i:s')." ".$_SESSION['sess_user_name']."\n").",
 										  modify_id = '".$_SESSION['sess_user_name']."',
@@ -90,82 +73,9 @@ switch($mode){
 					WHERE batch_nr = '".$batch_nr."'";
 
 		if($ergebnis=$core->Transact($sql)){
-		$sql1="select * from care_test_findings_".$db_request_table." where batch_nr='".$batch_nr."' and encounter_nr='".$pn."'";
-		//echo $sql1;
-			$temp=$db->execute($sql1);
-			if($temp->recordcount()){
-				//echo'33333';
-							      $sql3="UPDATE care_test_findings_".$db_request_table."  SET										  
-										   findings='".addslashes(htmlspecialchars($results))."',	
-										   doctor_id='".htmlspecialchars($results_doctor)."',
-										   doctor_id_nr='".$results_doctor_nr."',
-										   findings_date='".formatDate2STD($results_date,$date_format)."',
-										   findings_time='".$findings_time."', 
-										   history=".$core->ConcatHistory("Update: ".date('Y-m-d H:i:s')." = ".$_SESSION['sess_user_name']."\n").",
-										   modify_id = '".$_SESSION['sess_user_name']."',
-										   modify_time='".date('YmdHis')."'
-										   WHERE batch_nr = '".$batch_nr."'";
-//echo $sql;
-							      if($ergebnis=$core->Transact($sql3))
-       							  { $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql3, date('Y-m-d H:i:s'));
-								     signalNewDiagnosticsReportEvent($result_date);
-									// echo $sql3;
-//header("location:$thisfile?sid=$sid&lang=$lang&edit=$edit&saved=insert&mode=edit&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize&batch_nr=$batch_nr&entry_date=$entry_date");
-									// exit;
-								  }
-								  else
-								   {
-								      echo "<p>$sql3<p>$LDDbNoSave"; 
-								     // $mode='';
-								   }
-			
-			
-			}else{
 			//echo $sql;
-			 $sql2="INSERT INTO care_test_findings_".$db_request_table." 
-								          (
-										   batch_nr, encounter_nr, dept_nr, 
-										   findings, diagnosis,
-										   doctor_id,doctor_id_nr, findings_date, findings_time, 
-										   status, 
-										   history,
-										  create_id,
-										  create_time
-										  )
-										   VALUES
-										   (
-										   '".$batch_nr."','".$pn."','".$dept_nr."', 
-										   '".addslashes(htmlspecialchars($findings))."','".addslashes(htmlspecialchars($diagnosis))."',
-										   '".htmlspecialchars($results_doctor)."','".$results_doctor_nr."', '".formatDate2STD($results_date,$date_format)."', '".$findings_time."',
-										   'initial',  
-										   'Create: ".date('Y-m-d H:i:s')." = ".$_SESSION['sess_user_name']."\n',
-										  '".$_SESSION['sess_user_name']."',
-										  '".date('YmdHis')."'
-										   )";
-										   if($test=$core->Transact($sql2))
-       							  { $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql2, date('Y-m-d H:i:s'));
-								     signalNewDiagnosticsReportEvent($result_date);
-//echo $sql2;
-									// header("location:$thisfile?sid=$sid&lang=$lang&edit=$edit&saved=insert&mode=edit&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize&batch_nr=$batch_nr&entry_date=$entry_date");
-									// exit;
-								  }
-								  else 
-								  {
-								     echo "<p>$sql2<p>$LDDbNoSave"; 
-									// $mode='';
-								  }
-			}
-			$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql, date('Y-m-d H:i:s'));
-//			header("location:".$thisfile."?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&batch_nr=$batch_nr&noresize=$noresize");
-            header('Content-Type: text/html; charset=utf-8');                                          //đã thêm
-            echo "<script type='text/javascript'>";                                                   //đã thêm
-            echo "alert('Kết quả đã được lưu');";                                                      //đã thêm
-//            echo "alert('$LDNotifySave');";                                                           //đã thêm
-            echo "window.location.replace('".$thisfile."?sid=".$sid."&lang=".$lang."&edit=".$edit."&saved=update&pn=".$pn."&station=".$station."&user_origin=".$user_origin."&status=".$status."&target=".$target."&subtarget=".$subtarget."&batch_nr=".$batch_nr."&noresize=".$noresize."')"; //đã thêm
-            echo "</script>";
-
-            exit;
-			
+			header("location:".$thisfile."?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&batch_nr=$batch_nr&noresize=$noresize");
+			exit;
 		} else {
 			echo "<p>$sql<p>$LDDbNoSave";
 			$mode='';
@@ -176,7 +86,7 @@ switch($mode){
 }// end of switch($mode)
 
 /* Get the pending test requests */
-if(!$mode||$mode=='') {
+if(!$mode) {
 	$sql="SELECT batch_nr,encounter_nr,send_date,dept_nr FROM care_test_request_".$db_request_table."
 				WHERE status='pending' OR status='received' ORDER BY  send_date DESC";
 	if($requests=$db->Execute($sql)){
@@ -225,11 +135,6 @@ if($batchrows && $pn){
 			}else{
 				echo "<p>$sql<p>$LDDbNoRead";
 			}
-			
-			$sql1="SELECT findings_time FROM care_test_findings_".$db_request_table." WHERE batch_nr='".$batch_nr."'";
-			if($ergebnis1=$db->Execute($sql1)){
-				$stored_finding=$ergebnis1->FetchRow();
-			}
 		}
 	}else{
 		$mode='';
@@ -238,7 +143,7 @@ if($batchrows && $pn){
 }
 
 # Prepare title
-$sTitle = $LDPendingTestRequest;
+$sTitle = $LDDienTim.': '.$LDPendingTestRequest;
 if($batchrows) $sTitle = $sTitle." (".$batch_nr.")";
 
 # Start Smarty templating here
@@ -266,15 +171,16 @@ if($batchrows) $sTitle = $sTitle." (".$batch_nr.")";
 
  # Window bar title
  $smarty->assign('sWindowTitle',$sTitle);
+ 
+  # Create button to view results
+
+ $smarty->assign('pbAux1',"javascript:viewallresults()");
+ $smarty->assign('gifAux1',createLDImgSrc($root_path,'showreport.gif','0')); 
 
 $smarty->assign('sOnLoadJs','onLoad="if (window.focus) window.focus();"');
 
  # Collect extra javascript code
-//gjergji : new calendar
-			require_once ('../../js/jscalendar/calendar.php');
-			$calendar = new DHTML_Calendar('../../js/jscalendar/', $lang, 'calendar-system', true);
-			$calendar->load_files();
-			//gjergji : new calendar
+
  ob_start();
 ?>
 
@@ -311,32 +217,17 @@ function chkForm(d)
 		}
 		else return true; 
 }
-function doneRequest(){
-	var r=confirm('<?php echo $LDSaveBeforeDone; ?>');
-	if (r==true) {
-		window.location="<?php echo 'labor_test_findings_'.$subtarget.'.php?sid='.$sid.'&lang='.$lang.'&batch_nr='.$batch_nr.'&pn='.$pn.'&entry_date='.$stored_request['result_date'].'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin.'&tracker='.$tracker.'&mode=done'; ?>";
-	} else
-		return false;
-}
-	
-function saveResult(){
-	document.form_test_request.action="<?php echo 'labor_test_findings_duonghuyet.php?sid='.$sid.'&lang='.$lang.'&batch_nr='.$batch_nr.'&pn='.$pn.'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin.'&mode=save'; ?>";
-	document.form_test_request.submit();
-}
+
 function printOut()
 {
 	urlholder="<?php echo $root_path;?>modules/pdfmaker/dientim/PhieuDienTim.php<?php echo URL_APPEND; ?>&enc=<?php echo $pn;?>";
 	testprintout<?php echo $sid ?>=window.open(urlholder,"testprintout<?php echo $sid ?>","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
     //testprintout<?php echo $sid ?>.print();
 }
-function popDocPer(target,obj_val,obj_name){  //đã thêm hàm popDocPer
-    urlholder="<?php echo $root_path; ?>modules/laboratory/personell_search.php<?php echo URL_REDIRECT_APPEND; ?>&target="+target+"&obj_val="+obj_val+"&obj_name="+obj_name;
-    DSWIN<?php echo $sid ?>=window.open(urlholder,"wblabel<?php echo $sid ?>","menubar=no,width=400,height=550,resizable=yes,scrollbars=yes");
-}
-		$(function(){
-$("#f-calendar-field-1").mask("99/99/9999");
-$("#findings_time").mask("99:99");
-});
+function viewallresults(){
+	document.form_test_request.action="<?php echo '../radiology/viewresults_dientim.php?sid='.$sid.'&lang='.$lang.'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin; ?>";
+	document.form_test_request.submit();
+}	
 <?php require($root_path.'include/core/inc_checkdate_lang.php'); ?>
 
 //-->
@@ -369,9 +260,10 @@ require('includes/inc_test_request_lister_fx.php');
     <td>
 
 	<form name="form_test_request" method="post" action="<?php echo $thisfile ?>" onSubmit="return chkForm(this)">
-			<input type="image" <?php echo createLDImgSrc($root_path,'savedisc.gif','0') ?>  title="<?php echo $LDSaveEntry ?>"> 
-		<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut ?>"></a>
-		<a href="#" onclick="doneRequest();"><img <?php echo createLDImgSrc($root_path,'done.gif','0') ?> alt="<?php echo $LDEnterResult ?>"></a>
+		<input type="image" <?php echo createLDImgSrc($root_path,'savedisc.gif','0') ?>  title="<?php echo $LDSaveEntry ?>"> 
+		
+  <a href="<?php echo 'labor_test_findings_'.$subtarget.'.php?sid='.$sid.'&lang='.$lang.'&batch_nr='.$batch_nr.'&pn='.$pn.'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin.'&tracker='.$tracker.'&mode=done'; ?>"><img <?php echo createLDImgSrc($root_path,'enter_result.gif','0') ?> alt="<?php echo $LDEnterResult ?>"></a>
+
 	   <!--  outermost table creating form border -->
 <table border=0 bgcolor="#000000" cellpadding=1 cellspacing=0>
   <tr>
@@ -435,11 +327,11 @@ require('includes/inc_test_request_lister_fx.php');
 	
 	<tr bgcolor="<?php echo $bgc1 ?>">
 		<td colspan=2 align="right"><div class=fva2_ml10>
-		 <?php echo $LDDate ?> gởi:
+		 <?php echo $LDDate ?>:
 		<font face="courier" size=2 color="#000000">&nbsp;<?php 
 		
 		            
-					  echo formatDate2Local($stored_request['send_date'],$date_format)." Giờ gởi : ".@convertTimeToLocal(formatDate2Local($stored_request['send_date'],$date_format,0,1)); 
+					  echo formatDate2Local($stored_request['send_date'],$date_format); 
 					
 				  ?></font>&nbsp;
   <?php echo $LDRequestingDoc ?>:
@@ -451,7 +343,7 @@ require('includes/inc_test_request_lister_fx.php');
     </tr>	
 	<tr bgcolor="<?php echo $bgc1 ?>">
 		<td colspan=2> 
-		 <div class=fva2_ml10>&nbsp;<br><font color="#000099"><?php echo $LDNotesTempReport ?></font><br>
+		 <div class=fva2_ml10>&nbsp;<br><font color="#000099"><?php echo $LDKqDienTim; ?></font><br>
          <textarea name="results" cols=80 rows=5 wrap="physical"><?php if($read_form && $stored_request['results']) echo stripslashes($stored_request['results']) ?></textarea>				
 		 </td>
 		</tr>	
@@ -461,23 +353,21 @@ require('includes/inc_test_request_lister_fx.php');
 		 <?php echo $LDDate ?>
 		
 		<?php
-		if(isset($stored_request['results_date'])&&($stored_request['results_date']!='0000-00-00')){
+			if($stored_request['results_date']=='0000-00-00')
+				$stored_request['results_date']=date('Y-m-d');
+		
+		//gjergji : new calendar
+			require_once ('../../js/jscalendar/calendar.php');
+			$calendar = new DHTML_Calendar('../../js/jscalendar/', $lang, 'calendar-system', true);
+			$calendar->load_files();
+			//gjergji : new calendar
 			echo $calendar->show_calendar($calendar,$date_format,'results_date',$stored_request['results_date']);
-			}else{
-			echo $calendar->show_calendar($calendar,$date_format,'results_date',date("d/m/Y"));
-			}
 			//end : gjergji	
-			if(isset($stored_finding['findings_time'])&&($stored_finding['findings_time']!='00:00:00')){
-			echo '<input type="text" size="5" id="findings_time" name="findings_time" value="'.$stored_finding['findings_time'].'">';
-			}else{
-			echo '<input type="text" size="5" id="findings_time" name="findings_time" value="'.date("H:i").'">';
-			}
 		?>
 				  
-  <?php echo 'Bác sĩ xét nghiệm' ?>
-			<input type="text" name="results_doctor" size=37 maxlength=40 value="<?php if($stored_request['results_doctor']) echo $stored_request['results_doctor'];else echo $pers_name;?>">
-			<input type="hidden" name="results_doctor_nr" value="<?php if(!empty( $stored_request['results_doctor_nr'])) echo $stored_request['results_doctor_nr'];else echo $pers_nr; ?>"> <a href="javascript:popDocPer('doctor_nr','results_doctor_nr','results_doctor')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
-        </td>
+  <?php echo $LDReportingDoc ?>
+        <input type="text" name="results_doctor" value="<?php if($read_form && $stored_request['results_doctor']) echo $stored_request['results_doctor']; else echo $_SESSION['sess_user_name']; ?>" size=35 maxlength=35> 
+		</td>
     </tr>
 		</table> 
 		
@@ -492,7 +382,8 @@ require('includes/inc_test_request_lister_fx.php');
 <p>
 		<input type="image" <?php echo createLDImgSrc($root_path,'savedisc.gif','0') ?>  title="<?php echo $LDSaveEntry ?>"> 
 		<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut ?>"></a>
-		<a href="#" onclick="doneRequest()"><img <?php echo createLDImgSrc($root_path,'done.gif','0') ?> alt="<?php echo $LDEnterResult ?>"></a>
+		<a href="<?php echo 'labor_test_findings_'.$subtarget.'.php?sid='.$sid.'&lang='.$lang.'&batch_nr='.$batch_nr.'&pn='.$pn.'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin.'&tracker='.$tracker.'&mode=done'; ?>"><img <?php echo createLDImgSrc($root_path,'enter_result.gif','0') ?> alt="<?php echo $LDEnterResult ?>"></a>
+
 <?php
 
 require($root_path.'modules/laboratory/includes/inc_test_request_hiddenvars.php');
@@ -508,7 +399,9 @@ require($root_path.'modules/laboratory/includes/inc_test_request_hiddenvars.php'
 else
 {
 ?>
-<img <?php echo createMascot($root_path,'mascot1_r.gif','0','bottom') ?> align="absmiddle"><font size=3 face="verdana,arial" color="#990000"><b><?php echo $LDNoPendingRequest ?></b></font>
+<img <?php echo createMascot($root_path,'mascot1_r.gif','0','bottom') ?> align="absmiddle"><form name="form_test_request" method="post" action="<?php echo $thisfile ?>" >
+<font size=3 face="verdana,arial" color="#990000"><b><?php echo $LDNoPendingRequest ?></b></font>
+</form>
 <p>
 <a href="<?php echo $breakfile ?>"><img <?php echo createLDImgSrc($root_path,'back2.gif','0') ?>></a>
 <?php
