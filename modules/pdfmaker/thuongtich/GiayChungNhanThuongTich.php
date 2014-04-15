@@ -125,7 +125,7 @@ $tpdf->Cell(85,5,"- Nghề nghiệp: ".$encounter['job'],0,0,'L');
 $tpdf->Cell(0,5,"Nơi làm việc: ".$encounter['jod_addr'],0,1,'L');
 $tpdf->Cell(85,5,"- Số CMND/ Hộ khẩu: ".$encounter['nat_id_nr'],0,0,'L');
 $tpdf->Cell(0,5,"Ngày và nơi cấp: ".formatDate2Local($encounter['nat_id_date_issue'],$date_format)." ".$encounter['nat_id_addr_issue'],0,1,'L');
-$tpdf->Cell(0,5,"- Địa chỉ: ".$encounter['phuongxa_name']." ".$encounter['quanhuyen_name']." ".$encounter['citytown_name'],0,1,'L');
+$tpdf->Cell(0,5,"- Địa chỉ: ".$encounter ['addr_str']." ".$encounter['phuongxa_name']." ".$encounter['quanhuyen_name']." ".$encounter['citytown_name'],0,1,'L');
 $tpdf->Cell(0,5,"- Vào viện lúc: ".date("G",strtotime(formatDate2Local($encounter['encounter_date'],$date_format,TRUE,TRUE)))." giờ ".date("i",strtotime(formatDate2Local($encounter['encounter_date'],$date_format,TRUE,TRUE)))." phút, ngày ".date("d",strtotime($encounter['encounter_date']))." tháng ".date("m",strtotime($encounter['encounter_date']))." năm ".date("Y",strtotime($encounter['encounter_date'])),0,1,'L');
 $tpdf->Cell(0,5,"- Ra viện lúc: ".date("G",time())." giờ ".date("i",time())." phút, ngày ".date("d",time())." tháng ".date("m",time())." năm ".date("Y",time()),0,1,'L');
 $tpdf->Cell(0,5,"- Lý do vào viện: ".$encounter['lidovaovien'],0,1,'L');
