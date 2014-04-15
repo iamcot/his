@@ -163,6 +163,7 @@ $fpdf->Cell(120,5,"1.Họ và Tên:(In hoa) ".$s."        2.Sinh ngày:",0,0,'L'
 $x=$fpdf->GetX();
 $fpdf->DrawRect($x,$y,5,4.5,8);
 $fpdf->DrawRect($x+58,$y,5,4.5,2);
+
 if($tuoi<10){
 $fpdf->Cell(0,5," ".substr(formatDate2Local($encounter['date_birth'],$date_format),0,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),1,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),3,1)."    ".substr(formatDate2Local($encounter['date_birth'],$date_format),4,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),6,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),7,1)."    ".substr(formatDate2Local($encounter['date_birth'],$date_format),8,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),9,1)."                  ".$tuoi." ",0,0,'L');
 }

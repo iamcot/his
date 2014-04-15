@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 error_reporting(E_COMPILE_ERROR|E_ERROR|E_CORE_ERROR);
 
 $report_textsize=12;
@@ -88,8 +88,8 @@ $tpdf->SetX($tpdf->lMargin);
 $tpdf->Cell(150,5,'Sở Y tế: Bình Dương',0,0,'L');
 $tpdf->Cell(50,5,'MS: 19/BV-01',0,0,'L');
 $tpdf->Ln(); 
-$tpdf->Cell(150,5,$cell,0,0,'L');
-$tpdf->Cell(50,5,'Số: ..................',0,0,'L');
+$tpdf->Cell(150,5,PDF_HOSNAME,0,0,'L');
+$tpdf->Cell(50,5,'Số: '.$enc,0,0,'L');
 $tpdf->Ln(); 
 
 $tpdf->SetFont('DejaVu','BI',11);
@@ -105,10 +105,13 @@ if($encounter['sex']=='m'){
 }else{
 $sex=$LDFemale;
 }
-$tpdf->Cell(0,5,"- Họ tên người bệnh: ".$encounter['name_last']." ".$encounter['name_first']." Tuổi: ".$tuoi." ".$sex,0,1,'L');
-$tpdf->Cell(0,5,"- Địa chỉ: ".$encounter['addr_str_nr']." ".$encounter['addr_str']." ".$encounter['citytown_name'],0,1,'L');
-$tpdf->Cell(0,5,"- Khoa: ".$deptName." Buồng: ".$roomNumber." Giường: ".$wardName['roomprefix'].' '.$roomName,0,1,'L');
-$tpdf->Cell(0,5,"- Chẩn đoán:".$encounter['referrer_diagnosis'],0,1,'L');
+$tpdf->Cell(0,5,"- Họ tên người bệnh: ".$encounter['name_last']." ".$encounter['name_first']."  Tuổi: ".$tuoi."  Nam/Nữ:".$sex,0,1,'L');
+$tpdf->Cell(0,5,"- Địa chỉ: ".$encounter['addr_str_nr']." ".$encounter['addr_str']." ".$encounter['phuongxa_name']." ".$encounter['quanhuyen_name']." ".$encounter['citytown_name'],0,1,'L');
+if($roomNumber==0){
+	$roomNumber='';
+}
+$tpdf->Cell(0,5,"- Khoa: ".$deptName.", Buồng: ".$roomNumber.", Giường: ".$wardName['roomprefix'].' '.$roomName,0,1,'L');
+$tpdf->Cell(0,5,"- Chẩn đoán: ".$encounter['referrer_diagnosis'],0,1,'L');
 $tpdf->Ln();
 
 $tpdf->SetFont('DejaVu','B',12);
@@ -145,7 +148,7 @@ $ngaygoi=formatDate2STD($encounter_radio['send_date'],$date_format);
 $tpdf->Cell(60,5,"Ngày ".date("d",strtotime($ngaygoi))." tháng ".date("m",strtotime($ngaygoi))." năm ".date("Y",strtotime($ngaygoi)),0,1,'R');
 $tpdf->SetFont('DejaVu','B',11);
 $tpdf->SetX(135);
-$tpdf->Cell(64,5,'TRƯỞNG KHOA',0,1,'C');
+$tpdf->Cell(64,5,'BÁC SĨ CHỈ ĐỊNH',0,1,'C');
 $tpdf->SetX(135);
 $tpdf->Cell(0,25,' ',0,1,'C');
 $tpdf->SetFont('DejaVu','',11);
@@ -174,7 +177,7 @@ $tpdf->SetX(135);
 $tpdf->Cell(0,25,' ',0,1,'C');
 $tpdf->SetFont('DejaVu','',11);
 $tpdf->SetX(135);
-$tpdf->Cell(60,5,"Họ tên: ..................................... ".$encounter_radio['results_doctor'],0,1,'C');
+$tpdf->Cell(60,5,"Họ tên: ".$encounter_radio['results_doctor'],0,1,'C');
 
 
 //$tpdf->Output();
