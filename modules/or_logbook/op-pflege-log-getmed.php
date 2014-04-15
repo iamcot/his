@@ -6,6 +6,7 @@
     define('NO_2LEVEL_CHK',1);
     require_once($root_path.'include/core/inc_front_chain_lang.php');
     # Create the personell object 
+
     require_once($root_path.'include/care_api_classes/class_med_dept.php');
     $med=new Med_Dept;
     $title=$LDMedDept; 

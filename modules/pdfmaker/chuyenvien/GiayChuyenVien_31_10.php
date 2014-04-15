@@ -148,7 +148,7 @@ $sql="SELECT hl.lname FROM care_encounter_notes pn, dfck_hospital_list hl
 if($result=$db->Execute($sql)){
     if($row=$result->FetchRow()) $strbvden = $row['lname'];    
 }
-$fpdf->Cell(0,6,'Ban giám đốc '.$strbvden,0,1,'L');
+$fpdf->Cell(0,6,''.$strbvden,0,1,'L');
 $fpdf->Ln(); 
 
 //Thông tin bệnh nhân

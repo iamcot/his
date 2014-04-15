@@ -32,6 +32,7 @@ if($enc_obj->loadEncounterData()){
 	
 	if($encounter['sex']=='m') $sex_patient = 'Nam';			//nam hay nu
 	else $sex_patient = 'Nữ';
+//    var_dump($encounter);
 }
 
 require_once($root_path.'include/care_api_classes/class_notes_nursing.php');
@@ -106,7 +107,7 @@ $pdf->writeHTMLCell(125, 0, '', '', str_pad("Họ tên người bệnh: ..".$enc
 $pdf->writeHTMLCell(35, 0, '', '', str_pad(" Tuổi: ..".$encounter['tuoi'], 26, ".", STR_PAD_RIGHT), 0, 0, 0, true, 'L', true);
 $pdf->writeHTMLCell(0, 0, '', '', str_pad(" Nam/nữ: ..".$sex_patient, 25, ".", STR_PAD_RIGHT), 0, 1, 0, true, 'R', true);
 
-$pdf->writeHTMLCell(120, 0, '', '', str_pad(" Số giường: ", 98, ".", STR_PAD_RIGHT), 0, 0, 0, true, 'L', true);
+$pdf->writeHTMLCell(120, 0, '', '', str_pad(" Số giường: ".$encounter['giuong'], 98, ".", STR_PAD_RIGHT), 0, 0, 0, true, 'L', true);
 $pdf->writeHTMLCell(0, 0, '', '', str_pad("Buồng: ..".$encounter['current_room_nr'], 63, ".", STR_PAD_RIGHT), 0, 1, 0, true, 'R', true);
 
 $pdf->writeHTMLCell(0, 0, '', '', str_pad("Chẩn đoán: ..".$encounter['referrer_diagnosis'], 150, ".", STR_PAD_RIGHT), 0, 1, 0, true, 'L', true);
@@ -161,6 +162,7 @@ $html_thuoc .= '</table>';
 $pdf->writeHTML($html_thuoc);
 
 // ----------------------------------------------------------------------------
+//    var_dump($encounter);
 
 $pdf->lastPage();
 

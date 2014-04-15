@@ -13,7 +13,21 @@
                         {{$sByDeptSelect}} {{$pbByDeptGo}}
                         </nobr>
                         {{* Do not move the $sByDeptHiddenInputs outside of the form *}}
-                        {{$sByDeptHiddenInputs}}
+                        {{$LDListApptByDept}}<br>
+                        <nobr>
+                            {{$sByDeptSelect}} {{$pbByDeptGo}}
+                        </nobr>
+                    </form>
+                    <form name="bydoc">
+                        {{$LDListApptByDoc}}<br>
+                        <nobr>
+                            {{$sByDeptSelect1}} {{$pbByDeptGo}}
+                        </nobr>
+                        {{* Do not move the $sByDeptHiddenInputs outside of the form *}}
+                        {{$LDListApptByDoc1}}<br>
+                        <nobr>
+                            {{$sByDeptSelect1}} {{$pbByDeptGo}}
+                        </nobr>
                     </form>
                 </td>
 	</tr>
@@ -88,7 +102,7 @@
 					<tr class="wardlistrow1">
 						<td style="text-align:center;">{{$nhapvien}}</td>
 						<td style="text-align:center;">{{$nhapvienngoai}}</td>
-						<td style="text-align:center;">{{$nhapviennoi}}</td>
+						<td style="text-align:center;">{{$nhapviennoi}}</td>t
 						<td style="text-align:center;">{{$nhapvienhscc}}</td>
 						<td style="text-align:center;">{{$nhapvienyhct}}</td>
 						<td style="text-align:center;">{{$nhapviensan}}</td>

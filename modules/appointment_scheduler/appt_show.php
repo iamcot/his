@@ -60,7 +60,11 @@ if($mode=='show'){
 	}elseif(isset($aux)&&!empty($aux)){
 		# Get by doctor
 		$result=&$appt_obj->getAllByDocObj($currYear,$currMonth,$currDay,$aux);
-	}else{
+	}elseif(isset($auxx)&&!empty($auxx)){
+        # Get by lastname doctor
+        $result=&$appt_obj->getAllByLastNameObj($currYear,$currMonth,$currDay,$auxx);
+    }
+    else{
 		# Get all appointments
 		$result=&$appt_obj->getAllByDateObj($currYear,$currMonth,$currDay,$pers_nr);
 	}
@@ -186,6 +190,7 @@ $smarty->assign('sByDeptSelect','<select name="dept_nr">
 			<option value="">'.$LD_AllMedicalDept.'</option>'.$options.'
 			</select>');
 $smarty->assign('sByDeptHiddenInputs','<input type="submit" value="'.$LDShow.'">
+
 			<input type="hidden"  name="currYear" value="'.$currYear.'">
 			<input type="hidden"  name="currMonth" value="'.$currMonth.'">
 			<input type="hidden"  name="currDay" value="'.$currDay.'">
@@ -193,8 +198,10 @@ $smarty->assign('sByDeptHiddenInputs','<input type="submit" value="'.$LDShow.'">
 			<input type="hidden"  name="lang" value="'.$lang.'">');
 
 $smarty->assign('LDListApptByDoc',$LDListApptByDoc);
+
 $smarty->assign('sByDocSelect','<input type="text" name="aux" size=35 maxlength=40 value="'.$aux.'">');
-$smarty->assign('sByDocHiddenInputs','<input type="submit" value="'.$LDShow.'">
+
+$smarty->assign('sByDocHiddenInputs','<input type="submit" value="'.$LDShow.'"> </br>
 			<input type="hidden"  name="name_last" value="">
 			<input type="hidden"  name="name_first" value="">
 			<input type="hidden"  name="date_birth" value="">
@@ -219,6 +226,20 @@ $smarty->assign('sByDocHiddenInputs1','<input type="submit" value="'.$LDShow.'">
 			<input type="hidden"  name="sid" value="'.$sid.'">
 			<input type="hidden"  name="lang" value="'.$lang.'">'); */
 /* show the appointments */
+$smarty->assign('LDListApptByHo',$LDListApptByHo);
+
+$smarty->assign('sByDocSelect1','<input type="text" name="auxx" size=35 maxlength=40 value="'.$auxx.'">');
+
+$smarty->assign('sByDocHiddenInputs1','<input type="submit" value="'.$LDShow.'"> </br>
+			<input type="hidden"  name="name_last" value="">
+			<input type="hidden"  name="name_first" value="">
+			<input type="hidden"  name="date_birth" value="">
+			<input type="hidden"  name="personnel_nr" value="">
+			<input type="hidden"  name="currYear" value="'.$currYear.'">
+			<input type="hidden"  name="currMonth" value="'.$currMonth.'">
+			<input type="hidden"  name="currDay" value="'.$currDay.'">
+			<input type="hidden"  name="sid" value="'.$sid.'">
+			<input type="hidden"  name="lang" value="'.$lang.'">');
 if($appt_obj->count){
 	# Buffer output
 	ob_start();
