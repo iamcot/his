@@ -10,7 +10,6 @@ require($root_path.'include/core/inc_environment_global.php');
 *
 * See the file "copy_notice.txt" for the licence notice
 */
-$role_nr = ROLE_NR_DOCTOR;//doctor
 $lang_tables[]='departments.php';
 define('LANG_FILE','doctors.php');
 define('NO_2LEVEL_CHK',1);
@@ -29,7 +28,7 @@ $dept_obj->preloadDept($dept_nr);
 
 require_once($root_path.'include/care_api_classes/class_personell.php');
 $pers_obj=new Personell;
-$dutyplan=&$pers_obj->getDOCDutyplan($dept_nr,$role_nr,$pyear,$pmonth);
+$dutyplan=&$pers_obj->getDOCDutyplan($dept_nr,$pyear,$pmonth);
 
 
 $firstday=date("w",mktime(0,0,0,$pmonth,1,$pyear));

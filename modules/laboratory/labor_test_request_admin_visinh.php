@@ -13,6 +13,7 @@ require($root_path.'include/core/inc_environment_global.php');
 
 /* Start initializations */ 
 $lang_tables[]='departments.php';
+$lang_tables[]='billing.php';
 define('LANG_FILE','konsil.php');
 
 /* We need to differentiate from where the user is coming: 
@@ -101,10 +102,10 @@ switch($mode){
 										  status_mau_3='".$status_mau_3."',
 										   results_mau_3='".$results_mau_3."',
 										  status='received',
-										  result='".addslashes(htmlspecialchars($result))."',
-                                          result_date='".formatDate2STD($result_date,$date_format)."',
-										  result_doctor='".htmlspecialchars($results_doctor)."',
-										  result_doctor_nr='".$results_doctor_nr."',
+										  results='".addslashes(htmlspecialchars($results))."',
+                                          results_date='".formatDate2STD($result_date,$date_format)."',
+										  results_doctor='".htmlspecialchars($results_doctor)."',
+										  results_doctor_nr='".$results_doctor_nr."',
 										  history=".$core->ConcatHistory("Update ".date('Y-m-d H:i:s')." ".$_SESSION['sess_user_name']."\n").",
 										  modify_id = '".$_SESSION['sess_user_name']."',
 										  modify_time='".date('YmdHis')."'
@@ -116,67 +117,58 @@ switch($mode){
 			$temp=$db->execute($sql1);
 			if($temp->recordcount()){
 				//echo'33333';
-							      $sql3="UPDATE care_test_findings_".$db_request_table."  SET	
+							      $sql3="UPDATE care_test_findings_".$db_request_table."  SET
 										   doctor_id='".htmlspecialchars($results_doctor)."',
 										   doctor_id_nr='".$results_doctor_nr."',
-										   results='".addslashes(htmlspecialchars($result))."',										  
-										   result_date='".formatDate2STD($result_date,$date_format)."',
-										   result_time='".date('H:i:s')."', 
-										   history=".$core->ConcatHistory("Update: ".date('Y-m-d H:i:s')." = ".$_SESSION['sess_user_name']."\n").",
-										   modify_id = '".$_SESSION['sess_user_name']."',
-										   modify_time='".date('YmdHis')."'
-										   WHERE batch_nr = '".$batch_nr."'";
-//echo $sql;
-							      if($ergebnis=$core->Transact($sql3))
-       							  { $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql3, date('Y-m-d H:i:s'));
-								     signalNewDiagnosticsReportEvent($result_date);
-									// echo $sql3;
-//header("location:$thisfile?sid=$sid&lang=$lang&edit=$edit&saved=insert&mode=edit&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize&batch_nr=$batch_nr&entry_date=$entry_date");
-									// exit;
-								  }
-								  else
-								   {
-								      echo "<p>$sql3<p>$LDDbNoSave"; 
-								     // $mode='';
-								   }
-			
-			
+						                    results='".addslashes(htmlspecialchars($results))."',
+						                    results_date='".formatDate2STD($result_date,$date_format)."',
+						                    results_time='".date('H:i:s')."',
+                                            history=".$core->ConcatHistory("Update: ".date('Y-m-d H:i:s')." = ".$_SESSION['sess_user_name']."\n").",
+                                            modify_id = '".$_SESSION['sess_user_name']."',
+                                            modify_time='".date('YmdHis')."'
+                                            WHERE batch_nr = '".$batch_nr."'";
+				// echo $sql3;
+                if($ergebnis=$core->Transact($sql3)){
+                    $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql3, date('Y-m-d H:i:s'));
+                    signalNewDiagnosticsReportEvent($result_date);
+                    header("location:$thisfile?sid=$sid&lang=$lang&edit=$edit&saved=insert&mode=edit&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize&batch_nr=$batch_nr&entry_date=$entry_date");
+					exit;
+				}else{
+					echo "<p>$sql3<p>$LDDbNoSave"; 
+					// $mode='';
+				}					
+
+
 			}else{
-			$sql2="INSERT INTO care_test_findings_".$db_request_table." 
-								          (
-										   batch_nr, encounter_nr, dept_nr, 
-										    doctor_id,doctor_id_nr,results, result_date, result_time, 
-										   status, 
-										   history,
-										  create_id,
-										  create_time
-										  )
-										   VALUES
-										   (
-										   '".$batch_nr."','".$pn."','".$dept_nr."', 
-										   '".htmlspecialchars($results_doctor)."',
-										   '".$results_doctor_nr."',
-										'".addslashes(htmlspecialchars($result))."',
-										   '".formatDate2STD($result_date,$date_format)."', '".date('H:i:s')."',
-										   'initial',  
-										   'Create: ".date('Y-m-d H:i:s')." = ".$_SESSION['sess_user_name']."\n',
-										  '".$_SESSION['sess_user_name']."',
-										  '".date('YmdHis')."'
-										   )";
-//echo $sql;
-								
-							      if($test=$core->Transact($sql2))
-       							  { $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql2, date('Y-m-d H:i:s'));
-								     signalNewDiagnosticsReportEvent($result_date);
-//echo $sql2;
-									// header("location:$thisfile?sid=$sid&lang=$lang&edit=$edit&saved=insert&mode=edit&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize&batch_nr=$batch_nr&entry_date=$entry_date");
-									// exit;
-								  }
-								  else 
-								  {
-								     echo "<p>$sql2<p>$LDDbNoSave"; 
-									// $mode='';
-								  }
+				$sql2="INSERT INTO care_test_findings_".$db_request_table." 
+						(
+							batch_nr, encounter_nr, dept_nr, 
+							doctor_id,doctor_id_nr,results, results_date, results_time, 
+							status,history,create_id,create_time
+						)
+						VALUES
+						(
+							'".$batch_nr."','".$pn."','".$dept_nr."', 
+							'".htmlspecialchars($results_doctor)."',
+							'".$results_doctor_nr."',
+							'".addslashes(htmlspecialchars($result))."',
+							'".formatDate2STD($result_date,$date_format)."', '".date('H:i:s')."',
+							'initial',  
+							'Create: ".date('Y-m-d H:i:s')." = ".$_SESSION['sess_user_name']."\n',
+							'".$_SESSION['sess_user_name']."',
+							'".date('YmdHis')."'
+						)";
+				//echo $sql2;
+				if($test=$core->Transact($sql2)){ 
+					$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql2, date('Y-m-d H:i:s'));
+					signalNewDiagnosticsReportEvent($result_date);
+					header("location:$thisfile?sid=$sid&lang=$lang&edit=$edit&saved=insert&mode=edit&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize&batch_nr=$batch_nr&entry_date=$entry_date");
+					exit;
+				}
+				else{
+					echo "<p>$sql2<p>$LDDbNoSave"; 
+					// $mode='';
+				}
 			}
 		 $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql, date('Y-m-d H:i:s'));	
 		header("location:".$thisfile."?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&batch_nr=$batch_nr&noresize=$noresize");
@@ -193,7 +185,7 @@ switch($mode){
 
 /* Get the pending test requests */
 if(!$mode) {
-	$sql="SELECT batch_nr,encounter_nr,send_date,dept_nr FROM care_test_request_".$db_request_table."
+	$sql="SELECT batch_nr,encounter_nr,send_date,dept_nr,lao,kstdr,huyettrang FROM care_test_request_".$db_request_table."
 				WHERE (lao='1' OR kstdr='1' OR huyettrang='1')
 				AND (status='pending' OR status='received') ORDER BY  send_date DESC";
 	if($requests=$db->Execute($sql)){
@@ -203,7 +195,9 @@ if(!$mode) {
 			/* Check for the patietn number = $pn. If available get the patients data */
 		 	$pn=$test_request['encounter_nr'];
 			$batch_nr=$test_request['batch_nr'];
-			
+			$lao=$test_request['lao'];
+			$kstdr=$test_request['kstdr'];
+			$huyettrang=$test_request['huyettrang'];
 		}
 	}else{
 		echo "<p>$sql<p>$LDDbNoRead";
@@ -239,7 +233,9 @@ if($batchrows && $pn){
 				if($editable_rows=$ergebnis->RecordCount()){
 					$stored_request=$ergebnis->FetchRow();
 					$edit_form=1;
-					
+					$lao=$stored_request['lao'];
+					$kstdr=$stored_request['kstdr'];
+					$huyettrang=$stored_request['huyettrang'];
 					$sql1="SELECT * FROM care_test_request_radio_sub WHERE batch_nr=".$batch_nr;
 					$item_test=$db->Execute($sql1);
 				}
@@ -253,6 +249,25 @@ if($batchrows && $pn){
 		$mode='';
 		$pn='';
 	}
+}
+if($lao){
+	$YC = 'Lao';
+}
+if($kstdr){
+	$YC = 'KSTĐR';
+}
+if($huyettrang){
+	$YC = 'Huyết trắng';
+}
+$sql1 = "SELECT bill.bill_item_status, bill.bill_item_code
+		FROM care_test_request_".$db_request_table." AS req
+		INNER JOIN care_billing_item AS bill_it ON bill_it.item_description='$YC'
+		INNER JOIN care_billing_bill_item AS bill ON req.encounter_nr=bill.bill_item_encounter_nr AND DATE(req.send_date)=DATE(bill.bill_item_date) AND bill_it.item_code=bill.bill_item_code
+		WHERE req.batch_nr=$batch_nr
+		ORDER BY req.send_date DESC";
+if ($requests1 = $db->Execute ( $sql1 )) {
+	$bill = $requests1->FetchRow ();
+	$status_bill=$bill['bill_item_status'];
 }
 
 
@@ -410,7 +425,7 @@ require('includes/inc_test_request_lister_fx.php');
 		?>
 	<form name="form_test_request" method="post" action="<?php echo $thisfile ?>" onSubmit="return chkForm(this)">
 		<input type="image" <?php echo createLDImgSrc($root_path,'savedisc.gif','0') ?>  title="<?php echo $LDSaveEntry ?>"> 
-		<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut ?>"></a>
+		<!--<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut ?>"></a>-->
         <a href="#" onclick="doneRequest();"><img <?php echo createLDImgSrc($root_path,'done.gif','0') ?> alt="<?php echo $LDEnterResult ?>"></a>
 
 	   <!--  outermost table creating form border -->
@@ -432,7 +447,7 @@ require('includes/inc_test_request_lister_fx.php');
 		}
 		?></td>
       <td bgcolor="<?php echo $bgc1 ?>"  class=fva2_ml10><div   class=fva2_ml10><font size=5 color="#0000ff"><b><?php echo $formtitle ?></b></font>
-		 <br><?php echo $global_address[$subtarget].'<br>'.$LDTel.'&nbsp;'.$global_phone[$subtarget]; ?>
+		 <!--<br><?php echo $global_address[$subtarget].'<br>'.$LDTel.'&nbsp;'.$global_phone[$subtarget]; ?>-->
 		 </td>
 		 </tr>
 	 <tr>
@@ -505,6 +520,20 @@ require('includes/inc_test_request_lister_fx.php');
 		<font face="courier" size=2 color="#000000">&nbsp;<?php echo $stored_request['send_doctor'] ?></font></div><br>
 		</td>
     </tr>
+	
+	<tr bgcolor="<?php echo $bgc1 ?>">
+		<td colspan=2 align="right"><div class=fva2_ml10>
+			<font face="courier" size=3 color="red"><b>
+			<?php
+				if($status_bill){
+					echo $LDDaThanhtoan;
+				}else{
+					echo $LDChuaThanhToan;
+				}
+			?>
+			</b></font>
+		</td>
+	</tr>
 	
 	<tr bgcolor="<?php echo $bgc1 ?>">
 		<td colspan=2 ><div class=fva2_ml10>
@@ -918,7 +947,7 @@ require('includes/inc_test_request_lister_fx.php');
 	<tr bgcolor="<?php echo $bgc1 ?>">
 		<td colspan=2> 
 		 <div class=fva2_ml10>&nbsp;<br><font color="#000099"><?php echo $LDNotesTempReport ?></font><br>
-         <textarea name="result" cols=80 rows=5 wrap="physical"><?php if($read_form && $stored_request['result']) echo stripslashes($stored_request['result']) ?></textarea>				
+         <textarea name="results" cols=80 rows=5 wrap="physical"><?php if($stored_request['results']) echo stripslashes($stored_request['results']);?></textarea>				
 		 </td>
 		</tr>	
 		
@@ -928,8 +957,11 @@ require('includes/inc_test_request_lister_fx.php');
 
 		<?php
 			//gjergji : new calendar
-			
-			echo $calendar->show_calendar($calendar,$date_format,'result_date',$stored_request['result_date']);
+			if($stored_request['result_date']){
+				echo $calendar->show_calendar($calendar,$date_format,'result_date',$stored_request['result_date']);
+			}else{
+				echo $calendar->show_calendar($calendar,$date_format,'result_date',date('Y-m-d'));
+			}
 			//end : gjergji	
 		?>
 				  
@@ -952,7 +984,7 @@ require('includes/inc_test_request_lister_fx.php');
 </table> 
 <p>
 		<input type="image" <?php echo createLDImgSrc($root_path,'savedisc.gif','0') ?>  title="<?php echo $LDSaveEntry ?>"> 
-		<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut ?>"></a>
+		<!--<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut ?>"></a>-->
         <a href="#" onclick="doneRequest();"><img <?php echo createLDImgSrc($root_path,'done.gif','0') ?> alt="<?php echo $LDEnterResult ?>"></a>
 
 <?php

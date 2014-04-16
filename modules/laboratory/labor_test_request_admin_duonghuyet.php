@@ -13,6 +13,7 @@ require($root_path.'include/core/inc_environment_global.php');
 
 /* Start initializations */ 
 $lang_tables[]='departments.php';
+$lang_tables[]='billing.php';
 define('LANG_FILE','konsil.php');
 
 /* We need to differentiate from where the user is coming: 
@@ -159,8 +160,8 @@ switch($mode){
 //			header("location:".$thisfile."?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&batch_nr=$batch_nr&noresize=$noresize");
             header('Content-Type: text/html; charset=utf-8');                                          //đã thêm
             echo "<script type='text/javascript'>";                                                   //đã thêm
-            echo "alert('Kết quả đã được lưu');";                                                      //đã thêm
-//            echo "alert('$LDNotifySave');";                                                           //đã thêm
+//            echo "alert('Kết quả đã được lưu');";                                                      //đã thêm
+            echo "alert('$LDAlertBeforeSave');";                                                           //đã thêm
             echo "window.location.replace('".$thisfile."?sid=".$sid."&lang=".$lang."&edit=".$edit."&saved=update&pn=".$pn."&station=".$station."&user_origin=".$user_origin."&status=".$status."&target=".$target."&subtarget=".$subtarget."&batch_nr=".$batch_nr."&noresize=".$noresize."')"; //đã thêm
             echo "</script>";
 
@@ -229,13 +230,23 @@ if($batchrows && $pn){
 			$sql1="SELECT findings_time FROM care_test_findings_".$db_request_table." WHERE batch_nr='".$batch_nr."'";
 			if($ergebnis1=$db->Execute($sql1)){
 				$stored_finding=$ergebnis1->FetchRow();
-			}
+		}
 		}
 	}else{
 		$mode='';
 		$pn='';
 	}
 }
+
+$sql1 = "SELECT bill.bill_item_status, bill.bill_item_code
+			FROM care_test_request_" . $db_request_table . " AS req
+			INNER JOIN care_billing_bill_item AS bill ON req.encounter_nr=bill.bill_item_encounter_nr AND DATE(req.send_date)=DATE(bill.bill_item_date) AND bill.bill_item_code='DH'
+			WHERE req.batch_nr=$batch_nr";
+if ($requests1 = $db->Execute ( $sql1 )) {
+	$bill = $requests1->FetchRow ();
+	$status_bill=$bill['bill_item_status'];
+}
+
 
 # Prepare title
 $sTitle = $LDPendingTestRequest;
@@ -370,7 +381,7 @@ require('includes/inc_test_request_lister_fx.php');
 
 	<form name="form_test_request" method="post" action="<?php echo $thisfile ?>" onSubmit="return chkForm(this)">
 			<input type="image" <?php echo createLDImgSrc($root_path,'savedisc.gif','0') ?>  title="<?php echo $LDSaveEntry ?>"> 
-		<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut ?>"></a>
+		<!--<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut ?>"></a>-->
 		<a href="#" onclick="doneRequest();"><img <?php echo createLDImgSrc($root_path,'done.gif','0') ?> alt="<?php echo $LDEnterResult ?>"></a>
 	   <!--  outermost table creating form border -->
 <table border=0 bgcolor="#000000" cellpadding=1 cellspacing=0>
@@ -432,7 +443,7 @@ require('includes/inc_test_request_lister_fx.php');
 		</tr>	
 
 
-	
+
 	<tr bgcolor="<?php echo $bgc1 ?>">
 		<td colspan=2 align="right"><div class=fva2_ml10>
 		 <?php echo $LDDate ?> gởi:
@@ -446,6 +457,19 @@ require('includes/inc_test_request_lister_fx.php');
 		<font face="courier" size=2 color="#000000">&nbsp;<?php echo $stored_request['send_doctor'] ?></font></div><br>
 		</td>
     </tr>
+	<tr>
+		<td colspan=10 align="right"><div class=fva2_ml10>
+			<font face="courier" size=3 color="red"><b>
+			<?php
+				if($status_bill){
+					echo $LDDaThanhtoan;
+				}else{
+					echo $LDChuaThanhToan;
+				}
+			?>
+			</b></font>
+		</td>
+	</tr>
 	<tr bgcolor="<?php echo $bgc1 ?>">
 		
     </tr>	
@@ -493,7 +517,7 @@ require('includes/inc_test_request_lister_fx.php');
 </table> 
 <p>
 		<input type="image" <?php echo createLDImgSrc($root_path,'savedisc.gif','0') ?>  title="<?php echo $LDSaveEntry ?>"> 
-		<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut ?>"></a>
+		<!--<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut ?>"></a>-->
 		<a href="#" onclick="doneRequest()"><img <?php echo createLDImgSrc($root_path,'done.gif','0') ?> alt="<?php echo $LDEnterResult ?>"></a>
 <?php
 

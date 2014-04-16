@@ -12,7 +12,8 @@ require ($root_path . 'include/core/inc_environment_global.php');
  */
 
 /* Start initializations */
-$lang_tables = array ('departments.php' );
+$lang_tables[]='departments.php';
+$lang_tables[]='billing.php';
 define ( 'LANG_FILE', 'konsil_chemlabor.php' );
 
 /* We need to differentiate from where the user is coming:
@@ -88,7 +89,7 @@ switch ($mode) {
 				{
 				$para_array=array();
 				//$temp_array=array('_nit__urine','_leu__urine','_uro__urine','_pro__urine','_ph__urine','_blo__urine','_ket__urine','_bil__urine','_glu__urine','_sg__urine');
-					while($row_tests = $result_tests->FetchRow()) {
+				/*	while($row_tests = $result_tests->FetchRow()) {
 					 $sql2="select tp.bill_item_nr, bi.item_unit_cost from care_test_param as tp left join care_billing_item as bi on (tp.bill_item_nr=bi.item_code) where tp.id='".$row_tests['paramater_name']."'";
 						//echo $sql2;
 						$para_array[]=$row_tests['paramater_name'];
@@ -104,7 +105,7 @@ switch ($mode) {
 					if((in_array('_nit__urine',$para_array))&&(in_array('_leu__urine',$para_array))&&(in_array('_uro__urine',$para_array))&&(in_array('_pro__urine',$para_array))&&(in_array('_ph__urine',$para_array))&&(in_array('_blo__urine',$para_array))&&(in_array('_ket__urine',$para_array))&&(in_array('_bil__urine',$para_array))&&(in_array('_glu__urine',$para_array))&&(in_array('_sg__urine',$para_array))){
 					//echo 'is_array';
 					$eComBill->createBillItem($pn, 'NT','35000', 1, '35000',date("Y-m-d G:i:s") );
-					} 
+					} */
 				}
 			signalNewDiagnosticsReportEvent ( '', 'labor_test_request_printpop.php' );
 			header ( "location:" . $thisfile . URL_REDIRECT_APPEND . "&edit=$edit&pn=$pn&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize" );
@@ -135,6 +136,17 @@ if (!$mode) {/* Get the pending test requests */
 	} else {
 		echo "<p>$sql<p>$LDDbNoRead";
 		exit ();
+	}
+	$sql1 = "SELECT bill.bill_item_status, bill.bill_item_code
+			FROM care_test_request_" . $subtarget . " AS req
+			INNER JOIN care_test_request_chemlabor_sub AS req_sub ON req_sub.batch_nr=req.batch_nr
+			INNER JOIN care_test_param AS tp ON req_sub.paramater_name=tp.id
+			INNER JOIN care_billing_bill_item AS bill ON req_sub.encounter_nr=bill.bill_item_encounter_nr AND DATE(req.send_date)=DATE(bill.bill_item_date) AND tp.bill_item_nr=bill.bill_item_code
+			WHERE req.batch_nr=$batch_nr
+			ORDER BY req.send_date DESC";
+	if ($requests1 = $db->Execute ( $sql1 )) {
+		$bill = $requests1->FetchRow ();
+		$status_bill=$bill['bill_item_status'];
 	}
 	$mode = "show";
 }
@@ -351,11 +363,11 @@ if ($batchrows) {
 	?>
 		</td>
 		<!-- right block for the form -->
-		<td><!-- Here begins the form  --> <a href="javascript:printOut()"><img
+		<td><!-- Here begins the form  --> <!--<a href="javascript:printOut()"><img
 			<?php
 	echo createLDImgSrc ( $root_path, 'printout.gif', '0', 'absmiddle' )?>
 			alt="<?php
-	echo $LDPrintOut?>"></a><a
+	echo $LDPrintOut?>"></a>--><a
 			href="<?php
 	echo 'labor_datainput.php' . URL_APPEND . '&encounter_nr=' . $pn . '&job_id=' . $batch_nr . '&mode=' . $mode . '&update=0&user_origin=lab_mgmt';
 	?>"><img
@@ -375,11 +387,11 @@ if ($batchrows) {
 	require_once ('includes/inc_test_request_printout_chemlabor.php');
 	?>
 
-     <a href="javascript:printOut()"><img
+    <!-- <a href="javascript:printOut()"><img
 			<?php
 	echo createLDImgSrc ( $root_path, 'printout.gif', '0', 'absmiddle' )?>
 			alt="<?php
-	echo $LDPrintOut?>"></a><a
+	echo $LDPrintOut?>"></a>--><a
 			href="<?php
 	echo 'labor_datainput.php' . URL_APPEND . '&encounter_nr=' . $pn . '&job_id=' . $batch_nr . '&mode=' . $mode . '&update=1&user_origin=lab_mgmt';
 	?>"><img

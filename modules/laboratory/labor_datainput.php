@@ -51,6 +51,7 @@ if($result=&$lab_obj->getResult($job_id,$parameterselect)){
 		$pdata[$row['paramater_name']] = $row['parameter_value'];
 		$sub_id[$row['paramater_name']] = $row['sub_id'];
 		$status[$row['paramater_name']] = $row['status'];
+		$std_date=$row['test_date'];
 	}
 }
 
@@ -105,7 +106,7 @@ if( isset($mode) && $mode=='save' ){
 					$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $lab_obj_sub->getLastQuery(), date('Y-m-d H:i:s'));
 				}else{echo "<p>".$lab_obj->getLastQuery()."$LDDbNoSave";}
 			}$i++;
-}
+		}
 
 		# If save successful, jump to display values
 		if($saved){
@@ -231,7 +232,7 @@ if( isset($mode) && $mode=='save' ){
 	}
 }
 
-if($saved || $row['test_date']) $std_date=$row['test_date'];
+//if($saved || $row['test_date']) $std_date=$row['test_date'];
 
 # Prepare title
 if($update) $sTitle="$LDLabReport - $LDEdit";
@@ -347,13 +348,13 @@ $smarty->assign('sJobIdNr','<input name="job_id" type="text" size="14">');
 
 $smarty->assign('sExamDate',$LDExamDate);
 
-//if($saved||$row['test_date']||$std_date){
-//	$smarty->assign('sExamDate',formatDate2Local($std_date,$date_format).'<input type=hidden name="std_date" value="'.$std_date.'">');
-//}else{
+if($saved || $row['test_date'] || $std_date){
+	$smarty->assign('sMiniCalendar',$calendar->show_calendar($calendar,$date_format,'test_date',$std_date));
+}else{
 	//gjergji : new calendar
-	$smarty->assign('sMiniCalendar',$calendar->show_calendar($calendar,$date_format,'test_date'));
+	$smarty->assign('sMiniCalendar',$calendar->show_calendar($calendar,$date_format,'test_date',date('Y-m-d')));
 	//end : gjergji
-//}
+}
 
 # Assign parameter elements
 

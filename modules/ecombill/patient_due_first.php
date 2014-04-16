@@ -293,7 +293,7 @@ if($billid == "currentbill") {
 //			$Pres->updateCostPres($pres['prescription_id']);
 //		}
 //	}
-
+	
 	$presresult = $Pres->getAllPresOfEncounterByBillId($patientno,'0');	  //list lai cac toa chua thanh toan, da duoc cap nhat gia
 	if(is_object($presresult))
 	{

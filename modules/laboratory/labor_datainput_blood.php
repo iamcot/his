@@ -24,7 +24,8 @@ if(!$encounter_nr) {
 
 if(!isset($user_origin)||empty($user_origin))
 $user_origin='lab';
-
+include_once($root_path.'include/core/inc_front_chain_lang.php');
+$core = & new Core;
 # Create encounter object
 require_once($root_path.'include/care_api_classes/class_encounter.php');
 $encounter=new Encounter($encounter_nr);
@@ -48,6 +49,7 @@ if($result=&$lab_obj->getResult($job_id,$parameterselect)){
 	while($row=$result->FetchRow()) {
 		$batch_nr = $row['batch_nr'];
 		$pdata[$row['paramater_name']] = $row['parameter_value'];
+		$std_date=$row['test_date'];
 	}
 }
 
@@ -68,7 +70,15 @@ if( isset($mode) && $mode=='save' ){
 			}
 		}
 	}
-
+	$sql = "UPDATE care_test_findings_blood
+				SET status='received',
+					test_date='".formatDate2STD($test_date,$date_format)."',
+					test_time='".date('H:i:s')."',
+					history=" . $enc_obj->ConcatHistory ( "Done: " . date ( 'Y-m-d H:i:s' ) . " = " . $_SESSION ['sess_user_name'] . "\n" ) . ",
+					modify_id = '" . $_SESSION ['sess_user_name'] . "',
+					modify_time = '" . date ( 'YmdHis' ) . "'
+				WHERE batch_nr = '" . $batch_nr . "'";echo $sql;
+	if($ergebnis=$core->Transact($sql)){
 	$dbuf['job_id']=$job_id;
 	$dbuf['encounter_nr']=$encounter_nr;
 	if($allow_update == TRUE){
@@ -156,10 +166,12 @@ if( isset($mode) && $mode=='save' ){
 				}
 			}
 			$saved=true;
-		
+
 		}else{echo "<p>".$lab_obj->getLastQuery()."$LDDbNoSave";}
 
 	}
+	}
+	
 	 $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $lab_obj->getLastQuery(), date('Y-m-d H:i:s'));
 	# If save successful, jump to display values
 	if($saved){
@@ -216,7 +228,7 @@ if( isset($mode) && $mode=='save' ){
 	}
 }
 
-if($saved || $row['test_date']) $std_date=$row['test_date'];
+//if($saved || $row['test_date']) $std_date=$row['test_date'];
 
 # Prepare title
 if($update) $sTitle="$LDLabReport - $LDEdit";
@@ -332,13 +344,13 @@ $smarty->assign('sJobIdNr','<input name="job_id" type="text" size="14">');
 
 $smarty->assign('sExamDate',$LDExamDate);
 
-//if($saved||$row['test_date']||$std_date){
-//	$smarty->assign('sExamDate',formatDate2Local($std_date,$date_format).'<input type=hidden name="std_date" value="'.$std_date.'">');
-//}else{
+if($std_date){
+	$smarty->assign('sMiniCalendar',$calendar->show_calendar($calendar,$date_format,'test_date',$std_date));
+}else{
 	//gjergji : new calendar
-	$smarty->assign('sMiniCalendar',$calendar->show_calendar($calendar,$date_format,'test_date'));
+	$smarty->assign('sMiniCalendar',$calendar->show_calendar($calendar,$date_format,'test_date',date('Y-m-d')));
 	//end : gjergji
-//}
+}
 
 # Assign parameter elements
 
@@ -412,7 +424,7 @@ echo '
 		echo '<input name="'.$pId.'" type="text" size="8" ';
 		echo 'value="';
 		if(isset($pdata[$pId])&&!empty($pdata[$pId])) {
-			echo trim($pdata[$pId]) . "\" readonly >";
+			echo trim($pdata[$pId]) . "\" >";
 		} else echo '">';
 
 		echo '</td><td>

@@ -82,10 +82,8 @@ if($force_no_cache || (!$force_no_cache && !$is_cached)){
 	$dept_DOC=$dept_obj->getAllActiveWithDOC();
 	include_once($root_path.'include/care_api_classes/class_personell.php');
 	$pers_obj=new Personell;
-	$quicklist=&$pers_obj->getDOCQuicklist($dept_DOC,ROLE_NR_DOCTOR,$pyear,$pmonth);
+	$quicklist=&$pers_obj->getDOCQuicklist($dept_DOC,$pyear,$pmonth);
 }
-
-$role_nr = 15;//bsi role nr = 15
 
 # Start Smarty templating here
  /**
@@ -178,7 +176,7 @@ if(!$force_no_cache&&$is_cached){
 	while(list($x,$v)=each($dept_DOC)){
 	
 	if(in_array($v['nr'],$quicklist)){
-		if($dutyplan=$pers_obj->getDOCDutyplan($v['nr'],$role_nr,$pyear,$pmonth)){
+		if($dutyplan=$pers_obj->getDOCDutyplan($v['nr'],$pyear,$pmonth)){
 	
 			$a=unserialize($dutyplan['duty_1_txt']);	
 			$ao=unserialize($dutyplan['duty_3_txt']);
