@@ -221,10 +221,10 @@ function doneResult(){
         {
 		window.location="<?php echo 'labor_test_findings_mono.php?sid='.$sid.'&lang='.$lang.'&batch_nr='.$batch_nr.'&pn='.$pn.'&entry_date='.$stored_request['xray_date'].'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin.'&tracker='.$tracker.'&mode=done'; ?>";
 
-	}
+        }
         else
         {return false;}
-}
+	}
 }
 
 function saveResult(){

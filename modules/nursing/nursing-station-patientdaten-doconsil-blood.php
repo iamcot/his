@@ -199,8 +199,14 @@ if(isset($pn) && $pn) {
 						// Set the visual signal
 						setEventSignalColor($pn,SIGNAL_COLOR_DIAGNOSTICS_REQUEST);
 						//echo $sql;
-						header("location:".$root_path."modules/laboratory/labor_test_request_aftersave.php".URL_REDIRECT_APPEND."&edit=$edit&saved=insert&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=chemlabor&noresize=$noresize&batch_nr=$batch_nr");
-						exit;
+//						header("location:".$root_path."modules/laboratory/labor_test_request_aftersave.php".URL_REDIRECT_APPEND."&edit=$edit&saved=insert&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=chemlabor&noresize=$noresize&batch_nr=$batch_nr");
+                        header('Content-Type: text/html; charset=utf-8');                 //đã thêm
+                        echo "<script type='text/javascript'>";                                    //đã thêm
+                        echo "alert('Kết quả đã được lưu.');";                                      //đã thêm
+//            echo "alert('$LDNotifySave');";                                                    //đã thêm
+                        echo "window.location.replace('".$root_path."labor_test_request_admin_blood.php".URL_APPEND."&pn=".$encounter_nr."&batch_nr=".$job_id."&user_origin=lab')";//đã thêm
+                        echo "</script>";
+                        exit;
 					}else{
 					     echo "<p>$sql<p>$LDDbNoSave";
 						 $mode='';

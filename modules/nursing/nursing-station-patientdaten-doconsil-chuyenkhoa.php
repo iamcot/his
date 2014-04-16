@@ -306,7 +306,6 @@ function printOut()
 }
 
 
-
 <?php require($root_path.'include/core/inc_checkdate_lang.php'); ?>
 //-->
 </script>

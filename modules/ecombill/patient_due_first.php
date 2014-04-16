@@ -632,7 +632,7 @@ $smarty->assign('sHiddenInputs','<input type="hidden" name="patientno" value="'.
 /**
 * show Template
 */
-$smarty->assign('sMainBlockIncludeFile','ecombill/bill_payment_header.tpl');
+$smarty->assign('sMainBlockInc ludeFile','ecombill/bill_payment_header.tpl');
 
 $smarty->display('common/mainframe.tpl');
 ?>
