@@ -170,8 +170,7 @@ if( isset($mode) && $mode=='save' ){
 //thêm  save
         header('Content-Type: text/html; charset=utf-8');       //đã thêm
         echo "<script type='text/javascript'>";                 //đã thêm
-//        echo "alert('Kết quả đã được lưu.');";                           //đã thêm
-        echo "alert('ABC đi chơi.');";
+        echo "alert('Kết quả đã được lưu.');";                           //đã thêm
 //            echo "alert('$LDNotifySave');";                                         //đã thêm
         echo "window.location.replace('labor_test_request_admin_chemlabor.php".URL_APPEND."&pn=".$encounter_nr."&batch_nr=".$job_id."&user_origin=lab')";//đã thêm
         echo "</script>";

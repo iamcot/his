@@ -77,8 +77,7 @@ switch($mode){
 		include_once($root_path.'include/core/inc_front_chain_lang.php');
 		$core = & new Core;
 
-		$sql="UPDATE care_test_request_".$db_request_table." SET										 
-                                          
+		$sql="UPDATE care_test_request_".$db_request_table." SET
 										  results='".addslashes(htmlspecialchars($results))."',
                                           results_date='".formatDate2STD($results_date,$date_format)."',
 										  results_doctor='".htmlspecialchars($results_doctor)."',
@@ -170,6 +169,7 @@ switch($mode){
 			echo "<p>$sql<p>$LDDbNoSave";
 			$mode='';
 		}
+
 		break; // end of case 'save'
 	}
 	default: $mode='';
@@ -324,10 +324,10 @@ function printOut()
 	testprintout<?php echo $sid ?>=window.open(urlholder,"testprintout<?php echo $sid ?>","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
     //testprintout<?php echo $sid ?>.print();
 }
-function popDocPer(target,obj_val,obj_name){
-			urlholder="./personell_search.php<?php echo URL_REDIRECT_APPEND; ?>&target="+target+"&obj_val="+obj_val+"&obj_name="+obj_name;
-			DSWIN<?php echo $sid ?>=window.open(urlholder,"wblabel<?php echo $sid ?>","menubar=no,width=400,height=550,resizable=yes,scrollbars=yes");
-		}
+function popDocPer(target,obj_val,obj_name){  //đã thêm hàm popDocPer
+    urlholder="<?php echo $root_path; ?>modules/laboratory/personell_search.php<?php echo URL_REDIRECT_APPEND; ?>&target="+target+"&obj_val="+obj_val+"&obj_name="+obj_name;
+    DSWIN<?php echo $sid ?>=window.open(urlholder,"wblabel<?php echo $sid ?>","menubar=no,width=400,height=550,resizable=yes,scrollbars=yes");
+}
 		$(function(){
 $("#f-calendar-field-1").mask("99/99/9999");
 $("#findings_time").mask("99:99");
