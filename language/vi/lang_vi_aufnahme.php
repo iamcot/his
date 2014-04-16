@@ -509,6 +509,8 @@ $LDGotDrug = 'Nhận thuốc';
 $LDCreatePres='Tạo toa thuốc mới';
 $LDFinish='xong';
 $LDNotYet='chưa';
+# 20/03/2014
+$LD_flagNote ="Đã chốt";
 $LDNote = 'Ghi chú';
 $LDTotalEstimate = 'Tổng tiền dự tính';
 $LDTotalDay = 'Tổng ngày dùng';

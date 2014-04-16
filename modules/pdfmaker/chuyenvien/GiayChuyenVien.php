@@ -150,11 +150,11 @@ if($result=$db->Execute($sql)){
 }
 
 if($strbvden){
-	$strbvden = $strbvden.str_pad("", (120-strlen('Ban giám đốc '.$strbvden)), ".", STR_PAD_RIGHT);
+	$strbvden = $strbvden.str_pad("", (120-strlen(''.$strbvden)), ".", STR_PAD_RIGHT);
 }else{
 	$strbvden = $strbvden.str_pad("", 118, ".", STR_PAD_RIGHT);;
 }
-$fpdf->Cell(0,6,'Ban giám đốc '.$strbvden,0,1,'L'); 
+$fpdf->Cell(0,6,''.$strbvden,0,1,'L');
 
 //Thông tin bệnh nhân
 $fpdf->Cell(0,6,'  '.PDF_HOSNAME.' chúng tôi trân trọng giới thiệu:',0,1,'L');
