@@ -65,7 +65,7 @@
 
         function getInfoTest(){
             global $db;
-            $this->sql="SELECT batch_nr,encounter_nr,send_date,dept_nr
+            $this->sql="SELECT  batch_nr,encounter_nr,send_date,dept_nr
                         FROM $this->tb_test;
 			WHERE status='pending' OR status='received' ORDER BY  send_date DESC";
             if ($this->res['oi']=$db->Execute($this->sql)) {
@@ -84,14 +84,17 @@
         function getInfoMedoc($enc){
                 global $db;
                 if(empty($enc)) $enc='0';
-                $this->sql="SELECT * FROM $this->tb_medoc_op WHERE encounter_nr='$enc'";
+                $this->sql="SELECT * FROM $this->tb_medoc_op WHERE encounter_nr='$enc' ";
                 if($this->res['gim']=$db->Execute($this->sql)){
                         if ($this->res['gim']->RecordCount()) {
                 return $this->res['gim']->FetchRow();
                         }else{return FALSE;}
                 }else{return FALSE;}
-
         }
+
+
+
+
 
     }
 ?>

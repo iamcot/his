@@ -1,3 +1,4 @@
+
 <?php
     error_reporting(E_COMPILE_ERROR|E_ERROR|E_CORE_ERROR);
     require('./roots.php');
@@ -41,7 +42,7 @@
     $pagen->setSortDirection($odir);
     
     $toggle=0;
-    $sql1="SELECT enc.encounter_nr,yc.date_request,yc.encounter_nr,yc.clinical_info,yc.level_method,ps.name_last,ps.name_first,ps.date_birth,t.name AS citytown_name,qh.name AS quanhuyen_name,px.name AS phuongxa_name,ps.addr_str_nr,ps.addr_str";
+    $sql1="SELECT enc.encounter_nr,yc.date_request,yc.encounter_nr,hs.special,yc.level_method,ps.name_last,ps.name_first,ps.date_birth,t.name AS citytown_name,qh.name AS quanhuyen_name,px.name AS phuongxa_name,ps.addr_str_nr,ps.addr_str";
     $sql2=" FROM care_op_med_doc AS hs
             LEFT JOIN care_encounter_op AS tb ON tb.nr=hs.encounter_op_nr
             LEFT JOIN care_test_request_or AS yc ON yc.batch_nr=tb.batch_nr
@@ -49,7 +50,9 @@
             LEFT JOIN care_person AS ps ON ps.pid=enc.pid
 			LEFT JOIN care_address_citytown AS t ON ps.addr_citytown_nr=t.nr
 			LEFT JOIN care_address_quanhuyen AS qh ON ps.addr_quanhuyen_nr=qh.nr
-			LEFT JOIN care_address_phuongxa AS px ON ps.addr_phuongxa_nr=px.nr";
+			LEFT JOIN care_address_phuongxa AS px ON ps.addr_phuongxa_nr=px.nr"
+
+    ;
     $sql3=" ORDER BY ps.name_last $odir";
     if($ergebnis=$db->SelectLimit($sql1.$sql2.$sql3,$pagen->MaxCount(),$pagen->BlockStartIndex())){
 	if ($linecount=$ergebnis->RecordCount()){ 
