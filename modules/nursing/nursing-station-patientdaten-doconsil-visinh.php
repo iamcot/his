@@ -279,7 +279,7 @@ $core = & new Core;
 					            $batch_nr=_BATCH_NR_INIT_;
 					          }
 			             }
-			               else 
+			               else
 						   {
 						     echo "<p>$sql<p>$LDDbNoRead";
 						   }
@@ -313,6 +313,7 @@ $core = & new Core;
  $smarty->assign('sWindowTitle',"Xét nghiệm vi sinh :: $formtitle");
 
  # Create start new button if user comes from lab
+# else $breakfile=$root_path.'modules/laboratory/labor.php'.URL_APPEND
   if($user_origin=='lab'){
 	$smarty->assign('pbAux1',$thisfile.URL_APPEND."&station=$station&user_origin=$user_origin&status=$status&target=$target&noresize=$noresize");
 	$smarty->assign('gifAux1',createLDImgSrc($root_path,'newpat2.gif','0'));
@@ -454,6 +455,7 @@ elseif(!$read_form && !$no_proc_assist)
 echo '
 		<input type="text" name="stat_dept" value="'.strtoupper($station).'" size=25 maxlength=30>
   		</div>
+</div><br>
 		';*/
         if($edit)
         {

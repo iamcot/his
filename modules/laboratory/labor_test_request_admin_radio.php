@@ -262,7 +262,7 @@ function PopupGetImage()
 function viewallresults(){
 	document.form_test_request.action="<?php echo '../radiology/viewresults_radio.php?sid='.$sid.'&lang='.$lang.'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin; ?>";
 	document.form_test_request.submit();
-}	
+}
 
 function popDocPer(target,obj_val,obj_name){     //đã thêm
     urlholder="<?php echo $root_path; ?>modules/laboratory/personell_search.php<?php echo URL_REDIRECT_APPEND; ?>&target="+target+"&obj_val="+obj_val+"&obj_name="+obj_name;  //đã thêm
