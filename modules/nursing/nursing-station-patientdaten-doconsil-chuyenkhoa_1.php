@@ -18,53 +18,34 @@ define('LANG_FILE','konsil.php');
 *  $user_origin == lab ;  from the laboratory
 *  and set the user cookie name and break or return filename
 */
-if($user_origin=='lab')
-{
-  $local_user='aufnahme_user';
-  if($target=="radio") $breakfile=$root_path.'modules/radiology/radiolog.php'.URL_APPEND;
-  else $breakfile=$root_path.'modules/registration_admission/show_appointment_1.php'.URL_APPEND;
-}
-else
-{
+if($user_origin=='lab'){
+  //$local_user='ck_lab_user';
+    $local_user='aufnahme_user';
+    $breakfile=$root_path."modules/registration_admission/show_appointment_1.php".URL_APPEND."&pid=".$_SESSION['sess_pid']."&target=search&type_nr=4";
+
+}else{
   $local_user='ck_pflege_user';
-  $breakfile="nursing-station-patientdaten.php".URL_APPEND."&edit=$edit&station=$station&pn=$pn";
-    
+  $breakfile=$root_path."modules/nursing/nursing-station-patientdaten.php".URL_APPEND."&edit=$edit&station=$station&pn=$pn";
 }
 
 require_once($root_path.'include/core/inc_front_chain_lang.php');
 require_once($root_path.'global_conf/inc_global_address.php');
-require_once($root_path.'include/core/access_log.php');
-    require_once($root_path.'include/care_api_classes/class_access.php');
-    $logs = new AccessLog();
+
 //$db->debug=1;
 
-$thisfile=basename(__FILE__);
+$thisfile='nursing-station-patientdaten-doconsil-chuyenkhoa.php';
 
 $bgc1='#ffffff';  // entry form's background color
 
 $abtname=get_meta_tags($root_path."global_conf/$lang/konsil_tag_dept.pid");
 
-$formtitle='Khoa xét nghiệm';
-$sql="select personell_nr,name from care_users  where login_id='".$_SESSION['sess_login_userid']."'";
-//echo $sql;
-$temp=$db->execute($sql);
-if($temp->recordcount())
-{
-	if($result=$temp->fetchrow()){
-		$pers_nr=$result['personell_nr'];
-		$pers_name=$result['name'];
-	}else{
-		$pers_nr='';
-		$pers_name='';
-	}
-}
-$target='visinh';						
+$formtitle=$LDChuyenKhoa;
+						
 $db_request_table=$target;
-
-define('_BATCH_NR_INIT_',30000000); 
+define('_BATCH_NR_INIT_',80000000); 
 /*
 *  The following are  batch nr inits for each type of test request
-*   chemlabor = 10000000; patho = 20000000; baclabor = 30000000; blood = 40000000; generic = 50000000; radio = 60000000
+*   chemlabor = 10000000; patho = 20000000; baclabor = 30000000; blood = 40000000; generic = 50000000; radio = 60000000; dientim= 70000000
 */
 						
 /* Here begins the real work */
@@ -104,88 +85,40 @@ $core = & new Core;
 	   }		
      }
 	 
-	//Tuyen
-	if ($mode!="")
-	{
-		$a = array( "lao" => 0, "kstdr" => 0, "huyettrang" => 0);
-		foreach ($a as $k => $v) {
-			if ($group_nr==$k){
-				$a[$k]=1;			
-			}
-		}
-		//$request_all, $item_code
-		//Ham tach cac code_item trong list --------------
-		
-		$data = substr($code_item,1,strlen($code_item));
-		$data_name = substr($request_all,1,strlen($request_all));
-		$data = $data.'#';
-		$data_name = $data_name."#";
-		$from=0; $j=0; 
-		$array_code = array();
-		$from_n=0; $array_name = array();
-		while (strlen($data)){
-			$from = strpos($data, '#');
-			$from_n = strpos($data_name, "#");
-			$temp=substr($data,0,$from);
-			$temp_n=substr($data_name,0,$from_n);
-			if(strlen($temp)){
-				$array_code[$j]=$temp;
-				$array_name[$j]=$temp_n;
-				$j++;
-			}
-			$data = substr($data,$from+1,strlen($data));	
-			$data_name = substr($data_name,$from_n+1,strlen($data_name));
-		}
-		$n = count($array_code);
-		//echo $n;
-		//echo $array_code[0];
-	}
-	//-------
-	
+
+	   
 	 if(!isset($mode))   $mode="";
 		
 		  switch($mode)
 		  {
 				     case 'save':
-								
+							
                                  $sql="INSERT INTO care_test_request_".$db_request_table." 
-                                          (batch_nr, encounter_nr, dept_nr, 
-										  lao, kstdr, huyettrang, 
+                                          (batch_nr, encounter_nr, dept_nr, 										   
 										  clinical_info, test_request, send_date, 
-										  send_doctor,send_doctor_nr, status, 
+										  send_doctor, status, 
 										  history,
 										  create_id, 
 										  create_time)
 										  VALUES 
 										  (
-										   '".$batch_nr."','".$pn."','".$dept_nr."',
-										   '".$a['lao']."','".$a['kstdr']."','".$a['huyettrang']."',
-										   '".htmlspecialchars($clinical_info)."','".htmlspecialchars($test_request)."','".formatDate2STD($date,$date_format)." ".$time."',
-										   '".htmlspecialchars($send_doctor)."','".$send_doctor_nr."', 'pending', 
+										   '".$batch_nr."','".$pn."','".$dept_nr."',										   
+										   '".htmlspecialchars($clinical_info)."','".htmlspecialchars($test_request)."','".formatDate2STD($send_date,$date_format)."',
+										   '".htmlspecialchars($send_doctor)."', 'pending', 
 										   'Create: ".date('Y-m-d H:i:s')." = ".$_SESSION['sess_user_name']."\n',
 										   '".$_SESSION['sess_user_name']."',
 										   '".date('YmdHis')."'
 										   )";
 
 							      if($ergebnis=$core->Transact($sql))
-       							  {	
-								  $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql, date('Y-m-d H:i:s'));
-									//if($n>0){
-									//	for ($i=0; $i<$n; $i++){
-										//	$sql="INSERT INTO care_test_request_".$db_request_table."_sub  
-										//	  (sub_id, batch_nr, item_bill_code, item_bill_name, encounter_nr)
-										//	  VALUES 
-										//	  ('0', '".$batch_nr."','".$array_code[$i]."','".$array_name[$i]."','".$pn."')";
-											$core->Transact($sql);
-										//}
-									//}
+       							  {
 									//echo $sql;
 								  	// Load the visual signalling functions
 									include_once($root_path.'include/core/inc_visual_signalling_fx.php');
 									// Set the visual signal 
 									setEventSignalColor($pn,SIGNAL_COLOR_DIAGNOSTICS_REQUEST);									
 									
-									 header("location:".$root_path."modules/laboratory/labor_test_request_aftersave_visinh.php?sid=$sid&lang=$lang&edit=$edit&saved=insert&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&noresize=$noresize&batch_nr=$batch_nr");
+									 header("location:".$root_path."modules/laboratory/labor_test_request_aftersave_chuyenkhoa.php?sid=$sid&lang=$lang&edit=$edit&saved=insert&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&noresize=$noresize&batch_nr=$batch_nr");
 									 exit;
 								  }
 								  else 
@@ -199,11 +132,10 @@ $core = & new Core;
 		     case 'update':
 			 
 							      $sql="UPDATE care_test_request_".$db_request_table." SET 
-								          dept_nr = '".$a['dept_nr']."', 
-										  lao='".$a['lao']."', kstdr='".$a['kstdr']."', huyettrang='".$a['huyettrang']."', 										 
+								          dept_nr = '".$dept_nr."', 										  
 										  clinical_info='".htmlspecialchars($clinical_info)."', test_request='".htmlspecialchars($test_request)."', 
-										  send_date='".formatDate2STD($date,$date_format)." ".$time."', 
-										  send_doctor='".htmlspecialchars($send_doctor)."',send_doctor_nr='".$send_doctor_nr."', status='".$status."', 
+										  send_date='".formatDate2STD($send_date,$date_format)."', 
+										  send_doctor='".htmlspecialchars($send_doctor)."', status='".$status."', 
 										  history=".$core->ConcatHistory("Update: ".date('Y-m-d H:i:s')." = ".$_SESSION['sess_user_name']."\n").",
 										  modify_id='".$_SESSION['sess_user_name']."',
 										  modify_time='".date('YmdHis')."'
@@ -211,22 +143,13 @@ $core = & new Core;
 										  							
 							      if($ergebnis=$core->Transact($sql))
        							  {
-								  $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql, date('Y-m-d H:i:s'));
-										//$sql="DELETE FROM care_test_request_".$db_request_table."_sub WHERE batch_nr='".$batch_nr."'";
-										$core->Transact($sql);
-										
-									//	for ($i=0; $i<$n; $i++){
-									//		$sql="INSERT INTO care_test_request_".$db_request_table."_sub  (sub_id, batch_nr, item_bill_code, item_bill_name, encounter_nr) VALUES ('0', '".$batch_nr."','".$array_code[$i]."','".$array_name[$i]."','".$pn."')";
-									//		$core->Transact($sql);
-											
-									//	}
 									//echo $sql;
 								  	// Load the visual signalling functions
 									include_once($root_path.'include/core/inc_visual_signalling_fx.php');
 									// Set the visual signal 
 									setEventSignalColor($pn,SIGNAL_COLOR_DIAGNOSTICS_REQUEST);									
 									
-									 header("location:".$root_path."modules/laboratory/labor_test_request_aftersave_visinh.php?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&batch_nr=$batch_nr&noresize=$noresize");
+									 header("location:".$root_path."modules/laboratory/labor_test_request_aftersave_chuyenkhoa.php?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&batch_nr=$batch_nr&noresize=$noresize");
 									 exit;
 								  }
 								  else
@@ -251,9 +174,6 @@ $core = & new Core;
 					        {
      					       $stored_request=$ergebnis->FetchRow();
 							   $edit_form=1;
-							   $sql="SELECT * FROM care_test_request_".$db_request_table."_sub WHERE batch_nr='".$batch_nr."' ";
-							   if($item_ergebnis = $db->Execute($sql))
-									$value_edit = $item_ergebnis->RecordCount();
 					         }
 			             }
 						 
@@ -279,7 +199,7 @@ $core = & new Core;
 					            $batch_nr=_BATCH_NR_INIT_;
 					          }
 			             }
-			               else
+			               else 
 						   {
 						     echo "<p>$sql<p>$LDDbNoRead";
 						   }
@@ -298,7 +218,7 @@ $core = & new Core;
  $smarty = new smarty_care('nursing');
 
 # Title in toolbar
- $smarty->assign('sToolbarTitle', "Xét nghiệm vi sinh :: $formtitle");
+ $smarty->assign('sToolbarTitle', "$LDDiagnosticTest :: $formtitle");
 
   # hide back button
  $smarty->assign('pbBack',FALSE);
@@ -310,10 +230,9 @@ $core = & new Core;
  $smarty->assign('breakfile',$breakfile);
 
  # Window bar title
- $smarty->assign('sWindowTitle',"Xét nghiệm vi sinh :: $formtitle");
+ $smarty->assign('sWindowTitle',"$LDDiagnosticTest :: $formtitle");
 
  # Create start new button if user comes from lab
-# else $breakfile=$root_path.'modules/laboratory/labor.php'.URL_APPEND
   if($user_origin=='lab'){
 	$smarty->assign('pbAux1',$thisfile.URL_APPEND."&station=$station&user_origin=$user_origin&status=$status&target=$target&noresize=$noresize");
 	$smarty->assign('gifAux1',createLDImgSrc($root_path,'newpat2.gif','0'));
@@ -331,9 +250,6 @@ $smarty->assign('sOnLoadJs','onLoad="'.$sOnLoadJs.'"');
  # Collect extra javascript code
 
  ob_start();
- require_once ('../../js/jscalendar/calendar.php');
-			$calendar = new DHTML_Calendar('../../js/jscalendar/', $lang, 'calendar-system', true);
-			$calendar->load_files();
 ?>
 
 <style type="text/css">
@@ -350,7 +266,13 @@ div.fa2_ml3 {font-family: arial; font-size: 12; margin-left: 3; }
 <!-- 
 function chkForm(d){
 
-    if((d.send_doctor.value=='')||(d.send_doctor.value==' '))
+    if((d.test_request.value=='')||(d.test_request.value==' '))
+	{
+		alert("<?php echo $LDPlsEnterDiagnosisQuiry ?>");
+		d.test_request.focus();
+		return false;
+	}
+	else if((d.send_doctor.value=='')||(d.send_doctor.value==' '))
 	{
 		alert("<?php echo $LDPlsEnterDoctorName ?>");
 		d.send_doctor.focus();
@@ -362,7 +284,7 @@ function chkForm(d){
 		d.send_date.focus();
 		return false;
 	}
-	
+	else return true;
 }
 
 function sendLater()
@@ -370,22 +292,14 @@ function sendLater()
    document.form_test_request.status.value="draft";
    if(chkForm(document.form_test_request)) document.form_test_request.submit(); 
 }
-function popDocPer(target,obj_val,obj_name){
-			urlholder="./personell_search.php<?php echo URL_REDIRECT_APPEND; ?>&target="+target+"&obj_val="+obj_val+"&obj_name="+obj_name;
-			DSWIN<?php echo $sid ?>=window.open(urlholder,"wblabel<?php echo $sid ?>","menubar=no,width=400,height=550,resizable=yes,scrollbars=yes");
-		}
 
 function printOut()
 {
-	urlholder="<?php echo $root_path; ?>modules/laboratory/labor_test_request_printpop.php?sid=<?php echo $sid ?>&lang=<?php echo $lang ?>&user_origin=<?php echo $user_origin ?>&subtarget=<?php echo $target ?>&batch_nr=<?php echo $batch_nr ?>&pn=<?php echo $pn ?>&local_user=<?php echo $local_user?>";
+	urlholder="<?php echo $root_path ?>modules/laboratory/labor_test_request_printpop.php?sid=<?php echo $sid ?>&lang=<?php echo $lang ?>&user_origin=<?php echo $user_origin ?>&subtarget=<?php echo $target ?>&batch_nr=<?php echo $batch_nr ?>&pn=<?php echo $pn; ?>";
 	testprintout<?php echo $sid ?>=window.open(urlholder,"testprintout<?php echo $sid ?>","width=800,height=600,menubar=no,resizable=yes,scrollbars=yes");
     testprintout<?php echo $sid ?>.print();
 }
 
-$(function(){
-$("#f-calendar-field-1").mask("99/99/9999");
-$("#time").mask("99:99");
-});	
 
 <?php require($root_path.'include/core/inc_checkdate_lang.php'); ?>
 //-->
@@ -455,7 +369,6 @@ elseif(!$read_form && !$no_proc_assist)
 echo '
 		<input type="text" name="stat_dept" value="'.strtoupper($station).'" size=25 maxlength=30>
   		</div>
-</div><br>
 		';*/
         if($edit)
         {
@@ -468,7 +381,7 @@ echo '
         }
 		?></td>
       <td bgcolor="<?php echo $bgc1 ?>"  class=fva2_ml10><div   class=fva2_ml10><font size=5 color="#0000ff"><b><?php echo $formtitle ?></b></font>
-		 <br><?php echo $global_address[$target].'<br>'.$LDTel.'&nbsp;'.$global_phone[$target]; ?>
+		 <br>
 		 </td>
 		 </tr>
 	 <tr>
@@ -485,22 +398,12 @@ echo '
 
 
 		<table border=0 cellpadding=1 cellspacing=1 width=100%>
+   
     <tr>
-      <td align="right"><div class=fva2_ml10>Lao</td><br>
-      <td><input type="radio" name="group_nr" value="lao" <?php if(($edit_form || $read_form) && $stored_request['lao']) echo "checked" ?>></td>
-      <td align="right"><div class=fva2_ml10>KSTĐR</td>
-      <td><input type="radio" name="group_nr" value="kstdr" <?php if(($edit_form || $read_form) && $stored_request['kstdr']) echo "checked" ?>></td>
-	  <td align="right"><div class=fva2_ml10>Huyết trắng</td>
-      <td><input type="radio" name="group_nr" value="huyettrang" <?php if(($edit_form || $read_form) && $stored_request['huyettrang']) echo "checked" ?>></td>
+      <td colspan=4><hr></td>
     </tr>
     
-   
-	
-    <tr>
-      <td colspan=6><hr></td>
-    </tr>
-
-   
+    
   </table>
   
 		
@@ -508,49 +411,38 @@ echo '
 </tr>
 		 
 	<tr bgcolor="<?php echo $bgc1 ?>">
-		<td colspan=3><div class=fva2_ml10><?php echo $LDClinicalInfo ?>:<br>
+		<td colspan=2><div class=fva2_ml10><?php echo $LDClinicalInfo ?>:<br>
 		<textarea name="clinical_info" cols=80 rows=6 wrap="physical"><?php if($edit_form || $read_form) echo stripslashes($stored_request['clinical_info']) ?></textarea>
 				</td>
 		</tr>	
 	<tr bgcolor="<?php echo $bgc1 ?>">
-		<td colspan=3><div class=fva2_ml10>
-			<?php echo $LDReqTest ?>:<br>
-			
-		<textarea name="test_request" cols=80 rows=6 wrap="physical"><?php if($edit_form || $read_form) echo stripslashes($stored_request['test_request']) ?></textarea>
+		<td colspan=2><div class=fva2_ml10><?php echo $LDReqTest ?>:<br>
+		<textarea name="test_request" cols=80 rows=5 wrap="physical"><?php if($edit_form || $read_form) echo stripslashes($stored_request['test_request']) ?></textarea>
 				</td>
 		</tr>	
 
 
 	
 	<tr bgcolor="<?php echo $bgc1 ?>">
-		<td align="left"><div class=fva2_ml10><font color="#000099">
-			 <?php echo $LDDate .":";
+		<td colspan=2 align="right"><div class=fva2_ml10><font color="#000099">
+		 <?php echo $LDDate .":";
 
-							//gjergji : new calendar
-			
-			//end : gjergji
-			if ($stored_request['send_date']=="")
-				$dateshow=date("Y-m-d");
-			else $dateshow=formatDate2Local($stored_request['send_date'],$date_format);
-			
-			echo $calendar->show_calendar($calendar,$date_format,'date',$dateshow);
-			if(isset($stored_request['send_date']))
-			{echo '<input type="text" size="5" id="time" name="time" value="'.@convertTimeToLocal(formatDate2Local($stored_request['send_date'],$date_format,0,1)).'">';
-			}else{
-			echo '<input type="text" size="5" id="time" name="time" value="'.date("H:i").'">';
-			}
-			//end gjergji ?>
-			
-		</td>
-		<td>
-			<?php echo $LDRequestingDoc ?>:
-
-                <input type="text" name="send_doctor" size=34 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['send_doctor'];else echo $pers_name;?>">
-                <input type="hidden" name="send_doctor_nr" value="<?php if(!empty( $stored_request['send_doctor_nr'])) echo $stored_request['send_doctor_nr'];else echo $pers_nr; ?>"> <a href="javascript:popDocPer('doctor_nr','send_doctor_nr','send_doctor')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
-
-               <br>
+				  		//gjergji : new calendar
+		require_once ('../../js/jscalendar/calendar.php');
+		$calendar = new DHTML_Calendar('../../js/jscalendar/', $lang, 'calendar-system', true);
+		$calendar->load_files();
+		//end : gjergji
+		
+		echo $calendar->show_calendar($calendar,$date_format,'send_date',$stored_request['send_date']);
+		//end gjergji
+				  
+ 		echo $LDRequestingDoc ?>:
+		<input type="text" name="send_doctor" size=40 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['send_doctor'] ?>"></div><br>
 		</td>
     </tr>
+	
+	
+		
 	
 		</table> 
 	 
@@ -596,5 +488,3 @@ $smarty->assign('sMainFrameBlockData',$sTemp);
  $smarty->display('common/mainframe.tpl');
 
  ?>
-<!--<input type="text" name="send_doctor" size=34 maxlength=40 value="--><?php //if($edit_form || $read_form) echo $stored_request['send_doctor']; else echo $pers_name; ?><!--">-->
-<!--<input type="hidden" name="send_doctor_nr" value="--><?php //if($read_form && $stored_request['send_doctor_nr']) echo $stored_request['send_doctor_nr']; else echo $pers_nr;?><!--"> <a href="javascript:popDocPer('doctor_nr')"><img --><?php //echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?><!-->-->

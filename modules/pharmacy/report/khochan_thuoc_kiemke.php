@@ -371,14 +371,12 @@ ob_start();
 
 				}else{	//thuoc cu
 					if($rowItem['ton']>0 || $rowItem['nhap']>0){
-
 						/*	Cong don vao hang cu:
 								ton>0 && nhap>0 && giaton~gianhap
 								ton>0 && (giaton~giatoncuoi || giatoncuoi==0)
 								nhap>0 && (gianhap~giatoncuoi || giatoncuoi==0)								
 							Them hang moi
 						*/
-
 						if(($rowItem['giaton']>0 && $rowItem['gianhap']>0 && abs($rowItem['giaton']-$rowItem['gianhap'])<=1) || 
 							($rowItem['giaton']>0 && (abs($rowItem['giaton']-$list_encoder[$i]['giatoncuoi'])<=1 || $list_encoder[$i]['giatoncuoi']==0)) ||
 							($rowItem['gianhap']>0 && (abs($rowItem['gianhap']-$list_encoder[$i]['giatoncuoi'])<=1 || $list_encoder[$i]['giatoncuoi']==0))){ 

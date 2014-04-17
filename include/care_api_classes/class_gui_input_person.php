@@ -873,7 +873,7 @@ require('./include/js_popsearchwindow.inc.php');
 	$('#box1').show();
 	$('#box2').show();
 	$('#box3').show();
-      $('#box4').show();
+	$('#box4').show();
 	autobhyt();
 	
   }else{
@@ -982,7 +982,6 @@ require('./include/js_popsearchwindow.inc.php');
 		if($pid) $this->smarty->assign('LDRegistryNr',$LDRegistryNr);
 		$this->smarty->assign('pid',$pid);
 		$this->smarty->assign('img_source',$img_source);
-		$this->smarty->assign('LDPhoto',$LDPhoto);
 		$this->smarty->assign('LDPhoto',$LDPhoto);
 		if(isset($photo_filename)) $pfile= $photo_filename;
 			else $pfile='';
@@ -1437,7 +1436,6 @@ $this->smarty->assign('LDSelectOtherHospital',$LDSelectOtherHospital);
 		}
 		*/
 		$this->smarty->assign('LDRegBy',$LDRegBy);
-		$this->smarty->assign('LDThang1',$LDThang1);
 		if(isset($user_id) && $user_id) $buffer=$user_id; else  $buffer = $_SESSION['sess_user_name'];
 		$this->smarty->assign('sRegByInput','<input  onkeypress="return tabE(this,event)" name="user_id" type="text" value="'.$buffer.'"  style="width:96%" readonly>');
 

@@ -1526,9 +1526,9 @@ class Product extends Core {
 				
 			if($this->result=$db->Execute($this->sql)) {
 				if($this->result->RecordCount()) {
-					 return $this->result;	 
+					 return $this->result;
 				} else { return false; }
-			} else { return false; }                   
+			} else { return false; }
         }
 		function ShowNumberCatalogKhoChan_OrderByName($dongtayy, $current_page, $number_items_per_page)
         {
@@ -1564,14 +1564,14 @@ class Product extends Core {
 						".$condition." 
 					GROUP BY sub.product_encoder, sub.price, sub.exp_date
 					ORDER BY numbersum ".$updown;
-			//echo $this->sql;	
+			//echo $this->sql;
 			if($this->result=$db->Execute($this->sql)) {
 				if($this->result->RecordCount()) {
-					 return $this->result;	 
+					 return $this->result;
 				} else { return false; }
-			} else { return false; }      
+			} else { return false; }
 		}
-		
+
 		function SearchNumberCatalogKhoChan_OrderByName($condition)
 		{
 			global $db;

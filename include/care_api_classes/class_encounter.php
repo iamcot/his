@@ -3861,7 +3861,7 @@ class Encounter extends Notes {
 									p.photo_filename, t.name AS citytown_name,p.death_date,p.dantoc,p.nghenghiep,p.noilamviec,p.ngoaikieu,
 									p.hotenbaotin,p.dtbaotin,p.dcbaotin,p.tiensubenhcanhan,p.tiensubenhgiadinh,qh.name AS quanhuyen_name,px.name AS phuongxa_name,p.tuoi,
 									el.location_nr AS giuong
-							FROM $this->tb_enc AS e, 
+							FROM $this->tb_enc AS e,
 									 $this->tb_person AS p
 									 LEFT JOIN $this->tb_citytown AS t ON p.addr_citytown_nr=t.nr
 									 LEFT JOIN $this->tb_quanhuyen AS qh ON p.addr_quanhuyen_nr=qh.nr

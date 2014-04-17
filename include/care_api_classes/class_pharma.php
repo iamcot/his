@@ -2871,7 +2871,7 @@ class Pharma extends Core {
 						break;	
 		}		
 		$this->sql="SELECT DISTINCT source.monthreport, source.product_encoder, T.number AS ton, T.price AS giaton, 
-					N.number AS nhap, N.price AS gianhap, X.number AS xuat, X.price AS giaxuat, T.exp_date AS hanton, N.exp_date AS hannhap, T.lotid AS loton, N.lotid AS lonhap, X.lotid AS loxuat, 
+					N.number AS nhap, N.price AS gianhap, X.number AS xuat, X.price AS giaxuat, T.exp_date AS hanton, N.exp_date AS hannhap, T.lotid AS loton, N.lotid AS lonhap, X.lotid AS loxuat,
 					main.product_name, unit.unit_name_of_medicine, main.nuocsx 
 			FROM  ( SELECT * 
 					  FROM ".$view_ton." WHERE DATE(date_time)='$last_date_report'
@@ -2958,7 +2958,7 @@ class Pharma extends Core {
 					WHERE ton_id=$ton_id";
 		return $this->Transact($this->sql);	
 	}	
-	
+
 	function Khochan_vtyt_nhapxuatton_theongay($condition, $cond_typeput, $last_date_report, $date_show){
 		global $db;
 		

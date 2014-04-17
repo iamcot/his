@@ -22,7 +22,7 @@ if($user_origin=='lab')
 {
   $local_user='aufnahme_user';
   if($target=="radio") $breakfile=$root_path.'modules/radiology/radiolog.php'.URL_APPEND;
-  else $breakfile=$root_path.'modules/registration_admission/show_appointment_1.php'.URL_APPEND;
+   else $breakfile=$root_path.'modules/laboratory/labor.php'.URL_APPEND; 
 }
 else
 {
@@ -279,7 +279,7 @@ $core = & new Core;
 					            $batch_nr=_BATCH_NR_INIT_;
 					          }
 			             }
-			               else
+			               else 
 						   {
 						     echo "<p>$sql<p>$LDDbNoRead";
 						   }
@@ -313,7 +313,6 @@ $core = & new Core;
  $smarty->assign('sWindowTitle',"Xét nghiệm vi sinh :: $formtitle");
 
  # Create start new button if user comes from lab
-# else $breakfile=$root_path.'modules/laboratory/labor.php'.URL_APPEND
   if($user_origin=='lab'){
 	$smarty->assign('pbAux1',$thisfile.URL_APPEND."&station=$station&user_origin=$user_origin&status=$status&target=$target&noresize=$noresize");
 	$smarty->assign('gifAux1',createLDImgSrc($root_path,'newpat2.gif','0'));
@@ -374,7 +373,6 @@ function popDocPer(target,obj_val,obj_name){
 			urlholder="./personell_search.php<?php echo URL_REDIRECT_APPEND; ?>&target="+target+"&obj_val="+obj_val+"&obj_name="+obj_name;
 			DSWIN<?php echo $sid ?>=window.open(urlholder,"wblabel<?php echo $sid ?>","menubar=no,width=400,height=550,resizable=yes,scrollbars=yes");
 		}
-
 function printOut()
 {
 	urlholder="<?php echo $root_path; ?>modules/laboratory/labor_test_request_printpop.php?sid=<?php echo $sid ?>&lang=<?php echo $lang ?>&user_origin=<?php echo $user_origin ?>&subtarget=<?php echo $target ?>&batch_nr=<?php echo $batch_nr ?>&pn=<?php echo $pn ?>&local_user=<?php echo $local_user?>";
@@ -455,7 +453,6 @@ elseif(!$read_form && !$no_proc_assist)
 echo '
 		<input type="text" name="stat_dept" value="'.strtoupper($station).'" size=25 maxlength=30>
   		</div>
-</div><br>
 		';*/
         if($edit)
         {
@@ -544,11 +541,9 @@ echo '
 		</td>
 		<td>
 			<?php echo $LDRequestingDoc ?>:
-
-                <input type="text" name="send_doctor" size=34 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['send_doctor'];else echo $pers_name;?>">
-                <input type="hidden" name="send_doctor_nr" value="<?php if(!empty( $stored_request['send_doctor_nr'])) echo $stored_request['send_doctor_nr'];else echo $pers_nr; ?>"> <a href="javascript:popDocPer('doctor_nr','send_doctor_nr','send_doctor')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
-
-               <br>
+			<input type="text" name="send_doctor" size=34 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['send_doctor']; else echo $pers_name; ?>">
+			<input type="hidden" name="send_doctor_nr" value="<?php if($read_form && $stored_request['send_doctor_nr']) echo $stored_request['send_doctor_nr']; else echo $pers_nr;?>"> <a href="javascript:popDocPer('doctor_nr')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
+		</div><br>
 		</td>
     </tr>
 	
@@ -596,5 +591,3 @@ $smarty->assign('sMainFrameBlockData',$sTemp);
  $smarty->display('common/mainframe.tpl');
 
  ?>
-<!--<input type="text" name="send_doctor" size=34 maxlength=40 value="--><?php //if($edit_form || $read_form) echo $stored_request['send_doctor']; else echo $pers_name; ?><!--">-->
-<!--<input type="hidden" name="send_doctor_nr" value="--><?php //if($read_form && $stored_request['send_doctor_nr']) echo $stored_request['send_doctor_nr']; else echo $pers_nr;?><!--"> <a href="javascript:popDocPer('doctor_nr')"><img --><?php //echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?><!-->-->

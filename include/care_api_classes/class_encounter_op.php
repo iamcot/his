@@ -387,13 +387,16 @@
                     LEFT JOIN $this->tb_test AS yc ON yc.batch_nr=tb.batch_nr
                     WHERE pno.personell_nr='$personell_nr' AND yc.date_request='$date' AND yc.level_method='$level'
                     ";
-            }                                   
+            }
             if($this->result=$db->Execute($this->sql)) {
                 return $this->result;
             }else return false;
         }
         function list_doctor_op_flag($personell_nr,$level){
             global $db;
+//			if($month!='' && $pyear!=''){
+//				$cond=" AND MONTH(date_request)=$month AND YEAR(date_request)=$pyear";
+//			}
             if($level==""){
                 //Đếm tất cả các ca mổ trong tháng
                 $this->sql="SELECT yc.date_request,yc.level_method,pno.personell_nr

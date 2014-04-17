@@ -22,7 +22,8 @@ if($user_origin=='lab')
 {
   $local_user='aufnahme_user';
   if($target=="radio") $breakfile=$root_path.'modules/radiology/radiolog.php'.URL_APPEND;
-   else $breakfile=$root_path.'modules/laboratory/labor.php'.URL_APPEND; 
+   #else $breakfile=$root_path.'modules/laboratory/labor.php'.URL_APPEND;
+  else $breakfile=$root_path.'modules/registration_admission/show_appointment_1.php'.URL_APPEND;
 }
 else
 {

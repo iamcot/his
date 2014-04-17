@@ -33,14 +33,8 @@ if($temp->recordcount())
 }
 function prepareTestElements()
 {
-    global $_POST, $paramlist, $sday, $sample_time;
-	
-	/* Prepare the parameters
-	*  Check the first char of the POST_VARS. Concatenate all POST vars with
-	*  the content having "_" as the first character , then save it to  "parameters"
-	*/
-	$paramlist='';
-					   
+    global $_POST, $paramlist, $sday, $sample_time;		
+	$paramlist='';					   
 	while(list($x,$v)=each($_POST)){
     	if((substr($x,0,1)=='_')&&($_POST[$x]==1)){
 	    	if($paramlist==''){
@@ -49,14 +43,8 @@ function prepareTestElements()
 				$paramlist.='&'.$x.'=1';
 			}
 		}
-	}
-						
-	/* If the paramlist is not empty then the user had set a test parameter,
-	*  go ahead and prepare the other data for saving
-	*  otherwise, the user sent a form without setting any test parameter.
-	*  In such a case, do not save data and show the form again.
-	*/
-
+	}								
+	
 	if($paramlist!=''){
 		/* Prepare the sampling minutes */
 		for($i=15;$i<46;$i=$i+15){
@@ -66,13 +54,10 @@ function prepareTestElements()
 				break;
 			}
 		}
-		if(!$tmin) $tmin=0;
-							
+		if(!$tmin) $tmin=0;							
 		/* Prepare the sampling ten hours */
 		if($_POST['hrs_20']) $th=20;
 			elseif($_POST['hrs_10']) $th=10;
-								
-		/* Prepare the sampling one hours */
 		for($i=0;$i<10;$i++){
 			$h1s='hrs_'.$i;
 			if($_POST[$h1s]){
@@ -80,9 +65,7 @@ function prepareTestElements()
 				break;
 			}
 		}
-		if(!$to) $to=0;
-								
-		/* Prepare the weekday */
+		if(!$to) $to=0;				
 		for($i=0;$i<7;$i++){
 			$tday="day_".$i;
 			if($_POST[$tday]){
@@ -90,19 +73,19 @@ function prepareTestElements()
 				break;
 			}
 		}
-								
-		/* Finalize sampling time in TIME format */
-		$sample_time=($th+$to).":".$tmin.":00";
-		
+		$sample_time=($th+$to).":".$tmin.":00";								
 		return 1;
 	}else{
 		return 0;
 	}
 }
-require($root_path.'include/care_api_classes/class_ecombill.php');
-$eComBill = new eComBill;
+
 /* Start initializations */
-define('LANG_FILE','konsil_chemlabor.php');
+
+
+$lang_tables[]='departments.php';
+
+define('LANG_FILE','konsil.php');
 
 /* We need to differentiate from where the user is coming:
 *  $user_origin != lab ;  from patient charts folder
@@ -123,8 +106,8 @@ require_once($root_path.'include/core/inc_front_chain_lang.php'); ///* invoke th
 require_once($root_path.'include/core/access_log.php');
     require_once($root_path.'include/care_api_classes/class_access.php');
     $logs = new AccessLog();
-$thisfile='nursing-station-patientdaten-doconsil-chemlabor.php';
-
+$thisfile='nursing-station-patientdaten-doconsil-blood.php';
+require_once($root_path.'include/core/inc_date_format_functions.php');
 $bgc1='#fff3f3'; /* The main background color of the form */
 $abtname=get_meta_tags($root_path."global_conf/$lang/konsil_tag_dept.pid");
 $edit_form=0;
@@ -135,9 +118,9 @@ $paramlist='';
 $sday='';
 $sample_time='';
 $data=array();
-require_once($root_path.'include/core/inc_date_format_functions.php');
-$formtitle=$abtname[$konsil];
-define('_BATCH_NR_INIT_',10000000);
+$blood_array=array('WBC','LYM','MID','GRA','LY%','MI%','GR%','RBC','HGB','HCT','MCV','MCH','MCHC','RDWc','PLT','PCT','MPV','PDWc');
+$formtitle=$LDBloodBank;
+define('_BATCH_NR_INIT_',40000000);
 /*
 *  The following are  batch nr inits for each type of test request
 *   chemlabor = 10000000; patho = 20000000; baclabor = 30000000; blood = 40000000; generic = 50000000;
@@ -160,9 +143,9 @@ if(isset($pn) && $pn) {
 		
 		include_once($root_path.'include/care_api_classes/class_diagnostics.php');
 		$diag_obj=new Diagnostics;
-		$diag_obj->useChemLabRequestTable();
+		$diag_obj->useBloodLabRequestTable();
 		$diag_obj_sub = new Diagnostics;
-		$diag_obj_sub->useChemLabRequestSubTable();
+		$diag_obj_sub->useBloodLabRequestSubTable();
 		
 	}else{
     	$edit=0;
@@ -195,8 +178,6 @@ if(isset($pn) && $pn) {
 					$data['modify_id']=$_SESSION['sess_user_name'];
 					$data['create_id']=$_SESSION['sess_user_name'];
 					$data['create_time']='NULL';
-					//echo $_POST['time'];
-					//var_dump($data);
 					$diag_obj->setDataArray($data);
 				    if($diag_obj->insertDataFromInternalArray()){
 				    	$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $diag_obj->getLastQuery(), date('Y-m-d H:i:s'));
@@ -209,11 +190,10 @@ if(isset($pn) && $pn) {
 				    		$parsedParamList['encounter_nr']=$pn;
 				    		$parsedParamList['paramater_name']=$tmpParam[0];
 				    		$parsedParamList['parameter_value']=$tmpParam[1];
-							$diag_obj_sub->setDataArray($parsedParamList);
+					    	$diag_obj_sub->setDataArray($parsedParamList);
 					    	$diag_obj_sub->insertDataFromInternalArray();
-							
 				    	}
-				    	
+				    	//$eComBill->createBillItem($parsedParamList['encounter_nr'], $temp['bill_item_nr'],$temp1['item_unit_cost'], 1, $temp1['item_unit_cost'],date("Y-m-d G:i:s") );
 					  	// Load the visual signalling functions
 						include_once($root_path.'include/core/inc_visual_signalling_fx.php');
 						// Set the visual signal
@@ -312,7 +292,7 @@ if(isset($pn) && $pn) {
 			 default: $mode="";
 						   
 		  }// end of switch($mode)
-	
+			
           if(!$mode) /* Get a new batch number */
 		  {
 		                $sql="SELECT batch_nr FROM care_test_request_".$db_request_table."  ORDER BY batch_nr DESC";
@@ -347,7 +327,7 @@ if(!isset($edit)) $edit=FALSE;
  $smarty = new smarty_care('common');
 
 # Title in toolbar
- $smarty->assign('sToolbarTitle', "$LDDiagnosticTest :: $LDCentralLab");
+ $smarty->assign('sToolbarTitle','Xét nghiệm :: Công thức máu');
 
  # href for help button
  $smarty->assign('pbHelp',"javascript:gethelp('request_chemlab.php','$pn')");
@@ -359,7 +339,7 @@ if(!isset($edit)) $edit=FALSE;
  $smarty->assign('breakfile',$breakfile);
 
  # Window bar title
- $smarty->assign('sWindowTitle', "$LDDiagnosticTest :: $LDCentralLab");
+ $smarty->assign('sWindowTitle','Xét nghiệm :: Công thức máu');
 
  # Prepare new form start button
  if($user_origin=='lab' && $pn){
@@ -375,13 +355,13 @@ $smarty->assign('sOnLoadJs',$sTemp .'"');
 
  # collect extra javascript code
  ob_start();
-  require_once ('../../js/jscalendar/calendar.php');
+ require_once ('../../js/jscalendar/calendar.php');
 			$calendar = new DHTML_Calendar('../../js/jscalendar/', $lang, 'calendar-system', true);
 			$calendar->load_files();
 ?>
 
 <style type="text/css">
-.lab {font-family: arial; font-size: 14; color:purple;}
+.lab {font-family: arial; font-size: 12; color:purple;}
 .lmargin {margin-left: 5;}
 </style>
 
@@ -440,15 +420,15 @@ function setThis(prep,elem,begin,end,step){
   }
   setM(prep+elem);
 }
-
-function sendLater(){
-   document.form_test_request.status.value="draft";
-   if(chkForm(document.form_test_request)) document.form_test_request.submit();
-}
 function popDocPer(target,obj_val,obj_name){
 			urlholder="<?php echo $root_path; ?>modules/laboratory/personell_search.php<?php echo URL_REDIRECT_APPEND; ?>&target="+target+"&obj_val="+obj_val+"&obj_name="+obj_name;
 			DSWIN<?php echo $sid ?>=window.open(urlholder,"wblabel<?php echo $sid ?>","menubar=no,width=400,height=550,resizable=yes,scrollbars=yes");
 		}
+function sendLater(){
+   document.form_test_request.status.value="draft";
+   if(chkForm(document.form_test_request)) document.form_test_request.submit();
+}
+
 function printOut(){
 	urlholder="<?php echo $root_path; ?>modules/laboratory/labor_test_request_printpop.php?sid=<?php echo $sid ?>&lang=<?php echo $lang ?>&user_origin=<?php echo $user_origin ?>&subtarget=<?php echo $target ?>&batch_nr=<?php echo $batch_nr ?>&pn=<?php echo $pn ?>&local_user=<?php echo $local_user?>";
 	testprintout<?php echo $sid ?>=window.open(urlholder,"testprintout<?php echo $sid ?>","width=800,height=600,menubar=no,resizable=yes,scrollbars=yes");
@@ -702,7 +682,7 @@ if($edit){
       <tr align="center">
    <td ><font size=1 face="arial" color= "purple"></td>
    <?php
-   
+   //ECHO $max_row;
    $hour_tens=0;
    $hour_ones=0;
 
@@ -984,15 +964,17 @@ for($n=0;$n<8;$n++)
  <?php
 
 ob_start();
-for($i=0;$i<=$max_row;$i++) {
+for($i=0;$i<=19;$i++) {
 	echo '<tr class="lab">';
-	for($j=0;$j<=$column;$j++) {
-
+	for($j=0;$j<=1;$j++) {
+     
 			if($LD_Elements[$j][$i]['type']=='top') {
-				echo '<td bgcolor="#ee6666" colspan="2" width="50%" onclick="selectAllParams(\''.$LD_Elements[$j][$i]['id'].'\');"><font color="white" style="cursor : pointer;">&nbsp;<b>'.$parametergruppe[$LD_Elements[$j][$i]['value']].'</b></font></td>';
-
+				//echo $LD_Elements[$j][$i]['value'];
+				echo '<td bgcolor="#ee6666" colspan="2" onclick="selectAllParams(\''.$LD_Elements[$j][$i]['id'].'\');"><font color="white" style="cursor : pointer;">&nbsp;<b>'.$parametergruppe[$LD_Elements[$j][$i]['value']].'</b></font></td>';
+				
 			} else {
 				if($LD_Elements[$j][$i]['value']) {
+				
 					echo '<td>';
 					if($edit) {
 						if( isset($stored_param[$LD_Elements[$j][$i]['id']]) && !empty($stored_param[$LD_Elements[$j][$i]['id']])) {
@@ -1032,8 +1014,7 @@ for($i=0;$i<=$max_row;$i++) {
 ob_end_flush();
 //echo $sTemp;
 ?>
-<tr>
-<td colspan="10" align="left"><div class=fva2_ml10><font color="#000099">
+  <td colspan="10" align="left"><div class=fva2_ml10><font color="#000099">
 			 <?php echo "Ngày gởi: ";
 
 							//gjergji : new calendar
@@ -1056,7 +1037,6 @@ ob_end_flush();
 			<input type="hidden" name="send_doctor_nr" value="<?php if(!empty( $stored_request['send_doctor_nr'])) echo $stored_request['send_doctor_nr'];else echo $pers_nr; ?>"> <a href="javascript:popDocPer('doctor_nr','send_doctor_nr','send_doctor')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
 			</div><br>
 		</td>
-</tr>
   <tr>
     <td colspan=10><font size=2 face="verdana,arial" color="purple">&nbsp;<?php echo $LDEmergencyProgram.' &nbsp;&nbsp;&nbsp;<img '.createComIcon($root_path,'violet_phone.gif','0','absmiddle',TRUE).'> '.$LDPhoneOrder ?></td>
   </tr>

@@ -37,7 +37,6 @@ switch($type){
  $smarty->assign('sToolbarTitle',$LDKhoChan.' :: '.$title1);
 
  # href for help button
-//button tao phiếu lĩnh thuốc
  $smarty->assign('pbHelp',"javascript:gethelp('submenu1.php','$LDIssuePaper')");
 
  # Window bar title
@@ -62,8 +61,7 @@ function searchValue()
 	document.listmedform.submit();
 }
 
-function chkform(d)  {
-   // function chkform() {
+function chkform(d) {	
 	document.listmedform.action="";
 	document.listmedform.submit();
 }
@@ -79,24 +77,12 @@ function sortDown()
 	document.listmedform.action="<?php echo $urlsearch;?>&mode=sort_down";
 	document.listmedform.submit();
 }
-function sortName()
-{
-	document.getElementById('mode').value='sort_name';
-	document.listmedform.action="<?php echo $urlsearch;?>&mode=sort_name";
-	document.listmedform.submit();
-}
-function printout(){
-	var mode = document.getElementById('mode').value;
-	urlholder="<?php echo $root_path;?>modules/pdfmaker/duoc/khochan_danhmucthuoc.php<?php echo URL_APPEND; ?>&mode="+mode+"&dongtayy=<?php echo $type;?>";
-	testprintpdf=window.open(urlholder,"Danh Muc Thuoc Kho Chan","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
-}
-
 function putinItem(){
 	var i,total=0;
 	var itemid='';
 	for(i=0; i < document.listmedform.groupcb.length; i++){
 		if(document.listmedform.groupcb[i].checked){
-			itemid = itemid +'_'+ document.listmedform.groupcb[i].value;
+			itemid = itemid +'_'+ document.listmedform.groupcb[i].value;	
 			total++;
 		}
 	}
@@ -122,23 +108,15 @@ $Product=new Product();
 
 $datetime=date("d/m/Y G:i:s");
 if(!isset($mode))
-	$mode='sort_name';
+	$mode='sort_up';
 	
-//echo $mode;
-if ($mode=='sort_name'){
-	$picname='arrow_up_blue.gif';
-	$picup='arrow_up_gray.gif';
-	$picdown='arrow_down_gray.gif';
-}
-else if ($mode=='sort_up'){
+if ($mode=='sort_up'){
 	$picup='arrow_up_blue.gif';
 	$picdown='arrow_down_gray.gif';
-	$picname='arrow_up_gray.gif';
 	$updown='';
 }else {
 	$picup='arrow_up_gray.gif';
 	$picdown='arrow_down_blue.gif';
-	$picname='arrow_up_gray.gif';
 	$updown=' DESC ';
 }
 
@@ -166,44 +144,36 @@ ob_start();
 	<tr bgColor="#EDF1F4">
 		<th align="center"><input type="checkbox" name="checkall" onclick="checkUncheckAll(this);"></th>
 		<th><?php echo $LDSTT; ?></th>
-		<th><?php echo $LDMedicineName; ?>&nbsp;
-			<a href="">
-				<input type="image" <?php echo createComIcon($root_path,$picname,'0','',TRUE) ?> onclick="javascript:sortName()" title="<?php echo $LDSortName; ?>"></a>&nbsp;</th>
+		<th><?php echo $LDMedicineName; ?></th>
 		<th><?php echo $LDUnit; ?></th>	
 		<th><?php echo $LDSoKiemSoat; ?></th>
 		<th><?php echo $LDLotID1; ?></th>
 		<th><?php echo $LDCost; ?></th>
-		<th><?php echo $LDNumberOf; ?>&nbsp;
-			<a href="">
-				<input type="image" <?php echo createComIcon($root_path,$picup,'0','',TRUE) ?> onclick="javascript:sortUp()" title="<?php echo $LDSortUp; ?>"></a>&nbsp;
-			<a href="">
-				<input type="image" <?php echo createComIcon($root_path,$picdown,'0','',TRUE) ?> onclick="javascript:sortDown()" title="<?php echo $LDSortDown; ?>"></a>
-		</th>	
 		<th><?php echo $LDExpDate; ?></th>
-		<th><?php echo $LDNote; ?></th>
-		<th><?php echo $LDUseFor; ?></th>
+		<th><?php echo $LDNumberOf; ?>&nbsp;
+			<a href="javascript:sortUp()">
+				<input type="image" <?php echo createComIcon($root_path,$picup,'0','',TRUE) ?> onclick="" title="<?php echo $LDSortUp; ?>"></a>&nbsp;
+			<a href="javascript:sortDown()">
+				<input type="image" <?php echo createComIcon($root_path,$picdown,'0','',TRUE) ?> onclick="" title="<?php echo $LDSortDown; ?>"></a>
+		</th>	
+		<th><?php echo $LDNote; ?></th>	
 	</tr>
 	<?php 
 	if ($search==''){
 		//current_page, number_items_per_page, total_items, total_pages, location=1,2,3
-		//$number_items_per_page=20;
-		$condition= $dongtayy;
+		$number_items_per_page=20; 	$condition= $dongtayy;
 		
-		/*if ($listItem = $Product->SearchNumberCatalogKhoChan($condition, $updown)){
+		if ($listItem = $Product->SearchNumberCatalogKhoChan($condition, $updown)){		
 			$total_items = $listItem->RecordCount();
-		} else $total_items =0;*/
+		} else $total_items =0;
 		
-		//$total_pages=ceil($total_items/$number_items_per_page);
+		$total_pages=ceil($total_items/$number_items_per_page);
 		
-		//include_once('../../nursing/include/inc_issuepaper_listdepot_splitpage.php');
+		include_once('../include/inc_issuepaper_listdepot_splitpage.php');
 
-
-		if ($mode=='sort_name')
-			$listItem = $Product->ShowNumberCatalogKhoChan_OrderByName($dongtayy, $current_page, $number_items_per_page);
-		else
+		if ($total_pages>1)
 			$listItem = $Product->ShowNumberCatalogKhoChan($dongtayy, $current_page, $number_items_per_page, $updown);
 		
-
 	}else{
 		if (strrpos($search,'/') || strrpos($search,'-')){
 			$search = formatDate2STD($search,'dd/mm/yyyy');
@@ -214,9 +184,7 @@ ob_start();
 		else
 			$condition= $dongtayy." AND (product_name LIKE '".$search."%' OR product_name LIKE ' ".$search."%' )";
 			
-		if ($mode=='sort_name')
-			$listItem = $Product->SearchNumberCatalogKhoChan_OrderByName($condition, $updown);
-		else
+
 		$listItem = $Product->SearchNumberCatalogKhoChan($condition, $updown);
 		$breakfile = $thisfile.'&type='.$type;
 	}
@@ -227,9 +195,9 @@ ob_start();
 		{
 			$rowItem = $listItem->FetchRow();
 
-			if ($rowItem['numbersum']<0)
+			if ($rowItem['number']<0)
 				$bgc="#D47FFF";
-			elseif ($rowItem['numbersum']==0)
+			elseif ($rowItem['number']==0)
 				$bgc="#AAFFFF";
 			else
 				$bgc="#ffffff";	
@@ -239,11 +207,6 @@ ob_start();
 				$show_price = number_format($rowItem['price']);
 			else $show_price = number_format($rowItem['price'],3);
 			
-			if($rowItem['typeput']==0)
-				$usefor=$LDBHYT;
-			else
-				$usefor=$LDSuNghiep;
-
 			$sTemp=$sTemp.'<tr bgColor="'.$bgc.'" >
 								<td align="center"><input type="checkbox" name="groupcb" value="'.$rowItem['product_encoder'].'"></td>
 								<td align="center">'.($i+1).'</td>
@@ -252,16 +215,15 @@ ob_start();
 								<td align="center">'.$rowItem['product_encoder'].'</td>
 								<td align="center">'.$rowItem['lotid'].'</td>
 								<td align="right">'.$show_price.'</td>
-								<td align="right">'.number_format($rowItem['numbersum']).'</td>
 								<td align="center">'.$expdate.'</td>
+								<td align="right">'.number_format($rowItem['number']).'</td>
 								<td align="center"></td>
-								<td align="center">'.$usefor.'</td>
 							</tr>';
 		}
 		echo $sTemp;
 			
 	}else{
-		$sTemp='<tr bgColor="#ffffff"><td colspan="11">'.$LDItemNotFound.'</td></tr>';
+		$sTemp='<tr bgColor="#ffffff"><td colspan="10">'.$LDItemNotFound.'</td></tr>';
 		echo $sTemp;
 	}
 	
@@ -281,9 +243,8 @@ ob_start();
 		</td>
 	</tr>
 	<tr><td align="center">&nbsp;<p>
-		<a href="javascript:putinItem();"><img <?php echo createLDImgSrc($root_path,'issue.gif','0','middle'); ?> onclick="" ></a>
-		<img src="<?php echo $root_path; ?>gui/img/common/default/pixel.gif" border="0" width="30" height="16">
-		<a href="javascript:printout()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0','middle'); ?> onclick="" ></a><p>&nbsp;</td>
+		<a href="javascript:putinItem();"><img <?php echo createLDImgSrc($root_path,'issue.gif','0','middle'); ?> ></a><img src="<?php echo $root_path; ?>gui/img/common/default/pixel.gif" border="0" width="30" height="16">
+		<a href="javascript:window.print();"><img <?php echo createLDImgSrc($root_path,'printout.gif','0','middle'); ?> ></a><p>&nbsp;</td>
 	</tr>
 	<tr>
 	<td align="right">

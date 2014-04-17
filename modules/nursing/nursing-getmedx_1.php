@@ -579,8 +579,7 @@ li.selected {
 	
 <?php
   
-//$medis=$objPrescription->getAllPresOfEncounter($pn,$dept_nr,$ward_nr,'1');
-$medis=$objPrescription->getAllPresOfEncounter_1($pn,'1');
+$medis=$objPrescription->getAllPresOfEncounter($pn,$dept_nr,$ward_nr,'1');
 if(is_object($medis)){
 	$count=$medis->RecordCount();
 }
@@ -604,23 +603,8 @@ if($count){
 	$medis->Move($i);
 	do {
 			//$companionBestellnum =  explode(",",unserialize($row['companion']));
-			//echo "<br><span style=\"cursor:pointer;font-weight:bold;float: left;\" onclick=\"new Effect.toggle('_". $row['prescription_id']  ."_', 'blind' );\" /><font face=verdana,arial size=2 color=maroon>".$LDPreId." : " .$row['prescription_id']. " - ".$LDDate.": " .formatDate2Local($row['date_time_create'],'dd/mm/yyyy')."</font></span>";
-			$ward_nr = $row['ward_nr'];
-        $dept_nr = $row['dept_nr'];
-        if ($ward_nr!='' && $ward_nr!='0'){
-            if($wardinfo = $Ward->getWardInfo($ward_nr)) {
-                $wardname = $wardinfo['name'];
-                $deptname = ($$wardinfo['LD_var']);
-                $dept_nr = $wardinfo['dept_nr'];
-                echo "<br><span style=\"cursor:pointer;font-weight:bold;float: left;\" onclick=\"new Effect.toggle('_". $row['prescription_id']  ."_', 'blind' );\" /><font face=verdana,arial size=2 color=maroon>".$LDPreId." : " .$row['prescription_id']. " - ".$LDDate." : " .formatDate2Local($row['date_time_create'],'dd/mm/yyyy')." - ".$LDDept.' : '.$deptname." - ".$LDStation.' : '.$wardname."</font></span>";
-            }
-        } elseif ($dept_nr!='' && $dept_nr!='0'){
-            if ($deptinfo = $Dept->getDeptAllInfo($dept_nr)) {
-                $deptname = ($$deptinfo['LD_var']);
-                $wardname = $LDAllWard;
-                echo "<br><span style=\"cursor:pointer;font-weight:bold;float: left;\" onclick=\"new Effect.toggle('_". $row['prescription_id']  ."_', 'blind' );\" /><font face=verdana,arial size=2 color=maroon>".$LDPreId." : " .$row['prescription_id']. " - ".$LDDate.": " .formatDate2Local($row['date_time_create'],'dd/mm/yyyy')."-".$LDDept.': '.$deptname."-".$LDStation.': '.$wardname."</font></span>";
-            }
-	}		
+			echo "<br><span style=\"cursor:pointer;font-weight:bold;float: left;\" onclick=\"new Effect.toggle('_". $row['prescription_id']  ."_', 'blind' );\" /><font face=verdana,arial size=2 color=maroon>".$LDPreId." : " .$row['prescription_id']. " - ".$LDDate.": " .formatDate2Local($row['date_time_create'],'dd/mm/yyyy')."</font></span>";
+			
 			if(!$isDischarged && !$row['status_bill'] && !$row['status_finish']) {		//neu chua xuat vien, thanh toan, nhan thuoc
 				echo '<span style="float:right;cursor:pointer;"><img onClick="editPrescription('.$row['prescription_id'].');" '.createLDImgSrc($root_path,'redo.gif','0').' title="'.$LDEdit.'">&nbsp;';
 			} else {
