@@ -97,7 +97,7 @@ $fpdf->AddFont('DejaVu','IB','DejaVuSansCondensed-BoldOblique.ttf',true);
 
 
 $fpdf->SetFont('DejaVu','B',24);
-$fpdf->Ln(); 
+$fpdf->Ln();
 $fpdf->SetX($fpdf->lMargin+10);
 $fpdf->Cell(0,9,'PHIẾU PHẪU THUẬT',0,0,'C');
 
@@ -105,14 +105,14 @@ $fpdf->SetFont('DejaVu','',10);
 $fpdf->SetX($fpdf->lMargin);
 $fpdf->Cell(170,5,'Sở Y tế: Bình Dương ',0,0,'L');
 $fpdf->Cell(0,5,'Số: '.$encounter['encounter_nr'],0,0,'R');
-$fpdf->Ln(); 
+$fpdf->Ln();
 
 $fpdf->Cell(150,5,PDF_HOSNAME,0,0,'L');
-$fpdf->Ln(); 
+$fpdf->Ln();
 
 $fpdf->SetFont('DejaVu','B',11);
 $fpdf->SetX($fpdf->lMargin);
-$fpdf->Ln(); 
+$fpdf->Ln();
 $fpdf->Rect(15,25,180,30);
 $x=$fpdf->GetX(); $y=$fpdf->GetY();
 $fpdf->SetX($x+42);
