@@ -194,6 +194,7 @@ if( isset($mode) && $mode=='save' ){
 	}
 	# end of if(mode==save)
 	#If mode is not "save" then get the basic personal data
+
 } elseif(!isset($mode) || $mode == 'show') {
 
 	# If previously saved, get the values
