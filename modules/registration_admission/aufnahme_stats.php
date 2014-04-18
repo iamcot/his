@@ -33,12 +33,12 @@ $options='';
 $cond_dept=array();
 while(list($x,$v)=each($med_arr)){
 	if($x==42) continue;
-	$buffer=$v['LD_var'];        
+	$buffer=$v['LD_var'];
 	if(isset($$buffer)&&!empty($$buffer)){
             $buf2=$$buffer;
             $cond_dept[$$buffer]=$v['nr'];
         }else{
-            $buf2=$v['name_formal'];	
+            $buf2=$v['name_formal'];
             $cond_dept[$$buffer]=$v['nr'];
         }
 	$options.='
@@ -49,7 +49,7 @@ while(list($x,$v)=each($med_arr)){
 	}
 	$options.='>'.$buf2.'</option>';
 }
-		
+
 # Start Smarty templating here
  /**
  * LOAD Smarty
@@ -135,7 +135,7 @@ while(list($x,$v)=each($med_arr)){
  $sTemp=ob_get_contents();
  ob_end_clean();
  $smarty->append('JavaScript',$sTemp);
- 
+
  ob_start();
 
 	/*generate the calendar */
@@ -192,8 +192,8 @@ if($dept){
         $cond='';
     }
 }
-if($id_dept['id']!=7 ){    
-    if($currDay){        
+if($id_dept['id']!=7 ){
+    if($currDay){
         $smarty->assign('tong',$enc_obj->getStatsByDate($currYear,$currMonth,$currDay,$cond));
         $smarty->assign('tongbhyt',$enc_obj->getStatsByDateBHYT($currYear,$currMonth,$currDay,$cond));
         $tongkbhyt=($enc_obj->getStatsByDate($currYear,$currMonth,$currDay,$cond))-($enc_obj->getStatsByDateBHYT($currYear,$currMonth,$currDay,$cond));
@@ -282,11 +282,11 @@ if($id_dept['id']!=7 ){
         $smarty->assign('tieuchay',$enc_obj->getStatsByMonthTieuChay($currYear,$currMonth,$cond));
 
         $smarty->assign('pPrintOut','<a href="javascript:printOut('.$currYear.','.$currMonth.','.'\' \','."'admission/admitstats.php'".')"><img '.createLDImgSrc($root_path,'printout.gif','0').'  title="'.$LDPrintOut.'"  align="absmiddle"></a>');
-               
+
     }
     $smarty->assign('sWeekLink','<img '.createComIcon($root_path,'varrow.gif','0').'> <a href="aufnahme_stats_week.php'.URL_APPEND.'">Thống kê tuần</a>');
     $smarty->assign('sQuiLink','<img '.createComIcon($root_path,'varrow.gif','0').'> <a href="aufnahme_stats_qui.php'.URL_APPEND.'">Thống kê quí</a>');
-    $smarty->assign('sMainBlockIncludeFile','registration_admission/appt_list.tpl'); 
+    $smarty->assign('sMainBlockIncludeFile','registration_admission/appt_list.tpl');
 }else{
     $temp='<tr class="wardlisttitlerow">
                 <td style="text-align:center;">Tổng Bệnh nhân&nbsp;</td>
@@ -297,28 +297,28 @@ if($id_dept['id']!=7 ){
 				<td style="text-align:center;" colspan="2">Khám phụ khoa</td>
         </tr>';
     $smarty->assign('tr',$temp);
-    
+
     if($currDay){
-        $smarty->assign('tong',$enc_obj->getStatsByDateSan($currYear,$currMonth,$currDay,$cond));        
+        $smarty->assign('tong',$enc_obj->getStatsByDateSan($currYear,$currMonth,$currDay,$cond));
         $smarty->assign('tongbhyt',$enc_obj->getStatsByDateBHYTSan($currYear,$currMonth,$currDay,$cond2));
         $smarty->assign('tongkbhyt',$enc_obj->getStatsByDateKBHYTSan($currYear,$currMonth,$currDay,$cond2));
-        
+
         $smarty->assign('nhi',$enc_obj->getStatsByDateSoSinh($currYear,$currMonth,$currDay,$cond2));
         $smarty->assign('nhinoi',$enc_obj->getStatsByDateSoSinh_noi($currYear,$currMonth,$currDay,$cond2));
         $smarty->assign('nhingoai',$enc_obj->getStatsByDateSoSinh($currYear,$currMonth,$currDay,$cond2)-$enc_obj->getStatsByDateSoSinh_noi($currYear,$currMonth,$currDay,$cond2));
         $smarty->assign('nhisexm',$enc_obj->getStatsByDateSoSinh_GTM($currYear,$currMonth,$currDay,$cond2));
         $smarty->assign('nhisexf',$enc_obj->getStatsByDateSoSinh($currYear,$currMonth,$currDay,$cond2)-$enc_obj->getStatsByDateSoSinh_GTM($currYear,$currMonth,$currDay,$cond2));
         $smarty->assign('nhicann',$enc_obj->getStatsByDateSoSinh_CN($currYear,$currMonth,$currDay,$cond2));
-        
+
         $smarty->assign('khamngoai',$enc_obj->getStatsByDateNgoaitru($currYear,$currMonth,$currDay,$cond));
         $smarty->assign('khamngoaibh',$enc_obj->getStatsByDateNgoaitruBHYT($currYear,$currMonth,$currDay,$cond2));
         $khamngoaikbh=$enc_obj->getStatsByDateNgoaitru($currYear,$currMonth,$currDay,$cond) - $enc_obj->getStatsByDateNgoaitruBHYT($currYear,$currMonth,$currDay,$cond2);
-        
+
         $smarty->assign('khamthai',$enc_obj->getStatsByDateKhamthai($currYear,$currMonth,$currDay,$cond));
         $smarty->assign('khamthaibh',$enc_obj->getStatsByDateKhamthaiBHYT($currYear,$currMonth,$currDay,$cond));
         $smarty->assign('khamthaikbh',$enc_obj->getStatsByDateKhamthai($currYear,$currMonth,$currDay,$cond)-$enc_obj->getStatsByDateKhamthaiBHYT($currYear,$currMonth,$currDay,$cond));
         $smarty->assign('khamngoaikbh',$khamngoaikbh);
-        
+
         $smarty->assign('khamPkhoa',$enc_obj->getStatsByDateKhamPkhoa($currYear,$currMonth,$currDay,$cond));
         $smarty->assign('khamPkhoabh',$enc_obj->getStatsByDateKhamPkhoaBHYT($currYear,$currMonth,$currDay,$cond));
         $smarty->assign('khamPkhoakbh',$enc_obj->getStatsByDateKhamPkhoa($currYear,$currMonth,$currDay,$cond)-$enc_obj->getStatsByDateKhamPkhoaBHYT($currYear,$currMonth,$currDay,$cond));
@@ -327,14 +327,14 @@ if($id_dept['id']!=7 ){
         $smarty->assign('thuoctiem',$enc_obj->getStatsByDateThuoctiem($currYear,$currMonth,$currDay,$cond));
         $smarty->assign('bcs',$enc_obj->getStatsByDateBCS($currYear,$currMonth,$currDay,$cond));
         $smarty->assign('naohut',$enc_obj->getStatsByDateNaoHut($currYear,$currMonth,$currDay,$cond));
-        
+
         $khamnoi=$enc_obj->getStatsByDateSan($currYear,$currMonth,$currDay,$cond)-$enc_obj->getStatsByDateNgoaitru($currYear,$currMonth,$currDay,$cond);
         $khamnoibh=$enc_obj->getStatsByDateBHYTSan($currYear,$currMonth,$currDay,$cond2)-$enc_obj->getStatsByDateNgoaitruBHYT($currYear,$currMonth,$currDay,$cond2);
-        $smarty->assign('khamnoi',$khamnoi);        
-        $smarty->assign('khamnoibh',$khamnoibh);         
+        $smarty->assign('khamnoi',$khamnoi);
+        $smarty->assign('khamnoibh',$khamnoibh);
         $khamnoikbh=$khamnoi - $khamnoibh;
-        $smarty->assign('khamnoikbh',$khamnoikbh); 
-        
+        $smarty->assign('khamnoikbh',$khamnoikbh);
+
         $smarty->assign('cotiem',$enc_obj->getStatsByDateCotiem($currYear,$currMonth,$currDay,$cond));
         $smarty->assign('khongtiem',$enc_obj->getStatsByDateKhongtiem($currYear,$currMonth,$currDay,$cond));
         $smarty->assign('cokhamthai',$enc_obj->getStatsByDateKhamthaiNoi($currYear,$currMonth,$currDay,$cond));
@@ -346,29 +346,29 @@ if($id_dept['id']!=7 ){
                 $count_sinh+=$enc_obj->getPatientSinh($nr);
             }
         }
-        $smarty->assign('sinhnlan',$count_sinh);        
+        $smarty->assign('sinhnlan',$count_sinh);
         $smarty->assign('pPrintOut','<a href="javascript:printOut('.$currYear.','.$currMonth.','.$currDay.','."'BCTT/BM07_PHUKHOA_NAOPHATHAI.php'".')"><img '.createLDImgSrc($root_path,'printout.gif','0').'  title="'.$LDPrintOut.'"  align="absmiddle"></a>');
     }else{
         $smarty->assign('tong',$enc_obj->getStatsByMonthSan($currYear,$currMonth,$cond));
         $smarty->assign('tongbhyt',$enc_obj->getStatsByMonthBHYTSan($currYear,$currMonth,$cond2));
         $smarty->assign('tongkbhyt',$enc_obj->getStatsByMonthKBHYTSan($currYear,$currMonth,$cond2));
-        
+
         $smarty->assign('nhi',$enc_obj->getStatsByMonthSoSinh($currYear,$currMonth,$cond2));
         $smarty->assign('nhinoi',$enc_obj->getStatsByMonthSoSinh_noi($currYear,$currMonth,$cond2));
         $smarty->assign('nhingoai',$enc_obj->getStatsByMonthSoSinh($currYear,$currMonth,$cond2)-$enc_obj->getStatsByMonthSoSinh_noi($currYear,$currMonth,$cond2));
         $smarty->assign('nhisexm',$enc_obj->getStatsByMonthSoSinh_GTM($currYear,$currMonth,$cond2));
         $smarty->assign('nhisexf',$enc_obj->getStatsByMonthSoSinh($currYear,$currMonth,$cond2)-$enc_obj->getStatsByMonthSoSinh_GTM($currYear,$currMonth,$cond2));
         $smarty->assign('nhicann',$enc_obj->getStatsByMonthSoSinh_CN($currYear,$currMonth,$cond2));
-        
+
         $smarty->assign('khamngoai',$enc_obj->getStatsByMonthNgoaitru($currYear,$currMonth,$cond));
         $smarty->assign('khamngoaibh',$enc_obj->getStatsByMonthNgoaitruBHYT($currYear,$currMonth,$cond2));
         $khamngoaikbh=$enc_obj->getStatsByMonthNgoaitru($currYear,$currMonth,$cond) - $enc_obj->getStatsByMonthNgoaitruBHYT($currYear,$currMonth,$cond2);
-        
+
         $smarty->assign('khamthai',$enc_obj->getStatsByMonthKhamthai($currYear,$currMonth,$cond));
         $smarty->assign('khamthaibh',$enc_obj->getStatsByMonthKhamthaiBHYT($currYear,$currMonth,$cond));
         $smarty->assign('khamthaikbh',$enc_obj->getStatsByMonthKhamthai($currYear,$currMonth,$cond) -$enc_obj->getStatsByMonthKhamthaiBHYT($currYear,$currMonth,$cond));
         $smarty->assign('khamngoaikbh',$khamngoaikbh);
-        
+
         $smarty->assign('khamPkhoa',$enc_obj->getStatsByMonthKhamPkhoa($currYear,$currMonth,$cond));
         $smarty->assign('khamPkhoabh',$enc_obj->getStatsByMonthKhamPkhoaBHYT($currYear,$currMonth,$cond));
         $smarty->assign('khamPkhoakbh',$enc_obj->getStatsByMonthKhamPkhoa($currYear,$currMonth,$cond) - $enc_obj->getStatsByMonthKhamPkhoaBHYT($currYear,$currMonth,$cond));
@@ -377,14 +377,14 @@ if($id_dept['id']!=7 ){
         $smarty->assign('thuoctiem',$enc_obj->getStatsByMonthThuoctiem($currYear,$currMonth,$cond));
         $smarty->assign('bcs',$enc_obj->getStatsByMonthBCS($currYear,$currMonth,$cond));
         $smarty->assign('naohut',$enc_obj->getStatsByMonthNaoHut($currYear,$currMonth,$cond));
-        
+
         $khamnoi=$enc_obj->getStatsByMonthSan($currYear,$currMonth,$cond)-$enc_obj->getStatsByMonthNgoaitru($currYear,$currMonth,$cond);
         $khamnoibh=$enc_obj->getStatsByMonthBHYTSan($currYear,$currMonth,$cond2)-$enc_obj->getStatsByMonthNgoaitruBHYT($currYear,$currMonth,$cond2);
-        $smarty->assign('khamnoi',$khamnoi);        
+        $smarty->assign('khamnoi',$khamnoi);
         $smarty->assign('khamnoibh',$khamnoibh);
         $khamnoikbh=$khamnoi - $khamnoibh;
-        $smarty->assign('khamnoikbh',$khamnoikbh); 
-        
+        $smarty->assign('khamnoikbh',$khamnoikbh);
+
         $smarty->assign('cotiem',$enc_obj->getStatsByMonthCotiem($currYear,$currMonth,$cond));
         $smarty->assign('khongtiem',$enc_obj->getStatsByMonthKhongtiem($currYear,$currMonth,$cond));
         $smarty->assign('cokhamthai',$enc_obj->getStatsByMonthKhamthaiNoi($currYear,$currMonth,$cond));
@@ -397,14 +397,14 @@ if($id_dept['id']!=7 ){
             }
         }
         $smarty->assign('sinhnlan',$count_sinh);
-        
+
         $smarty->assign('pPrintOut','<a href="javascript:printOut('.$currYear.','.$currMonth.',\' \','."'BCTT/BM07_PHUKHOA_NAOPHATHAI.php'".')"><img '.createLDImgSrc($root_path,'printout.gif','0').'  title="'.$LDPrintOut.'"  align="absmiddle"></a>');
     }
     $smarty->assign('sWeekLink','<img '.createComIcon($root_path,'varrow.gif','0').'> <a href="aufnahme_stats_week.php'.URL_APPEND.'">Thống kê tuần</a>');
     $smarty->assign('sQuiLink','<img '.createComIcon($root_path,'varrow.gif','0').'> <a href="aufnahme_stats_qui.php'.URL_APPEND.'">Thống kê quí</a>');
     $target='stats';
     $parent_admit = TRUE;
-    $smarty->assign('sMainBlockIncludeFile','registration_admission/appt_list_1.tpl'); 
+    $smarty->assign('sMainBlockIncludeFile','registration_admission/appt_list_1.tpl');
 }
 
 # Assign page output to the mainframe template
