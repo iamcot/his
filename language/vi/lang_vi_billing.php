@@ -301,6 +301,6 @@ $LDTraTien='Trả tiền cho bệnh nhân';
 $LDTraTienTxt='Hoàn tiền lại cho bệnh nhân trong những trường hợp đặc biệt';
 $LDItemCheck='Chọn';
 $LDChuaThanhToan='Chưa thanh toán';
-
+$LDDaThanhtoan='Đã thanh toán';
 
 ?>

@@ -79,11 +79,11 @@
                 return true;
             }else{return false;}
         }
-
+// edit 16/04
         function getInfoTest($batch_nr='',$status='pending'){
             global $db;
             if($status!=''){
-                $this->sql="SELECT encounter_nr,date_request,level_method FROM $this->tb_test
+                $this->sql="SELECT clinical_info, encounter_nr,date_request,level_method FROM $this->tb_test
 				WHERE batch_nr=$batch_nr AND status='$status' OR status='move' ORDER BY  date_request DESC";
             }else{
                 $this->sql="SELECT encounter_nr,date_request,level_method FROM $this->tb_test
@@ -112,7 +112,26 @@
                 }else{return FALSE;}
 
         }
-        
+
+    //insert by Mến  16/04/2014
+    function getInfoTestRequest($batch_nr='',$status=''){
+
+        global $db;
+        if(!empty($bath_nr)){
+            $enc='0';
+            $this->sql="SELECT * FROM $this->tb_test WHERE $batch_nr='$batch_nr' AND $status='$status' ";
+        }else{
+            $this->sql="SELECT * FROM $this->tb_test WHERE batch_nr='$batch_nr'";
+        }
+        if($this->res['gim']=$db->Execute($this->sql)){
+            if ($this->res['gim']->RecordCount()) {
+                return $this->res['gim']->FetchRow();
+            }else{return FALSE;}
+        }else{return FALSE;}
+
+}
+//
+
         function getNamePersonell($batch_nr, $function){
             global $db;
             $this->sql="SELECT $function FROM $this->tb WHERE batch_nr='$batch_nr'";
@@ -368,13 +387,16 @@
                     LEFT JOIN $this->tb_test AS yc ON yc.batch_nr=tb.batch_nr
                     WHERE pno.personell_nr='$personell_nr' AND yc.date_request='$date' AND yc.level_method='$level'
                     ";
-            }                                   
+            }
             if($this->result=$db->Execute($this->sql)) {
                 return $this->result;
             }else return false;
         }
         function list_doctor_op_flag($personell_nr,$level){
             global $db;
+//			if($month!='' && $pyear!=''){
+//				$cond=" AND MONTH(date_request)=$month AND YEAR(date_request)=$pyear";
+//			}
             if($level==""){
                 //Đếm tất cả các ca mổ trong tháng
                 $this->sql="SELECT yc.date_request,yc.level_method,pno.personell_nr

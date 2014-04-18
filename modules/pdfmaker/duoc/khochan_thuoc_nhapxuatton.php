@@ -1,10 +1,7 @@
 <?php
+error_reporting(E_COMPILE_ERROR|E_ERROR|E_CORE_ERROR);
 require('./roots.php');
 require($root_path.'include/core/inc_environment_global.php');
-$classpathFPDF=$root_path.'classes/fpdf/';
-$fontpathFPDF=$classpathFPDF.'font/unifont/';
-require_once($root_path.'classes/tcpdf/config/lang/eng.php');
-require_once($root_path.'classes/tcpdf/tcpdf.php');
 define('LANG_FILE','pharma.php');
 define('NO_CHAIN',1);
 require_once($root_path.'include/core/inc_front_chain_lang.php');
@@ -35,6 +32,8 @@ $Pharma = new Pharma;
 //$listItem = $Product->ShowKhoChanThuoc_Ton($dongtayy_cond, '', '', $cond_typeput, $todate);
 
 
+require_once($root_path.'classes/tcpdf/config/lang/eng.php');
+require_once($root_path.'classes/tcpdf/tcpdf.php');
 
 
 // create new PDF document
@@ -116,9 +115,8 @@ $congtondau = 0;
 $congnhap=0;
 $congxuat=0;
 $congtoncuoi=0;
-//echo $dongtayy.'@'.@$cond_typeput."@".$month.'@'.$year;
+
 $listReport = $Pharma->Khochan_thuoc_nhapxuatton($dongtayy, $cond_typeput, $month, $year);
-//var_dump($listReport);
 /*switch($flag){
 	case 'tonkho': 
 			$listReport = $Pharma->Thuoc_TonKhoChan($month, $year, $cond_typeput.$dongtayy);
@@ -318,8 +316,7 @@ $sTempDiv = $sTempDiv.'<tr bgColor="#ffffff">
 							<td></td>
 						</tr>';
 
-$html = $html.'</table>'; // .$sTempDiv
-//echo $html;
+$html = $html.$sTempDiv.'</table>';
 
 $pdf->writeHTML($html);
 $pdf->Ln();

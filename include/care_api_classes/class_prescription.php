@@ -1290,6 +1290,27 @@ class Prescription extends Core {
 		return $this->Transact($this->sql);	
 	}	
 	
-	
+//	function getAllPresOfEncounter_1($encounter_nr, $phieutheodoi=''){
+//	    global $db;
+//		if($phieutheodoi!='' && $phieutheodoi!='0')
+//			$phieutheodoi_cmd=" AND prs.phieutheodoi='".$phieutheodoi."' ";
+//		else $phieutheodoi_cmd="";
+//        //thu
+//        $this->sql="SELECT prs.*, pr.*, prs.note AS totalnote, t.prescription_type_name AS type_name, dm.product_name
+//			  FROM $this->tb_phar_pres_info AS prs, $this->tb_phar_pres AS pr, $this->tb_phar_pres_type AS t,
+//					care_pharma_products_main AS dm
+//			  WHERE prs.encounter_nr='".$encounter_nr."'
+//			   ".$phieutheodoi_cmd."
+//				AND prs.prescription_id = pr.prescription_id
+//				AND pr.product_encoder = dm.product_encoder
+//				AND prs.prescription_type = t.prescription_type
+//			ORDER BY prs.date_time_create";
+//			//echo $sql;
+//	    if ($this->result=$db->Execute($this->sql)) {
+//		    if ($this->result->RecordCount()) {
+//		        return $this->result;
+//			}else{return false;}
+//		}else{return false;}
+//	}
 }
 ?>

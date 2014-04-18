@@ -103,19 +103,13 @@ if($type=='pres') {
 	$noitru_ngoaitru =1;
 }
 
-
 $notestype='prescription';
 
 $_SESSION['sess_file_return']=$returnfile;
 
 $buffer=str_replace('~tag~',$title.' '.$name_last,$LDNoRecordFor);
-$norecordyet=str_replace('~obj~',strtolower($subtitle),$buffer); 
-
+$norecordyet=str_replace('~obj~',strtolower($subtitle),$buffer);
 
 /* Load GUI page */
 require('./gui_bridge/default/gui_show.php');
-
-
-
-
 ?>

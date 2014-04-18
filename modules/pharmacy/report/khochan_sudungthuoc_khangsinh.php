@@ -59,11 +59,11 @@ function chkform(d) {
 	document.reportform.action="<?php echo $thisfile; ?>";
 	document.reportform.submit();
 }
-function printOut(type_month,month,year)
+function printOut(type_month,month,year,flag,lastmonth,lastyear)
 {
-	urlholder="<?php echo $root_path;?>modules/pdfmaker/duoc/khochan_sudungthuoc_khangsinh.php<?php echo URL_APPEND; ?>&type_month="+type_month+"&typedongtay=<?php echo $type;?>"+"&showmonth="+month+"&showyear="+year+"&pharma_group_id=<?php echo $pharma_group_id;?>";
-	testprintpdf=window.open(urlholder,"KhangSinh","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
-	//window.print();
+	urlholder="<?php echo $root_path;?>modules/pdfmaker/duoc/khochan_thuoc_khangsinh.php<?php echo URL_APPEND; ?>&type_month="+type_month+"&typedongtay=<?php echo $type;?>"+"&month="+month+"&year="+year+"&lastmonth="+lastmonth+"&lastyear="+lastyear+"&flag="+flag;
+	testprintpdf=window.open(urlholder,"NhapXuatTon","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
+//	window.print();
 }
 function Save(alertsave){
 	if(alertsave=='ok'){
@@ -224,7 +224,7 @@ switch($type_month){
 						echo '<td>'.$rowReport['using_type'].'</td>';
 						echo '<td align="right">'.number_format($rowReport['xuat']).'</td>';						
 						echo '<td align="right">'.$showgiaxuat.'</td>';	
-						echo '<td align="right">'.number_format($rowReport['giaxuat']*$rowReport['xuat']).'</td></tr>';
+						echo '<td align="right">'.number_format($rowReport['giaxuat']*$rowReport['xuat']).'</td>';				
 					}
 				}
 								
@@ -275,7 +275,7 @@ switch($type_month){
 						echo '<td>'.$rowReport['using_type'].'</td>';
 						echo '<td align="right">'.number_format($rowReport['xuat']).'</td>';						
 						echo '<td align="right">'.$showgiaxuat.'</td>';	
-						echo '<td align="right">'.number_format($rowReport['giaxuat']*$rowReport['xuat']).'</td></tr>';
+						echo '<td align="right">'.number_format($rowReport['giaxuat']*$rowReport['xuat']).'</td>';					
 					}
 				}									
 			} else {
@@ -325,7 +325,7 @@ switch($type_month){
 						echo '<td>'.$rowReport['using_type'].'</td>';
 						echo '<td align="right">'.number_format($rowReport['xuat']).'</td>';						
 						echo '<td align="right">'.$showgiaxuat.'</td>';	
-						echo '<td align="right">'.number_format($rowReport['giaxuat']*$rowReport['xuat']).'</td></tr>';
+						echo '<td align="right">'.number_format($rowReport['giaxuat']*$rowReport['xuat']).'</td>';					
 					}
 				}					
 			} else {
@@ -358,7 +358,7 @@ $smarty->assign('sHiddenInputs',$sTempHidden);
 
 $smarty->assign('pbSubmit','<input type="image" '.createLDImgSrc($root_path,'showreport.gif','0','middle').'>');
 //$smarty->assign('pbSave','<a href="javascript:Save(\''.$alertsave.'\');"><img '.createLDImgSrc($root_path,'savedisc.gif','0','middle').' align="middle"></a>');
-$smarty->assign('pbPrint','<a href="#"><img '.createLDImgSrc($root_path,'printout.gif','0','middle').' align="middle" onclick="printOut(\''.$type_month.'\',\''.$showmonth.'\',\''.$showyear.'\')"></a>');
+$smarty->assign('pbPrint','<a href="#"><img '.createLDImgSrc($root_path,'printout.gif','0','middle').' align="middle" onclick="printOut(\''.$type_month.'\',\''.$showmonth.'\',\''.$showyear.'\',\''.$flag.'\',\''.$lastmonth.'\',\''.$lastyear.'\')"></a>');
 $smarty->assign('pbCancel','<a href="'.$breakfile.'" ><img '.createLDImgSrc($root_path,'close2.gif','0','middle').' title="'.$LDBackTo.'" align="middle"></a>');
 
 # Assign the page template to mainframe block

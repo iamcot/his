@@ -213,6 +213,7 @@ $smarty->assign('sByDocHiddenInputs','<input type="submit" value="'.$LDShow.'"> 
 			<input type="hidden"  name="lang" value="'.$lang.'">');
  //  sửa code theo o textbox va button xem
 
+/* show the appointments */
 if($appt_obj->count){
 	# Buffer output
 	ob_start();

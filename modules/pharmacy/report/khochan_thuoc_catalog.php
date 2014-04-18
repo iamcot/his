@@ -96,7 +96,7 @@ function putinItem(){
 	var itemid='';
 	for(i=0; i < document.listmedform.groupcb.length; i++){
 		if(document.listmedform.groupcb[i].checked){
-			itemid = itemid +'_'+ document.listmedform.groupcb[i].value;	
+			itemid = itemid +'_'+ document.listmedform.groupcb[i].value;
 			total++;
 		}
 	}

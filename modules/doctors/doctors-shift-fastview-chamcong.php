@@ -82,7 +82,7 @@ if($force_no_cache || (!$force_no_cache && !$is_cached)){
 	$dept_DOC=$dept_obj->getAllActiveWithDOC();
 	include_once($root_path.'include/care_api_classes/class_personell.php');
 	$pers_obj=new Personell;
-	$quicklist=&$pers_obj->getDChamcongQuicklist($dept_DOC,ROLE_NR_DOCTOR,$pyear,$pmonth);
+	$quicklist=&$pers_obj->getDChamcongQuicklist($dept_DOC,$pyear,$pmonth);
 }
 
 # Start Smarty templating here

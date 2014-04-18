@@ -117,7 +117,7 @@ switch($mode){
 							'cost_dutinh' => $_POST['cost'.$j]
 						);
 						$pres_obj->insertDataFromArray($pharma_prescription);
-						//$pres_obj->updateAvaiPro_Sub($_POST['avai_id'.$j], $_POST['sum'.$j]);
+						$pres_obj->updateAvaiPro_Sub($_POST['avai_id'.$j], $_POST['sum'.$j]);
 					}
 				}
 				$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $pres_obj->getLastQuery(), date('Y-m-d H:i:s'));	
@@ -212,7 +212,7 @@ switch($mode){
 							);
 							//$pres_obj->setDataArray(&$pharma_prescription);
 							$pres_obj->insertDataFromArray($pharma_prescription);
-							//$pres_obj->updateAvaiPro_Sub($_POST['avai_id'.$j], $_POST['sum'.$j]);
+							$pres_obj->updateAvaiPro_Sub($_POST['avai_id'.$j], $_POST['sum'.$j]);
 						}				
 					}
 					$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $pres_obj->getLastQuery(), date('Y-m-d H:i:s'));					

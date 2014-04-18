@@ -61,7 +61,8 @@ $op_info=$op_obj->getInfoMedoc($nr_op[nr]);
 //Lấy những thành phần trong test_request_or
 $test=$op_obj->getInfoTest($batch_nr,'draff');
 $test_op=$test->FetchRow();
-
+//insert by Mến 16/04/2014
+$test_info=$op_obj->getInfoTestRequest($batch_nr,'pending');
 $e_kip=$op_obj->getInfo($batch_nr,'pending');
 $op_info1=$e_kip->FetchRow();
 $sql="SELECT nr FROM care_op_med_doc WHERE encounter_op_nr='".$nr_op[nr]."'";
@@ -71,10 +72,6 @@ $buf2=$buf->FetchRow();
 // Optionally define the filesystem path to your system fonts
 // otherwise tFPDF will use [path to tFPDF]/font/unifont/ directory
 // define("_SYSTEM_TTFONTS", "C:/Windows/Fonts/");
-
-
-
-
 
 $classpathFPDF=$root_path.'classes/fpdf/';
 $fontpathFPDF=$classpathFPDF.'font/unifont/';
@@ -100,7 +97,7 @@ $fpdf->AddFont('DejaVu','IB','DejaVuSansCondensed-BoldOblique.ttf',true);
 
 
 $fpdf->SetFont('DejaVu','B',24);
-$fpdf->Ln(); 
+$fpdf->Ln();
 $fpdf->SetX($fpdf->lMargin+10);
 $fpdf->Cell(0,9,'PHIẾU PHẪU THUẬT',0,0,'C');
 
@@ -108,14 +105,14 @@ $fpdf->SetFont('DejaVu','',10);
 $fpdf->SetX($fpdf->lMargin);
 $fpdf->Cell(170,5,'Sở Y tế: Bình Dương ',0,0,'L');
 $fpdf->Cell(0,5,'Số: '.$encounter['encounter_nr'],0,0,'R');
-$fpdf->Ln(); 
+$fpdf->Ln();
 
 $fpdf->Cell(150,5,PDF_HOSNAME,0,0,'L');
-$fpdf->Ln(); 
+$fpdf->Ln();
 
 $fpdf->SetFont('DejaVu','B',11);
 $fpdf->SetX($fpdf->lMargin);
-$fpdf->Ln(); 
+$fpdf->Ln();
 $fpdf->Rect(15,25,180,30);
 $x=$fpdf->GetX(); $y=$fpdf->GetY();
 $fpdf->SetX($x+42);
@@ -132,8 +129,9 @@ $fpdf->Cell(0,5," Địa chỉ:   ".$encounter['addr_str_nr']." ".$encounter['ad
 $fpdf->Cell(0,5," Ngày giờ vào viện:        ".$time['0']." giờ ".$time['1']." phút     ngày ".substr($ngayden,0,2)." tháng ".substr($ngayden,3,2)." năm ".substr($ngayden,6,4),0,1,'L');
 $fpdf->Cell(0,5," Ngày giờ phẩu thuật:    ".substr($op_info['op_start'],0,2)." giờ ".substr($op_info['op_start'],3,2)." phút    ngày ".substr($giomo,0,2)." tháng ".substr($giomo,3,2)." năm ".substr($giomo,6,4),0,1,'L');
 
-if(!empty($op_info['localize'])){
-$fpdf->Cell(0,5," Chẩn đoán trước mổ:    ".$op_info['localize'],0,1,'L');
+//edit 16/04/2014
+if(!empty($test_info['clinical_info'])){
+$fpdf->Cell(0,5," Chẩn đoán trước mổ:    ".$test_info['clinical_info'],0,1,'L'); //edit
 }else {
 $fpdf->Cell(0,5,' Chẩn đoán trước mổ:..............................................................................................................................',0,1,'L');
 }

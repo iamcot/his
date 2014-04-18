@@ -444,7 +444,20 @@ for($n=0;$n<8;$n++)
 					
 				  ?>&nbsp;
   <?php echo "BS gởi yêu cầu" ?>:</b></font>
-		<font face="courier" size=2 color="#000000">&nbsp;<b><?php echo $stored_request['send_doctor'] ?></b></font></div><br>
+		<font face="courier" size=2 color="#000000">&nbsp;<b><?php echo $stored_request['send_doctor'] ?></b></font></div>
+		</td>
+    </tr>
+	<tr>
+		<td colspan=10 align="right"><div class=fva2_ml10>
+			<font face="courier" size=3 color="red"><b>
+			<?php
+				if($status_bill){
+					echo $LDDaThanhtoan;
+				}else{
+					echo $LDChuaThanhToan;
+				}
+			?>
+			</b></font>
 		</td>
     </tr>
  <?php

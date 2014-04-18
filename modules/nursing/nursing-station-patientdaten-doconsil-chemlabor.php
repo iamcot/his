@@ -7,7 +7,7 @@ require($root_path.'include/core/inc_environment_global.php');
 * CARE2X Integrated Hospital Information System version deployment 1.1 (mysql) 2004-01-11
 * GNU General Public License
 * Copyright 2002,2003,2004,2005,2006 Elpidio Latorilla
-* , el8pidio@care2x.org
+* , elpidio@care2x.org
 *
 * See the file "copy_notice.txt" for the licence notice
 */
@@ -148,7 +148,7 @@ include_once($root_path.'include/care_api_classes/class_lab.php');
 $lab_obj = new Lab;
 
 /* Check for the patietn number = $pn. If available get the patients data, otherwise set edit to 0 */
-if(isset($pn) && $pn) {                          //$pn: Ma benh an
+if(isset($pn) && $pn) {
     include_once($root_path.'include/care_api_classes/class_encounter.php');
 	$enc_obj=new Encounter;
 	
