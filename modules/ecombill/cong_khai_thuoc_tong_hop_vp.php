@@ -280,6 +280,19 @@ if($pres_item_noitru=$db->Execute($pres_noitru)){
 		}
 	}
 }
+/*
+ * SELECT
+  b.product_name,
+  a.total_cost
+FROM care_pharma_prescription_info AS a,
+  care_pharma_prescription AS b,
+  care_test_request_or c
+WHERE c.encounter_nr = a.encounter_nr
+    AND b.prescription_id = a.prescription_id
+    AND c.encounter_nr = '2013002098'
+    AND c.date_request=a.date_time_create
+    AND c.status = 'draff'
+ */
 $stt=1;
 ob_start();
 	//In dong ngay (co 7 cot)
