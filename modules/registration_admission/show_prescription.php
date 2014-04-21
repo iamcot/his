@@ -60,6 +60,7 @@ if(isset($current_encounter) && $current_encounter) {
 
 
 if($type=='pres') {
+    // toa thuoc ke
 	$sql="SELECT pr.*, grp.group_pres 
 			  FROM care_encounter AS e, 
 				   care_person AS p, 
@@ -99,7 +100,7 @@ if($type=='pres') {
 		$rows_2 = $result_2->RecordCount();
 	}else{ echo $sql_treatment; }
 	$rows= $rows_2;
-	$subtitle=$LDSheetTreatment;
+	$subtitle=$LDSheetTreatment;   //y lệnh/ Tờ điều tr
 	$noitru_ngoaitru =1;
 }
 

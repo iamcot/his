@@ -1233,7 +1233,7 @@ class Prescription extends Core {
 			}else{return false;}
 		}else{return false;}
 	}
-
+    //tong so ton kho
 	function findInventoryKhoChan_HoaChat($product_encoder,$typeput){
 	    global $db;
 		$this->sql="SELECT sum(number) AS sum 

@@ -355,6 +355,7 @@ class Encounter extends Notes {
 		$row=array();
 		$this->sql="SELECT encounter_nr FROM $this->tb_enc WHERE encounter_nr>=$ref_nr AND encounter_class_nr=$enc_class_nr ORDER BY encounter_nr DESC";
 		//$this->sql="SELECT encounter_nr FROM $this->tb_enc WHERE encounter_nr>=$ref_nr ORDER BY encounter_nr DESC";
+       // echo $this->sql;
 		if($this->res['gnen']=$db->SelectLimit($this->sql,1)){
 			if($this->res['gnen']->RecordCount()){
 				$row=$this->res['gnen']->FetchRow();
