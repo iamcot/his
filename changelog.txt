@@ -8,3 +8,5 @@
 * sửa toàn bộ class personell
 * tắt hiển thị danh mục thuốc khi load khoa dược
 * sửa class encounter
+2014-04-19:
++
