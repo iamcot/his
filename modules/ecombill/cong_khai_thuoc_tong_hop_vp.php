@@ -202,7 +202,7 @@ if(is_object($paymentresult)) $payment=$paymentresult->FetchRow();
  $smarty->assign('LDTitleFinalBill',$LDTitleFinalBill);
  $smarty->assign('LDWard',$LDWard.': '.$wardname);
  
- $smarty->assign('LDPatientNumber',$LDPatientNumber.': '.$patientno);
+ $smarty->assign('LDPatientNumber',$LDPatientNumber.': '.$patientno);  //$patientno mã bệnh nhân
  $smarty->assign('LDEncouterNumberNow',$LDEncouterNumberNow);
  $smarty->assign('LDPatientNumberData',$patientno);
  $smarty->assign('LDPatientType',$LDPatientType.': '.$in_out_patient);
@@ -311,7 +311,7 @@ ob_start();
 			echo '<td align="center">'.$v[$v1].'</td>';
 			$tongthuoc += $v[$v1];
 		}
-		$tongtienthuoc += $tongthuoc*$list_info[$x]['cost'];
+		$tongtienthuoc += $tongthuoc*$list_info[$x]['cost'];  //$tongtienthuoc là tổng tiền thuốc được bệnh nhân dùng
 		echo '</tr></table></td><td align="right">'.$tongthuoc.'</td><td align="right">'.number_format($list_info[$x]['cost']).'</td><td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']).'</td></tr>';
 		$stt++;
 	}
@@ -416,6 +416,7 @@ else
  if(is_object($itemresult))
  {
 	for ($i=0;$i<$itemresult->RecordCount();$i++)
+    // for ($i=1;$i<$itemresult->RecordCount();$i++) //nang
 	{	
 		$item=$itemresult->FetchRow();
 		$groupnr = $item['item_group_nr'];
@@ -424,7 +425,7 @@ else
 		$smarty->assign('LDItemNumberOf',$item['bill_item_units']); 
 		$smarty->assign('LDItemUnitCost',number_format($item['bill_item_unit_cost'])); 
 		$smarty->assign('LDItemSumCost',number_format($item['bill_item_units']*$item['bill_item_unit_cost']));
-		
+		   //
 		$tongtienDichVu += $item['bill_item_units']*$item['bill_item_unit_cost'];
 		
 		if ($groupnr<=25){								//Xet nghiem 1->25
@@ -535,7 +536,8 @@ else
 $resultfinalqry= $eComBill->billAmountByEncounter($patientno);
 if(is_object($resultfinalqry)) $cntbill=$resultfinalqry->FetchRow();
 
-$cntbill['total_amount'] += $tongtienthuoc + $tongtienVTYT + $tongitenHC + $tongtienDichVu;
+$cntbill['total_amount'] += $tongtienthuoc + $tongtienVTYT + $tongitenHC + $tongtienDichVu  ;
+//$cntbill['total_amount'] = $tongtienthuoc + $tongtienVTYT + $tongitenHC + $tongtienDichVu  ;     //nang
 
  $smarty->assign('LDTotal',$LDTotalFinalBill.': '); 
  $smarty->assign('LDTotalValue',number_format($cntbill['total_amount'])); 				//$final['final_total_bill_amount']

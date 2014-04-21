@@ -407,6 +407,7 @@ if($target=='depot')
 					$rowIssue['units'] = $rowIssue['unit_name_of_chemical'];
 					$inventory = $rowIssue['number']; 
 					$rowIssue['number_request'] = $rowIssue['number'];
+                    echo $inventory;
 				}
 			}
 			ob_start();
@@ -537,6 +538,7 @@ if($target=='depot')
 						if($tempinven->RecordCount()){
 							$tempcount=$tempinven->FetchRow();
 							$inventory=$tempcount['allocation_temp'];
+                          //  echo $inventory;
 						}	
 				ob_start();
 				$rowIssue['number_request']=$rowIssue['sumpres'];
@@ -575,7 +577,8 @@ if($target=='depot')
 							$tempcount=$tempinven->FetchRow();
 							$inventory=$tempcount['allocation_temp'];
 						}
-				$style=' style="border-color:white;border-style:solid;" '; $readonly=' readonly ';
+			//	echo $inventory;
+                $style=' style="border-color:white;border-style:solid;" '; $readonly=' readonly ';
 				
 				ob_start();
 				require('./include/inc_issuepaper_addchemical_sum.php');
