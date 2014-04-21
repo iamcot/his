@@ -77,7 +77,7 @@ if( isset($mode) && $mode=='save' ){
 					history=" . $enc_obj->ConcatHistory ( "Done: " . date ( 'Y-m-d H:i:s' ) . " = " . $_SESSION ['sess_user_name'] . "\n" ) . ",
 					modify_id = '" . $_SESSION ['sess_user_name'] . "',
 					modify_time = '" . date ( 'YmdHis' ) . "'
-				WHERE batch_nr = '" . $batch_nr . "'";echo $sql;
+				WHERE batch_nr = '" . $batch_nr . "'";
 	if($ergebnis=$core->Transact($sql)){
 	$dbuf['job_id']=$job_id;
 	$dbuf['encounter_nr']=$encounter_nr;
@@ -171,7 +171,7 @@ if( isset($mode) && $mode=='save' ){
 
 	}
 	}
-	
+
 	 $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $lab_obj->getLastQuery(), date('Y-m-d H:i:s'));
 	# If save successful, jump to display values
 	if($saved){
@@ -285,6 +285,7 @@ ob_start();
 
 <script language="javascript" name="j1">
 <!--
+/*
 function pruf(d) {
 	if(d.job_id.value == "" ) {
 		alert("<?php echo $LDAlertJobId ?>");
@@ -300,7 +301,7 @@ function pruf(d) {
 					return true;
 			}
 		}
-}
+}   */
 function chkselect(d) {
  	if(d.parameterselect.value=="<?php echo $parameterselect ?>"){
 		return false;
@@ -415,7 +416,7 @@ echo '
 	</tr>';
 
 	while(list($pId,$not)=each($pm)) {
-	
+
 		$pName = $lab_obj->TestParamsDetails($pId);
 		echo '<td bgcolor="#ffffee" class="a10_b"><b>';
 		echo $pName['name'] . '</b></td>';
