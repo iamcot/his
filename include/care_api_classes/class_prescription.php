@@ -464,6 +464,19 @@ class Prescription extends Core {
             }else{return 0;}
         }else{return 0;}
     }
+    function findInventoryKhoLe_ToaThuoc($product_encoder,$typeput){
+        global $db;
+        $this->sql="SELECT *, sum(available_number) AS sum
+					FROM care_pharma_available_product 
+					WHERE product_encoder='$product_encoder' AND typeput='$typeput' AND available_number>0
+					GROUP BY price";
+        //echo $this->sql;
+        if ($this->result=$db->Execute($this->sql)) {
+            if ($this->result->RecordCount()) {
+                return $this->result;
+            }else{return 0;}
+        }else{return 0;}
+    }
     /** 18/10/2011
      * Get all medicine in a prescription, based on the prescription id
      * Tuyen
@@ -779,7 +792,26 @@ class Prescription extends Core {
 
         return $this->Transact($this->sql);
     }
+    function setReceiveMedicineInPres_ToaThuoc($medicine_nr, $receive_number, $cost) {
+        global $db;
+        if(!$medicine_nr) return FALSE;
+        //prescriprion_info
+        $this->sql="UPDATE $this->tb_phar_pres
+						SET number_receive='".$receive_number."', cost='".$cost."' 
+						WHERE nr='".$medicine_nr."' ";
 
+        return $this->Transact($this->sql);
+    }
+    /** 2014/03/26
+     * Update cost for 1 medicine in pres
+     * */
+    function updateCostOneMedicine($medicine_nr,$cost,$recv){
+        global $db;
+        $this->sql="UPDATE ".$this->tb_phar_pres."
+                        SET cost = '$cost', number_receive = '$recv'
+                        WHERE nr = $medicine_nr";
+        return $this->Transact($this->sql);
+    }
     /** 5/12/2011
      * Updates the cost all medicine in prescription, based on the prescription_id and product_name
      * @param int prescription id
@@ -850,6 +882,78 @@ class Prescription extends Core {
 						WHERE prescription_id=$pres_id";
         return $this->Transact($this->sql);
     }
+
+    function IssueMedicineForPatient($enc_nr, $date_issue, $encoder, $number, $pres_id) {
+        global $db;
+        global $_SESSION;
+        if($encoder=='') return FALSE;
+        $this->sql="INSERT INTO care_pharma_prescription_issue
+					(enc_nr, date_issue, product_encoder, number, pres_id, create_id)
+					VALUES
+					('".$enc_nr."', '".$date_issue."', '".$encoder."', '".$number."', '".$pres_id."', '".$_SESSION['sess_user_name']."');";
+        return $this->Transact($this->sql);
+    }
+    function getMedicineIssue($pres_id, $product_encoder){
+        global $db;
+        $this->sql="SELECT *, sum(number) AS sum FROM care_pharma_prescription_issue
+					WHERE pres_id='".$pres_id."' AND product_encoder='".$product_encoder."'
+					GROUP BY product_encoder";
+
+        if ($this->result=$db->Execute($this->sql)) {
+            if ($this->result->RecordCount()) {
+                return $this->result->FetchRow();
+            }else{return false;}
+        }else{return false;}
+    }
+    function listMedicineIssueByEncounter($encounter_nr){
+        global $db;
+        $this->sql="SELECT *, sum(number) AS sum FROM care_pharma_prescription_issue
+					WHERE enc_nr='".$encounter_nr."' 
+					GROUP BY product_encoder, date_issue
+					ORDER BY product_encoder, date_issue";
+
+        if ($this->result=$db->Execute($this->sql)) {
+            if ($this->result->RecordCount()) {
+                return $this->result;
+            }else{return false;}
+        }else{return false;}
+    }
+    function listMedicineIssueByPresId($pres_id){
+        global $db;
+        $this->sql="SELECT iss.*,main.product_name, SUM(iss.number) AS SUM FROM care_pharma_prescription_issue AS iss, care_pharma_products_main AS main
+					WHERE iss.pres_id='".$pres_id."' AND iss.product_encoder=main.product_encoder 
+					GROUP BY iss.product_encoder, iss.date_issue
+					ORDER BY iss.product_encoder, iss.date_issue";
+
+        if ($this->result=$db->Execute($this->sql)) {
+            if ($this->result->RecordCount()) {
+                return $this->result;
+            }else{return false;}
+        }else{return false;}
+    }
+    function listMedicineIssueByEncNr($enc_nr){
+        global $db;
+        $this->sql="SELECT iss.*,main.product_name, SUM(iss.number) AS SUM FROM care_pharma_prescription_issue AS iss, care_pharma_products_main AS main
+					WHERE iss.enc_nr='".$enc_nr."' AND iss.product_encoder=main.product_encoder 
+					GROUP BY iss.product_encoder, iss.date_issue
+					ORDER BY iss.product_encoder, iss.date_issue";
+
+        if ($this->result=$db->Execute($this->sql)) {
+            if ($this->result->RecordCount()) {
+                return $this->result;
+            }else{return false;}
+        }else{return false;}
+    }
+    function setDongPhatThuoc($pres_id) {
+        global $db;
+        if(!$pres_id) return FALSE;
+        //prescriprion_info
+        $this->sql="UPDATE $this->tb_phar_pres_info
+						SET dongphatthuoc='1' 
+						WHERE prescription_id='$pres_id'";
+        return $this->Transact($this->sql);
+    }
+
     //**********************************************************************
     //**********************************************************************
     //Hoa chat
@@ -1153,7 +1257,27 @@ class Prescription extends Core {
             }else{return 0;}
         }else{return 0;}
     }
+    function updateAvaiPro_Sub($avai_pro, $number) {
+        global $db;
+        $this->sql="UPDATE care_pharma_available_product
+						SET available_number=available_number - '".$number."' 
+						WHERE available_product_id='".$avai_pro."' ";
+        "UPDATE care_pharma_available_product AS avai, care_pharma_prescription AS pr
+		SET avai.available_number = avai.available_number + pr.sum_number
+		WHERE avai.available_product_id = pr.avai_pro_id 
+		AND pr.prescription_id='$id' ";
 
+        return $this->Transact($this->sql);
+    }
+    function updateAvaiPro_Plus($pres_id) {
+        global $db;
+        $this->sql="UPDATE care_pharma_available_product AS avai, care_pharma_prescription AS pr
+					SET avai.available_number = avai.available_number + pr.sum_number
+					WHERE avai.available_product_id = pr.avai_pro_id 
+					AND pr.prescription_id='$pres_id' ";
+
+        return $this->Transact($this->sql);
+    }
     //Xu ly tam ton
     function updateAvaiPro_TamTon_Sub($avai_pro, $number) {
         global $db;
@@ -1177,6 +1301,27 @@ class Prescription extends Core {
         return $this->Transact($this->sql);
     }
 
-
+//	function getAllPresOfEncounter_1($encounter_nr, $phieutheodoi=''){
+//	    global $db;
+//		if($phieutheodoi!='' && $phieutheodoi!='0')
+//			$phieutheodoi_cmd=" AND prs.phieutheodoi='".$phieutheodoi."' ";
+//		else $phieutheodoi_cmd="";
+//        //thu
+//        $this->sql="SELECT prs.*, pr.*, prs.note AS totalnote, t.prescription_type_name AS type_name, dm.product_name
+//			  FROM $this->tb_phar_pres_info AS prs, $this->tb_phar_pres AS pr, $this->tb_phar_pres_type AS t,
+//					care_pharma_products_main AS dm
+//			  WHERE prs.encounter_nr='".$encounter_nr."'
+//			   ".$phieutheodoi_cmd."
+//				AND prs.prescription_id = pr.prescription_id
+//				AND pr.product_encoder = dm.product_encoder
+//				AND prs.prescription_type = t.prescription_type
+//			ORDER BY prs.date_time_create";
+//			//echo $sql;
+//	    if ($this->result=$db->Execute($this->sql)) {
+//		    if ($this->result->RecordCount()) {
+//		        return $this->result;
+//			}else{return false;}
+//		}else{return false;}
+//	}
 }
 ?>
