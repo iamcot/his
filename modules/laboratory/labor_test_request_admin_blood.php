@@ -105,8 +105,14 @@ switch ($mode) {
 				*/
 				 $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql, date('Y-m-d H:i:s'));
 			signalNewDiagnosticsReportEvent ( '', 'labor_test_request_printpop.php' );
-			header ( "location:" . $thisfile . URL_REDIRECT_APPEND . "&edit=$edit&pn=$pn&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize" );
-			exit ();
+//			header ( "location:" . $thisfile . URL_REDIRECT_APPEND . "&edit=$edit&pn=$pn&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize" );
+            header('Content-Type: text/html; charset=utf-8');                                         //đã thêm
+            echo "<script type='text/javascript'>";                                                   //đã thêm
+//                echo "alert('$LDNotifySave');";                                                           //đã thêm
+            echo "alert('Kết quả đã được lưu');";
+            echo "window.location.replace('".$thisfile.URL_REDIRECT_APPEND."&edit=".$edit."&saved=insert&mode=edit&pn=".$pn."&station=".$station."&user_origin=".$user_origin."&status=".$status."&target=".$target."&subtarget=".$subtarget."&noresize=".$noresize."&batch_nr=".$batch_nr."&entry_date=".$entry_date."')"; //đã thêm
+            echo "</script>";
+            exit ();
 		} else {
 			echo "<p>$sql<p>$LDDbNoSave";
 			$mode = "";
