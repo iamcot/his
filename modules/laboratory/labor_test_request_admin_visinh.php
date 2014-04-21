@@ -131,8 +131,14 @@ switch($mode){
                 if($ergebnis=$core->Transact($sql3)){
                     $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql3, date('Y-m-d H:i:s'));
                     signalNewDiagnosticsReportEvent($result_date);
-                    header("location:$thisfile?sid=$sid&lang=$lang&edit=$edit&saved=insert&mode=edit&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize&batch_nr=$batch_nr&entry_date=$entry_date");
-					exit;
+//                    header("location:$thisfile?sid=$sid&lang=$lang&edit=$edit&saved=insert&mode=edit&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize&batch_nr=$batch_nr&entry_date=$entry_date");
+                    header('Content-Type: text/html; charset=utf-8');       //đã thêm
+                    echo "<script type='text/javascript'>";                 //đã thêm
+                    echo "alert('Kết quả đã được lưu.');";                           //đã thêm
+//            echo "alert('$LDNotifySave');";                                         //đã thêm
+                    echo "window.location.replace('".$thisfile."?sid=".$sid."&lang=".$lang."&edit=".$edit."&saved=insert&mode=edit&pn=".$pn."&station=".$station."&user_origin=".$user_origin."&status=".$status."&target=".$target."&subtarget=".$subtarget."&batch_nr=".$batch_nr."&entry_date=".$entry_date."')"; //đã thêm
+                    echo "</script>";
+                    exit;
 				}else{
 					echo "<p>$sql3<p>$LDDbNoSave"; 
 					// $mode='';
