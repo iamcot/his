@@ -370,6 +370,7 @@
 				<td class="adm_input">
 					{{$sRegByInput}}
 				</td>
+			</tr>
 		</table>
 
 		{{$sHiddenInputs}}

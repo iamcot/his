@@ -102,7 +102,7 @@
 					<tr class="wardlistrow1">
 						<td style="text-align:center;">{{$nhapvien}}</td>
 						<td style="text-align:center;">{{$nhapvienngoai}}</td>
-						<td style="text-align:center;">{{$nhapviennoi}}</td>t
+						<td style="text-align:center;">{{$nhapviennoi}}</td>
 						<td style="text-align:center;">{{$nhapvienhscc}}</td>
 						<td style="text-align:center;">{{$nhapvienyhct}}</td>
 						<td style="text-align:center;">{{$nhapviensan}}</td>
