@@ -160,8 +160,8 @@ switch($mode){
 //			header("location:".$thisfile."?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&batch_nr=$batch_nr&noresize=$noresize");
             header('Content-Type: text/html; charset=utf-8');                                          //đã thêm
             echo "<script type='text/javascript'>";                                                   //đã thêm
-//            echo "alert('Kết quả đã được lưu');";                                                      //đã thêm
-            echo "alert('$LDAlertBeforeSave');";                                                           //đã thêm
+            echo "alert('Kết quả đã được lưu');";                                                      //đã thêm
+//            echo "alert('$LDAlertBeforeSave');";                                                           //đã thêm
             echo "window.location.replace('".$thisfile."?sid=".$sid."&lang=".$lang."&edit=".$edit."&saved=update&pn=".$pn."&station=".$station."&user_origin=".$user_origin."&status=".$status."&target=".$target."&subtarget=".$subtarget."&batch_nr=".$batch_nr."&noresize=".$noresize."')"; //đã thêm
             echo "</script>";
 
