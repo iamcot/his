@@ -90,7 +90,6 @@ if( isset($mode) && $mode=='save' ){
             if($_POST['std_date']==DBF_NODATE) $dbuf['test_date']=date('Y-m-d');
 
             foreach( $nbuf as $key => $value) {
-//                if(isset($value) && !empty($value) && !array_key_exists($key, $pdata)) {
                   if(isset($value) && !empty($value) && ($value!=$pdata[$key])){
                     $parsedParamList['test_date']		= date('Y-m-d');
                     $parsedParamList['batch_nr'] 		= $batch_nr;
