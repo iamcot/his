@@ -18,23 +18,23 @@ require_once($root_path.'include/core/inc_front_chain_lang.php');
 //$db->debug=1;
 
 if(!$encounter_nr) {
-	header('Location:'.$root_path.'language/'.$lang.'/lang_'.$lang.'_invalid-access-warning.php');
-	exit;
+    header('Location:'.$root_path.'language/'.$lang.'/lang_'.$lang.'_invalid-access-warning.php');
+    exit;
 };
 
 if(!isset($user_origin)||empty($user_origin))
-$user_origin='lab';
+    $user_origin='lab';
 include_once($root_path.'include/core/inc_front_chain_lang.php');
 $core = & new Core;
 # Create encounter object
 require_once($root_path.'include/care_api_classes/class_encounter.php');
 $encounter=new Encounter($encounter_nr);
 require_once($root_path.'include/core/access_log.php');
-    require_once($root_path.'include/care_api_classes/class_access.php');
-    $logs = new AccessLog();
+require_once($root_path.'include/care_api_classes/class_access.php');
+$logs = new AccessLog();
 $enc_obj=new Encounter($encounter_nr);
 if($encounter =&$enc_obj->getBasic4Data($encounter_nr)){
-	$patient = $encounter->FetchRow();
+    $patient = $encounter->FetchRow();
 }
 
 $thisfile='labor_datainput_blood.php';
@@ -46,11 +46,11 @@ $lab_obj_sub = new LabBlood($encounter_nr, true);
 $batch_nr = '';
 //to avoid reinserting allready done analysis
 if($result=&$lab_obj->getResult($job_id,$parameterselect)){
-	while($row=$result->FetchRow()) {
-		$batch_nr = $row['batch_nr'];
-		$pdata[$row['paramater_name']] = $row['parameter_value'];
-		$std_date=$row['test_date'];
-	}
+    while($row=$result->FetchRow()) {
+        $batch_nr = $row['batch_nr'];
+        $pdata[$row['paramater_name']] = $row['parameter_value'];
+        $std_date=$row['test_date'];
+    }
 }
 
 if (!empty($pdata) ) $allow_update = TRUE; else $allow_update = FALSE;
@@ -59,18 +59,18 @@ include_once($root_path.'include/core/inc_date_format_functions.php');
 
 if( isset($mode) && $mode=='save' ){
 
-	$nbuf=array();
-	//Prepare parameter values
-	//gjergji
-	while (list($z,$y)=each($_POST)) {
-		if($result_tests = $lab_obj->GetTestsToDo($job_id))
-		while($row_tests = $result_tests->FetchRow()) {
-			if ($z == $row_tests['paramater_name'] ) {
-				$nbuf[$z]=$y;
-			}
-		}
-	}
-	$sql = "UPDATE care_test_findings_blood
+    $nbuf=array();
+    //Prepare parameter values
+    //gjergji
+    while (list($z,$y)=each($_POST)) {
+        if($result_tests = $lab_obj->GetTestsToDo($job_id))
+            while($row_tests = $result_tests->FetchRow()) {
+                if ($z == $row_tests['paramater_name'] ) {
+                    $nbuf[$z]=$y;
+                }
+            }
+    }
+    $sql = "UPDATE care_test_findings_blood
 				SET status='received',
 					test_date='".formatDate2STD($test_date,$date_format)."',
 					test_time='".date('H:i:s')."',
@@ -78,106 +78,107 @@ if( isset($mode) && $mode=='save' ){
 					modify_id = '" . $_SESSION ['sess_user_name'] . "',
 					modify_time = '" . date ( 'YmdHis' ) . "'
 				WHERE batch_nr = '" . $batch_nr . "'";
-	if($ergebnis=$core->Transact($sql)){
-	$dbuf['job_id']=$job_id;
-	$dbuf['encounter_nr']=$encounter_nr;
-	if($allow_update == TRUE){
+    if($ergebnis=$core->Transact($sql)){
+        $dbuf['job_id']=$job_id;
+        $dbuf['encounter_nr']=$encounter_nr;
+        if($allow_update == TRUE){
 
-		$dbuf['modify_id']=$_SESSION['sess_user_name'];
-		$dbuf['modify_time']=date('YmdHis');
+            $dbuf['modify_id']=$_SESSION['sess_user_name'];
+            $dbuf['modify_time']=date('YmdHis');
 
-		# Recheck the date, ! bug pat	$dbuf['modify_id']=$_SESSION['sess_user_name'];
-		if($_POST['std_date']==DBF_NODATE) $dbuf['test_date']=date('Y-m-d');
+            # Recheck the date, ! bug pat	$dbuf['modify_id']=$_SESSION['sess_user_name'];
+            if($_POST['std_date']==DBF_NODATE) $dbuf['test_date']=date('Y-m-d');
 
-		foreach( $nbuf as $key => $value) {
-			if(isset($value) && !empty($value) && !array_key_exists($key, $pdata)) {
-				$parsedParamList['test_date']		= date('Y-m-d');
-				$parsedParamList['batch_nr'] 		= $batch_nr;
-				$parsedParamList['job_id'] 			= $job_id;
-				$parsedParamList['encounter_nr'] 	= $encounter_nr;
-				$parsedParamList['paramater_name']	= $key;
-				$parsedParamList['parameter_value']	= $value;
-				$parsedParamList['test_time']		= date('H:i:s');
-				$parsedParamList['history']			= "Create ".date('Y-m-d H:i:s')." ".$_SESSION['sess_user_name']."\n";
-				$parsedParamList['create_id']		= $_SESSION['sess_user_name'];
-				$parsedParamList['create_time']		= date('YmdHis');
-				$lab_obj_sub->setDataArray($parsedParamList);
-				if($lab_obj_sub->insertDataFromInternalArray()){
-					$saved = TRUE;
-				$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $lab_obj_sub->getLastQuery(), date('Y-m-d H:i:s'));
-				}else{echo "<p>".$lab_obj->getLastQuery()."$LDDbNoSave";}
-			}
-		}
+            foreach( $nbuf as $key => $value) {
+//                if(isset($value) && !empty($value) && !array_key_exists($key, $pdata)) {
+                  if(isset($value) && !empty($value) && ($value!=$pdata[$key])){
+                    $parsedParamList['test_date']		= date('Y-m-d');
+                    $parsedParamList['batch_nr'] 		= $batch_nr;
+                    $parsedParamList['job_id'] 			= $job_id;
+                    $parsedParamList['encounter_nr'] 	= $encounter_nr;
+                    $parsedParamList['paramater_name']	= $key;
+                    $parsedParamList['parameter_value']	= $value;
+                    $parsedParamList['test_time']		= date('H:i:s');
+                    $parsedParamList['history']			= "Create ".date('Y-m-d H:i:s')." ".$_SESSION['sess_user_name']."\n";
+                    $parsedParamList['create_id']		= $_SESSION['sess_user_name'];
+                    $parsedParamList['create_time']		= date('YmdHis');
+                    $lab_obj_sub->setDataArray($parsedParamList);
+                    if($lab_obj_sub->insertDataFromInternalArray()){
+                        $saved = TRUE;
+                        $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $lab_obj_sub->getLastQuery(), date('Y-m-d H:i:s'));
+                    }else{echo "<p>".$lab_obj->getLastQuery()."$LDDbNoSave";}
+                }
+            }
 
-		# If save successful, jump to display values
-		if($saved){
-			include_once($root_path.'include/core/inc_visual_signalling_fx.php');
-			# Set the visual signal
-			setEventSignalColor($encounter_nr,SIGNAL_COLOR_DIAGNOSTICS_REPORT);
+            # If save successful, jump to display values
+            if($saved){
+                include_once($root_path.'include/core/inc_visual_signalling_fx.php');
+                # Set the visual signal
+                setEventSignalColor($encounter_nr,SIGNAL_COLOR_DIAGNOSTICS_REPORT);
 //			header("location:$thisfile?sid=$sid&lang=$lang&saved=1&batch_nr=$batch_nr&encounter_nr=$encounter_nr&job_id=$job_id&parameterselect=$parameterselect&allow_update=1&user_origin=$user_origin&mode=show");
-            header('Content-Type: text/html; charset=utf-8');                 //đã thêm
-            echo "<script type='text/javascript'>";                                    //đã thêm
-            echo "alert('Kết quả đã được lưu.');";                                      //đã thêm
+                header('Content-Type: text/html; charset=utf-8');                 //đã thêm
+                echo "<script type='text/javascript'>";                                    //đã thêm
+                echo "alert('Kết quả đã được lưu.');";                                      //đã thêm
 //            echo "alert('$LDNotifySave');";                                                    //đã thêm
-            echo "window.location.replace('labor_test_request_admin_blood.php".URL_APPEND."&pn=".$encounter_nr."&batch_nr=".$job_id."&user_origin=lab')";//đã thêm
-            echo "</script>";
+                echo "window.location.replace('labor_test_request_admin_blood.php".URL_APPEND."&pn=".$encounter_nr."&batch_nr=".$job_id."&user_origin=lab')";//đã thêm
+                echo "</script>";
 
-            exit;
-		}
-		//$saved=true;
+                exit;
+            }
+            //$saved=true;
 
 
 
-	}else{
-		# Hide old job record if it exists
-		//TODO : check it later...is it really needed ?
-		//$lab_obj->hideResultIfExists($encounter_nr,$job_id,$parameterselect);
-		# Convert date to standard format
-		/*		if(isset($std_date)){
-		if($_POST['std_date'] == DBF_NODATE)
-		$dbuf['test_date']=date('Y-m-d');
-		else
-		$dbuf['test_date']=$_POST['std_date'];
-		}else{
-		$dbuf['test_date']=formatDate2STD($_POST['test_date'],$date_format);
-		}*/
-		$dbuf['test_date']=formatDate2STD($_POST['test_date'],$date_format);
-		$dbuf['test_time']=date('H:i:s');
+        }else{
+            # Hide old job record if it exists
+            //TODO : check it later...is it really needed ?
+            //$lab_obj->hideResultIfExists($encounter_nr,$job_id,$parameterselect);
+            # Convert date to standard format
+            /*		if(isset($std_date)){
+            if($_POST['std_date'] == DBF_NODATE)
+            $dbuf['test_date']=date('Y-m-d');
+            else
+            $dbuf['test_date']=$_POST['std_date'];
+            }else{
+            $dbuf['test_date']=formatDate2STD($_POST['test_date'],$date_format);
+            }*/
+            $dbuf['test_date']=formatDate2STD($_POST['test_date'],$date_format);
+            $dbuf['test_time']=date('H:i:s');
 
-		$dbuf['history']="Create ".date('Y-m-d H:i:s')." ".$_SESSION['sess_user_name']."\n";
-		$dbuf['create_id']=$_SESSION['sess_user_name'];
-		$dbuf['create_time']=date('YmdHis');
+            $dbuf['history']="Create ".date('Y-m-d H:i:s')." ".$_SESSION['sess_user_name']."\n";
+            $dbuf['create_id']=$_SESSION['sess_user_name'];
+            $dbuf['create_time']=date('YmdHis');
 
-		# Insert new job record
-		$lab_obj->setDataArray($dbuf);
-		if($lab_obj->insertDataFromInternalArray()){
-			$pk_nr=$db->Insert_ID();
-			$batch_nr=$lab_obj->LastInsertPK('batch_nr',$pk_nr);
-			foreach( $nbuf as $key => $value) {
-				if(isset($value) && !empty($value)) {
-					$parsedParamList['batch_nr']=$batch_nr;
-					$parsedParamList['encounter_nr']=$encounter_nr;
-					$parsedParamList['job_id']=$job_id;
-					$parsedParamList['paramater_name']=$key;
-					$parsedParamList['parameter_value']=$value;
-					$lab_obj_sub->setDataArray($parsedParamList);
-					$lab_obj_sub->insertDataFromInternalArray();
-					$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $lab_obj_sub->getLastQuery(), date('Y-m-d H:i:s'));
-				}
-			}
-			$saved=true;
+            # Insert new job record
+            $lab_obj->setDataArray($dbuf);
+            if($lab_obj->insertDataFromInternalArray()){
+                $pk_nr=$db->Insert_ID();
+                $batch_nr=$lab_obj->LastInsertPK('batch_nr',$pk_nr);
+                foreach( $nbuf as $key => $value) {
+                    if(isset($value) && !empty($value)) {
+                        $parsedParamList['batch_nr']=$batch_nr;
+                        $parsedParamList['encounter_nr']=$encounter_nr;
+                        $parsedParamList['job_id']=$job_id;
+                        $parsedParamList['paramater_name']=$key;
+                        $parsedParamList['parameter_value']=$value;
+                        $lab_obj_sub->setDataArray($parsedParamList);
+                        $lab_obj_sub->insertDataFromInternalArray();
+                        $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $lab_obj_sub->getLastQuery(), date('Y-m-d H:i:s'));
+                    }
+                }
+                $saved=true;
 
-		}else{echo "<p>".$lab_obj->getLastQuery()."$LDDbNoSave";}
+            }else{echo "<p>".$lab_obj->getLastQuery()."$LDDbNoSave";}
 
-	}
-	}
+        }
+    }
 
-	 $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $lab_obj->getLastQuery(), date('Y-m-d H:i:s'));
-	# If save successful, jump to display values
-	if($saved){
-		include_once($root_path.'include/core/inc_visual_signalling_fx.php');
-		# Set the visual signal
-		setEventSignalColor($encounter_nr,SIGNAL_COLOR_DIAGNOSTICS_REPORT);
+    $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $lab_obj->getLastQuery(), date('Y-m-d H:i:s'));
+    # If save successful, jump to display values
+    if($saved){
+        include_once($root_path.'include/core/inc_visual_signalling_fx.php');
+        # Set the visual signal
+        setEventSignalColor($encounter_nr,SIGNAL_COLOR_DIAGNOSTICS_REPORT);
 //		header("location:$thisfile?sid=$sid&lang=$lang&saved=1&batch_nr=$batch_nr&encounter_nr=$encounter_nr&job_id=$job_id&parameterselect=$parameterselect&allow_update=1&user_origin=$user_origin");
 
         header('Content-Type: text/html; charset=utf-8');        //đã thêm
@@ -187,45 +188,45 @@ if( isset($mode) && $mode=='save' ){
         echo "window.location.replace('labor_test_request_admin_blood.php".URL_APPEND."&pn=".$encounter_nr."&batch_nr=".$job_id."&user_origin=lab')"; //đã thêm
         echo "</script>";
         exit;
-	}
-	# end of if(mode==save)
-	#If mode is not "save" then get the basic personal data
+    }
+    # end of if(mode==save)
+    #If mode is not "save" then get the basic personal data
 } elseif(!isset($mode) || $mode == 'show') {
 
-	# If previously saved, get the values
-	if($saved){
-		if($result=&$lab_obj->getBatchResult($batch_nr)){
-			while($row=$result->FetchRow()) {
-				$pdata[$row['paramater_name']] = $row['parameter_value'];
-			}
-		}
-	}else{
-		if($result=&$lab_obj->getResult($job_id,$parameterselect)){
-			while($row=$result->FetchRow()) {
-				$pdata[$row['paramater_name']] = $row['parameter_value'];
-			}
-		}else{
-			# disallow update if group does not exist yet
-			$allow_update=false;
-		}
-	}
+    # If previously saved, get the values
+    if($saved){
+        if($result=&$lab_obj->getBatchResult($batch_nr)){
+            while($row=$result->FetchRow()) {
+                $pdata[$row['paramater_name']] = $row['parameter_value'];
+            }
+        }
+    }else{
+        if($result=&$lab_obj->getResult($job_id,$parameterselect)){
+            while($row=$result->FetchRow()) {
+                $pdata[$row['paramater_name']] = $row['parameter_value'];
+            }
+        }else{
+            # disallow update if group does not exist yet
+            $allow_update=false;
+        }
+    }
 
-	# Get the test test groups
-	$tgroups=&$lab_obj->TestActiveGroups();
-	# Get the test parameter values
-	//gjergji : take all the params for this group...
-	$tparams=&$lab_obj->TestParams();
+    # Get the test test groups
+    $tgroups=&$lab_obj->TestActiveGroups();
+    # Get the test parameter values
+    //gjergji : take all the params for this group...
+    $tparams=&$lab_obj->TestParams();
 
-	# Set the return file
-	if(isset($job_id) && $job_id){
-		switch($user_origin){
-			case 'lab_mgmt':  $breakfile="labor_test_request_admin_blood.php".URL_APPEND."&pn=$encounter_nr&batch_nr=$job_id&user_origin=lab";
-			break;
-			default: $breakfile="labor_data_check_arch.php".URL_APPEND."&versand=1&encounter_nr=$encounter_nr";
-		}
-	}else{
-		$breakfile="labor_data_patient_such.php".URL_APPEND."&mode=edit";
-	}
+    # Set the return file
+    if(isset($job_id) && $job_id){
+        switch($user_origin){
+            case 'lab_mgmt':  $breakfile="labor_test_request_admin_blood.php".URL_APPEND."&pn=$encounter_nr&batch_nr=$job_id&user_origin=lab";
+                break;
+            default: $breakfile="labor_data_check_arch.php".URL_APPEND."&versand=1&encounter_nr=$encounter_nr";
+        }
+    }else{
+        $breakfile="labor_data_patient_such.php".URL_APPEND."&mode=edit";
+    }
 }
 
 //if($saved || $row['test_date']) $std_date=$row['test_date'];
@@ -264,54 +265,54 @@ ob_start();
 ?>
 
 <style type="text/css">
-.va12_n {
-	font-family: verdana, arial;
-	font-size: 12;
-	color: #000099
-}
+    .va12_n {
+        font-family: verdana, arial;
+        font-size: 12;
+        color: #000099
+    }
 
-.a10_b {
-	font-family: arial;
-	font-size: 10;
-	color: #000000
-}
+    .a10_b {
+        font-family: arial;
+        font-size: 10;
+        color: #000000
+    }
 
-.a10_n {
-	font-family: arial;
-	font-size: 10;
-	color: #000099
-}
+    .a10_n {
+        font-family: arial;
+        font-size: 10;
+        color: #000099
+    }
 </style>
 
 <script language="javascript" name="j1">
-<!--
-/*
-function pruf(d) {
-	if(d.job_id.value == "" ) {
-		alert("<?php echo $LDAlertJobId ?>");
-			d.job_id.focus();
-			 return false;
-		} else {
-			if(d.test_date){
-				if(!d.test_date.value)
-				{ alert("<?php echo $LDAlertTestDate ?>");
-					d.test_date.focus();
-					return false;
-				} else
-					return true;
-			}
-		}
-}   */
-function chkselect(d) {
- 	if(d.parameterselect.value=="<?php echo $parameterselect ?>"){
-		return false;
-	}
-}
-function labReport(){
-	window.location.replace("<?php echo 'labor_datalist_noedit_blood.php'.URL_REDIRECT_APPEND.'&encounter_nr='.$encounter_nr.'&noexpand=1&from=input&job_id='.$job_id.'&parameterselect='.$parameterselect.'&allow_update='.$allow_update.'&nostat=1&user_origin=lab'; ?>");
-}
-<?php require($root_path.'include/core/inc_checkdate_lang.php'); ?>
-// -->
+    <!--
+    /*
+     function pruf(d) {
+     if(d.job_id.value == "" ) {
+     alert("<?php echo $LDAlertJobId ?>");
+     d.job_id.focus();
+     return false;
+     } else {
+     if(d.test_date){
+     if(!d.test_date.value)
+     { alert("<?php echo $LDAlertTestDate ?>");
+     d.test_date.focus();
+     return false;
+     } else
+     return true;
+     }
+     }
+     }   */
+    function chkselect(d) {
+        if(d.parameterselect.value=="<?php echo $parameterselect ?>"){
+            return false;
+        }
+    }
+    function labReport(){
+        window.location.replace("<?php echo 'labor_datalist_noedit_blood.php'.URL_REDIRECT_APPEND.'&encounter_nr='.$encounter_nr.'&noexpand=1&from=input&job_id='.$job_id.'&parameterselect='.$parameterselect.'&allow_update='.$allow_update.'&nostat=1&user_origin=lab'; ?>");
+    }
+    <?php require($root_path.'include/core/inc_checkdate_lang.php'); ?>
+    // -->
 </script>
 <?php
 
@@ -339,18 +340,18 @@ $smarty->assign('sName',$patient['name_first']);
 $smarty->assign('sBday',formatDate2Local($patient['date_birth'],$date_format));
 
 if($saved||$job_id)
-$smarty->assign('sJobIdNr',$job_id.'<input type=hidden name=job_id value="'.$job_id.'">');
+    $smarty->assign('sJobIdNr',$job_id.'<input type=hidden name=job_id value="'.$job_id.'">');
 else
-$smarty->assign('sJobIdNr','<input name="job_id" type="text" size="14">');
+    $smarty->assign('sJobIdNr','<input name="job_id" type="text" size="14">');
 
 $smarty->assign('sExamDate',$LDExamDate);
 
 if($std_date){
-	$smarty->assign('sMiniCalendar',$calendar->show_calendar($calendar,$date_format,'test_date',$std_date));
+    $smarty->assign('sMiniCalendar',$calendar->show_calendar($calendar,$date_format,'test_date',$std_date));
 }else{
-	//gjergji : new calendar
-	$smarty->assign('sMiniCalendar',$calendar->show_calendar($calendar,$date_format,'test_date',date('Y-m-d')));
-	//end : gjergji
+    //gjergji : new calendar
+    $smarty->assign('sMiniCalendar',$calendar->show_calendar($calendar,$date_format,'test_date',date('Y-m-d')));
+    //end : gjergji
 }
 
 # Assign parameter elements
@@ -379,14 +380,14 @@ $paramnum=sizeof($parameters);
 $rowlimit=0;
 $requestData=array();
 if($result_tests = $lab_obj->GetTestsToDo($job_id)) {
-	while ( $result=$result_tests->fetchrow() ) {
-	//echo $result['paramater_name']." ";
-		if(isset($result['paramater_name'])) {
-			$ext = substr(stristr($result['paramater_name'], '__'), 2);
-			//echo $ext;
-			$requestData[$ext][$result['paramater_name']] = $result['parameter_value'];
-		}
-	}
+    while ( $result=$result_tests->fetchrow() ) {
+        //echo $result['paramater_name']." ";
+        if(isset($result['paramater_name'])) {
+            $ext = substr(stristr($result['paramater_name'], '__'), 2);
+            //echo $ext;
+            $requestData[$ext][$result['paramater_name']] = $result['parameter_value'];
+        }
+    }
 }
 
 reset($requestData);
@@ -396,48 +397,48 @@ reset($requestData);
 $collimit=0;
 while(list($group,$pm)=each($requestData)) {
 //$pm;
-	$gName = $lab_obj->getGroupName($group ) ;
-	echo '
+    $gName = $lab_obj->getGroupName($group ) ;
+    echo '
 	<tr>';
-	echo '<td colspan="9" bgcolor="#fd0303" class="a10_a" style="height:20px;"><b>';
-	echo $parametergruppe[$gName->fields['name']];
-	echo '</b></td></tr><tr>';
-	$pcols=COL_MAX/2;
-echo '<tr>';
+    echo '<td colspan="9" bgcolor="#fd0303" class="a10_a" style="height:20px;"><b>';
+    echo $parametergruppe[$gName->fields['name']];
+    echo '</b></td></tr><tr>';
+    $pcols=COL_MAX/2;
+    echo '<tr>';
 
-for($j=0;$j<$pcols;$j++){
-	echo '
+    for($j=0;$j<$pcols;$j++){
+        echo '
 		<td class="a10_n">&nbsp;'.$LDParameter.'</td>
 		<td  class="a10_n">&nbsp;'.$LDValue.'</td>
 		<td  class="a10_n">&nbsp;Đơn vị</td>';
-}
+    }
 
-echo '
+    echo '
 	</tr>';
 
-	while(list($pId,$not)=each($pm)) {
+    while(list($pId,$not)=each($pm)) {
 
-		$pName = $lab_obj->TestParamsDetails($pId);
-		echo '<td bgcolor="#ffffee" class="a10_b"><b>';
-		echo $pName['name'] . '</b></td>';
-		echo '<td>';
+        $pName = $lab_obj->TestParamsDetails($pId);
+        echo '<td bgcolor="#ffffee" class="a10_b"><b>';
+        echo $pName['name'] . '</b></td>';
+        echo '<td>';
 
-		echo '<input name="'.$pId.'" type="text" size="8" ';
-		echo 'value="';
-		if(isset($pdata[$pId])&&!empty($pdata[$pId])) {
-			echo trim($pdata[$pId]) . "\" >";
-		} else echo '">';
+        echo '<input name="'.$pId.'" type="text" size="8" ';
+        echo 'value="';
+        if(isset($pdata[$pId])&&!empty($pdata[$pId])) {
+            echo trim($pdata[$pId]) . "\" >";
+        } else echo '">';
 
-		echo '</td><td>
+        echo '</td><td>
 			('.$pName['lo_bound'].'-'.$pName['hi_bound'].') '.$pName['msr_unit'].'
 		</td>';
-		$collimit++;
-		if($collimit==(COL_MAX/2)){
-			echo '
+        $collimit++;
+        if($collimit==(COL_MAX/2)){
+            echo '
 			</tr>';
-			$collimit=0;
-		}
-	}
+            $collimit=0;
+        }
+    }
 }
 
 # Assign parameter output
@@ -463,7 +464,7 @@ ob_start();
 <input type=hidden name="std_date" value="<?php echo $std_date; ?>">
 <input type=hidden name="user_origin" value="<?php echo $user_origin; ?>">
 <?php if($mode == 'save' || !isset($allow_update) || $allow_update == '')  ?>
-	<input type="hidden" name="mode" value="save">
+    <input type="hidden" name="mode" value="save">
 <?php
 
 

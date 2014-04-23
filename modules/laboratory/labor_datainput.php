@@ -290,6 +290,7 @@ ob_start();
 
 <script language="javascript" name="j1">
 <!--
+/*
 function pruf(d) {
 	if(d.job_id.value == "" ) {
 		alert("<?php echo $LDAlertJobId ?>");
@@ -305,7 +306,7 @@ function pruf(d) {
 					return true;
 			}
 		}
-}
+}        */
 function chkselect(d) {
  	if(d.parameterselect.value=="<?php echo $parameterselect ?>"){
 		return false;
