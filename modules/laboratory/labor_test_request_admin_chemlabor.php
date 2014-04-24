@@ -89,7 +89,7 @@ switch ($mode) {
 				{
 				$para_array=array();
 				//$temp_array=array('_nit__urine','_leu__urine','_uro__urine','_pro__urine','_ph__urine','_blo__urine','_ket__urine','_bil__urine','_glu__urine','_sg__urine');
-                while($row_tests = $result_tests->FetchRow()) {
+                /*while($row_tests = $result_tests->FetchRow()) {
                     $sql2="select tp.bill_item_nr, bi.item_unit_cost from care_test_param as tp left join care_billing_item as bi on (tp.bill_item_nr=bi.item_code) where tp.id='".$row_tests['paramater_name']."'";
                     //echo $sql2;
                     $para_array[]=$row_tests['paramater_name'];
@@ -106,7 +106,7 @@ switch ($mode) {
                     //echo 'is_array';
                     $eComBill->createBillItem($pn, 'NT','35000', 1, '35000',date("Y-m-d G:i:s") );
 
-                }
+                } */
             }
             signalNewDiagnosticsReportEvent ( '', 'labor_test_request_printpop.php' );
             header ( "location:" . $thisfile . URL_REDIRECT_APPEND . "&edit=$edit&pn=$pn&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize" );
