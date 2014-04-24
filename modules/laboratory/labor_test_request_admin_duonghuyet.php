@@ -501,8 +501,8 @@ require('includes/inc_test_request_lister_fx.php');
   <?php echo 'Bác sĩ xét nghiệm' ?>
 <!--        <input type="text" name="results_doctor" value="--><?php //if($read_form && $stored_request['results_doctor']) echo $stored_request['results_doctor'];else echo $pers_name; ?><!--" size=35 maxlength=35> -->
 <!--        <input type="hidden" name="results_doctor_nr" value="--><?php //if($read_form && $stored_request['results_doctor_']) echo $stored_request['results_doctor_nr']; else echo $pers_nr;?><!--"> <a href="javascript:popDocPer('doctor_nr')"><img --><?php //echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?><!-->-->
-            <input type="text" name="send_doctor" size=40 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['send_doctor'];else echo $pers_name;?>">
-            <input type="hidden" name="send_doctor_nr" value="<?php if(!empty( $stored_request['send_doctor_nr'])) echo $stored_request['send_doctor_nr'];else echo $pers_nr; ?>"> <a href="javascript:popDocPer('doctor_nr','send_doctor_nr','send_doctor')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
+            <input type="text" name="results_doctor" size=40 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['results_doctor'];else echo $pers_name;?>">
+            <input type="hidden" name="results_doctor_nr" value="<?php if(!empty( $stored_request['results_doctor_nr'])) echo $stored_request['results_doctor_nr'];else echo $pers_nr; ?>"> <a href="javascript:popDocPer('doctor_nr','results_doctor_nr','results_doctor')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
         </td>
     </tr>
 		</table> 
