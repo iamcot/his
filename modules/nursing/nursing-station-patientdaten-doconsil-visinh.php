@@ -13,6 +13,9 @@ require($root_path.'include/core/inc_environment_global.php');
 $lang_tables[] = 'departments.php';
 define('LANG_FILE','konsil.php');
 
+include_once($root_path.'include/care_api_classes/class_lab.php');
+$lab_obj = new Lab;
+
 /* We need to differentiate from where the user is coming:
 *  $user_origin != lab ;  from patient charts folder
 *  $user_origin == lab ;  from the laboratory
@@ -186,7 +189,33 @@ $core = & new Core;
 									setEventSignalColor($pn,SIGNAL_COLOR_DIAGNOSTICS_REQUEST);									
 									
 									 header("location:".$root_path."modules/laboratory/labor_test_request_aftersave_visinh.php?sid=$sid&lang=$lang&edit=$edit&saved=insert&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&noresize=$noresize&batch_nr=$batch_nr");
-									 exit;
+
+                                      //billing
+                                      if($result_tests = $lab_obj->GetTestsToDo($batch_nr))
+                                      {
+                                          $para_array=array();
+                                          while($row_tests = $result_tests->FetchRow()) {
+                                              $sql2="select tp.bill_item_nr, bi.item_unit_cost from care_test_param as tp left join care_billing_item as bi on (tp.bill_item_nr=bi.item_code) where tp.id='".$row_tests['paramater_name']."'";
+                                              //echo $sql2;
+                                              $para_array[]=$row_tests['paramater_name'];
+                                              //var_dump($row_tests);
+
+                                              $temp=$db->execute($sql2);
+                                              if($temp->recordcount()){
+                                                  $buf=$temp->fetchrow();
+                                                  $eComBill->createBillItem($pn, $buf['bill_item_nr'],$buf['item_unit_cost'], 1, $buf['item_unit_cost'],date("Y-m-d G:i:s") );
+                                              }
+                                          }
+                                          //var_dump($para_array);
+                                          if((in_array('_nit__urine',$para_array))&&(in_array('_leu__urine',$para_array))&&(in_array('_uro__urine',$para_array))&&(in_array('_pro__urine',$para_array))&&(in_array('_ph__urine',$para_array))&&(in_array('_blo__urine',$para_array))&&(in_array('_ket__urine',$para_array))&&(in_array('_bil__urine',$para_array))&&(in_array('_glu__urine',$para_array))&&(in_array('_sg__urine',$para_array))){
+                                              //echo 'is_array';
+                                              $eComBill->createBillItem($pn, 'NT','35000', 1, '35000',date("Y-m-d G:i:s") );
+
+                                          }
+                                      }
+                                      //billing
+
+                                      exit;
 								  }
 								  else 
 								  {
