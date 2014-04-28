@@ -226,7 +226,6 @@ if(isset($pn) && $pn) {
                             }
 //                            $code_bill_xn = 'abc';
                             //lay gia cua xn - neu chua co thi lay gia mac dinh
-
                             // insert vao bill
                         }
                         //billing

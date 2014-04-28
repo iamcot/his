@@ -18,6 +18,7 @@ $breakfile=$root_path.'main/startframe.php'.URL_APPEND;
 // reset all 2nd level lock cookies
 require($root_path.'include/core/inc_2level_reset.php');
 
+
 # Start Smarty templating here
  /**
  * LOAD Smarty
@@ -59,12 +60,17 @@ require($root_path.'include/core/inc_2level_reset.php');
 
   # Pathology lab submenu block
 
-  $smarty->assign('LDPathLab',$LDPathLab);
+    $smarty->assign('LDPathLab',$LDPathLab);
 
-  //$smarty->assign('LDPathLabTestRequest',"<a href=\"labor_test_request_pass.php?sid=$sid&lang=$lang&target=patho&user_origin=lab\">$LDTestRequest</a>");
-  //$smarty->assign('LDTestRequestPathoTxt',$LDTestRequestPathoTxt);
+    //$smarty->assign('LDPathLabTestRequest',"<a href=\"labor_test_request_pass.php?sid=$sid&lang=$lang&target=patho&user_origin=lab\">$LDTestRequest</a>");
+    //$smarty->assign('LDTestRequestPathoTxt',$LDTestRequestPathoTxt);
+    /*$smarty->assign('LDPathLabTestReception',"
+    <a href= \" labor_test_request_pass.php?sid=$sid&lang=$lang&target=admin&subtarget=patho&user_origin=lab\">$LDTestReception</a>
+    ");   mp     */
+    $smarty->assign('LDPathLabTestReception',"
+   $LDTestReception
+   ");
 
-  $smarty->assign('LDPathLabTestReception',"<a href=\"labor_test_request_pass.php?sid=$sid&lang=$lang&target=admin&subtarget=patho&user_origin=lab\">$LDTestReception</a>");
 
   # Bacteriology lab submenu block
 
@@ -111,7 +117,8 @@ require($root_path.'include/core/inc_2level_reset.php');
   
   //$smarty->assign('LDChuyenKhoaTestRequest',"<a href=\"labor_test_request_pass.php?sid=$sid&lang=$lang&target=chuyenkhoa&user_origin=lab\">$LDChuyenKhoaTestRequest</a>");
   //$smarty->assign('LDChuyenKhoaRequestTxt',$LDChuyenKhoaRequestTxt);
-  $smarty->assign('LDOtherTestReception',"<a href=\"labor_test_request_pass.php?sid=$sid&lang=$lang&target=admin&subtarget=other&user_origin=lab\">$LDTestReception</a>");
+//  $smarty->assign('LDOtherTestReception',"<a href=\"labor_test_request_pass.php?sid=$sid&lang=$lang&target=admin&subtarget=other&user_origin=lab\">$LDTestReception</a>");
+$smarty->assign('LDOtherTestReception',"$LDTestReception");
   # Test parameters admin submenu block
 
   $smarty->assign('LDAdministration',$LDAdministration);
