@@ -117,8 +117,7 @@ require($root_path.'include/core/inc_2level_reset.php');
   
   //$smarty->assign('LDChuyenKhoaTestRequest',"<a href=\"labor_test_request_pass.php?sid=$sid&lang=$lang&target=chuyenkhoa&user_origin=lab\">$LDChuyenKhoaTestRequest</a>");
   //$smarty->assign('LDChuyenKhoaRequestTxt',$LDChuyenKhoaRequestTxt);
-//  $smarty->assign('LDOtherTestReception',"<a href=\"labor_test_request_pass.php?sid=$sid&lang=$lang&target=admin&subtarget=other&user_origin=lab\">$LDTestReception</a>");
-$smarty->assign('LDOtherTestReception',"$LDTestReception");
+  $smarty->assign('LDOtherTestReception',"<a href=\"labor_test_request_pass.php?sid=$sid&lang=$lang&target=admin&subtarget=other&user_origin=lab\">$LDTestReception</a>");
   # Test parameters admin submenu block
 
   $smarty->assign('LDAdministration',$LDAdministration);
