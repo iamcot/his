@@ -105,7 +105,6 @@ switch ($mode) {
                 if((in_array('_nit__urine',$para_array))&&(in_array('_leu__urine',$para_array))&&(in_array('_uro__urine',$para_array))&&(in_array('_pro__urine',$para_array))&&(in_array('_ph__urine',$para_array))&&(in_array('_blo__urine',$para_array))&&(in_array('_ket__urine',$para_array))&&(in_array('_bil__urine',$para_array))&&(in_array('_glu__urine',$para_array))&&(in_array('_sg__urine',$para_array))){
                     //echo 'is_array';
                     $eComBill->createBillItem($pn, 'NT','35000', 1, '35000',date("Y-m-d G:i:s") );
-
                 } */
             }
             signalNewDiagnosticsReportEvent ( '', 'labor_test_request_printpop.php' );

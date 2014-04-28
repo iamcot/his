@@ -16,6 +16,7 @@ require_once($root_path.'include/care_api_classes/class_encounter.php');
 class Lab extends Encounter {
 
 	var $tb_req_chemlab='care_test_request_chemlabor';
+
 	/**
 	* Table name for test findings for chemical lab
 	* @var string

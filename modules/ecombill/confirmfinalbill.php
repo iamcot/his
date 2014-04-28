@@ -16,8 +16,8 @@ require_once($root_path.'include/core/inc_date_format_functions.php');
 require($root_path.'include/care_api_classes/class_ecombill.php');
 require($root_path.'include/care_api_classes/class_encounter.php');
 require_once($root_path.'classes/money/convertMoney.php');
-$eComBill = new eComBill;
-$Encounter = new Encounter;
+$eComBill = new eComBill();
+$Encounter = new Encounter();
 
 $Encounter->loadEncounterData($patientno);
 

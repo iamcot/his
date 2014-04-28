@@ -3,6 +3,8 @@ error_reporting(E_COMPILE_ERROR|E_ERROR|E_CORE_ERROR);
 //error_reporting(E_ALL);
 require('./roots.php');
 require($root_path.'include/core/inc_environment_global.php');
+require($root_path.'include/care_api_classes/class_ecombill.php');
+$eComBill = new eComBill();
 /**
 * CARE2X Integrated Hospital Information System version deployment 1.1 (mysql) 2004-01-11
 * GNU General Public License
@@ -193,7 +195,7 @@ if(isset($pn) && $pn) {
 					    	$diag_obj_sub->setDataArray($parsedParamList);
 					    	$diag_obj_sub->insertDataFromInternalArray();
 				    	}
-				    	//$eComBill->createBillItem($parsedParamList['encounter_nr'], $temp['bill_item_nr'],$temp1['item_unit_cost'], 1, $temp1['item_unit_cost'],date("Y-m-d G:i:s") );
+//				    	$eComBill->createBillItem($parsedParamList['encounter_nr'], $temp['bill_item_nr'],$temp1['item_unit_cost'], 1, $temp1['item_unit_cost'],date("Y-m-d G:i:s") );
 					  	// Load the visual signalling functions
 						include_once($root_path.'include/core/inc_visual_signalling_fx.php');
 						// Set the visual signal
@@ -202,7 +204,7 @@ if(isset($pn) && $pn) {
 						header("location:".$root_path."modules/laboratory/labor_test_request_aftersave.php".URL_REDIRECT_APPEND."&edit=$edit&saved=insert&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=chemlabor&noresize=$noresize&batch_nr=$batch_nr");
 
                         //billing
-                        if($result_tests = $lab_obj->GetTestsToDo($batch_nr))
+                        if($result_tests = $lab_obj->GetTestsToDoB($batch_nr))
                         {
                             $para_array=array();
                             while($row_tests = $result_tests->FetchRow()) {
@@ -215,17 +217,19 @@ if(isset($pn) && $pn) {
                                 if($temp->recordcount()){
                                     $buf=$temp->fetchrow();
                                     $eComBill->createBillItem($pn, $buf['bill_item_nr'],$buf['item_unit_cost'], 1, $buf['item_unit_cost'],date("Y-m-d G:i:s") );
-                                }
                             }
-                            //var_dump($para_array);
-                            if((in_array('_nit__urine',$para_array))&&(in_array('_leu__urine',$para_array))&&(in_array('_uro__urine',$para_array))&&(in_array('_pro__urine',$para_array))&&(in_array('_ph__urine',$para_array))&&(in_array('_blo__urine',$para_array))&&(in_array('_ket__urine',$para_array))&&(in_array('_bil__urine',$para_array))&&(in_array('_glu__urine',$para_array))&&(in_array('_sg__urine',$para_array))){
+                            }
+//                            //var_dump($para_array);
+                            if((in_array('_wbc__hematology',$para_array))&&(in_array('_rbc__hematology',$para_array))&&(in_array('_hgb__hematology',$para_array))&&(in_array('_hct__hematology',$para_array))&&(in_array('_plt__hematology',$para_array))&&(in_array('_pct__hematology',$para_array))&&(in_array('_mcv__hematology',$para_array))&&(in_array('_mch__hematology',$para_array))&&(in_array('_mchc__hematology',$para_array))&&(in_array('_rdw__hematology',$para_array))&&(in_array('_mpv__hematology',$para_array))&&(in_array('_pdw__hematology',$para_array))&&(in_array('_%lym__hematology',$para_array))&&(in_array('_#lym__hematology',$para_array))&&(in_array('_%mon__hematology',$para_array))&&(in_array('_#mon__hematology',$para_array))&&(in_array('_%gra__hematology',$para_array))&&(in_array('_#gra__hematology',$para_array))){
                                 //echo 'is_array';
-                                $eComBill->createBillItem($pn, 'NT','35000', 1, '35000',date("Y-m-d G:i:s") );
-
+                                $eComBill->createBillItem($pn, 'CTM','55000', 1, '55000',date("Y-m-d G:i:s") );
                             }
+//                            $code_bill_xn = 'abc';
+                            //lay gia cua xn - neu chua co thi lay gia mac dinh
+
+                            // insert vao bill
                         }
                         //billing
-
                         exit;
 					}else{
 					     echo "<p>$sql<p>$LDDbNoSave";

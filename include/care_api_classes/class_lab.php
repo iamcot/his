@@ -18,7 +18,7 @@ require_once($root_path . 'include/care_api_classes/class_encounter.php');
 class Lab extends Encounter {
 
     var $tb_req_chemlab = 'care_test_request_chemlabor';
-
+    var $tb_req_blood   = 'care_test_request_blood';
     /**
      * Table name for test findings for chemical lab
      * @var string
@@ -422,6 +422,26 @@ class Lab extends Encounter {
             $cond = "batch_nr='$id'";
         $sub = "_sub";
         $this->sql = "SELECT paramater_name, parameter_value FROM $this->tb_req_chemlab$sub  WHERE $cond";
+        //echo $this->sql;
+        if ($this->tparams = $db->Execute($this->sql)) {
+            if ($this->rec_count = $this->tparams->RecordCount()) {
+                return $this->tparams;
+            } else {
+                return FALSE;
+            }
+        } else {
+            return FALSE;
+        }
+    }
+
+    function GetTestsToDoB($id = '') {
+        global $db;
+        if (empty($id))
+            $cond = '';
+        else
+            $cond = "batch_nr='$id'";
+        $sub = "_sub";
+        $this->sql = "SELECT paramater_name, parameter_value FROM ".$this->tb_req_blood.$sub."  WHERE $cond";
         //echo $this->sql;
         if ($this->tparams = $db->Execute($this->sql)) {
             if ($this->rec_count = $this->tparams->RecordCount()) {

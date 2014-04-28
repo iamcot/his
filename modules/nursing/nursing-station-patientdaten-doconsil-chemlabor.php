@@ -214,8 +214,6 @@ if(isset($pn) && $pn) {
 							
 				    	}
 
-
-
 					  	// Load the visual signalling functions
 						include_once($root_path.'include/core/inc_visual_signalling_fx.php');
 						// Set the visual signal
@@ -243,23 +241,16 @@ if(isset($pn) && $pn) {
                             if((in_array('_nit__urine',$para_array))&&(in_array('_leu__urine',$para_array))&&(in_array('_uro__urine',$para_array))&&(in_array('_pro__urine',$para_array))&&(in_array('_ph__urine',$para_array))&&(in_array('_blo__urine',$para_array))&&(in_array('_ket__urine',$para_array))&&(in_array('_bil__urine',$para_array))&&(in_array('_glu__urine',$para_array))&&(in_array('_sg__urine',$para_array))){
                                 //echo 'is_array';
                                 $eComBill->createBillItem($pn, 'NT','35000', 1, '35000',date("Y-m-d G:i:s") );
-
                             }
                         }
                         //billing
 
                         exit;
-
-
-
 					}else{
 					     echo "<p>$sql<p>$LDDbNoSave";
 						 $mode='';
 					}
 	            } //end of prepareTestElements()
-
-
-
 				break; // end of case 'save'
 							
 			case 'update':
