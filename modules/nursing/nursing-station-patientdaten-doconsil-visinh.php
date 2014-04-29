@@ -171,7 +171,7 @@ $core = & new Core;
 										   '".$_SESSION['sess_user_name']."',
 										   '".date('YmdHis')."'
 										   )";
-
+                                  echo $sql;
 							      if($ergebnis=$core->Transact($sql))
        							  {	
 								  $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql, date('Y-m-d H:i:s'));
@@ -411,9 +411,9 @@ function printOut()
 }
 
 $(function(){
-$("#f-calendar-field-1").mask("99/99/9999");
-$("#time").mask("99:99");
-});	
+    $("#f-calendar-field-1").mask("99/99/9999");
+    $("#time").mask("99:99:99");
+});
 
 <?php require($root_path.'include/core/inc_checkdate_lang.php'); ?>
 //-->
@@ -563,10 +563,10 @@ echo '
 			
 			echo $calendar->show_calendar($calendar,$date_format,'date',$dateshow);
 			if(isset($stored_request['send_date']))
-			{echo '<input type="text" size="5" id="time" name="time" value="'.@convertTimeToLocal(formatDate2Local($stored_request['send_date'],$date_format,0,1)).'">';
-			}else{
-			echo '<input type="text" size="5" id="time" name="time" value="'.date("H:i").'">';
-			}
+             {echo '<input type="text" size="5" id="time" name="time" value="'.@convertTimeToLocal(formatDate2Local($stored_request['send_date'],$date_format,0,1)).'">';
+             }else{
+                 echo '<input type="text" size="5" id="time" name="time" value="'.date("H:i").'">';
+             }
 			//end gjergji ?>
 			
 		</td>

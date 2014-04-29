@@ -157,7 +157,7 @@ switch($mode){
 							'".$batch_nr."','".$pn."','".$dept_nr."', 
 							'".htmlspecialchars($results_doctor)."',
 							'".$results_doctor_nr."',
-							'".addslashes(htmlspecialchars($result))."',
+							'".addslashes(htmlspecialchars($results))."',
 							'".formatDate2STD($result_date,$date_format)."', '".date('H:i:s')."',
 							'initial',  
 							'Create: ".date('Y-m-d H:i:s')." = ".$_SESSION['sess_user_name']."\n',
@@ -169,7 +169,7 @@ switch($mode){
 					$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql2, date('Y-m-d H:i:s'));
 					signalNewDiagnosticsReportEvent($result_date);
 					header("location:$thisfile?sid=$sid&lang=$lang&edit=$edit&saved=insert&mode=edit&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize&batch_nr=$batch_nr&entry_date=$entry_date");
-					exit;
+                    exit;
 				}
 				else{
 					echo "<p>$sql2<p>$LDDbNoSave"; 
@@ -177,8 +177,14 @@ switch($mode){
 				}
 			}
 		 $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql, date('Y-m-d H:i:s'));	
-		header("location:".$thisfile."?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&batch_nr=$batch_nr&noresize=$noresize");
-		exit;
+//		header("location:".$thisfile."?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&batch_nr=$batch_nr&noresize=$noresize");
+            header('Content-Type: text/html; charset=utf-8');       //đã thêm
+            echo "<script type='text/javascript'>";                 //đã thêm
+            echo "alert('Kết quả đã được lưu.');";                           //đã thêm
+//            echo "alert('$LDNotifySave');";                                         //đã thêm
+            echo "window.location.replace('".$thisfile."?sid=".$sid."&lang=".$lang."&edit=".$edit."&saved=update&pn=".$pn."&station=".$station."&user_origin=".$user_origin."&status=".$status."&target=".$target."&subtarget=".$subtarget."&batch_nr=".$batch_nr."&entry_date=".$entry_date."')"; //đã thêm
+            echo "</script>";
+            exit;
 			
 		} else {
 			echo "<p>$sql<p>$LDDbNoSave";
@@ -260,14 +266,15 @@ if($lao){
 	$YC = 'Lao';
 }
 if($kstdr){
-	$YC = 'KSTĐR';
+//	$YC = 'KSTĐR';
+    $YC = 'VTH02';
 }
 if($huyettrang){
 	$YC = 'Huyết trắng';
 }
 $sql1 = "SELECT bill.bill_item_status, bill.bill_item_code
 		FROM care_test_request_".$db_request_table." AS req
-		INNER JOIN care_billing_item AS bill_it ON bill_it.item_description='$YC'
+		INNER JOIN care_billing_item AS bill_it ON bill_it.item_code='$YC'
 		INNER JOIN care_billing_bill_item AS bill ON req.encounter_nr=bill.bill_item_encounter_nr AND DATE(req.send_date)=DATE(bill.bill_item_date) AND bill_it.item_code=bill.bill_item_code
 		WHERE req.batch_nr=$batch_nr
 		ORDER BY req.send_date DESC";
