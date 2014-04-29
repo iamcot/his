@@ -263,21 +263,31 @@ if($batchrows && $pn){
 	}
 }
 if($lao){
-	$YC = 'Lao';
+	$YC = 'VTH01';
 }
 if($kstdr){
 //	$YC = 'KSTĐR';
     $YC = 'VTH02';
 }
 if($huyettrang){
-	$YC = 'Huyết trắng';
+	$YC = 'VTH03';
 }
-$sql1 = "SELECT bill.bill_item_status, bill.bill_item_code
-		FROM care_test_request_".$db_request_table." AS req
-		INNER JOIN care_billing_item AS bill_it ON bill_it.item_code='$YC'
-		INNER JOIN care_billing_bill_item AS bill ON req.encounter_nr=bill.bill_item_encounter_nr AND DATE(req.send_date)=DATE(bill.bill_item_date) AND bill_it.item_code=bill.bill_item_code
-		WHERE req.batch_nr=$batch_nr
-		ORDER BY req.send_date DESC";
+//$sql1 = "SELECT bill.bill_item_status, bill.bill_item_code
+//		FROM care_test_request_".$db_request_table." AS req
+//		INNER JOIN care_billing_item AS bill_it ON bill_it.item_code='$YC'
+//		INNER JOIN care_billing_bill_item AS bill ON req.encounter_nr=bill.bill_item_encounter_nr AND DATE(req.send_date)=DATE(bill.bill_item_date) AND bill_it.item_code=bill.bill_item_code
+//		WHERE req.batch_nr=$batch_nr
+//		ORDER BY req.send_date DESC";
+$sql1="SELECT TR.batch_nr,TR.encounter_nr,TR.send_date,BB.bill_item_status
+          FROM care_test_request_" . $db_request_table . " AS TR
+          JOIN care_billing_bill_item AS BB ON TR.encounter_nr = BB.bill_item_encounter_nr
+          WHERE BB.bill_item_code='$YC'
+          AND DATE(BB.bill_item_date)=DATE(TR.send_date)
+          AND HOUR(BB.bill_item_date)=HOUR(TR.send_date)
+          AND MINUTE(BB.bill_item_date)=MINUTE(TR.send_date)
+          AND TR.batch_nr=".$batch_nr."
+          GROUP BY TR.batch_nr
+          ";
 if ($requests1 = $db->Execute ( $sql1 )) {
 	$bill = $requests1->FetchRow ();
 	$status_bill=$bill['bill_item_status'];

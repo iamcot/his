@@ -412,7 +412,7 @@ function printOut()
 
 $(function(){
     $("#f-calendar-field-1").mask("99/99/9999");
-    $("#time").mask("99:99:99");
+    $("#time").mask("99:99");
 });
 
 <?php require($root_path.'include/core/inc_checkdate_lang.php'); ?>
@@ -552,23 +552,39 @@ echo '
 	
 	<tr bgcolor="<?php echo $bgc1 ?>">
 		<td align="left"><div class=fva2_ml10><font color="#000099">
-			 <?php echo $LDDate .":";
+<!--			 --><?php //echo $LDDate .":";
+//
+//							//gjergji : new calendar
+//
+//			//end : gjergji
+//			if ($stored_request['send_date']=="")
+////				$dateshow=date("Y-m-d");
+//             $dateshow=date("Y-m-d G:i:s");
+//			else $dateshow=formatDate2Local($stored_request['send_date'],$date_format);
+//
+//			echo $calendar->show_calendar($calendar,$date_format,'date',$dateshow);
+//			if(isset($stored_request['send_date']))
+//             {echo '<input type="text" size="5" id="time" name="time" value="'.@convertTimeToLocal(formatDate2Local($stored_request['send_date'],$date_format,0,1)).'">';
+//             }else{
+//                 echo '<input type="text" size="5" id="time" name="time" value="'.date("H:i").'">';
+//             }
+//			//end gjergji ?>
+             <?php echo $LDDate .":";
 
-							//gjergji : new calendar
-			
-			//end : gjergji
-			if ($stored_request['send_date']=="")
-				$dateshow=date("Y-m-d");
-			else $dateshow=formatDate2Local($stored_request['send_date'],$date_format);
-			
-			echo $calendar->show_calendar($calendar,$date_format,'date',$dateshow);
-			if(isset($stored_request['send_date']))
+             //gjergji : new calendar
+
+             //end : gjergji
+             if ($stored_request['send_date']=="")
+                 $dateshow=date("Y-m-d G:i:s");
+             else $dateshow=$stored_request['send_date'];
+
+             echo $calendar->show_calendar($calendar,$date_format,'date',$dateshow);
+             if(isset($stored_request['send_date']))
              {echo '<input type="text" size="5" id="time" name="time" value="'.@convertTimeToLocal(formatDate2Local($stored_request['send_date'],$date_format,0,1)).'">';
              }else{
                  echo '<input type="text" size="5" id="time" name="time" value="'.date("H:i").'">';
              }
-			//end gjergji ?>
-			
+             //end gjergji ?>
 		</td>
 		<td>
 			<?php echo $LDRequestingDoc ?>:

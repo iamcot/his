@@ -465,7 +465,7 @@ function printOut(){
 }
 $(function(){
 $("#f-calendar-field-1").mask("99/99/9999");
-$("#time").mask("99:99");
+$("#time").mask("99:99:99");
 });
 <?php require($root_path.'include/core/inc_checkdate_lang.php'); ?>
 
@@ -1052,7 +1052,7 @@ ob_end_flush();
 			if ($stored_request['send_date']=="")
 				$dateshow=date("Y-m-d G:i:s");
 			else $dateshow=$stored_request['send_date'];
-			
+
 			echo $calendar->show_calendar($calendar,$date_format,'date',$dateshow);
 			if(isset($stored_request['send_date']))
 			{echo '<input type="text" size="5" id="time" name="time" value="'.@convertTimeToLocal(formatDate2Local($stored_request['send_date'],$date_format,0,1)).'">';
