@@ -102,8 +102,18 @@ switch ($mode) {
 
 
 if (!$mode) {/* Get the pending test requests */
-	$sql = "SELECT batch_nr,encounter_nr,send_date,dept_nr,room_nr FROM care_test_request_" . $subtarget . "
-			WHERE (status='pending' OR status='') ORDER BY  send_date DESC";
+//	$sql = "SELECT batch_nr,encounter_nr,send_date,dept_nr,room_nr FROM care_test_request_" . $subtarget . "
+//			WHERE (status='pending' OR status='') ORDER BY  send_date DESC";
+    $sql = "SELECT TR.batch_nr,TR.encounter_nr,TR.send_date,BB.bill_item_status,BB.bill_item_code,TR.dept_nr,TR.room_nr
+          FROM care_test_request_" . $subtarget . " AS TR
+          JOIN care_billing_bill_item AS BB ON TR.encounter_nr = BB.bill_item_encounter_nr
+          WHERE (STATUS='pending' OR STATUS='')
+          AND DATE(BB.bill_item_date)=DATE(TR.send_date)
+          AND HOUR(BB.bill_item_date)=HOUR(TR.send_date)
+          AND MINUTE(BB.bill_item_date)=MINUTE(TR.send_date)
+          GROUP BY TR.batch_nr
+          ORDER BY  send_date DESC
+          ";
 	if ($requests = $db->Execute ( $sql )) {
 		/* If request is available, load the date format functions */
 		require_once ($root_path . 'include/core/inc_date_format_functions.php');
@@ -114,18 +124,47 @@ if (!$mode) {/* Get the pending test requests */
 			/* Check for the patietn number = $pn. If available get the patients data */
 			$pn = $test_request ['encounter_nr'];
 			$batch_nr = $test_request ['batch_nr'];
+            $bill_item_code=$test_request['bill_item_code'];
 		}
 	} else {
 		echo "<p>$sql<p>$LDDbNoRead";
 		exit ();
 	}
-	$sql1 = "SELECT bill.bill_item_status, bill.bill_item_code
-			FROM care_test_request_" . $subtarget . " AS req
-			INNER JOIN care_test_request_chemlabor_sub AS req_sub ON req_sub.batch_nr=req.batch_nr
-			INNER JOIN care_test_param AS tp ON req_sub.paramater_name=tp.id
-			INNER JOIN care_billing_bill_item AS bill ON req_sub.encounter_nr=bill.bill_item_encounter_nr AND DATE(req.send_date)=DATE(bill.bill_item_date) AND tp.bill_item_nr=bill.bill_item_code
-			WHERE req.batch_nr=$batch_nr
-			ORDER BY req.send_date DESC";
+
+
+    if($bill_item_code=="NT"){
+        $YC = 'NT';
+    }
+    elseif($bill_item_code=="ION01"){
+    $YC = 'ION01';
+    }
+    elseif($bill_item_code=="ION02"){
+    $YC = 'ION02';
+    }
+    elseif($bill_item_code=="ION03"){
+        $YC = 'ION03';
+    }
+    elseif($bill_item_code=="ION04"){
+        $YC = 'ION04';
+    }
+//	$sql1 = "SELECT bill.bill_item_status, bill.bill_item_code
+//			FROM care_test_request_" . $subtarget . " AS req
+//			INNER JOIN care_test_request_chemlabor_sub AS req_sub ON req_sub.batch_nr=req.batch_nr
+//			INNER JOIN care_test_param AS tp ON req_sub.paramater_name=tp.id
+//			INNER JOIN care_billing_bill_item AS bill ON req_sub.encounter_nr=bill.bill_item_encounter_nr AND DATE(req.send_date)=DATE(bill.bill_item_date) AND tp.bill_item_nr=bill.bill_item_code
+//			WHERE req.batch_nr=$batch_nr
+//			ORDER BY req.send_date DESC";
+
+    $sql1="SELECT TR.batch_nr,TR.encounter_nr,TR.send_date,BB.bill_item_status
+          FROM care_test_request_" . $subtarget . " AS TR
+          JOIN care_billing_bill_item AS BB ON TR.encounter_nr = BB.bill_item_encounter_nr
+          WHERE BB.bill_item_code='$YC'
+          AND DATE(BB.bill_item_date)=DATE(TR.send_date)
+          AND HOUR(BB.bill_item_date)=HOUR(TR.send_date)
+          AND MINUTE(BB.bill_item_date)=MINUTE(TR.send_date)
+          AND TR.batch_nr=".$batch_nr."
+          GROUP BY TR.batch_nr
+          ";
 	if ($requests1 = $db->Execute ( $sql1 )) {
 		$bill = $requests1->FetchRow ();
 		$status_bill=$bill['bill_item_status'];
