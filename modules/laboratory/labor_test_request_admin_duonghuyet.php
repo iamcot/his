@@ -178,8 +178,18 @@ switch($mode){
 
 /* Get the pending test requests */
 if(!$mode||$mode=='') {
-	$sql="SELECT batch_nr,encounter_nr,send_date,dept_nr FROM care_test_request_".$db_request_table."
-				WHERE status='pending' OR status='received' ORDER BY  send_date DESC";
+//	$sql="SELECT batch_nr,encounter_nr,send_date,dept_nr FROM care_test_request_".$db_request_table."
+//				WHERE status='pending' OR status='received' ORDER BY  send_date DESC";
+    $sql="SELECT TR.batch_nr,TR.encounter_nr,TR.send_date,BB.bill_item_status,BB.bill_item_code,TR.dept_nr
+          FROM care_test_request_".$db_request_table." AS TR
+          JOIN care_billing_bill_item AS BB ON TR.encounter_nr = BB.bill_item_encounter_nr
+          WHERE (STATUS='pending' OR STATUS='received')
+          AND DATE(BB.bill_item_date)=DATE(TR.send_date)
+          AND HOUR(BB.bill_item_date)=HOUR(TR.send_date)
+          AND MINUTE(BB.bill_item_date)=MINUTE(TR.send_date)
+          GROUP BY TR.batch_nr
+          ORDER BY  send_date DESC
+          ";
 	if($requests=$db->Execute($sql)){
 		$batchrows=$requests->RecordCount();
 	 	if($batchrows && (!isset($batch_nr) || !$batch_nr)){
@@ -238,10 +248,19 @@ if($batchrows && $pn){
 	}
 }
 
-$sql1 = "SELECT bill.bill_item_status, bill.bill_item_code
-			FROM care_test_request_" . $db_request_table . " AS req
-			INNER JOIN care_billing_bill_item AS bill ON req.encounter_nr=bill.bill_item_encounter_nr AND DATE(req.send_date)=DATE(bill.bill_item_date) AND bill.bill_item_code='DH'
-			WHERE req.batch_nr=$batch_nr";
+//$sql1 = "SELECT bill.bill_item_status, bill.bill_item_code
+//			FROM care_test_request_" . $db_request_table . " AS req
+//			INNER JOIN care_billing_bill_item AS bill ON req.encounter_nr=bill.bill_item_encounter_nr AND DATE(req.send_date)=DATE(bill.bill_item_date) AND bill.bill_item_code='DH'
+//			WHERE req.batch_nr=$batch_nr";
+$sql1 = "SELECT TR.batch_nr,TR.encounter_nr,TR.send_date,BB.bill_item_status
+        FROM care_test_request_" . $db_request_table . " AS TR
+        JOIN care_billing_bill_item AS BB ON TR.encounter_nr = BB.bill_item_encounter_nr
+        WHERE BB.bill_item_code='DH'
+        AND DATE(BB.bill_item_date)=DATE(TR.send_date)
+        AND HOUR(BB.bill_item_date)=HOUR(TR.send_date)
+        AND MINUTE(BB.bill_item_date)=MINUTE(TR.send_date)
+        AND TR.batch_nr=$batch_nr
+        GROUP BY TR.batch_nr";
 if ($requests1 = $db->Execute ( $sql1 )) {
 	$bill = $requests1->FetchRow ();
 	$status_bill=$bill['bill_item_status'];
