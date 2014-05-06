@@ -121,7 +121,7 @@ if (!$mode) {/* Get the pending test requests */
 		$batchrows = $requests->RecordCount ();
 		if ($batchrows && (! isset ( $batch_nr ) || ! $batch_nr)) {
 			$test_request = $requests->FetchRow ();
-			/* Check for the patietn number = $pn. If available get the patients data */
+			/* Check for the patient number = $pn. If available get the patients data */
 			$pn = $test_request ['encounter_nr'];
 			$batch_nr = $test_request ['batch_nr'];
             $bill_item_code=$test_request['bill_item_code'];
@@ -163,7 +163,7 @@ if (!$mode) {/* Get the pending test requests */
           AND HOUR(BB.bill_item_date)=HOUR(TR.send_date)
           AND MINUTE(BB.bill_item_date)=MINUTE(TR.send_date)
           AND TR.batch_nr=".$batch_nr."
-          GROUP BY TR.batch_nr
+
           ";
 	if ($requests1 = $db->Execute ( $sql1 )) {
 		$bill = $requests1->FetchRow ();
