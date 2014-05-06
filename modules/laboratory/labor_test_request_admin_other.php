@@ -212,13 +212,6 @@ if(!$mode||$mode=='') {
           AND MINUTE(BB.bill_item_date)=MINUTE(TR.send_date)
           ORDER BY  send_date DESC
     ";
-//    if($temp=$db->Execute($sq1l))
-//    {
-//        if($temp->RecordCount()){
-//            $buf=$temp->FetchRow();
-//            $bill_item_code=$buf['bill_item_code'];
-//        }
-//    }
     if ($temp = $db->Execute ( $sql5 )) {
         $buf5 = $temp->FetchRow ();
         $bill_item_code=$buf5['bill_item_code'];

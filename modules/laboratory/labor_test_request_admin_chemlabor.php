@@ -102,18 +102,9 @@ switch ($mode) {
 
 
 if (!$mode) {/* Get the pending test requests */
-//	$sql = "SELECT batch_nr,encounter_nr,send_date,dept_nr,room_nr FROM care_test_request_" . $subtarget . "
-//			WHERE (status='pending' OR status='') ORDER BY  send_date DESC";
-    $sql = "SELECT TR.batch_nr,TR.encounter_nr,TR.send_date,BB.bill_item_status,BB.bill_item_code,TR.dept_nr,TR.room_nr
-          FROM care_test_request_" . $subtarget . " AS TR
-          JOIN care_billing_bill_item AS BB ON TR.encounter_nr = BB.bill_item_encounter_nr
-          WHERE (STATUS='pending' OR STATUS='')
-          AND DATE(BB.bill_item_date)=DATE(TR.send_date)
-          AND HOUR(BB.bill_item_date)=HOUR(TR.send_date)
-          AND MINUTE(BB.bill_item_date)=MINUTE(TR.send_date)
-          GROUP BY TR.batch_nr
-          ORDER BY  send_date DESC
-          ";
+	$sql = "SELECT batch_nr,encounter_nr,send_date,dept_nr,room_nr FROM care_test_request_" . $subtarget . "
+			WHERE (status='pending' OR status='') ORDER BY  send_date DESC";
+
 	if ($requests = $db->Execute ( $sql )) {
 		/* If request is available, load the date format functions */
 		require_once ($root_path . 'include/core/inc_date_format_functions.php');
@@ -131,6 +122,20 @@ if (!$mode) {/* Get the pending test requests */
 		exit ();
 	}
 
+    $sql5="SELECT BB.bill_item_code
+          FROM care_test_request_".$subtarget." AS TR
+          JOIN care_billing_bill_item AS BB ON TR.encounter_nr = BB.bill_item_encounter_nr
+          WHERE (STATUS='pending' OR STATUS='received')
+          AND TR.batch_nr=".$batch_nr."
+          AND DATE(BB.bill_item_date)=DATE(TR.send_date)
+          AND HOUR(BB.bill_item_date)=HOUR(TR.send_date)
+          AND MINUTE(BB.bill_item_date)=MINUTE(TR.send_date)
+          ORDER BY  send_date DESC
+    ";
+    if ($temp = $db->Execute ( $sql5 )) {
+        $buf5 = $temp->FetchRow ();
+        $bill_item_code=$buf5['bill_item_code'];
+    }
 
     if($bill_item_code=="NT"){
         $YC = 'NT';
