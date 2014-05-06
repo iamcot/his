@@ -628,7 +628,7 @@ class Prescription extends Core {
             }else{return false;}
         }else{return false;}
     }
-    function getAllPresOfEncounter($encounter_nr, $phieutheodoi=''){
+    function getAllPresOfEncounter($encounter_nr,   $phieutheodoi=''){
         //function getAllPresOfEncounter($encounter_nr, $dept_nr='', $ward_nr='', $phieutheodoi=''){
         global $db;
         //$dept_ward='';
