@@ -101,6 +101,7 @@ function prepareTestElements()
 }
 require($root_path.'include/care_api_classes/class_ecombill.php');
 $eComBill = new eComBill;
+$subtarget = 'chemlabor';
 /* Start initializations */
 define('LANG_FILE','konsil_chemlabor.php');
 
@@ -195,7 +196,7 @@ if(isset($pn) && $pn) {
 					$data['modify_id']=$_SESSION['sess_user_name'];
 					$data['create_id']=$_SESSION['sess_user_name'];
 					$data['create_time']='NULL';
-					//echo $_POST['time'];
+					echo $_POST['time'];
 					//var_dump($data);
 					$diag_obj->setDataArray($data);
 				    if($diag_obj->insertDataFromInternalArray()){
@@ -222,6 +223,12 @@ if(isset($pn) && $pn) {
 						header("location:".$root_path."modules/laboratory/labor_test_request_aftersave.php".URL_REDIRECT_APPEND."&edit=$edit&saved=insert&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=chemlabor&noresize=$noresize&batch_nr=$batch_nr");
 
                         //billing
+                        $sql10="SELECT batch_nr,encounter_nr,send_date FROM care_test_request_" . $subtarget . " WHERE batch_nr=".$batch_nr."";
+                        if ($temp10 = $db->Execute ( $sql10 )) {
+                            $buf10 = $temp10->FetchRow ();
+                            $bill_item_date=$buf10['send_date'];
+                        }
+
                         if($result_tests = $lab_obj->GetTestsToDo($batch_nr))
                         {
                             $para_array=array();
@@ -235,7 +242,8 @@ if(isset($pn) && $pn) {
                                 $temp=$db->execute($sql2);
                                 if($temp->recordcount()){
                                     $buf=$temp->fetchrow();
-                                    $eComBill->createBillItem($pn, $buf['bill_item_nr'],$buf['item_unit_cost'], 1, $buf['item_unit_cost'],date("Y-m-d G:i:s") );
+//                                    $eComBill->createBillItem($pn, $buf['bill_item_nr'],$buf['item_unit_cost'], 1, $buf['item_unit_cost'],date("Y-m-d G:i:s") );
+                                    $eComBill->createBillItem($pn, $buf['bill_item_nr'],$buf['item_unit_cost'], 1, $buf['item_unit_cost'],$bill_item_date );
                                 }
                             }
                             //var_dump($para_array);

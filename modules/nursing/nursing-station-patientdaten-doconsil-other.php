@@ -157,6 +157,12 @@ switch($mode)
             header("location:".$root_path."modules/laboratory/labor_test_request_aftersave_duonghuyet.php?sid=$sid&lang=$lang&edit=$edit&saved=insert&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&noresize=$noresize&batch_nr=$batch_nr");
 
             //billing
+            $sql10="SELECT batch_nr,encounter_nr,send_date FROM care_test_request_" . $db_request_table . " WHERE batch_nr=".$batch_nr."";
+            if ($temp10 = $db->Execute ( $sql10 )) {
+                $buf10 = $temp10->FetchRow ();
+                $bill_item_date=$buf10['send_date'];
+            }
+
                     $items = explode("_",$other_type);
                     foreach($items as $item_code){
                         if(trim($item_code)!=''){
@@ -175,7 +181,8 @@ switch($mode)
                             $temp=$db->execute($sql);
                             if($temp->recordcount()){
                                 $buf=$temp->fetchrow();
-                                $eComBill->createBillItem($pn, $buf['item_code'],$buf['item_unit_cost'], 1, $buf['item_unit_cost'],date("Y-m-d G:i:s") );
+//                                $eComBill->createBillItem($pn, $buf['item_code'],$buf['item_unit_cost'], 1, $buf['item_unit_cost'],date("Y-m-d G:i:s") );
+                                $eComBill->createBillItem($pn, $buf['item_code'],$buf['item_unit_cost'], 1, $buf['item_unit_cost'],$bill_item_date );
                             }
                         }
                     }
