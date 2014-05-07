@@ -473,7 +473,7 @@ function printOut(){
 }
 $(function(){
 $("#f-calendar-field-1").mask("99/99/9999");
-$("#time").mask("99:99:99");
+$("#time").mask("99:99");
 });
 <?php require($root_path.'include/core/inc_checkdate_lang.php'); ?>
 
@@ -1052,22 +1052,22 @@ ob_end_flush();
 //echo $sTemp;
 ?>
   <td colspan="10" align="left"><div class=fva2_ml10><font color="#000099">
-			 <?php echo "Ngày gởi: ";
+              <?php echo "Ngày gởi: ";
 
-							//gjergji : new calendar
-			
-			//end : gjergji
-			if ($stored_request['send_date']=="")
-				$dateshow=date("Y-m-d G:i:s");
-			else $dateshow=$stored_request['send_date'];
+              //gjergji : new calendar
 
-			echo $calendar->show_calendar($calendar,$date_format,'date',$dateshow);
-			if(isset($stored_request['send_date']))
-			{echo '<input type="text" size="5" id="time" name="time" value="'.@convertTimeToLocal(formatDate2Local($stored_request['send_date'],$date_format,0,1)).'">';
-			}else{
-			echo '<input type="text" size="5" id="time" name="time" value="'.date("H:i").'">';
-			}
-			//end gjergji ?>
+              //end : gjergji
+              if ($stored_request['send_date']=="")
+                  $dateshow=date("Y-m-d G:i:s");
+              else $dateshow=$stored_request['send_date'];
+
+              echo $calendar->show_calendar($calendar,$date_format,'date',$dateshow);
+              if(isset($stored_request['send_date']))
+              {echo '<input type="text" size="5" id="time" name="time" value="'.@convertTimeToLocal(formatDate2Local($stored_request['send_date'],$date_format,0,1)).'">';
+              }else{
+                  echo '<input type="text" size="5" id="time" name="time" value="'.date("H:i").'">';
+              }
+              //end gjergji ?>
 		
 			<?php echo 'BS gửi yêu cầu' ?>:
 			<input type="text" name="send_doctor" size=37 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['send_doctor'];else echo $pers_name;?>">
