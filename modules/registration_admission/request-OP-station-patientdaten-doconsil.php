@@ -174,7 +174,7 @@
                         VALUES
                         (
                         '".$batch_nr."','".$pn."','".formatDate2STD($date_request,$date_format)."',
-                        '".htmlspecialchars($clinical_info)."','".htmlspecialchars($test_request)."','".date('Y-m-d')."',
+                        '".htmlspecialchars($clinical_info)."','".htmlspecia+lchars($test_request)."','".date('Y-m-d')."',
                         '".htmlspecialchars($referrer_name)."', 'pending',
                         'Create: ".date('Y-m-d H:i:s')." = ".$_SESSION['sess_user_name']."\n',
                         '".$_SESSION['sess_user_name']."',
