@@ -42,6 +42,10 @@ define('PDF_HOSNAME','TTYT TÂN UYÊN');
 $cell='TRUNG TÂM Y TẾ TÂN UYÊN';
 $cell_address='TT Uyên Hưng';
 
+define('ITEM_CODE_NT','NT');
+define('ITEM_CODE_CTM','CTM');
+define('ITEM_CODE_DH','DH');
+
 define('ROLE_NR_NURSER',14);
 define('ROLE_NR_DOCTOR',15);
 #

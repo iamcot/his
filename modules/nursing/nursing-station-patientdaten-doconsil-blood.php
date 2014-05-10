@@ -230,7 +230,9 @@ if(isset($pn) && $pn) {
 //                            //var_dump($para_array);
                             if((in_array('_wbc__hematology',$para_array))&&(in_array('_rbc__hematology',$para_array))&&(in_array('_hgb__hematology',$para_array))&&(in_array('_hct__hematology',$para_array))&&(in_array('_plt__hematology',$para_array))&&(in_array('_pct__hematology',$para_array))&&(in_array('_mcv__hematology',$para_array))&&(in_array('_mch__hematology',$para_array))&&(in_array('_mchc__hematology',$para_array))&&(in_array('_rdw__hematology',$para_array))&&(in_array('_mpv__hematology',$para_array))&&(in_array('_pdw__hematology',$para_array))&&(in_array('_%lym__hematology',$para_array))&&(in_array('_#lym__hematology',$para_array))&&(in_array('_%mon__hematology',$para_array))&&(in_array('_#mon__hematology',$para_array))&&(in_array('_%gra__hematology',$para_array))&&(in_array('_#gra__hematology',$para_array))){
                                 //echo 'is_array';
-                                $eComBill->createBillItem($pn, 'CTM','55000', 1, '55000',date("Y-m-d G:i:s") );
+//                                $eComBill->createBillItem($pn, 'CTM','55000', 1, '55000',date("Y-m-d G:i:s") );
+                                $price= $eComBill->getPriceItemcode(ITEM_CODE_CTM);
+                                $eComBill->createBillItem($pn, ITEM_CODE_CTM,$price, 1,$price,$bill_item_date );
                             }
 //                            $code_bill_xn = 'abc';
                             //lay gia cua xn - neu chua co thi lay gia mac dinh

@@ -69,7 +69,8 @@ if($temp->recordcount()){
 	
 	<tr bgcolor="#ffffff">
 		<td colspan=2 align="right"><div class=fva2_ml10>
-		 <?php echo $LDDate ?>:
+<!--		 --><?php //echo $LDDate ?><!--:-->
+        <?php echo 'Ngày Yêu cầu XN' ?>:
 		<font face="courier" size=2 color="#000000">&nbsp;<?php 
 		
 		            
@@ -92,8 +93,8 @@ if($temp->recordcount()){
 		
 	<tr bgcolor="#ffffff">
 		<td colspan=2 align="right"><div class=fva2_ml10><font color="#000099">
-		 <?php echo $LDDate ?>
-		
+<!--		 --><?php //echo $LDDate ?>
+         <?php echo 'Ngày Trả kết quả XN' ?>
 		<?php
 		//gjergji : new calendar
 		

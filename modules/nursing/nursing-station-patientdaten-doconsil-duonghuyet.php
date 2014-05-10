@@ -162,7 +162,9 @@ $core = & new Core;
                                       if($temp->recordcount()){
                                           $buf=$temp->fetchrow();
 //                                          $eComBill->createBillItem($pn, $buf['item_code'],$buf['item_unit_cost'], 1, $buf['item_unit_cost'],date("Y-m-d G:i:s") );
-                                          $eComBill->createBillItem($pn, $buf['item_code'],$buf['item_unit_cost'], 1, $buf['item_unit_cost'],$bill_item_date );
+//                                          $eComBill->createBillItem($pn, $buf['item_code'],$buf['item_unit_cost'], 1, $buf['item_unit_cost'],$bill_item_date );
+                                          $price= $eComBill->getPriceItemcode(ITEM_CODE_DH);
+                                          $eComBill->createBillItem($pn, ITEM_CODE_DH,$price, 1,$price,$bill_item_date );
                                       }
                                       //billing
                                       exit;

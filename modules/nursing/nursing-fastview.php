@@ -50,7 +50,7 @@ $dbtable='care_ward';
   /* Load date formatter */
   include_once($root_path.'include/core/inc_date_format_functions.php');
 	
-	# Get the wards´ info
+	# Get the wardsï¿½ info
     $sql="SELECT nr,ward_id,name,room_nr_start,room_nr_end	
 				FROM $dbtable
 				WHERE is_temp_closed IN ('',0) 
@@ -69,11 +69,11 @@ $dbtable='care_ward';
 		$sql .=	" ORDER BY nr";
 		//echo $sql.'<p>';
 	if($wards=$db->Execute($sql)){
-		$rows=$wards->RecordCount();
+		$rows=$wards->RecordCount();     //24 row
 	}else{echo "$sql<br>$LDDbNoRead";}
 
 
-	# Get the rooms´ info
+	# Get the roomsï¿½ info
   $sql="SELECT SUM(r.nr_of_beds) AS maxbed
 			FROM $dbtable AS w LEFT JOIN care_room AS r   ON r.ward_nr=w.nr
 			WHERE w.is_temp_closed IN ('',0)
@@ -83,10 +83,10 @@ $dbtable='care_ward';
 			ORDER BY w.nr";
 		//echo $sql.'<p>';
 	if($rooms=$db->Execute($sql)){
-		$roomcount=$rooms->RecordCount();
+		$roomcount=$rooms->RecordCount();        //24
 	}else{echo "$sql<br>$LDDbNoRead";}
 
-	# Get the today´s occupancy
+	# Get the todayï¿½s occupancy
   $sql="SELECT  COUNT(l.location_nr) AS maxoccbed, w.nr AS ward_nr
           FROM $dbtable AS w
      LEFT JOIN care_encounter_location AS l ON l.group_nr=w.nr AND l.type_nr=5 ";
@@ -168,12 +168,12 @@ $dbtable='care_ward';
     
    $maxbed=$result['room_nr_end']-$result['room_nr_start'];
     
-   $roomrow=$rooms->FetchRow();
-   $bedrow=$occbed->FetchRow();
-   $freebeds=$roomrow['maxbed']-$bedrow['maxoccbed'];
+   $roomrow=$rooms->FetchRow();       //23
+   $bedrow=$occbed->FetchRow();       //7
+   $freebeds=$roomrow['maxbed']-$bedrow['maxoccbed'];   //23-7=16
    // Patch 2004-05-15
    if($roomrow['maxbed']){
-		$frei=floor(($freebeds/$roomrow['maxbed'])*10);
+		$frei=floor(($freebeds/$roomrow['maxbed'])*10);   //16/23*10 = 6
 	}else{
 		$frei=0;
 	}

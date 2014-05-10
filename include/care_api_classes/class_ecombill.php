@@ -511,5 +511,18 @@ class eComBill extends Core {
 		}
 	}
 
+    function getPriceItemcode($item_code)
+    {
+        global $db;
+        $this->sql="SELECT item_unit_cost FROM care_billing_item WHERE item_code='$item_code'";
+        if($buf=$db->Execute($this->sql)) {
+            if($buf->RecordCount()) {
+                $buf2=$buf->FetchRow();
+                return $buf2['item_unit_cost'];
+            } else return 0;
+        }else {
+            return 0;
+        }
+    }
 }
 ?>
