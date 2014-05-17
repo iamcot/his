@@ -340,10 +340,16 @@ class eComBill extends Core {
 	function listServiceItemsOfEncounter($patientno)
 	{
 		global $db;
-		$this->sql="SELECT bill.*, serv.* 
+		/*$this->sql="SELECT bill.*, serv.*
 					FROM $this->billItem AS bill, $this->billableItem AS serv 
 					WHERE bill.bill_item_encounter_nr='$patientno' 
-					AND bill.bill_item_code = serv.item_code ";
+					AND bill.bill_item_code = serv.item_code ";  */
+        //nang
+        $this->sql="SELECT bill.*, serv.*
+					FROM $this->billItem AS bill, $this->billableItem AS serv
+					WHERE bill.bill_item_encounter_nr='$patientno'
+					AND bill.bill_item_code = serv.item_code
+					AND serv.item_group_nr != 37";
 					
 		if ($this->result=$db->Execute($this->sql)) {
 		    if ($this->result->RecordCount()) {

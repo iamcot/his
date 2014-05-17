@@ -153,7 +153,7 @@ if($billid == "currentbill") {
 
 $smarty->assign('LDPaymentDateData', $billDate);
 $smarty->assign('LDPatientType', $LDPatientType );
-$smarty->assign('LDPatientTypeData', $Encounter->encounter['encounter_class_nr'] );
+$smarty->assign('LDPatientTypeData', $Encounter->encounter['encounter_class_nr']);
 $smarty->assign('LDDateofBirth', $LDDateofBirth );
 $smarty->assign('LDDateofBirthData', formatDate2Local($Encounter->encounter['date_birth'],$date_format) );
 $smarty->assign('LDSex', $LDSex );

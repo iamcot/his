@@ -16,10 +16,12 @@ $local_user='aufnahme_user';
 require_once($root_path.'include/core/inc_front_chain_lang.php');
 require($root_path.'include/care_api_classes/class_ecombill.php');
 require_once($root_path.'include/care_api_classes/class_prescription.php');
+require_once($root_path.'include/care_api_classes/class_encounter.php');
 $eComBill=new eComBill;
 $Pres = new Prescription;
+$Encounter = new Encounter;
 //$db->debug=true;
-
+$returnfile='patientbill.php'.URL_APPEND.'&patientno='.$patientno.'&full_en='.$full_en.'&target='.$target;
 if($patnum==""){
 	$patient_no=$patientno;
 }else{
@@ -34,7 +36,14 @@ if($target=='nursing'){
 	$returnfile= $root_path.'modules/ecombill/search.php'.URL_APPEND;
 	$thisfile= basename(__FILE__).URL_APPEND;
 }
+  //lay thong tin benh nhan xem noi tru hay ngoai tru -->nang
+$patqry="SELECT e.* FROM care_encounter AS e WHERE e.encounter_nr=$patnum";
 
+$resultpatqry=$db->Execute($patqry);
+if(is_object($resultpatqry)) $patient=$resultpatqry->FetchRow();
+else $patient=array();
+$in_out = $patient['encounter_class_nr']; // xet noi tru hay ngoai tru -->nang
+//echo $in_out;
 // Check if final bill is available, if yes hide new entry of bills and make payment menu items
 
 $chkexists = 0;
@@ -119,6 +128,10 @@ function showfinalbill() {
 	document.patientfrm.submit();
 }
 
+function showfinalbill1() {
+    document.patientfrm.action="showfinalbill1.php<?php echo URL_APPEND; ?>";
+    document.patientfrm.submit();
+}
 function xemcongkhaithuoc() {
 	document.patientfrm.action="cong_khai_thuoc_tong_hop_vp.php<?php echo URL_APPEND; ?>";
 	document.patientfrm.submit();
@@ -157,7 +170,8 @@ $aSubMenuIcon=array(createComIcon($root_path,'add2.jpg','0'),
 
 # Prepare the submenu item descriptions
 
-$aSubMenuText=array($LDPleaseSelectHospitalServicesforthePatient,
+$aSubMenuText=array($LDMuchuong,
+                    $LDPleaseSelectHospitalServicesforthePatient,
 					$LDPleaseSelectLaboratoryTestsforthePatient,
 					$LDViewBillTxt,
 					$LDViewPaymentTxt,
@@ -168,15 +182,38 @@ $aSubMenuText=array($LDPleaseSelectHospitalServicesforthePatient,
 				
 					
 # Prepare the submenu item links indexed by their template tags
-$aSubMenuItem=array();					
+$aSubMenuItem=array();
+$muchuong =0;
+$temp = "select muchuong from care_encounter WHERE encounter_nr = $patient_no ";
+$temp1=$db->Execute($temp);
+if(is_object($temp1)){
+    if($temp1->RecordCount()>0){
+        $temp2=$temp1->FetchRow();
+        $muchuong = $temp2['muchuong'] * 100;
+        $Encounter->updateMuchuong($muchuong,$patientno);
+    }
+}
+if(!$chkexists){
+   $aSubMenuItem['LDMuchuong']='<form action="'.$returnfile.'" method="POST">
+                             Mức hưởng(0%-100%):
+                             <input type="text" id="discount" name="discount" value="'.$muchuong.'" size="10"> %
+                             <input type="submit" value="Xem" name="ok" id="save">';
+}
+
+if(isset($_POST['discount']))
+{
+    $muchuong = $_POST['discount']/100;
+    $Encounter->updateMuchuong($muchuong,$patientno);
+}
 if(!$chkexists && $is_discharged!=1) {
 	if($target=='nursing'){
 		$aSubMenuItem['LDSelectHospitalServices'] = '<a href="javascript:subHS()"">'.$LDSelectHospitalServices.'</a>';
 		$aSubMenuItem['LDSelectLaboratoryTests'] = '<a href="javascript:subLT()"">'.$LDSelectLaboratoryTests.'</a>';
-	}else{
-		$aSubMenuItem['LDSelectHospitalServices'] = $LDSelectHospitalServices;
-		$aSubMenuItem['LDSelectLaboratoryTests'] = $LDSelectLaboratoryTests;	
-	}
+    }else{
+        $aSubMenuItem['LDSelectHospitalServices'] = $LDSelectHospitalServices;
+        $aSubMenuItem['LDSelectLaboratoryTests'] = $LDSelectLaboratoryTests;
+
+        }
 }
 
 if(!$chkexists && ($billexists || $presexists)) {
@@ -186,17 +223,30 @@ if(!$chkexists && ($billexists || $presexists)) {
 
 if(!$chkexists){
 	$aSubMenuItem['LDViewPayment'] = '<a href="javascript:subpayment()"">'.$LDViewPayment.'</a>';
-	$aSubMenuItem['LDCongKhaiThuocVaTongHopVienPhi'] = '<a href="javascript:xemcongkhaithuoc()"">'.$LDCongKhaiThuocVaTongHopVienPhi.'</a>';	
+//	$aSubMenuItem['LDCongKhaiThuocVaTongHopVienPhi'] = '<a href="javascript:xemcongkhaithuoc()"">'.$LDCongKhaiThuocVaTongHopVienPhi.'</a>';
 	if($billexists || $presexists)
 		$aSubMenuItem['LDGenerateFinalBill'] = '<a href="javascript:finalbill()"">'.$LDGenerateFinalBill.'</a>';
 }
-
-
-//Neu benh nhan da thanh toan hoa don cuoi cung (xuat vien)
-if($chkexists>0) { 
-	$aSubMenuItem['LDPatienthasclearedallthebills'] = '<a href="javascript:showfinalbill()"">'.$LDPatienthasclearedallthebills.'</a>';
+// xet phần hiên phiêu cong khai cho nội trú và k hiện o ngoại trú  ->nang
+if(!$chkexists){
+    if($in_out==1){
+        $aSubMenuItem['LDCongKhaiThuocVaTongHopVienPhi'] = '<a href="javascript:xemcongkhaithuoc()"">'.$LDCongKhaiThuocVaTongHopVienPhi.'</a>';
+    } else{
+        $aSubMenuItem['LDCongKhaiThuocVaTongHopVienPhi'] = $LDCongKhaiThuocVaTongHopVienPhi;
+    }
 }
 
+//Neu benh nhan da thanh toan hoa don cuoi cung (xuat vien)
+if($chkexists>0) {
+    // khi xuat vien nếu nội tru hiện công khai và tong ket, con ngoại tru chi hien tong ket
+    if($in_out==1) {
+	$aSubMenuItem['LDPatienthasclearedallthebills'] = '<a href="javascript:showfinalbill()"">'.$LDPatienthasclearedallthebills.'</a>';
+    $aSubMenuItem['LDCongKhaiThuocVaTongHopVienPhi'] = '<a href="javascript:showfinalbill1()"">'.$LDCongKhaiThuocVaTongHopVienPhi.'</a>';    //nang
+    }
+    else{
+    $aSubMenuItem['LDPatienthasclearedallthebills'] = '<a href="javascript:showfinalbill()"">'.$LDPatienthasclearedallthebills.'</a>';
+    }
+}
 # Create the submenu rows
 
 $iRunner = 0;

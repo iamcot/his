@@ -775,6 +775,11 @@ class Encounter extends Notes {
 		    } else { return FALSE;}
 		} else { return FALSE;}
 	}
+
+    function updateMuchuong($muchuong,$patientno){
+        $this->sql ="UPDATE $this->tb_enc SET muchuong = '".$muchuong."' WHERE encounter_nr='".$patientno."'";
+        return $this->Transact();
+    }
 	/**
 	* Returns last or family name.
 	* Use only after the encounter data was successfully loaded by the <var>loadEncounterData()</var> method.

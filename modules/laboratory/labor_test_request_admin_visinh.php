@@ -661,8 +661,9 @@ require('includes/inc_test_request_lister_fx.php');
 									<td align=center colspan=5 class="adm_item">Kết quả</td>
 								</tr>
 								<tr>
-									
-									<td width=45% align=center class="adm_item">(1-9 AFB)</td>
+
+                                    <td width=45% align=center class="adm_item">(1-9 AFB)</td>
+
 									<td width=15% align=center class="adm_item">Âm</td>
 									<td width=13% align=center class="adm_item">1+</td>
 									<td width=13% align=center class="adm_item">2+</td>
@@ -688,7 +689,7 @@ require('includes/inc_test_request_lister_fx.php');
 					</td>';
 					if($stored_request['results_mau_1']=="am"){
 					echo'<td align=center width=29%>
-						<input type="text" maxlength="5" value="" name="results_mau_1">
+						<input type="text" maxlength="5" value="" name="results_mau_1 ">
 					</td>
 					<td align=center width=14%>
 						<input type="radio" value="am" checked name="results_mau_1">
