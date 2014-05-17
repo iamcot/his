@@ -13,6 +13,7 @@ require($root_path.'include/core/inc_environment_global.php');
 
 /* Start initializations */ 
 $lang_tables[]='departments.php';
+$lang_tables[]='billing.php';
 define('LANG_FILE','konsil.php');
 
 /* We need to differentiate from where the user is coming: 
@@ -184,18 +185,37 @@ switch($mode){
 if(!$mode||$mode=='') {
 	$sql="SELECT batch_nr,encounter_nr,send_date,dept_nr FROM care_test_request_".$db_request_table."
 				WHERE status='pending' OR status='received' ORDER BY  send_date DESC";
+
+
+
 	if($requests=$db->Execute($sql)){
 		$batchrows=$requests->RecordCount();
 	 	if($batchrows && (!isset($batch_nr) || !$batch_nr)){
 			$test_request=$requests->FetchRow();
-			/* Check for the patietn number = $pn. If available get the patients data */
+			/* Check for the patient number = $pn. If available get the patients data */
 		 	$pn=$test_request['encounter_nr'];
 			$batch_nr=$test_request['batch_nr'];
+//            $bill_item_code=$test_request['bill_item_code'];
 		}
 	}else{
 		echo "<p>$sql<p>$LDDbNoRead";
 		exit;
 	}
+
+    $sql5="SELECT BB.bill_item_code
+          FROM care_test_request_".$db_request_table." AS TR
+          JOIN care_billing_bill_item AS BB ON TR.encounter_nr = BB.bill_item_encounter_nr
+          WHERE (STATUS='pending' OR STATUS='received')
+          AND TR.batch_nr=".$batch_nr."
+          AND DATE(BB.bill_item_date)=DATE(TR.send_date)
+          AND HOUR(BB.bill_item_date)=HOUR(TR.send_date)
+          AND MINUTE(BB.bill_item_date)=MINUTE(TR.send_date)
+          ORDER BY  send_date DESC
+    ";
+    if ($temp = $db->Execute ( $sql5 )) {
+        $buf5 = $temp->FetchRow ();
+        $bill_item_code=$buf5['bill_item_code'];
+    }
 	$mode='update';
 }
 
@@ -366,7 +386,7 @@ require('includes/inc_test_request_lister_fx.php');
 
 	<form name="form_test_request" method="post" action="<?php echo $thisfile ?>" onSubmit="return chkForm(this)">
 			<input type="image" <?php echo createLDImgSrc($root_path,'savedisc.gif','0') ?>  title="<?php echo $LDSaveEntry ?>"> 
-		<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut ?>"></a>
+		<!--<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut ?>"></a>-->
 		<a href="#" onclick="doneRequest()"><img <?php echo createLDImgSrc($root_path,'done.gif','0') ?> alt="<?php echo $LDEnterResult ?>"></a>
 	   <!--  outermost table creating form border -->
 <table border=0 bgcolor="#000000" cellpadding=1 cellspacing=0>
@@ -414,11 +434,74 @@ require('includes/inc_test_request_lister_fx.php');
 		$temp=$db->execute($sql);
 		if($temp->recordcount()){
 		$result=$temp->fetchrow();
-			echo '
-			
-			<td class="adm_input">'.$result['name'].' </td>';
+		    echo '<td class="adm_input">'.$result['name'].' </td>';
 			}
-			}
+//			$YC=$result['name'];
+		}
+//		$sql1 = "SELECT bill.bill_item_status, bill.bill_item_code
+//			FROM care_test_request_" . $db_request_table . " AS req
+//			INNER JOIN care_billing_item AS bill_it ON bill_it.item_description LIKE '%$YC%'
+//			INNER JOIN care_billing_bill_item AS bill ON req.encounter_nr=bill.bill_item_encounter_nr AND DATE(req.send_date)=DATE(bill.bill_item_date) AND bill_it.item_code=bill.bill_item_code
+//			WHERE req.batch_nr=$batch_nr";
+        if($bill_item_code=="XNK01"){
+            $YC = 'XNK01';
+        }
+        elseif($bill_item_code=="XNK02"){
+            $YC = 'XNK02';
+        }
+        elseif($bill_item_code=="XNK03"){
+            $YC = 'XNK03';
+        }
+        elseif($bill_item_code=="XNK04"){
+            $YC = 'XNK04';
+        }
+        elseif($bill_item_code=="XNK05"){
+            $YC = 'XNK05';
+        }
+        elseif($bill_item_code=="XNK06"){
+            $YC = 'XNK06';
+        }
+        elseif($bill_item_code=="XNK07"){
+            $YC = 'XNK07';
+        }
+        elseif($bill_item_code=="XNK08"){
+            $YC = 'XNK08';
+        }
+        elseif($bill_item_code=="XNK09"){
+            $YC = 'XNK09';
+        }
+        elseif($bill_item_code=="XNK10"){
+            $YC = 'XNK10';
+        }
+        elseif($bill_item_code=="XNK11"){
+            $YC = 'XNK11';
+        }
+        elseif($bill_item_code=="XNK12"){
+            $YC = 'XNK12';
+        }
+        elseif($bill_item_code=="XNK13"){
+            $YC = 'XNK13';
+        }
+        elseif($bill_item_code=="XNK14"){
+            $YC = 'XNK14';
+        }
+        elseif($bill_item_code=="XNK15"){
+            $YC = 'XNK15';
+        }
+        $sql1="SELECT TR.batch_nr,TR.encounter_nr,TR.send_date,BB.bill_item_status
+          FROM care_test_request_" . $db_request_table . " AS TR
+          JOIN care_billing_bill_item AS BB ON TR.encounter_nr = BB.bill_item_encounter_nr
+          WHERE BB.bill_item_code='$YC'
+          AND DATE(BB.bill_item_date)=DATE(TR.send_date)
+          AND HOUR(BB.bill_item_date)=HOUR(TR.send_date)
+          AND MINUTE(BB.bill_item_date)=MINUTE(TR.send_date)
+          AND TR.batch_nr=$batch_nr
+
+          ";
+		if ($requests1 = $db->Execute ( $sql1 )) {
+			$bill = $requests1->FetchRow ();
+			$status_bill=$bill['bill_item_status'];
+		}
 		?>
 	</tr>
     <tr>
@@ -444,7 +527,7 @@ require('includes/inc_test_request_lister_fx.php');
 		</tr>	
 
 
-	
+
 	<tr bgcolor="<?php echo $bgc1 ?>">
 		<td colspan=2 align="right"><div class=fva2_ml10>
 		 <?php echo $LDDate ?>:
@@ -455,9 +538,24 @@ require('includes/inc_test_request_lister_fx.php');
 					echo' Giờ gởi '.@convertTimeToLocal(formatDate2Local($stored_request['send_date'],$date_format,0,1));
 				  ?></font>&nbsp;
   <?php echo $LDRequestingDoc ?>:
-		<font face="courier" size=2 color="#000000">&nbsp;<?php echo $stored_request['send_doctor'] ?></font></div><br>
+		<font face="courier" size=2 color="#000000">&nbsp;<?php echo $stored_request['send_doctor'] ?></font></div>
 		</td>
     </tr>
+	
+	<tr>
+		<td colspan=10 align="right"><div class=fva2_ml10>
+			<font face="courier" size=3 color="red"><b>
+			<?php
+				if($status_bill){
+					echo $LDDaThanhtoan;
+				}else{
+					echo $LDChuaThanhToan;
+				}
+			?>
+			</b></font>
+		</td>
+	</tr>
+	
 	<tr bgcolor="<?php echo $bgc1 ?>">
 		
     </tr>	
@@ -520,7 +618,7 @@ require('includes/inc_test_request_lister_fx.php');
 </table> 
 <p>
 		<input type="image" <?php echo createLDImgSrc($root_path,'savedisc.gif','0') ?>  title="<?php echo $LDSaveEntry ?>"> 
-		<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut ?>"></a>
+		<!--<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut ?>"></a>-->
 		<a href="#" onclick="doneRequest()"><img <?php echo createLDImgSrc($root_path,'done.gif','0') ?> alt="<?php echo $LDEnterResult ?>"></a>
 <?php
 

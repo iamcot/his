@@ -361,8 +361,7 @@ if($ward_ok){
 	$cflag=$ward_info['room_nr_start'];
 	
 	# Initialize list rows container string
-
-    $sListRows='';
+   $sListRows='';
 	
 	# Loop trough the ward rooms
 	for ($i=$ward_info['room_nr_start'];$i<=$ward_info['room_nr_end'];$i++)

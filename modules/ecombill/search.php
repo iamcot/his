@@ -83,7 +83,7 @@ if(($mode=='search'||$mode=='paginate')&&!empty($searchkey)){
 				AND enc.status  IN ('','normal')";
 	$orderby = " ORDER BY $oprep.$oitem $odir";
     //	AND enc.is_discharged NOT IN (1)
-		
+
 	if(is_numeric($suchwort)){
 		$suchwort=(int) $suchwort;
 		$numeric=1;
@@ -207,8 +207,7 @@ if($mode=='search'||$mode=='paginate'){
 			case 'm': echo '<img '.$img_male.'>'; break;
 			default: echo '&nbsp;'; break;
 		}
-		echo '</td>
-						';	
+		echo '</td>';
 
 		echo"<td><font face=arial size=2>";
 		echo "&nbsp;".ucfirst($zeile['name_last']);
@@ -253,7 +252,7 @@ if($mode=='search'||$mode=='paginate'){
 		<tr>
 			<td>
 				<?php
-            include($root_path.'include/core/inc_patient_searchmask.php');
+            include($root_path.'include/core/inc_patient_searchmask.php');     //giaodien search
 	   ?>
 			</td>
 		</tr>

@@ -355,6 +355,7 @@ class Encounter extends Notes {
 		$row=array();
 		$this->sql="SELECT encounter_nr FROM $this->tb_enc WHERE encounter_nr>=$ref_nr AND encounter_class_nr=$enc_class_nr ORDER BY encounter_nr DESC";
 		//$this->sql="SELECT encounter_nr FROM $this->tb_enc WHERE encounter_nr>=$ref_nr ORDER BY encounter_nr DESC";
+       // echo $this->sql;
 		if($this->res['gnen']=$db->SelectLimit($this->sql,1)){
 			if($this->res['gnen']->RecordCount()){
 				$row=$this->res['gnen']->FetchRow();
@@ -749,18 +750,21 @@ class Encounter extends Notes {
 		$this->sql="SELECT p.insurance_nr AS pinsurance_nr, p.insurance_start as pinsurance_start,
 							p.insurance_exp as pinsurance_exp, p.madkbd,
 							e.*, p.pid, p.title,p.name_last, p.name_first, p.date_birth, p.sex, p.tuoi, p.thang,
-									p.addr_str,p.addr_str_nr,p.addr_zip, p.blood_group,
+									p.addr_str as addr_str,p.addr_str_nr as addr_str_nr,p.addr_zip, p.blood_group,
 									p.photo_filename, t.name AS citytown_name,p.death_date,p.dantoc,p.nghenghiepcode,p.nghenghiep,p.noilamviec,p.ngoaikieu,
-									p.hotenbaotin,p.dtbaotin,p.dcbaotin,p.tiensubenhcanhan,p.tiensubenhgiadinh,qh.name AS quanhuyen_name,px.name AS phuongxa_name,dt.name AS dantoc
+									p.hotenbaotin,p.dtbaotin,p.dcbaotin,p.tiensubenhcanhan,p.tiensubenhgiadinh,qh.name AS quanhuyen_name,px.name AS phuongxa_name,dt.name AS dantoc,
+									q.location_nr AS giuong
 							FROM $this->tb_enc AS e, 
 									 $this->tb_person AS p
 									 LEFT JOIN $this->tb_citytown AS t ON p.addr_citytown_nr=t.nr
 									 LEFT JOIN $this->tb_quanhuyen AS qh ON p.addr_quanhuyen_nr=qh.nr
 									 LEFT JOIN $this->tb_phuongxa AS px ON p.addr_phuongxa_nr=px.nr
 									 LEFT JOIN care_type_ethnic_orig AS dt ON p.ethnic_orig=dt.id
+
+									 LEFT JOIN care_encounter_location q ON q.type_nr = 5 AND q.encounter_nr = '".$this->enc_nr."' AND  q.status=''
 							WHERE e.encounter_nr=$this->enc_nr
 								AND e.pid=p.pid";
-							//	echo $this->sql;
+//								echo $this->sql;
 		if($this->res['lend']=$db->Execute($this->sql)) {
 		    if($this->record_count=$this->res['lend']->RecordCount()) {
 				$this->rec_count=$this->record_count;
@@ -771,6 +775,11 @@ class Encounter extends Notes {
 		    } else { return FALSE;}
 		} else { return FALSE;}
 	}
+
+    function updateMuchuong($muchuong,$patientno){
+        $this->sql ="UPDATE $this->tb_enc SET muchuong = '".$muchuong."' WHERE encounter_nr='".$patientno."'";
+        return $this->Transact();
+    }
 	/**
 	* Returns last or family name.
 	* Use only after the encounter data was successfully loaded by the <var>loadEncounterData()</var> method.
@@ -3856,12 +3865,14 @@ class Encounter extends Notes {
 								e.*, p.pid, p.title,p.name_last, p.name_first, p.date_birth, p.sex,  
 									p.addr_str,p.addr_str_nr,p.addr_zip, p.blood_group, 
 									p.photo_filename, t.name AS citytown_name,p.death_date,p.dantoc,p.nghenghiep,p.noilamviec,p.ngoaikieu,
-									p.hotenbaotin,p.dtbaotin,p.dcbaotin,p.tiensubenhcanhan,p.tiensubenhgiadinh,qh.name AS quanhuyen_name,px.name AS phuongxa_name,p.tuoi
-							FROM $this->tb_enc AS e, 
+									p.hotenbaotin,p.dtbaotin,p.dcbaotin,p.tiensubenhcanhan,p.tiensubenhgiadinh,qh.name AS quanhuyen_name,px.name AS phuongxa_name,p.tuoi,
+									el.location_nr AS giuong
+							FROM $this->tb_enc AS e,
 									 $this->tb_person AS p
 									 LEFT JOIN $this->tb_citytown AS t ON p.addr_citytown_nr=t.nr
 									 LEFT JOIN $this->tb_quanhuyen AS qh ON p.addr_quanhuyen_nr=qh.nr
 									 LEFT JOIN $this->tb_phuongxa AS px ON p.addr_phuongxa_nr=px.nr
+									 LEFT JOIN care_encounter_location el ON el.type_nr = 5 AND el.encounter_nr = '".$this->encounter."' AND  el.status=''
 							WHERE e.encounter_nr=$this->enc_nr
 								AND e.pid=p.pid";
 								//echo $this->sql;

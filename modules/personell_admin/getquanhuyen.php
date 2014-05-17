@@ -18,6 +18,5 @@ require_once($root_path.'include/care_api_classes/class_address.php');
 			echo '<option  value="'.$buf2['nr'].'">'.$buf2['name'].'</option>';
 			}
 		}
-			echo '</select>';	
-		
+			echo '</select>';
 ?>

@@ -16,13 +16,10 @@ require_once($root_path.'include/core/inc_date_format_functions.php');
 require($root_path.'include/care_api_classes/class_ecombill.php');
 require($root_path.'include/care_api_classes/class_encounter.php');
 require_once($root_path.'classes/money/convertMoney.php');
-$eComBill = new eComBill;
-$Encounter = new Encounter;
+$eComBill = new eComBill();
+$Encounter = new Encounter();
 
 $Encounter->loadEncounterData($patientno);
-
-
-
 if($discount=="") $discount=0;
 $presdate=date("Y-m-d");
 
@@ -30,44 +27,44 @@ $breakfile='final_bill.php'.URL_APPEND.'&patientno='.$patientno.'&full_en='.$ful
 $returnfile='final_bill.php'.URL_APPEND.'&patientno='.$patientno.'&full_en='.$full_en.'&target='.$target;
 
 # Start Smarty templating here
- /**
+/**
  * LOAD Smarty
  */
 
- # Note: it is advisable to load this after the inc_front_chain_lang.php so
- # that the smarty script can use the user configured template theme
+# Note: it is advisable to load this after the inc_front_chain_lang.php so
+# that the smarty script can use the user configured template theme
 
- require_once($root_path.'gui/smarty_template/smarty_care.class.php');
- $smarty = new smarty_care('common');
+require_once($root_path.'gui/smarty_template/smarty_care.class.php');
+$smarty = new smarty_care('common');
 
 # Toolbar title
 
- $smarty->assign('sToolbarTitle',$LDBilling . ' - ' . $LDFinalBillPreview);
+$smarty->assign('sToolbarTitle',$LDBilling . ' - ' . $LDFinalBillPreview);
 
- # href for the return button
- $smarty->assign('pbBack',$returnfile);
+# href for the return button
+$smarty->assign('pbBack',$returnfile);
 
 # href for the  button
- $smarty->assign('pbHelp',"javascript:gethelp('billing.php','final-bill')");
+$smarty->assign('pbHelp',"javascript:gethelp('billing.php','final-bill')");
 
- $smarty->assign('breakfile',$breakfile);
+$smarty->assign('breakfile',$breakfile);
 
- # Window bar title
- $smarty->assign('title',$LDBilling . ' - ' . $LDFinalBillPreview);
+# Window bar title
+$smarty->assign('title',$LDBilling . ' - ' . $LDFinalBillPreview);
 
- # Collect extra javascrit code
+# Collect extra javascrit code
 
- ob_start();
+ob_start();
 ?>
-<SCRIPT language="JavaScript">
-<!--
-	function submitform() {
-		document.confirmfrmfinal.action = "postfinalbill.php";
-		document.confirmfrmfinal.submit();
-	}
-//-->
-</SCRIPT>
-<?php 
+    <SCRIPT language="JavaScript">
+        <!--
+        function submitform() {
+            document.confirmfrmfinal.action = "postfinalbill.php";
+            document.confirmfrmfinal.submit();
+        }
+        //-->
+    </SCRIPT>
+<?php
 $sTemp = ob_get_contents();
 ob_end_clean();
 
@@ -108,7 +105,7 @@ $smarty->assign('Insurance_exp', formatDate2Local($Encounter->encounter['insuran
 $smarty->assign('LDMaKCB', $LDMaKCB);
 $smarty->assign('makcb', $Encounter->encounter['madk_kcbbd']);
 
- 
+
 # Load diagnostics --25/9/11
 /*$resultdiagno=$Encounter->listAllDiagnosisResultByEncounter($patientno);
 
@@ -139,6 +136,7 @@ if(is_object($resultdiagno)){
 	
 	$smarty->assign('LDItemDiag',$sListRows);
 }*/
+ # inser muchuong vao table person
 
 # Liet ke tat ca cac encounter truoc do --------------------------------------------------------
 $arr='';
@@ -147,54 +145,54 @@ $smarty->assign('LDTong', $LDTong);
 $smarty->assign('LDBHYT', $LDBHYT);
 $smarty->assign('LDConlai', $LDConlai);
 $smarty->assign('LDDaThanhToanVaTamUng', $LDDaThanhToanVaTamUng);
-$Encounter->listAllEncounterTransfer($patientno, &$arr);	
+$Encounter->listAllEncounterTransfer($patientno, &$arr);
 //echo $arr; //#2011000013#2011000001#0
 $old_final_bill='';
 $list_enc = explode('#',$arr);
 $oldenc_totalbill=0; $oldenc_totaloutstanding=0; $oldenc_discount =0;
 $oldenc_totalpayment = 0;
 for ($k=0; $k<count($list_enc); $k++){
-	if($list_enc[$k]!='0' && $list_enc[$k]!=''){
-		$smarty->assign('LDEncouterNumber', $LDEncouterNumberPre);
-		$smarty->assign('encounterId', $list_enc[$k]);
-		$smarty->assign('LDAllBillInfo', $LDAllBillInfo);
-		$smarty->assign('LDAllPaymentInfo', $LDAllPaymentInfo);
-		
-		$oldenc_each_totalbill=0; $oldenc_each_totaloutstanding=0; $oldenc_each_totalpayment=0; $oldenc_each_discount=0;
-		//List bill
-		$oldenc_listbill = $eComBill->listCurrentBills($list_enc[$k]);
-		if(is_object($oldenc_listbill)){
-			$oldbill_temp='';
-			while ($oldenc_eachbill = $oldenc_listbill->FetchRow()){
-			
-				$oldbill_temp .='
+    if($list_enc[$k]!='0' && $list_enc[$k]!=''){
+        $smarty->assign('LDEncouterNumber', $LDEncouterNumberPre);
+        $smarty->assign('encounterId', $list_enc[$k]);
+        $smarty->assign('LDAllBillInfo', $LDAllBillInfo);
+        $smarty->assign('LDAllPaymentInfo', $LDAllPaymentInfo);
+
+        $oldenc_each_totalbill=0; $oldenc_each_totaloutstanding=0; $oldenc_each_totalpayment=0; $oldenc_each_discount=0;
+        //List bill
+        $oldenc_listbill = $eComBill->listCurrentBills($list_enc[$k]);
+        if(is_object($oldenc_listbill)){
+            $oldbill_temp='';
+            while ($oldenc_eachbill = $oldenc_listbill->FetchRow()){
+
+                $oldbill_temp .='
 					<tr bgColor="#EBDDE2">
 						<td><p>'.$LDBillingId.': '.$oldenc_eachbill['bill_bill_no'].'</p></td>
 						<td colspan="4"><p>'.formatDate2Local($oldenc_eachbill['bill_date_time'],$date_format).'</p></td>	
 					</tr>		
 					<tr><td colspan="5">
 							<table width="100%" bgcolor="#FCDFFF" border="0">';
-							//items in bill
-							$temp_item='';
-							$billitem_query = $eComBill->listItemsByBillId($oldenc_eachbill['bill_bill_no']);
-							if(is_object($billitem_query)) {
-								while ($billitem_result=$billitem_query->FetchRow()){							
-									$billitem_result['bill_item_date']= formatDate2Local($billitem_result['bill_item_date'],$date_format);
-									if ($billitem_result['item_type']=='HS') $item_type=$LDMedicalServices;
-									else if ($billitem_result['item_type']=='LT') $item_type=$LDLaboratoryTests;
-								
-									$temp_item=$temp_item.'<tr>	
+                //items in bill
+                $temp_item='';
+                $billitem_query = $eComBill->listItemsByBillId($oldenc_eachbill['bill_bill_no']);
+                if(is_object($billitem_query)) {
+                    while ($billitem_result=$billitem_query->FetchRow()){
+                        $billitem_result['bill_item_date']= formatDate2Local($billitem_result['bill_item_date'],$date_format);
+                        if ($billitem_result['item_type']=='HS') $item_type=$LDMedicalServices;
+                        else if ($billitem_result['item_type']=='LT') $item_type=$LDLaboratoryTests;
+
+                        $temp_item=$temp_item.'<tr>
 															<td width="30%">'.$billitem_result['item_description'].'</td>
 															<td align="right" width="10%">'.$billitem_result['bill_item_unit_cost'].'</td>
 															<td align="right" width="5%">'.$billitem_result['bill_item_units'].'</td>
 															<td align="right" >'.$billitem_result['bill_item_amount'].'</td>
 															<td align="center">'.$item_type.'</td>
 															<td>'.$billitem_result['bill_item_date'].'</td>
-														</tr>';	
-								}
-							}	
-				$oldbill_temp .=	$temp_item;
-				$oldbill_temp .='
+														</tr>';
+                    }
+                }
+                $oldbill_temp .=	$temp_item;
+                $oldbill_temp .='
 							</table>
 						</td>
 					</tr>
@@ -203,57 +201,57 @@ for ($k=0; $k<count($list_enc); $k++){
 						<td align="right">'.$LDBHYT.': <b>'.$oldenc_eachbill['bill_discount'].'</b></td>
 						<td align="center">'.$LDOutstanding.': <b>'.$oldenc_eachbill['bill_outstanding'].'</b></td>
 					</tr>';
-					
-				 $oldenc_each_totalbill += $oldenc_eachbill['bill_amount'];		//tong tien
-				 $oldenc_each_discount += $oldenc_eachbill['bill_discount'];
-				 $oldenc_each_totaloutstanding += $oldenc_eachbill['bill_outstanding'];	//tong thanh toan
-			}
-		}else {	$oldbill_temp = '<tr><td bgcolor="#FCDFFF" colspan="6">'.$NoBill.'</td></tr>';	}
-		$smarty->assign('ListAllBill', $oldbill_temp);
-		
-		$oldenc_totalbill += $oldenc_each_totalbill;
-		$oldenc_totaloutstanding += $oldenc_each_totaloutstanding;
-		$oldenc_discount += $oldenc_each_discount;
-		
-		//List Payment
-		$oldenc_listpayment = $eComBill->listCurrentAdvancedPayments($list_enc[$k]);
-		if(is_object($oldenc_listpayment)) {
-			$oldpayment_temp=''; $total=0;
-			$oldpayment_temp .=	'
+
+                $oldenc_each_totalbill += $oldenc_eachbill['bill_amount'];		//tong tien
+                $oldenc_each_discount += $oldenc_eachbill['bill_discount'];
+                $oldenc_each_totaloutstanding += $oldenc_eachbill['bill_outstanding'];	//tong thanh toan
+            }
+        }else {	$oldbill_temp = '<tr><td bgcolor="#FCDFFF" colspan="6">'.$NoBill.'</td></tr>';	}
+        $smarty->assign('ListAllBill', $oldbill_temp);
+
+        $oldenc_totalbill += $oldenc_each_totalbill;
+        $oldenc_totaloutstanding += $oldenc_each_totaloutstanding;
+        $oldenc_discount += $oldenc_each_discount;
+
+        //List Payment
+        $oldenc_listpayment = $eComBill->listCurrentAdvancedPayments($list_enc[$k]);
+        if(is_object($oldenc_listpayment)) {
+            $oldpayment_temp=''; $total=0;
+            $oldpayment_temp .=	'
 					<tr>
 						<td colspan="5" bordercolor="#FFFFFF" bgColor="#EBDDE2">'.$LDPaymentId.'&nbsp;</td>
 					</tr>';
-			while ($oldenc_eachpayment = $oldenc_listpayment->FetchRow()){
-				$total = $total + $oldenc_eachpayment['payment_amount_total'];
-				$oldpayment_temp .='<tr bgcolor="#FCDFFF">	
+            while ($oldenc_eachpayment = $oldenc_listpayment->FetchRow()){
+                $total = $total + $oldenc_eachpayment['payment_amount_total'];
+                $oldpayment_temp .='<tr bgcolor="#FCDFFF">
 									<td>'.$oldenc_eachpayment['payment_receipt_no'].'</td>
 									<td colspan="2">'.(formatDate2Local($oldenc_eachpayment['payment_date'],$date_format)).'</td>
 									<td colspan="2">'.$oldenc_eachpayment['payment_amount_total'].'</td>
 								</tr>';
-				$oldenc_each_totalpayment += $oldenc_eachpayment['payment_amount_total'];
-			}		
-			$oldpayment_temp .='
+                $oldenc_each_totalpayment += $oldenc_eachpayment['payment_amount_total'];
+            }
+            $oldpayment_temp .='
 					<tr bgcolor="#FCDFFF">
 						<td colspan="2" align="right">'.$LDTotal.'</td>
 						<td>&nbsp;</td>
 						<td colspan="2"><b>'.$total.'</b></td>
 					</tr>';
-		}else {	$oldpayment_temp = '<tr><td bgColor="#EBDDE2" colspan="5">'.$NoPayment.'</td></tr>';	}
-		$smarty->assign('ListAllPayment', $oldpayment_temp);
-		
-		$oldenc_totalpayment += $oldenc_each_totalpayment;
-		
-		//Tong ket
-		$smarty->assign('oldenc_each_totalbill', $oldenc_each_totalbill);
-		$smarty->assign('oldenc_each_discount', $oldenc_each_discount);
-		$smarty->assign('oldenc_each_paid', $oldenc_each_totaloutstanding+$oldenc_each_totalpayment);
-		$smarty->assign('oldenc_each_remain', $oldenc_each_totalbill - ($oldenc_each_totaloutstanding+$oldenc_each_totalpayment+$oldenc_each_discount) );
-		
-		ob_start();
-		$smarty->display('ecombill/old_final_bill.tpl');
-		$old_final_bill = $old_final_bill.ob_get_contents();
-		ob_end_clean(); 		
-	}
+        }else {	$oldpayment_temp = '<tr><td bgColor="#EBDDE2" colspan="5">'.$NoPayment.'</td></tr>';	}
+        $smarty->assign('ListAllPayment', $oldpayment_temp);
+
+        $oldenc_totalpayment += $oldenc_each_totalpayment;
+
+        //Tong ket
+        $smarty->assign('oldenc_each_totalbill', $oldenc_each_totalbill);
+        $smarty->assign('oldenc_each_discount', $oldenc_each_discount);
+        $smarty->assign('oldenc_each_paid', $oldenc_each_totaloutstanding+$oldenc_each_totalpayment);
+        $smarty->assign('oldenc_each_remain', $oldenc_each_totalbill - ($oldenc_each_totaloutstanding+$oldenc_each_totalpayment+$oldenc_each_discount) );
+
+        ob_start();
+        $smarty->display('ecombill/old_final_bill.tpl');
+        $old_final_bill = $old_final_bill.ob_get_contents();
+        ob_end_clean();
+    }
 }
 $smarty->assign('PastEnc', $old_final_bill);
 
@@ -263,59 +261,59 @@ $sListBillRow='';
 $sListItemBillRow='';
 $bill_query = $eComBill->listCurrentBills($patientno);
 if(is_object($bill_query)) {
-	while ($bill_result=$bill_query->FetchRow()) { 
-	    //bill
-		$billno = $bill_result['bill_bill_no'];
-		$smarty->assign('billno', $billno);
-	    $smarty->assign('date', formatDate2Local($bill_result['bill_date_time'],$date_format));
-		$smarty->assign('amount', number_format($bill_result['bill_amount']));
-		$smarty->assign('discountbill', number_format($bill_result['bill_discount']));
-		$smarty->assign('outstanding', number_format($bill_result['bill_outstanding']));
-		
-		$smarty->assign('LDBillingId', $LDBillingId);
-		$smarty->assign('LDTotal', $LDTotal);
-		$smarty->assign('LDOutstanding', $LDOutstanding);
-		
-		//items in bill
-		$temp_item='';
-		$billitem_query = $eComBill->listItemsByBillId($billno);			
-		if(is_object($billitem_query)) {
-			while ($billitem_result=$billitem_query->FetchRow()){
-				
-				$billitem_result['bill_item_date']= formatDate2Local($billitem_result['bill_item_date'],$date_format);
-				if ($billitem_result['item_type']=='HS')
-					$item_type=$LDMedicalServices;
-				else if ($billitem_result['item_type']=='LT')
-					$item_type=$LDLaboratoryTests;
-				
-				$temp_item=$temp_item.'<tr bgcolor="ffffff">	
+    while ($bill_result=$bill_query->FetchRow()) {
+        //bill
+        $billno = $bill_result['bill_bill_no'];
+        $smarty->assign('billno', $billno);
+        $smarty->assign('date', formatDate2Local($bill_result['bill_date_time'],$date_format));
+        $smarty->assign('amount', number_format($bill_result['bill_amount']));
+        $smarty->assign('discountbill', number_format($bill_result['bill_discount']));
+        $smarty->assign('outstanding', number_format($bill_result['bill_outstanding']));
+
+        $smarty->assign('LDBillingId', $LDBillingId);
+        $smarty->assign('LDTotal', $LDTotal);
+        $smarty->assign('LDOutstanding', $LDOutstanding);
+
+        //items in bill
+        $temp_item='';
+        $billitem_query = $eComBill->listItemsByBillId($billno);
+        if(is_object($billitem_query)) {
+            while ($billitem_result=$billitem_query->FetchRow()){
+
+                $billitem_result['bill_item_date']= formatDate2Local($billitem_result['bill_item_date'],$date_format);
+                if ($billitem_result['item_type']=='HS')
+                    $item_type=$LDMedicalServices;
+                else if ($billitem_result['item_type']=='LT')
+                    $item_type=$LDLaboratoryTests;
+
+                $temp_item=$temp_item.'<tr bgcolor="ffffff">
 										<td width="30%">'.$billitem_result['item_description'].'</td>
 										<td align="right" width="10%">'.number_format($billitem_result['bill_item_unit_cost']).'</td>
 										<td align="right" width="5%">'.$billitem_result['bill_item_units'].'</td>
 										<td align="right" >'.number_format($billitem_result['bill_item_amount']).'</td>
 										<td align="center">'.$item_type.'</td>
 										<td>'.$billitem_result['bill_item_date'].'</td>
-									</tr>';	
-			}
-			$smarty->assign('results', $temp_item);
-			$smarty->assign('LDMedicalServices', $LDMedicalServices);
-			$smarty->assign('LDLaboratoryTests', $LDLaboratoryTests);	
-		}
-				
-	    ob_start();
-		$smarty->display('ecombill/each_bill_table.tpl');
-		$sListBillRow = $sListBillRow.ob_get_contents();
-		ob_end_clean(); 
-		
-		$smarty->assign('LDItemAllBill', $sListBillRow);		
-	}
+									</tr>';
+            }
+            $smarty->assign('results', $temp_item);
+            $smarty->assign('LDMedicalServices', $LDMedicalServices);
+            $smarty->assign('LDLaboratoryTests', $LDLaboratoryTests);
+        }
+
+        ob_start();
+        $smarty->display('ecombill/each_bill_table.tpl');
+        $sListBillRow = $sListBillRow.ob_get_contents();
+        ob_end_clean();
+
+        $smarty->assign('LDItemAllBill', $sListBillRow);
+    }
 } else {
-	$temp_item='';
-	$temp_item=$temp_item.'<tr>	
+    $temp_item='';
+    $temp_item=$temp_item.'<tr>
 								<td bgColor="#FFFFFF" colspan="6">'.$NoBill.'</td>
 							</tr>';
-	
-	$smarty->assign('LDItemAllBill',$temp_item);
+
+    $smarty->assign('LDItemAllBill',$temp_item);
 }
 
 # Load all payments (just advanced: type=0) of this encounter --26/9/11
@@ -324,28 +322,28 @@ $sListPaymentRow='';
 $paymenttotal=0;
 $payment_query = $eComBill->listCurrentAdvancedPayments($patientno);
 if(is_object($payment_query)) {
-	$smarty->assign('LDPaymentId', $LDPaymentId);
-	$smarty->assign('LDTotal', $LDTotal);
-	$item_number=$payment_query->RecordCount();
-	$temp_item='';
-	for($i=0;$i<$item_number;$i++) { 
-	    //payment
-		$payment_result=$payment_query->FetchRow();
-		$paymenttotal = $paymenttotal + $payment_result['payment_amount_total'];
+    $smarty->assign('LDPaymentId', $LDPaymentId);
+    $smarty->assign('LDTotal', $LDTotal);
+    $item_number=$payment_query->RecordCount();
+    $temp_item='';
+    for($i=0;$i<$item_number;$i++) {
+        //payment
+        $payment_result=$payment_query->FetchRow();
+        $paymenttotal = $paymenttotal + $payment_result['payment_amount_total'];
 
-		$temp_item=$temp_item.'<tr>	
+        $temp_item=$temp_item.'<tr>
 									<td bgColor="#FFFFFF">'.$payment_result['payment_receipt_no'].'</td>
 									<td colspan="2" bgColor="#FFFFFF">'.(formatDate2Local($payment_result['payment_date'],$date_format)).'</td>
 									<td colspan="2" bgColor="#FFFFFF">'.number_format($payment_result['payment_amount_total']).'</td>
 								</tr>';
-		
-		$smarty->assign('LDListAllPayment', $temp_item);	
-	}
-	$smarty->assign('LDTotalPayment', $LDTotal.':');
-	$smarty->assign('LDTotalPaymentValue', number_format($paymenttotal));
-	
+
+        $smarty->assign('LDListAllPayment', $temp_item);
+    }
+    $smarty->assign('LDTotalPayment', $LDTotal.':');
+    $smarty->assign('LDTotalPaymentValue', number_format($paymenttotal));
+
 } else{
-	$smarty->assign('LDPaymentId', $NoPayment);
+    $smarty->assign('LDPaymentId', $NoPayment);
 }
 
 
@@ -354,7 +352,7 @@ if(is_object($payment_query)) {
 $smarty->assign('LDConfirmBill', TRUE);
 
 $smarty->assign('LDDianosticsInformation', $LDDianosticsInformation);
- $smarty->assign('LDEncouterNumberNow', $LDEncouterNumberNow);
+$smarty->assign('LDEncouterNumberNow', $LDEncouterNumberNow);
 $smarty->assign('LDAllBillInformation', $LDAllBillInfo);
 $smarty->assign('LDAllPaymentInfo', $LDAllPaymentInfo);
 $smarty->assign('LDConvertMoney', $LDConvertMoney);
@@ -370,10 +368,10 @@ $smarty->assign('LDTotal', $LDTotalBillAmount);		//tat ca hoa don + no truoc
 $last_totalbill = $totalremain + ($oldenc_totalbill - $oldenc_discount - $oldenc_totaloutstanding - $oldenc_totalpayment);
 $smarty->assign('last_totalbill', number_format($last_totalbill));
 if($last_totalbill>=0)
-	$sTempMoney = convertMoney($last_totalbill);
+    $sTempMoney = convertMoney($last_totalbill);
 else {
-	$sTempMoney = convertMoney(-$last_totalbill);
-	$sTempMoney = $LDTru.' '.$sTempMoney;
+    $sTempMoney = convertMoney(-$last_totalbill);
+    $sTempMoney = $LDTru.' '.$sTempMoney;
 }
 $smarty->assign('money_total_Reader',$sTempMoney);
 
@@ -382,7 +380,7 @@ $smarty->assign('money_total_Reader',$sTempMoney);
 //$sTempMoney = convertMoney($discount);
 //$smarty->assign('money_discount_Reader',$sTempMoney);
 
-$amtwithdisc = $last_totalbill-$discount; 
+$amtwithdisc = $last_totalbill-$discount;
 //$totalbill-($discount*$totalbill/100);
 //$smarty->assign('LDAmountAfterDiscount', $LDAmountAfterDiscount);
 //$smarty->assign('afterdisc', number_format($amtwithdisc));
@@ -414,8 +412,8 @@ $smarty->assign('sHiddenInputs','<input type="hidden" name="patientno" value="'.
 							      <input type="hidden" name="sid" value="'. $sid .'">');
 
 /**
-* show Template
-*/
+ * show Template
+ */
 $smarty->assign('sMainBlockIncludeFile','ecombill/bill_payment_header.tpl');
 
 $smarty->display('common/mainframe.tpl');

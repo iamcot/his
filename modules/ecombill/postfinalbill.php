@@ -35,6 +35,7 @@ $ybr=date(Y)-$actMil;
 
 
 //check for empty set
+
 if($cntergebnis !=0) {
 	$result=$ergebnis->FetchRow();
 	$receipt_no=$result['payment_receipt_no'];

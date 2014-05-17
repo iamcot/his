@@ -181,7 +181,7 @@ if($batchrows) $sTitle = $sTitle." (".$batch_nr.")";
   # Create button to view results
 
  $smarty->assign('pbAux1',"javascript:viewallresults()");
- $smarty->assign('gifAux1',createLDImgSrc($root_path,'showreport.gif','0')); 
+ $smarty->assign('gifAux1',createLDImgSrc($root_path,'showreport.gif','0'));
 
 $smarty->assign('sOnLoadJs','onLoad="if (window.focus) window.focus();"');
 
@@ -291,7 +291,7 @@ require('includes/inc_test_request_lister_fx.php');
 	<form name="form_test_request" method="post" action="<?php echo $thisfile ?>" onSubmit="return chkForm(this)">
 <!-- 		<input type="image" <?php echo createLDImgSrc($root_path,'savedisc.gif','0') ?>  title="<?php echo $LDSaveEntry ?>" onclick="saveResult();">
 			<a href="#" onclick="saveDone();"><img <?php echo createLDImgSrc($root_path,'done.gif','0') ?> alt="<?php echo $LDEnterResult ?>"></a> -->
-		
+
 		<input type="image" <?php echo createLDImgSrc($root_path,'savedisc.gif','0') ?>  title="<?php echo $LDSaveEntry ?>">
   <a href="<?php echo 'labor_test_findings_'.$subtarget.'.php?sid='.$sid.'&lang='.$lang.'&batch_nr='.$batch_nr.'&pn='.$pn.'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin.'&tracker='.$tracker.'&mode=done'; ?>"><img <?php echo createLDImgSrc($root_path,'enter_result.gif','0') ?> alt="<?php echo $LDEnterResult ?>"></a>
 
@@ -414,7 +414,7 @@ require('includes/inc_test_request_lister_fx.php');
   </tr>
 </table> 
 <p>
-		<input type="image" <?php echo createLDImgSrc($root_path,'savedisc.gif','0') ?>  title="<?php echo $LDSaveEntry ?>"> 
+		<input type="image" <?php echo createLDImgSrc($root_path,'savedisc.gif','0') ?>  title="<?php echo $LDSaveEntry ?>">
 		<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut ?>"></a>
 		<a href="<?php echo 'labor_test_findings_'.$subtarget.'.php?sid='.$sid.'&lang='.$lang.'&batch_nr='.$batch_nr.'&pn='.$pn.'&target='.$target.'&subtarget='.$subtarget.'&user_origin='.$user_origin.'&tracker='.$tracker.'&mode=done'; ?>"><img <?php echo createLDImgSrc($root_path,'enter_result.gif','0') ?> alt="<?php echo $LDEnterResult ?>"></a>
 

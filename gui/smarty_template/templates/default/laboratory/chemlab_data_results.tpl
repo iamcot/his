@@ -26,15 +26,15 @@
 						</tr>
 					</tbody>
 					</table>
-				
-					<table cellspacing=1 cellpadding=1 width="100%"  bgcolor=#ffdddd >
+
+					<table cellspacing=1 cellpadding=1 bgcolor=#ffdddd >
 					<tbody>
 						<tr>
 							<td colspan="2" style="color: white; background-color: red; font-weight: bold;">{{$sParamGroup}}</td>
 						</tr>
 						<tr>
 							<td colspan="2">
-							
+
 								{{* Table block for the parameters *}}
 								<table cellpadding=0 cellspacing=1>
 								<tbody>
@@ -54,7 +54,7 @@
 					{{$sSaveParamHiddenInputs}}
 					{{$sSelectGroupHiddenInputs}}
 				</form>
-				
+
 				{{* Block for parameter group select box *}}
 <!--				<form {{$sFormAction}} method=post onSubmit="return chkselect(this)" name="paramselect">
 					<table>
@@ -70,7 +70,7 @@
 					</tbody>
 					</table>
 					{{$sSelectGroupHiddenInputs}}
-				</form> -->
+				</form>
 
 	  </td>
       <td width="20%">
@@ -103,7 +103,7 @@
 					</tr>
 				</tbody>
 			</table>
-	  </td>
+	  </td> -->
     </tr>
   </tbody>
 </table>

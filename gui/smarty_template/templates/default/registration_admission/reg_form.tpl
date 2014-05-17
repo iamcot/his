@@ -21,9 +21,9 @@
 					</td>
 					<td class="adm_input">
 						{{$pid}}
-						 
+
 						{{$sBarcodeImg}}
-					</td>					
+					</td>
 					<td {{$sPicTdRowSpan}} class="photo_id" align="center" style="width:330px;" colspan=2>
 						<a href="#"  onClick="showpic(document.aufnahmeform.photo_filename)"><img {{$img_source}} name="headpic"></a>
 						<br>
@@ -370,6 +370,7 @@
 				<td class="adm_input">
 					{{$sRegByInput}}
 				</td>
+			</tr>
 		</table>
 
 		{{$sHiddenInputs}}

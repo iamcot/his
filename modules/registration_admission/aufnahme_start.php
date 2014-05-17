@@ -325,6 +325,7 @@ if($pid!='' || $encounter_nr!=''){
 						//add 0310 - cot, benh nhan tiep nhan ngoai tru tu dong chuyen vao khoa
 						if($_POST['encounter_class_nr'] == 2)
 							$encounter_obj->assignInDept($encounter_nr,$_POST['current_dept_nr'],$_POST['current_dept_nr'],date("Y-m-d"),date("H:i:s"));
+                       // $encounter_obj->assignInDept($encounter_nr,$_POST['current_dept_nr'],$_POST['current_dept_nr']);
 						//insert encounter transfer
 						$encounter_transfer = array(
 												"nr" => "",

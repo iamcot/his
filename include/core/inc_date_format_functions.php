@@ -137,7 +137,7 @@ function formatShortDate2Local($month,$day,$localFormat,$sepChars=null)
 
 function formatDate2STD($localDate,$localFormat,&$sepChars=null)
 {
-	if(strlen($localDate)>4){
+    if(strlen($localDate)>4){
    $finalDate=0;
    $localFormat=strtolower($localFormat);
 
@@ -148,7 +148,6 @@ function formatDate2STD($localDate,$localFormat,&$sepChars=null)
    
    if(!$finalDate)
    {
-     
 	 for($i=0;$i<sizeof($sepChars);$i++)
 	 {
         if(strchr($localDate,$sepChars[$i]))

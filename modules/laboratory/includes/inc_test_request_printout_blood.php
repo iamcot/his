@@ -429,6 +429,20 @@ for($n=0;$n<8;$n++)
 
 	</tr>	
 	
+	<tr>
+		<td colspan=10 align="right"><div class=fva2_ml10>
+			<font face="courier" size=3 color="red"><b>
+			<?php
+				if($status_bill){
+					echo $LDDaThanhtoan;
+				}else{
+					echo $LDChuaThanhToan;
+				}
+			?>
+			</b></font>
+		</td>
+	</tr>
+	
 	</table>
 	
 <!--  The test parameters begin  -->

@@ -182,13 +182,20 @@ $tpdf->SetX(135);
 $tpdf->Cell(60,5,'Ngày........tháng........năm........',0,1,'R');
 $tpdf->SetFont('','B');
 $tpdf->SetX(135);
+/*
 $tpdf->Cell(64,5,'BÁC SĨ CHUYÊN KHOA',0,1,'C');
 $tpdf->SetX(135);
 $tpdf->Cell(0,25,' ',0,1,'C');
 $tpdf->SetFont('','');
 $tpdf->SetX(135);
-$tpdf->Cell(60,5,'Họ tên:.....................................',0,1,'R');
-
+$tpdf->Cell(60,5,'Họ tên:.....................................',0,1,'R');   */
+// ĐÃ SỬA
+$tpdf->Cell(64,5,'BÁC SĨ CHUYÊN KHOA',0,1,'C');
+$tpdf->SetX(135);
+$tpdf->Cell(0,25,' ',0,1,'C');
+$tpdf->SetFont('DejaVu','',11);
+$tpdf->SetX(135);
+$tpdf->Cell(0,5,'Họ tên: '.$encounter_dientim['results_doctor'],0,1,'R');
 
 //-----------------------Page2-------------------------------------
 $tpdf->AddPage();

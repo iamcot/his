@@ -147,7 +147,7 @@ function FinishPres(issue_id)
 		alert('<?php echo $LDIssueNotFound; ?>');
 		return false;
 	}
-		
+
 	var r=confirm("<?php echo $LDGiveMedicineIssue; ?>");
 	if (r==true) {
 		document.form_test_request.action="includes/inc_issuepaper_medipot_statusfinish.php?issue_id="+ issue_id+"&radiovalue=<?php echo $radiovalue; ?>&user_origin=<?php echo $user_origin; ?>";

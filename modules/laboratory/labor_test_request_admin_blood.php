@@ -1,3 +1,4 @@
+
 <?php
 error_reporting ( E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR );
 require ('./roots.php');
@@ -12,7 +13,8 @@ require ($root_path . 'include/core/inc_environment_global.php');
  */
 
 /* Start initializations */
-$lang_tables = array ('departments.php');
+$lang_tables[]='departments.php';
+$lang_tables[]='billing.php';
 define ( 'LANG_FILE', 'konsil.php' );
 
 /* We need to differentiate from where the user is coming:
@@ -104,7 +106,8 @@ switch ($mode) {
 				 $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql, date('Y-m-d H:i:s'));
 			signalNewDiagnosticsReportEvent ( '', 'labor_test_request_printpop.php' );
 			header ( "location:" . $thisfile . URL_REDIRECT_APPEND . "&edit=$edit&pn=$pn&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize" );
-			exit ();
+
+            exit ();
 		} else {
 			echo "<p>$sql<p>$LDDbNoSave";
 			$mode = "";
@@ -131,6 +134,24 @@ if (!$mode) {/* Get the pending test requests */
 	} else {
 		echo "<p>$sql<p>$LDDbNoRead";
 		exit ();
+	}
+//	$sql1 = "SELECT bill.bill_item_status, bill.bill_item_code
+//			FROM care_test_request_" . $subtarget . " AS req
+//			INNER JOIN care_billing_bill_item AS bill ON req.encounter_nr=bill.bill_item_encounter_nr AND DATE(req.send_date)=DATE(bill.bill_item_date) AND bill.bill_item_code='CTM'
+//			WHERE (req.status='pending' OR req.status='') AND req.batch_nr=$batch_nr";
+    $sql1="SELECT TR.batch_nr,TR.encounter_nr,TR.send_date,BB.bill_item_status
+          FROM care_test_request_" . $subtarget . " AS TR
+          JOIN care_billing_bill_item AS BB ON TR.encounter_nr = BB.bill_item_encounter_nr
+          WHERE BB.bill_item_code='CTM'
+          AND DATE(BB.bill_item_date)=DATE(TR.send_date)
+          AND HOUR(BB.bill_item_date)=HOUR(TR.send_date)
+          AND MINUTE(BB.bill_item_date)=MINUTE(TR.send_date)
+          AND TR.batch_nr=".$batch_nr."
+          GROUP BY TR.batch_nr
+          ";
+	if ($requests1 = $db->Execute ( $sql1 )) {
+		$bill = $requests1->FetchRow ();
+		$status_bill=$bill['bill_item_status'];
 	}
 	$mode = "show";
 }
@@ -347,11 +368,11 @@ if ($batchrows) {
 	?>
 		</td>
 		<!-- right block for the form -->
-		<td><!-- Here begins the form  --> <a href="javascript:printOut()"><img
+		<td><!-- Here begins the form  --> <!--<a href="javascript:printOut()"><img
 			<?php
 	echo createLDImgSrc ( $root_path, 'printout.gif', '0', 'absmiddle' )?>
 			alt="<?php
-	echo $LDPrintOut?>"></a><a
+	echo $LDPrintOut?>"></a>--><a
 			href="<?php
 	echo 'labor_datainput_blood.php' . URL_APPEND . '&encounter_nr=' . $pn . '&job_id=' . $batch_nr . '&mode=' . $mode . '&update=0&user_origin=lab_mgmt';
 	?>"><img
@@ -371,11 +392,11 @@ if ($batchrows) {
 	require_once ('includes/inc_test_request_printout_blood.php');
 	?>
 
-     <a href="javascript:printOut()"><img
+    <!-- <a href="javascript:printOut()"><img
 			<?php
 	echo createLDImgSrc ( $root_path, 'printout.gif', '0', 'absmiddle' )?>
 			alt="<?php
-	echo $LDPrintOut?>"></a><a
+	echo $LDPrintOut?>"></a>--><a
 			href="<?php
 	echo 'labor_datainput_blood.php' . URL_APPEND . '&encounter_nr=' . $pn . '&job_id=' . $batch_nr . '&mode=' . $mode . '&update=1&user_origin=lab_mgmt';
 	?>"><img

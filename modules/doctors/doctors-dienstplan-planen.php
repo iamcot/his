@@ -25,7 +25,7 @@ if(!isset($dept_nr)||!$dept_nr){
 
 $thisfile=basename(__FILE__);
 $breakfile="doctors-dienstplan.php".URL_APPEND."&dept_nr=$dept_nr&pmonth=$pmonth&pyear=$pyear&retpath=$retpath";
-$role_nr = ROLE_NR_DOCTOR;//bsi role nr = 15
+
 require_once($root_path.'include/care_api_classes/class_department.php');
 $dept_obj=new Department;
 $dept_obj->preloadDept($dept_nr);
@@ -129,12 +129,12 @@ if($dblink_ok)
 					
 					
 					$ref_buffer['dept_nr']=$dept_nr;
-					$ref_buffer['role_nr']=$role_nr;//bác sĩ trực sẵn sàng 15
+					$ref_buffer['role_nr']=15;//bác sĩ trực sẵn sàng
 					$ref_buffer['year']=$pyear;
 					$ref_buffer['month']=$pmonth;
 					$ref_buffer['modify_id']=$_SESSION['sess_user_name'];
 					
-					if($dpoc_nr=$pers_obj->DOCDutyplanExists($dept_nr,$role_nr,$pyear,$pmonth)){
+					if($dpoc_nr=$pers_obj->DOCDutyplanExists($dept_nr,$pyear,$pmonth)){
 						$ref_buffer['history']=$pers_obj->ConcatHistory("Update: ".date('Y-m-d H:i:s')." = ".$_SESSION['sess_user_name']."\n");
 						$ref_buffer['modify_time']=date('YmdHis');
 						
@@ -142,7 +142,7 @@ if($dblink_ok)
 						$pers_obj->setDataArray($ref_buffer);
                                   //$dpoc_nr= mã nhân viên
 						if($pers_obj->updateDataFromInternalArray($dpoc_nr)){
-						$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, str_replace("\"","\'",$pers_obj->getLastQuery()), date('Y-m-d H:i:s'));
+						$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, str_replace("\"","\'",$pers_obj->getLastQuery()), date('Y-m-d H:i:s'));		
 							# Remove the cache plan
 							if(date('Yn')=="$pyear$pmonth"){
 								$pers_obj->deleteDBCache('DOCS_'.date('Y-m-d'));
@@ -177,7 +177,7 @@ if($dblink_ok)
 		 }// end of if(mode==save)
 		 else
 		 {
-		 	if($dutyplan=&$pers_obj->getDOCDutyplan($dept_nr,$role_nr,$pyear,$pmonth)){
+		 	if($dutyplan=&$pers_obj->getDOCDutyplan($dept_nr,$pyear,$pmonth)){
 			
 				$aelems=unserialize($dutyplan['duty_1_txt']);
 				//var_dump($dutyplan['duty_1_txt']);
@@ -307,7 +307,7 @@ function delRow(mode,i,num)
   //alert(lastRow);
  
 if (lastRow >= num) tbl.deleteRow(num-1);
-document.getElementById("h"+mode+i+"_"+(num-1)).innerHTML="";
+document.getElementById("h"+mode+i+"_"+(num-1))="";
 }
 
 function killchild()

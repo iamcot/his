@@ -441,7 +441,25 @@ $insurance_obj=new Insurance;
 		$this->smarty->assign('sInsExpDayInput','');
 		}else{
 		$this->smarty->assign('sInsExpDayInput',@formatDate2Local($insurance_exp,$date_format));
+		if((substr($insurance_exp,0,4))< (date("Y"))){
+		$this->smarty->assign('error',True);		
+		}elseif(((substr($insurance_exp,0,4))==(date("Y")))){
+			if((substr($insurance_exp,5,2))<(date("m"))){
+			$this->smarty->assign('error',True);
+			}elseif((substr($insurance_exp,5,2))==(date("m"))){
+				if((substr($insurance_exp,8,2))<(date("d"))){
+				$this->smarty->assign('error',True);
+				}else{
+				$this->smarty->assign('error',false);	
+				}
+			}else{
+			$this->smarty->assign('error',false);	
+			}
+		}else{
+		$this->smarty->assign('error',false);	
 		}
+		}
+		$this->smarty->assign('LDexp','Bảo hiểm đã hết hạn vui lòng cập nhật');
 		$this->smarty->assign('LDNoicap',$LDNoicap);
 		$this->smarty->assign('insurance_loca',$insurance_local);
 		

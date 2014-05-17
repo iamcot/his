@@ -441,31 +441,34 @@ echo '
 		</tr>	
 
 
-	
+
 	<tr bgcolor="<?php echo $bgc1 ?>">
 		<td colspan=2 align="right"><div class=fva2_ml10><font color="#000099">
 		 <?php echo $LDDate .":";
-		 
-		if($stored_request['send_date']=='') 
-			$stored_request['send_date']=date('Y-m-d'); 
+
+		if($stored_request['send_date']=='')
+			$stored_request['send_date']=date('Y-m-d');
 
 				  		//gjergji : new calendar
 		require_once ('../../js/jscalendar/calendar.php');
 		$calendar = new DHTML_Calendar('../../js/jscalendar/', $lang, 'calendar-system', true);
 		$calendar->load_files();
 		//end : gjergji
-		
+
 		echo $calendar->show_calendar($calendar,$date_format,'send_date',$stored_request['send_date']);
 		//end gjergji
 
-			
+
  		echo $LDRequestingDoc ?>:
-<!-- gốc		<input type="text" name="send_doctor" size=40 maxlength=40 value="--><?php //echo $_SESSION['sess_user_name']; ?><!--"></div><br>-->
+<!-- g?c		<input type="text" name="send_doctor" size=40 maxlength=40 value="--><?php //echo $_SESSION['sess_user_name']; ?><!--"></div><br>-->
         <input type="text" name="send_doctor" size=37 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['send_doctor'];else echo $pers_name;?>">
         <input type="hidden" name="send_doctor_nr" value="<?php if(!empty( $stored_request['send_doctor_nr'])) echo $stored_request['send_doctor_nr'];else echo $pers_nr; ?>"> <a href="javascript:popDocPer('doctor_nr','send_doctor_nr','send_doctor')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
+
+
 		</td>
+
     </tr>
-	
+
 	
 		
 	

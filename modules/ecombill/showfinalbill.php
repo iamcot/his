@@ -28,7 +28,7 @@ $patqry="SELECT e.*,p.* FROM care_encounter AS e, care_person AS p WHERE e.encou
 $resultpatqry=$db->Execute($patqry);
 if(is_object($resultpatqry)) $patient=$resultpatqry->FetchRow();
 else $patient=array();
-
+$mh = $patient['muchuong'];
 $in_out = $patient['encounter_class_nr'];					//noi tru hay ngoai tru
 if($in_out==1) $in_out_patient=$LDInPatient;
 else $in_out_patient=$LDOutPatient;
@@ -226,12 +226,18 @@ if(is_object($paymentresult)) $payment=$paymentresult->FetchRow();
 ?>
 
 <script language="javascript">
+
 function printOut()
 {
 	urlholder="<?php echo $root_path;?>modules/pdfmaker/tamung/congkhaithuoc_vienphi.php<?php echo URL_APPEND; ?>&finalbill_id=<?php echo $final['final_bill_no']; ?>&patientno=<?php echo $patientno; ?>";
 	testprintpdf=window.open(urlholder,"PhieuCongKhaiThuocVaVienPhi","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
-	
 }
+/*
+function printOut()
+{
+    urlholder="<?php echo $root_path;?>modules/pdfmaker/tamung/tongkethoadon_pdf.php<?php echo URL_APPEND; ?>&finalbill_id=<?php echo $final['final_bill_no']; ?>&patientno=<?php echo $patientno; ?>";
+    testprintpdf=window.open(urlholder,"phieutongkethoadon","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
+}  */
 </script>
 <?php 
 $sTemp = ob_get_contents();
@@ -248,7 +254,122 @@ $smarty->append('JavaScript',$sTemp);
  $smarty->assign('LDEnterPriceUnit',$LDEnterPriceUnit);
  $smarty->assign('LDSumCost',$LDSumCost); 
  $smarty->assign('LDEncouterNumberNow', $LDEncouterNumberNow);
- 
+// nang sửa
+//Lay tat ca thuoc da phat cho benh nhan
+$tongtienthuoc=0;
+$tongtienBHYT=0;
+$tongtienthanhtoan=0;
+//Neu noi tru (group_pres=1)
+$pres_noitru = "SELECT iss.*, sum(iss.number) AS sum, prs.product_name, prs.note AS unit, prs.cost
+					FROM care_pharma_prescription_issue AS iss, care_pharma_prescription AS prs
+					WHERE iss.enc_nr='".$patientno."' AND prs.prescription_id=iss.pres_id AND prs.product_encoder=iss.product_encoder
+					GROUP BY iss.product_encoder, iss.date_issue
+					ORDER BY iss.product_encoder, iss.date_issue";
+
+$list_item = array();
+$list_date = array();
+$k=0;
+$list_name = array();
+$list_info = array();
+if($pres_item_noitru=$db->Execute($pres_noitru)){
+    for($i=0;$i<$pres_item_noitru->RecordCount();$i++){
+        $item = $pres_item_noitru->FetchRow();
+        $list_item[$item['product_encoder']][$item['date_issue']]= $item['number'];
+        if(!in_array($item['date_issue'], $list_date)){
+            $k++;
+            $list_date[$k]=$item['date_issue'];
+        }
+        if(!in_array($item['product_encoder'],$list_name)){
+            $list_info[$item['product_encoder']]['name']=$item['product_name'];
+            $list_info[$item['product_encoder']]['unit']=$item['unit'];
+            $list_info[$item['product_encoder']]['cost']=$item['cost'];
+        }
+    }
+}
+$stt=1;
+ob_start();
+//In dong ngay (co 7 cot)
+echo '<tr><td colspan="3"></td><td><table width="100%"><tr>';
+//	foreach ($list_date as $d) {
+//		echo '<td align="center">'.formatDate2Local($d,'dd/mm/yyyy').'</td>';
+//	}
+echo '</tr></table></td><td colspan="3"></td></tr>';
+//In cac dong thuoc chi tiet
+foreach ($list_item as $x => $v) {
+    // $x: encoder, $v['date_issue'] = number
+    echo '<tr><td>'.$list_info[$x]['name'].' </td>';
+    echo '<td align="center">'.$list_info[$x]['unit'].'</td>'; //<td><table width="100%"><tr>
+    $tongthuoc=0;
+    foreach ($list_date as $v1) {
+        //echo '<td align="center">'.$v[$v1].'</td>';
+        $tongthuoc += $v[$v1];
+    }
+    $tongtienthuoc = $tongthuoc*$list_info[$x]['cost'];
+    //</tr></table></td>
+    //  echo '<td align="right">'.$tongthuoc.'</td><td align="right">'.number_format($list_info[$x]['cost']).'</td><td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']).'</td></tr>';
+    //nang
+
+        $tongtienBHYT = $tongthuoc*$list_info[$x]['cost']*$mh ;
+    // $tongtienBHYT = $tongthuoc*$list_info[$x]['cost']*$muchuong; // tinh so tien BHYT gi?m  v?n ch?a xác ??nh ?c ph?n tr?m gi?m
+    $tongtienkhac = '';
+    $tongtienthanhtoan = $tongtienthuoc - $tongtienBHYT; // tính so tien benh nhan can tra
+    echo '<td align="center">'.$tongthuoc.'</td><td align="right">'.number_format($list_info[$x]['cost']).'</td><td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']).'<td align="right">'.$tongtienBHYT.'<td align="right">'.$tongtienkhac.'<td align="right">'.$tongtienthanhtoan.'</td></tr>';
+    /////////////////
+    $stt++;
+}
+$sTempPres = $sTempPres.ob_get_contents();
+ob_end_clean();
+
+
+//Neu ngoai tru (group_pres=0)
+$presqry="SELECT prs.*,prsinfo.date_time_create,prsinfo.sum_date
+			FROM care_pharma_prescription AS prs, care_pharma_prescription_info AS prsinfo, care_pharma_type_of_prescription AS tp
+			WHERE prsinfo.encounter_nr='$patientno' AND prsinfo.prescription_id=prs.prescription_id
+			AND prsinfo.prescription_type=tp.prescription_type
+			AND prsinfo.status_finish=1 AND tp.group_pres=0
+			ORDER BY prs.prescription_id";
+$presresult=$db->Execute($presqry);
+if(is_object($presresult))
+{
+    if($presresult->RecordCount()>0)
+    {
+        for ($i=0;$i<$presresult->RecordCount();$i++)
+        {
+            $pres=$presresult->FetchRow();
+            $end = date("d/m/Y", strtotime($pres['date_time_create'] . "+".($pres['sum_date']-1)." day"));
+
+            //$smarty->assign('LDItemNr',$stt);
+            $smarty->assign('LDItemPrescriptionName',$pres['product_name']);
+            $smarty->assign('LDItemUnit',$pres['note']);
+            //$smarty->assign('LDItemDate',formatDate2Local($pres['date_time_create'],$date_format).' - '.$end.' ('.$pres['sum_date'].' '.$LDdate.')');
+            $smarty->assign('LDItemSumUnit',$pres['sum_number']);
+            $smarty->assign('LDItemEnterPriceUnit',($pres['cost']));
+            $smarty->assign('LDItemSumCost',number_format($pres['cost']*$pres['sum_number']));
+            if($muchuong!=0){
+                $smarty->assign('LDItemSumCostBHYT',number_format($pres['cost']*$pres['sum_number']*$muchuong));   //nang
+                $smarty->assign('LDItemSumCostKhac','');//nang
+                $smarty->assign('LDItemSumCostTra',number_format($pres['cost']*$pres['sum_number'] - $pres['cost']*$pres['sum_number']*$muchuong)); //nang
+            }   else{
+                $smarty->assign('LDItemSumCostBHYT',number_format($pres['cost']*$pres['sum_number']*$mh));   //nang
+                $smarty->assign('LDItemSumCostKhac','');//nang
+                $smarty->assign('LDItemSumCostTra',number_format($pres['cost']*$pres['sum_number'] - $pres['cost']*$pres['sum_number']*$mh)); //nang
+            }
+            $tongtienthuoc += ($pres['cost']*$pres['sum_number']);
+            $tongtienBHYT += ($pres['cost']*$pres['sum_number'])*$mh;
+            $tongtienkhac = '';
+            $tongtienthanhtoan += $tongtienthuoc - $tongtienBHYT;
+            $stt++;
+            ob_start();
+            $smarty->display('ecombill/showfinalbill_pres_line.tpl');
+            $sTempPres = $sTempPres.ob_get_contents();
+            ob_end_clean();
+        }  }}
+if($sTempPres!='')
+    $smarty->assign('ItemPres',$sTempPres);
+else
+    $smarty->assign('ItemPres','<tr><td align="center" colspan="7">'.$LDNoPres.'</td></tr>');
+
+  /*
  //Lay tat ca toa thuoc cua benh nhan
  $presqry="SELECT prs.*,prsinfo.date_time_create,prsinfo.sum_date FROM care_pharma_prescription AS prs, care_pharma_prescription_info AS prsinfo WHERE prsinfo.encounter_nr='$patientno' AND prsinfo.prescription_id=prs.prescription_id ORDER BY prs.prescription_id";
  $presresult=$db->Execute($presqry);
@@ -268,8 +389,15 @@ $smarty->append('JavaScript',$sTemp);
 			$smarty->assign('LDItemSumUnit',$pres['sum_number']); 
 			$smarty->assign('LDItemEnterPriceUnit',number_format($pres['cost']));
 			$smarty->assign('LDItemSumCost',number_format($pres['cost']*$pres['sum_number']));
-			
-			ob_start();
+            $smarty->assign('LDItemSumCostBHYT',number_format($pres['cost']*$pres['sum_number']*$mh));
+            $smarty->assign('LDItemSumCostKhac','');//nang
+            $smarty->assign('LDItemSumCostTra',number_format($pres['cost']*$pres['sum_number'] - $pres['cost']*$pres['sum_number']*$mh)); //nang
+            $tongtienthuoc += ($pres['cost']*$pres['sum_number']);
+            $tongtienBHYT += ($pres['cost']*$pres['sum_number'])*$mh;
+            // tinh so tien BHYT gi?m  v?n ch?a xác ??nh ?c ph?n tr?m gi?m
+            $tongtienkhac = '';
+            $tongtienthanhtoan += $tongtienthuoc - $tongtienBHYT;
+            ob_start();
 			$smarty->display('ecombill/showfinalbill_pres_line.tpl');
 			$sTemp = $sTemp.ob_get_contents();
 			ob_end_clean();
@@ -277,7 +405,7 @@ $smarty->append('JavaScript',$sTemp);
 		$smarty->assign('ItemPres',$sTemp);
 	} else
 		$smarty->assign('ItemPres','<tr><td colspan="7">'.$LDNoPres.'</td></tr>');
-}
+}  */
 # Show info of Depot, Surgery, Laborator... 
  $smarty->assign('LDContent',$LDContent); 
  $smarty->assign('LDNumberOf',$LDNumberOf); 
@@ -296,8 +424,13 @@ $smarty->append('JavaScript',$sTemp);
 		$smarty->assign('LDItemNumberOf',$depot['sum_number']); 
 		$smarty->assign('LDItemUnitCost',$depot['cost']); 
 		$smarty->assign('LDItemSumCost',number_format($depot['cost']*$depot['sum_number']));
-		
-		ob_start();
+        $smarty->assign('LDItemSumCostBHYT',number_format($depot['cost']*$depot['sum_number']*$mh));
+        $smarty->assign('LDItemSumCostKhac','');//nang
+        $smarty->assign('LDItemSumCostTra',number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh)); //nang
+        $tongtienVTYT += $depot['cost']*$depot['sum_number'];
+        $tongtienVTYTBHYT += $depot['cost']*$depot['sum_number']*$mh;  //nang
+        $tongtienVTYTTra += $tongtienVTYT - $tongtienVTYTBHYT;               //nang
+        ob_start();
 		$smarty->display('ecombill/showfinalbill_other_line.tpl');
 		$sTempMed = $sTempMed.ob_get_contents();
 		ob_end_clean();
@@ -316,8 +449,13 @@ $smarty->append('JavaScript',$sTemp);
 		$smarty->assign('LDItemNumberOf',$depot['sum_number']); 
 		$smarty->assign('LDItemUnitCost',$depot['cost']); 
 		$smarty->assign('LDItemSumCost',number_format($depot['cost']*$depot['sum_number']));
-		
-		ob_start();
+        $smarty->assign('LDItemSumCostBHYT',number_format($depot['cost']*$depot['sum_number']*$mh));   //nang
+        $smarty->assign('LDItemSumCostKhac','');//nang
+        $smarty->assign('LDItemSumCostTra',number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh)); //nang
+        $tongtienHC += $depot['cost']*$depot['sum_number'];
+        $tongtienHCBHYT += $depot['cost']*$depot['sum_number']*$mh;    //nang
+        $tongtienHCTra += $tongtienHC - $tongtienHCBHYT;
+        ob_start();
 		$smarty->display('ecombill/showfinalbill_other_line.tpl');
 		$sTempMed = $sTempMed.ob_get_contents();
 		ob_end_clean();
@@ -342,8 +480,14 @@ else
 		$smarty->assign('LDItemNumberOf',$item['bill_item_units']); 
 		$smarty->assign('LDItemUnitCost',number_format($item['bill_item_unit_cost'])); 
 		$smarty->assign('LDItemSumCost',number_format($item['bill_item_units']*$item['bill_item_unit_cost']));
-		
-		if ($groupnr<=25){								//Xet nghiem 1->25
+        $smarty->assign('LDItemSumCostBHYT',number_format($item['bill_item_units']*$item['bill_item_unit_cost']*$mh));   //nang
+        $smarty->assign('LDItemSumCostKhac','');//nang
+        $smarty->assign('LDItemSumCostTra',number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*$mh)); //nang
+        $tongtienDichVu += $item['bill_item_units']*$item['bill_item_unit_cost'];
+        $tongtienDichVuBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*$mh;   //nang
+        $tongtienDichVuTra += $tongtienDichVu - $tongtienDichVuBHYT; //nang
+
+        if ($groupnr<=25){								//Xet nghiem 1->25
 			ob_start();
 			$smarty->display('ecombill/showfinalbill_other_line.tpl');
 			$sTempLabor = $sTempLabor.ob_get_contents();
@@ -439,13 +583,14 @@ else
 
 $resultfinalqry= $eComBill->billAmountByEncounter($patientno);
 if(is_object($resultfinalqry)) $cntbill=$resultfinalqry->FetchRow();
-
+$cntbill['total_amount'] = $tongtienthuoc + $tongtienVTYT + $tongtienHC + $tongtienDichVu;//nang
  $smarty->assign('LDTotal',$LDTotalFinalBill.': '); 
  $smarty->assign('LDTotalValue',number_format($cntbill['total_amount'])); 				//$final['final_total_bill_amount']
  $sTempMoney = convertMoney($cntbill['total_amount']);
  $smarty->assign('money_total_Reader',$sTempMoney);
- 
- $smarty->assign('LDDiscountonTotalAmount',$LDDiscountonTotalAmount); 
+$cntbill['total_discount'] += $tongtienBHYT + $tongtienVTYTBHYT + $tongtienHCBHYT + $tongtienDichVuBHYT;  //nang- tinh so tien dc giam BHYT
+
+$smarty->assign('LDDiscountonTotalAmount',$LDDiscountonTotalAmount);
  $smarty->assign('LDDiscountonTotalAmountValue',number_format($cntbill['total_discount'])); 			//$final['final_discount']
  $sTempMoney = convertMoney($cntbill['total_discount']);
  $smarty->assign('money_disc_Reader',$sTempMoney);
@@ -456,7 +601,7 @@ if(is_object($resultfinalqry)) $cntbill=$resultfinalqry->FetchRow();
  $smarty->assign('LDAmountAfterDiscountValue',number_format($discamt)); 
  $sTempMoney = convertMoney($discamt);
  $smarty->assign('money_afterdisc_Reader',$sTempMoney);
- 
+ /*
  $smarty->assign('LDAmountPreviouslyReceived',$LDAmountPreviouslyReceived);
  $smarty->assign('LDAmountPreviouslyReceivedValue',number_format($cntbill['total_outstanding']+$payment['sumcost']));
  $sTempMoney = convertMoney($cntbill['total_outstanding']+$payment['sumcost']);
@@ -519,7 +664,7 @@ if(is_object($resultfinalqry)) $cntbill=$resultfinalqry->FetchRow();
 	$sTempMoney = $LDTru.' '.$sTempMoney;
  }
  $smarty->assign('money_duelast_Reader',$sTempMoney);
- 
+ */
  //Show Button
 $smarty->assign('pbPrint','<a href="javascript:window.printOut();"><input type="image"  '.createLDImgSrc($root_path,'printout.gif','0','middle').'></a>');
 $smarty->assign('pbClose','<a href="'.$breakfile.'" ><img '.createLDImgSrc($root_path,'close2.gif','0').' title="'.$LDCancel.'" align="middle"></a>');

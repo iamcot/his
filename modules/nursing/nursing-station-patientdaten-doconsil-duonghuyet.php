@@ -12,6 +12,8 @@ require($root_path.'include/core/inc_environment_global.php');
 */
 $lang_tables[] = 'departments.php';
 define('LANG_FILE','konsil.php');
+require($root_path.'include/care_api_classes/class_ecombill.php');
+$eComBill = new eComBill;
 
 /* We need to differentiate from where the user is coming:
 *  $user_origin != lab ;  from patient charts folder
@@ -22,7 +24,7 @@ if($user_origin=='lab')
 {
   $local_user='aufnahme_user';
   if($target=="radio") $breakfile=$root_path.'modules/radiology/radiolog.php'.URL_APPEND;
-   else $breakfile=$root_path.'modules/laboratory/labor.php'.URL_APPEND; 
+  else $breakfile=$root_path.'modules/registration_admission/show_appointment_1.php'.URL_APPEND;
 }
 else
 {
@@ -146,7 +148,26 @@ $core = & new Core;
 									setEventSignalColor($pn,SIGNAL_COLOR_DIAGNOSTICS_REQUEST);									
 									
 									 header("location:".$root_path."modules/laboratory/labor_test_request_aftersave_visinh.php?sid=$sid&lang=$lang&edit=$edit&saved=insert&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&noresize=$noresize&batch_nr=$batch_nr");
-									 exit;
+
+                                      //billing
+                                      $sql10="SELECT batch_nr,encounter_nr,send_date FROM care_test_request_" . $db_request_table . " WHERE batch_nr=".$batch_nr."";
+                                      if ($temp10 = $db->Execute ( $sql10 )) {
+                                          $buf10 = $temp10->FetchRow ();
+                                          $bill_item_date=$buf10['send_date'];
+                                      }
+
+                                        $item_code_dh='DH';
+                                      $sql = "SELECT item_code,item_unit_cost FROM care_billing_item WHERE item_code= '$item_code_dh'";
+                                      $temp=$db->execute($sql);
+                                      if($temp->recordcount()){
+                                          $buf=$temp->fetchrow();
+//                                          $eComBill->createBillItem($pn, $buf['item_code'],$buf['item_unit_cost'], 1, $buf['item_unit_cost'],date("Y-m-d G:i:s") );
+//                                          $eComBill->createBillItem($pn, $buf['item_code'],$buf['item_unit_cost'], 1, $buf['item_unit_cost'],$bill_item_date );
+                                          $price= $eComBill->getPriceItemcode(ITEM_CODE_DH);
+                                          $eComBill->createBillItem($pn, ITEM_CODE_DH,$price, 1,$price,$bill_item_date );
+                                      }
+                                      //billing
+                                      exit;
 								  }
 								  else 
 								  {

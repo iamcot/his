@@ -642,7 +642,8 @@ for($n=0;$n<8;$n++)
 	 ?></td>
     <td  colspan=2><font size=1 color="#ee6666" face="verdana,arial"><?php 
 	
-	echo $LDDate.'&nbsp;';
+//	echo $LDDate.'&nbsp;';
+    echo 'Ngày Yêu cầu XN'.'&nbsp;';
     if($edit_findings)
 	 { 
 	    if($stored_findings['rec_date'] && $stored_findings['rec_date']!='0000-00-00')  //#147
