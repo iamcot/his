@@ -37,7 +37,7 @@ if($target=='nursing'){
 	$thisfile= basename(__FILE__).URL_APPEND;
 }
   //lay thong tin benh nhan xem noi tru hay ngoai tru -->nang
-$patqry="SELECT e.* FROM care_encounter AS e WHERE e.encounter_nr=$patnum";
+$patqry="SELECT e.* FROM care_encounter AS e WHERE e.encounter_nr=$patient_no";
 
 $resultpatqry=$db->Execute($patqry);
 if(is_object($resultpatqry)) $patient=$resultpatqry->FetchRow();
@@ -183,6 +183,7 @@ $aSubMenuText=array($LDMuchuong,
 					
 # Prepare the submenu item links indexed by their template tags
 $aSubMenuItem=array();
+
 $muchuong =0;
 
 //Nếu có cập nhật thì update
@@ -196,7 +197,7 @@ $temp = "select muchuong from care_encounter WHERE encounter_nr = $patient_no ";
 $temp1=$db->Execute($temp);
 if(is_object($temp1)){
     if($temp1->RecordCount()>0){
-        $temp2=$temp1->FetchRow();
+      $temp2=$temp1->FetchRow();
         $muchuong = $temp2['muchuong'] * 100;
 
     }

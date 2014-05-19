@@ -226,18 +226,18 @@ if(is_object($paymentresult)) $payment=$paymentresult->FetchRow();
 ?>
 
 <script language="javascript">
-
+ /*
 function printOut()
 {
 	urlholder="<?php echo $root_path;?>modules/pdfmaker/tamung/congkhaithuoc_vienphi.php<?php echo URL_APPEND; ?>&finalbill_id=<?php echo $final['final_bill_no']; ?>&patientno=<?php echo $patientno; ?>";
 	testprintpdf=window.open(urlholder,"PhieuCongKhaiThuocVaVienPhi","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
-}
-/*
+}  */
+
 function printOut()
 {
     urlholder="<?php echo $root_path;?>modules/pdfmaker/tamung/tongkethoadon_pdf.php<?php echo URL_APPEND; ?>&finalbill_id=<?php echo $final['final_bill_no']; ?>&patientno=<?php echo $patientno; ?>";
     testprintpdf=window.open(urlholder,"phieutongkethoadon","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
-}  */
+}
 </script>
 <?php 
 $sTemp = ob_get_contents();
