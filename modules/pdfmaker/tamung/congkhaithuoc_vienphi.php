@@ -1,6 +1,5 @@
 <?php
 error_reporting(E_COMPILE_ERROR|E_ERROR|E_CORE_ERROR);
-
 require('./roots.php');
 require_once($root_path.'include/core/inc_environment_global.php');
 //define('LANG_FILE','billing.php');

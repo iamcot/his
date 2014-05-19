@@ -184,27 +184,31 @@ $aSubMenuText=array($LDMuchuong,
 # Prepare the submenu item links indexed by their template tags
 $aSubMenuItem=array();
 $muchuong =0;
+
+//Nếu có cập nhật thì update
+if(isset($_POST['discount']))
+{
+    $muchuong = $_POST['discount']/100;
+    $Encounter->updateMuchuong($muchuong,$patientno);
+}
+
 $temp = "select muchuong from care_encounter WHERE encounter_nr = $patient_no ";
 $temp1=$db->Execute($temp);
 if(is_object($temp1)){
     if($temp1->RecordCount()>0){
         $temp2=$temp1->FetchRow();
         $muchuong = $temp2['muchuong'] * 100;
-        $Encounter->updateMuchuong($muchuong,$patientno);
+
     }
 }
 if(!$chkexists){
    $aSubMenuItem['LDMuchuong']='<form action="'.$returnfile.'" method="POST">
                              Mức hưởng(0%-100%):
                              <input type="text" id="discount" name="discount" value="'.$muchuong.'" size="10"> %
-                             <input type="submit" value="Xem" name="ok" id="save">';
+                             <input type="submit" value="Sửa" name="ok" id="save">';
 }
 
-if(isset($_POST['discount']))
-{
-    $muchuong = $_POST['discount']/100;
-    $Encounter->updateMuchuong($muchuong,$patientno);
-}
+
 if(!$chkexists && $is_discharged!=1) {
 	if($target=='nursing'){
 		$aSubMenuItem['LDSelectHospitalServices'] = '<a href="javascript:subHS()"">'.$LDSelectHospitalServices.'</a>';

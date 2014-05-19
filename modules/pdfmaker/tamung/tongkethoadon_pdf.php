@@ -1,12 +1,5 @@
 <?php
 error_reporting(E_COMPILE_ERROR|E_ERROR|E_CORE_ERROR);
-/**
- * eComBill 1.0.04 for Care2002 beta 1.0.04
- * (2003-04-30)
- * adapted from eComBill beta 0.2
- * developed by ecomscience.com http://www.ecomscience.com
- * GPL License
- */
 require('./roots.php');
 require($root_path.'include/core/inc_environment_global.php');
 $local_user='aufnahme_user';
@@ -35,6 +28,8 @@ $pdf->SetAutoPageBreak(TRUE, 3);
 
 // add a page: Trang 1
 $pdf->AddPage();
+
+ob_start();
 //Lay info Benh nhan
 $patqry="SELECT e.*,p.* FROM care_encounter AS e, care_person AS p WHERE e.encounter_nr=$patientno AND e.pid=p.pid";
 
@@ -657,25 +652,30 @@ $smarty->assign('money_duelast_Reader',$sTempMoney);
 
 //Hidden Input
 //$smarty->assign('sFormTag','<form name=confirmfrmfinal method="POST" action="postfinalbill.php">');
-$smarty->assign('sHiddenInputs','<input type="hidden" name="cleared" value="cleared">
-								<input type="hidden" name="patientno" value="'. $patientno .'">
-								<input type="hidden" name="lang" value="'. $lang .'">
-								<input type="hidden" name="final_bill_no" value="'. $final['final_bill_no'] .'">
-								<input type="hidden" name="sid" value="'. $sid . '">
-								<input type="hidden" name="full_en" value="'.$full_en .'">
-								<input type="hidden" name="target" value="'. $target .'">
-								<input type="hidden" name ="muchuong" value="'.$muchuong.'" >');
+//$smarty->assign('sHiddenInputs','<input type="hidden" name="cleared" value="cleared">
+//								<input type="hidden" name="patientno" value="'. $patientno .'">
+//								<input type="hidden" name="lang" value="'. $lang .'">
+//								<input type="hidden" name="final_bill_no" value="'. $final['final_bill_no'] .'">
+//								<input type="hidden" name="sid" value="'. $sid . '">
+//								<input type="hidden" name="full_en" value="'.$full_en .'">
+//								<input type="hidden" name="target" value="'. $target .'">
+//								<input type="hidden" name ="muchuong" value="'.$muchuong.'" >');
 /**
  * show Template
  */
 
 # Assign the page template to mainframe block
-$smarty->assign('sMainBlockIncludeFile','ecombill/showfinalbill.tpl');
-
+$smarty->display('ecombill/showfinalbill.tpl');
 # Show main frame
-$smarty->display('common/mainframe.tpl');
+//$smarty->display('common/mainframe.tpl');
 
-$pdf->lastPage();
+$content = ob_get_contents();
+ob_clean();
+ob_flush();
+
+
+$pdf->writeHTML($content);
+//$pdf->lastPage();
 //Close and output PDF document
 $pdf->Output('phieutongkethoadon.pdf', 'I');
 
