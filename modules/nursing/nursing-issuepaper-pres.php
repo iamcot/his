@@ -155,17 +155,19 @@ if($target=='pres')
 		$condition.=' AND prs.dept_nr='.$dept_nr.' ';
 	
 	$sql=	"SELECT prs.*, enc.current_room_nr,
-					per.name_first, per.name_last, per.sex, tp.typeput   
-			FROM care_pharma_prescription_info AS prs, care_pharma_type_of_prescription AS tp, care_encounter AS enc, care_person AS per 
+					per.name_first, per.name_last, per.sex, tp.typeput
+
+			FROM care_pharma_prescription_info AS prs
+			LEFT JOIN care_pharma_type_of_prescription AS tp ON prs.prescription_type = tp.prescription_type
+              LEFT JOIN care_encounter AS enc ON prs.encounter_nr = enc.encounter_nr
+              LEFT JOIN care_person AS per ON per.pid = enc.pid
+              LEFT JOIN care_ward AS w ON w.nr = prs.ward_nr
 			WHERE prs.status_finish='0' 
 				AND prs.in_issuepaper='0' 
-				AND prs.encounter_nr=enc.encounter_nr 
-				".$condition." 
-				AND prs.prescription_type = tp.prescription_type
-				AND tp.group_pres='1' AND prs.total_cost>0 
-				AND per.pid=enc.pid 
+				".$condition."
+				AND w.ward_id!='PM'
 				ORDER BY enc.current_room_nr, prs.prescription_id ";
-					
+	//echo $sql;
 	if($listpres=$db->Execute($sql))
 	{
 		$count = $listpres->RecordCount();

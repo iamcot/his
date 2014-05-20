@@ -71,7 +71,7 @@ switch ($mode) {
 						modify_id = '" . $_SESSION ['sess_user_name'] . "',
 						modify_time = '" . date ( 'YmdHis' ) . "'
 				WHERE batch_nr = '" . $batch_nr . "'";
-		
+
 		if ($ergebnis = $enc_obj->Transact ( $sql )) {
 			include_once ('includes/inc_diagnostics_report_fx.php');
 			//echo $sql;
@@ -88,33 +88,15 @@ switch ($mode) {
 			if($result_tests = $lab_obj->GetTestsToDo($batch_nr))
 				{
 				$para_array=array();
-				//$temp_array=array('_nit__urine','_leu__urine','_uro__urine','_pro__urine','_ph__urine','_blo__urine','_ket__urine','_bil__urine','_glu__urine','_sg__urine');
-				/*	while($row_tests = $result_tests->FetchRow()) {
-					 $sql2="select tp.bill_item_nr, bi.item_unit_cost from care_test_param as tp left join care_billing_item as bi on (tp.bill_item_nr=bi.item_code) where tp.id='".$row_tests['paramater_name']."'";
-						//echo $sql2;
-						$para_array[]=$row_tests['paramater_name'];
-						//var_dump($row_tests);
-					
-						$temp=$db->execute($sql2);
-						if($temp->recordcount()){
-						  $buf=$temp->fetchrow();
-						  $eComBill->createBillItem($pn, $buf['bill_item_nr'],$buf['item_unit_cost'], 1, $buf['item_unit_cost'],date("Y-m-d G:i:s") );
-						}
-					}
-					//var_dump($para_array);
-					if((in_array('_nit__urine',$para_array))&&(in_array('_leu__urine',$para_array))&&(in_array('_uro__urine',$para_array))&&(in_array('_pro__urine',$para_array))&&(in_array('_ph__urine',$para_array))&&(in_array('_blo__urine',$para_array))&&(in_array('_ket__urine',$para_array))&&(in_array('_bil__urine',$para_array))&&(in_array('_glu__urine',$para_array))&&(in_array('_sg__urine',$para_array))){
-					//echo 'is_array';
-					$eComBill->createBillItem($pn, 'NT','35000', 1, '35000',date("Y-m-d G:i:s") );
-					} */
-				}
-			signalNewDiagnosticsReportEvent ( '', 'labor_test_request_printpop.php' );
-			header ( "location:" . $thisfile . URL_REDIRECT_APPEND . "&edit=$edit&pn=$pn&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize" );
-			exit ();
-		} else {
-			echo "<p>$sql<p>$LDDbNoSave";
-			$mode = "";
-		}
-		break;
+            }
+            signalNewDiagnosticsReportEvent ( '', 'labor_test_request_printpop.php' );
+            header ( "location:" . $thisfile . URL_REDIRECT_APPEND . "&edit=$edit&pn=$pn&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize" );
+            exit ();
+        } else {
+            echo "<p>$sql<p>$LDDbNoSave";
+            $mode = "";
+        }
+        break;
 
 } // end of switch($mode)
 
@@ -122,28 +104,72 @@ switch ($mode) {
 if (!$mode) {/* Get the pending test requests */
 	$sql = "SELECT batch_nr,encounter_nr,send_date,dept_nr,room_nr FROM care_test_request_" . $subtarget . "
 			WHERE (status='pending' OR status='') ORDER BY  send_date DESC";
+
 	if ($requests = $db->Execute ( $sql )) {
 		/* If request is available, load the date format functions */
 		require_once ($root_path . 'include/core/inc_date_format_functions.php');
-		
+
 		$batchrows = $requests->RecordCount ();
 		if ($batchrows && (! isset ( $batch_nr ) || ! $batch_nr)) {
 			$test_request = $requests->FetchRow ();
-			/* Check for the patietn number = $pn. If available get the patients data */
+			/* Check for the patient number = $pn. If available get the patients data */
 			$pn = $test_request ['encounter_nr'];
 			$batch_nr = $test_request ['batch_nr'];
+            $bill_item_code=$test_request['bill_item_code'];
 		}
 	} else {
 		echo "<p>$sql<p>$LDDbNoRead";
 		exit ();
 	}
-	$sql1 = "SELECT bill.bill_item_status, bill.bill_item_code
-			FROM care_test_request_" . $subtarget . " AS req
-			INNER JOIN care_test_request_chemlabor_sub AS req_sub ON req_sub.batch_nr=req.batch_nr
-			INNER JOIN care_test_param AS tp ON req_sub.paramater_name=tp.id
-			INNER JOIN care_billing_bill_item AS bill ON req_sub.encounter_nr=bill.bill_item_encounter_nr AND DATE(req.send_date)=DATE(bill.bill_item_date) AND tp.bill_item_nr=bill.bill_item_code
-			WHERE req.batch_nr=$batch_nr
-			ORDER BY req.send_date DESC";
+
+    $sql5="SELECT BB.bill_item_code
+          FROM care_test_request_".$subtarget." AS TR
+          JOIN care_billing_bill_item AS BB ON TR.encounter_nr = BB.bill_item_encounter_nr
+          WHERE (STATUS='pending' OR STATUS='received')
+          AND TR.batch_nr=".$batch_nr."
+          AND DATE(BB.bill_item_date)=DATE(TR.send_date)
+          AND HOUR(BB.bill_item_date)=HOUR(TR.send_date)
+          AND MINUTE(BB.bill_item_date)=MINUTE(TR.send_date)
+          ORDER BY  send_date DESC
+    ";
+    if ($temp = $db->Execute ( $sql5 )) {
+        $buf5 = $temp->FetchRow ();
+        $bill_item_code=$buf5['bill_item_code'];
+    }
+
+    if($bill_item_code=="NT"){
+        $YC = 'NT';
+    }
+    elseif($bill_item_code=="ION01"){
+    $YC = 'ION01';
+    }
+    elseif($bill_item_code=="ION02"){
+    $YC = 'ION02';
+    }
+    elseif($bill_item_code=="ION03"){
+        $YC = 'ION03';
+    }
+    elseif($bill_item_code=="ION04"){
+        $YC = 'ION04';
+    }
+//	$sql1 = "SELECT bill.bill_item_status, bill.bill_item_code
+//			FROM care_test_request_" . $subtarget . " AS req
+//			INNER JOIN care_test_request_chemlabor_sub AS req_sub ON req_sub.batch_nr=req.batch_nr
+//			INNER JOIN care_test_param AS tp ON req_sub.paramater_name=tp.id
+//			INNER JOIN care_billing_bill_item AS bill ON req_sub.encounter_nr=bill.bill_item_encounter_nr AND DATE(req.send_date)=DATE(bill.bill_item_date) AND tp.bill_item_nr=bill.bill_item_code
+//			WHERE req.batch_nr=$batch_nr
+//			ORDER BY req.send_date DESC";
+
+    $sql1="SELECT TR.batch_nr,TR.encounter_nr,TR.send_date,BB.bill_item_status
+          FROM care_test_request_" . $subtarget . " AS TR
+          JOIN care_billing_bill_item AS BB ON TR.encounter_nr = BB.bill_item_encounter_nr
+          WHERE BB.bill_item_code='$YC'
+          AND DATE(BB.bill_item_date)=DATE(TR.send_date)
+          AND HOUR(BB.bill_item_date)=HOUR(TR.send_date)
+          AND MINUTE(BB.bill_item_date)=MINUTE(TR.send_date)
+          AND TR.batch_nr=".$batch_nr."
+
+          ";
 	if ($requests1 = $db->Execute ( $sql1 )) {
 		$bill = $requests1->FetchRow ();
 		$status_bill=$bill['bill_item_status'];
@@ -153,9 +179,9 @@ if (!$mode) {/* Get the pending test requests */
 
 /* Check for the patietn number = $pn. If available get the patients data */
 if ($batchrows && $pn) {
-	
+
 	if ($enc_obj->loadEncounterData ( $pn )) {
-		
+
 		include_once ($root_path . 'include/care_api_classes/class_globalconfig.php');
 		$GLOBAL_CONFIG = array ();
 		$glob_obj = new GlobalConfig ( $GLOBAL_CONFIG );
@@ -170,9 +196,9 @@ if ($batchrows && $pn) {
 			default :
 				$full_en = ($pn + $GLOBAL_CONFIG ['patient_inpatient_nr_adder']);
 		}
-		
+
 		$result = &$enc_obj->encounter;
-		
+
 		$sql = "SELECT * FROM care_test_request_" . $subtarget . " ";
 		$sql .= "INNER JOIN care_test_request_" . $subtarget_sub . " ON ";
 		$sql .= "( care_test_request_" . $subtarget . ".batch_nr = care_test_request_" . $subtarget_sub . ".batch_nr) ";
@@ -198,7 +224,7 @@ if ($batchrows && $pn) {
 $sTitle = $LDPendingTestRequest;
 if ($batchrows)
 	$sTitle = $sTitle . " (" . $batch_nr . ")";
-	
+
 # Start Smarty templating here
 /**
  * LOAD Smarty
@@ -348,7 +374,7 @@ ob_start ();
 
 
 if ($batchrows) {
-	
+
 	?>
 
 <table border=0>
@@ -359,7 +385,7 @@ if ($batchrows) {
 	;
 	/* The following routine creates the list of pending requests */
 	require ('includes/inc_test_request_lister_fx.php');
-	
+
 	?>
 		</td>
 		<!-- right block for the form -->

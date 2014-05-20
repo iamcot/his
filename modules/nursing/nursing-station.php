@@ -507,7 +507,7 @@ if($ward_ok){
 				if(isset($sln) && $sln) $sFamNameBuffer = str_ireplace($sln,'<span style="background:yellow">'.ucfirst($sln).'</span>',ucfirst($bed['name_last']));
 					else $sFamNameBuffer = ucfirst($bed['name_last']);
 
-				if($bed['name_last']) $smarty->assign('cComma',',');
+				if($bed['name_last']) $smarty->assign('cComma','-');
 					else $smarty->assign('cComma','');
 
 				if(isset($sfn) && $sfn) $sNameBuffer = str_ireplace($sfn,'<span style="background:yellow">'.ucfirst($sln).'</span>',ucfirst($bed['name_first']));

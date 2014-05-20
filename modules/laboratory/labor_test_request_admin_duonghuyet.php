@@ -160,8 +160,8 @@ switch($mode){
 //			header("location:".$thisfile."?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&batch_nr=$batch_nr&noresize=$noresize");
             header('Content-Type: text/html; charset=utf-8');                                          //đã thêm
             echo "<script type='text/javascript'>";                                                   //đã thêm
-//            echo "alert('Kết quả đã được lưu');";                                                      //đã thêm
-            echo "alert('$LDAlertBeforeSave');";                                                           //đã thêm
+            echo "alert('Kết quả đã được lưu');";                                                      //đã thêm
+//            echo "alert('$LDAlertBeforeSave');";                                                           //đã thêm
             echo "window.location.replace('".$thisfile."?sid=".$sid."&lang=".$lang."&edit=".$edit."&saved=update&pn=".$pn."&station=".$station."&user_origin=".$user_origin."&status=".$status."&target=".$target."&subtarget=".$subtarget."&batch_nr=".$batch_nr."&noresize=".$noresize."')"; //đã thêm
             echo "</script>";
 
@@ -178,8 +178,18 @@ switch($mode){
 
 /* Get the pending test requests */
 if(!$mode||$mode=='') {
-	$sql="SELECT batch_nr,encounter_nr,send_date,dept_nr FROM care_test_request_".$db_request_table."
-				WHERE status='pending' OR status='received' ORDER BY  send_date DESC";
+//	$sql="SELECT batch_nr,encounter_nr,send_date,dept_nr FROM care_test_request_".$db_request_table."
+//				WHERE status='pending' OR status='received' ORDER BY  send_date DESC";
+    $sql="SELECT TR.batch_nr,TR.encounter_nr,TR.send_date,BB.bill_item_status,BB.bill_item_code,TR.dept_nr
+          FROM care_test_request_".$db_request_table." AS TR
+          JOIN care_billing_bill_item AS BB ON TR.encounter_nr = BB.bill_item_encounter_nr
+          WHERE (STATUS='pending' OR STATUS='received')
+          AND DATE(BB.bill_item_date)=DATE(TR.send_date)
+          AND HOUR(BB.bill_item_date)=HOUR(TR.send_date)
+          AND MINUTE(BB.bill_item_date)=MINUTE(TR.send_date)
+          GROUP BY TR.batch_nr
+          ORDER BY  send_date DESC
+          ";
 	if($requests=$db->Execute($sql)){
 		$batchrows=$requests->RecordCount();
 	 	if($batchrows && (!isset($batch_nr) || !$batch_nr)){
@@ -238,10 +248,19 @@ if($batchrows && $pn){
 	}
 }
 
-$sql1 = "SELECT bill.bill_item_status, bill.bill_item_code
-			FROM care_test_request_" . $db_request_table . " AS req
-			INNER JOIN care_billing_bill_item AS bill ON req.encounter_nr=bill.bill_item_encounter_nr AND DATE(req.send_date)=DATE(bill.bill_item_date) AND bill.bill_item_code='DH'
-			WHERE req.batch_nr=$batch_nr";
+//$sql1 = "SELECT bill.bill_item_status, bill.bill_item_code
+//			FROM care_test_request_" . $db_request_table . " AS req
+//			INNER JOIN care_billing_bill_item AS bill ON req.encounter_nr=bill.bill_item_encounter_nr AND DATE(req.send_date)=DATE(bill.bill_item_date) AND bill.bill_item_code='DH'
+//			WHERE req.batch_nr=$batch_nr";
+$sql1 = "SELECT TR.batch_nr,TR.encounter_nr,TR.send_date,BB.bill_item_status
+        FROM care_test_request_" . $db_request_table . " AS TR
+        JOIN care_billing_bill_item AS BB ON TR.encounter_nr = BB.bill_item_encounter_nr
+        WHERE BB.bill_item_code='DH'
+        AND DATE(BB.bill_item_date)=DATE(TR.send_date)
+        AND HOUR(BB.bill_item_date)=HOUR(TR.send_date)
+        AND MINUTE(BB.bill_item_date)=MINUTE(TR.send_date)
+        AND TR.batch_nr=$batch_nr
+        GROUP BY TR.batch_nr";
 if ($requests1 = $db->Execute ( $sql1 )) {
 	$bill = $requests1->FetchRow ();
 	$status_bill=$bill['bill_item_status'];
@@ -501,8 +520,8 @@ require('includes/inc_test_request_lister_fx.php');
   <?php echo 'Bác sĩ xét nghiệm' ?>
 <!--        <input type="text" name="results_doctor" value="--><?php //if($read_form && $stored_request['results_doctor']) echo $stored_request['results_doctor'];else echo $pers_name; ?><!--" size=35 maxlength=35> -->
 <!--        <input type="hidden" name="results_doctor_nr" value="--><?php //if($read_form && $stored_request['results_doctor_']) echo $stored_request['results_doctor_nr']; else echo $pers_nr;?><!--"> <a href="javascript:popDocPer('doctor_nr')"><img --><?php //echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?><!-->-->
-            <input type="text" name="send_doctor" size=40 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['send_doctor'];else echo $pers_name;?>">
-            <input type="hidden" name="send_doctor_nr" value="<?php if(!empty( $stored_request['send_doctor_nr'])) echo $stored_request['send_doctor_nr'];else echo $pers_nr; ?>"> <a href="javascript:popDocPer('doctor_nr','send_doctor_nr','send_doctor')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
+            <input type="text" name="results_doctor" size=40 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['results_doctor'];else echo $pers_name;?>">
+            <input type="hidden" name="results_doctor_nr" value="<?php if(!empty( $stored_request['results_doctor_nr'])) echo $stored_request['results_doctor_nr'];else echo $pers_nr; ?>"> <a href="javascript:popDocPer('doctor_nr','results_doctor_nr','results_doctor')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
         </td>
     </tr>
 		</table> 

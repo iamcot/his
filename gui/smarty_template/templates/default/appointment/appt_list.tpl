@@ -20,7 +20,7 @@
 			<form name="bydoc">
 				{{$LDListApptByDoc}}<br>
 				<nobr>
-				{{$sByDocSelect}} {{$pbByDocGo}}
+				{{$sByDocSelect}} Ho {{$pbByDocGo}}
 				</nobr>
 				{{* Do not move the $sByDocHiddenInputs outside of the form *}}
 				{{$sByDocHiddenInputs}}

@@ -12,6 +12,11 @@ require($root_path.'include/core/inc_environment_global.php');
 */
 $lang_tables[] = 'departments.php';
 define('LANG_FILE','konsil.php');
+require($root_path.'include/care_api_classes/class_ecombill.php');
+$eComBill = new eComBill;
+
+include_once($root_path.'include/care_api_classes/class_lab.php');
+$lab_obj = new Lab;
 
 /* We need to differentiate from where the user is coming:
 *  $user_origin != lab ;  from patient charts folder
@@ -166,7 +171,7 @@ $core = & new Core;
 										   '".$_SESSION['sess_user_name']."',
 										   '".date('YmdHis')."'
 										   )";
-
+                                  echo $sql;
 							      if($ergebnis=$core->Transact($sql))
        							  {	
 								  $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql, date('Y-m-d H:i:s'));
@@ -186,7 +191,37 @@ $core = & new Core;
 									setEventSignalColor($pn,SIGNAL_COLOR_DIAGNOSTICS_REQUEST);									
 									
 									 header("location:".$root_path."modules/laboratory/labor_test_request_aftersave_visinh.php?sid=$sid&lang=$lang&edit=$edit&saved=insert&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&noresize=$noresize&batch_nr=$batch_nr");
-									 exit;
+
+                                      //billing
+                                      $sql10="SELECT batch_nr,encounter_nr,send_date FROM care_test_request_" . $db_request_table . " WHERE batch_nr=".$batch_nr."";
+                                      if ($temp10 = $db->Execute ( $sql10 )) {
+                                          $buf10 = $temp10->FetchRow ();
+                                          $bill_item_date=$buf10['send_date'];
+                                      }
+
+                                    //   $item_code = $_POST['group_nr'];
+                                      $item_code_dh = $group_nr;
+                                      if($item_code_dh=='lao')      {
+                                                 $item_code='VTH01';
+                                      }
+                                      elseif($item_code_dh=='kstdr')
+                                      {
+                                          $item_code='VTH02';
+                                      }
+                                      elseif($item_code_dh=='huyettrang')
+                                      {
+                                          $item_code='VTH03';
+                                      }
+                                      $sql = "SELECT item_code,item_unit_cost FROM care_billing_item WHERE  item_code= '$item_code'";
+                                      $temp=$db->execute($sql);
+                                      if($temp->recordcount()){
+                                          $buf=$temp->fetchrow();
+//                                          $eComBill->createBillItem($pn, $buf['item_code'],$buf['item_unit_cost'], 1, $buf['item_unit_cost'],date("Y-m-d G:i:s") );
+                                          $eComBill->createBillItem($pn, $buf['item_code'],$buf['item_unit_cost'], 1, $buf['item_unit_cost'],$bill_item_date );
+                                      }
+                                      //billing
+
+                                     exit;
 								  }
 								  else 
 								  {
@@ -383,9 +418,9 @@ function printOut()
 }
 
 $(function(){
-$("#f-calendar-field-1").mask("99/99/9999");
-$("#time").mask("99:99");
-});	
+    $("#f-calendar-field-1").mask("99/99/9999");
+    $("#time").mask("99:99");
+});
 
 <?php require($root_path.'include/core/inc_checkdate_lang.php'); ?>
 //-->
@@ -524,23 +559,39 @@ echo '
 	
 	<tr bgcolor="<?php echo $bgc1 ?>">
 		<td align="left"><div class=fva2_ml10><font color="#000099">
-			 <?php echo $LDDate .":";
+<!--			 --><?php //echo $LDDate .":";
+//
+//							//gjergji : new calendar
+//
+//			//end : gjergji
+//			if ($stored_request['send_date']=="")
+////				$dateshow=date("Y-m-d");
+//             $dateshow=date("Y-m-d G:i:s");
+//			else $dateshow=formatDate2Local($stored_request['send_date'],$date_format);
+//
+//			echo $calendar->show_calendar($calendar,$date_format,'date',$dateshow);
+//			if(isset($stored_request['send_date']))
+//             {echo '<input type="text" size="5" id="time" name="time" value="'.@convertTimeToLocal(formatDate2Local($stored_request['send_date'],$date_format,0,1)).'">';
+//             }else{
+//                 echo '<input type="text" size="5" id="time" name="time" value="'.date("H:i").'">';
+//             }
+//			//end gjergji ?>
+             <?php echo $LDDate .":";
 
-							//gjergji : new calendar
-			
-			//end : gjergji
-			if ($stored_request['send_date']=="")
-				$dateshow=date("Y-m-d");
-			else $dateshow=formatDate2Local($stored_request['send_date'],$date_format);
-			
-			echo $calendar->show_calendar($calendar,$date_format,'date',$dateshow);
-			if(isset($stored_request['send_date']))
-			{echo '<input type="text" size="5" id="time" name="time" value="'.@convertTimeToLocal(formatDate2Local($stored_request['send_date'],$date_format,0,1)).'">';
-			}else{
-			echo '<input type="text" size="5" id="time" name="time" value="'.date("H:i").'">';
-			}
-			//end gjergji ?>
-			
+             //gjergji : new calendar
+
+             //end : gjergji
+             if ($stored_request['send_date']=="")
+                 $dateshow=date("Y-m-d G:i:s");
+             else $dateshow=$stored_request['send_date'];
+
+             echo $calendar->show_calendar($calendar,$date_format,'date',$dateshow);
+             if(isset($stored_request['send_date']))
+             {echo '<input type="text" size="5" id="time" name="time" value="'.@convertTimeToLocal(formatDate2Local($stored_request['send_date'],$date_format,0,1)).'">';
+             }else{
+                 echo '<input type="text" size="5" id="time" name="time" value="'.date("H:i").'">';
+             }
+             //end gjergji ?>
 		</td>
 		<td>
 			<?php echo $LDRequestingDoc ?>:

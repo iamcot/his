@@ -3,6 +3,8 @@ error_reporting(E_COMPILE_ERROR|E_ERROR|E_CORE_ERROR);
 //error_reporting(E_ALL);
 require('./roots.php');
 require($root_path.'include/core/inc_environment_global.php');
+require($root_path.'include/care_api_classes/class_ecombill.php');
+$eComBill = new eComBill();
 /**
 * CARE2X Integrated Hospital Information System version deployment 1.1 (mysql) 2004-01-11
 * GNU General Public License
@@ -114,6 +116,7 @@ $edit_form=0;
 $read_form=0;
 $db_request_table=$target;
 $db_request_table_sub=$target . "_sub";
+$subtarget = 'blood';
 $paramlist='';
 $sday='';
 $sample_time='';
@@ -193,14 +196,50 @@ if(isset($pn) && $pn) {
 					    	$diag_obj_sub->setDataArray($parsedParamList);
 					    	$diag_obj_sub->insertDataFromInternalArray();
 				    	}
-				    	//$eComBill->createBillItem($parsedParamList['encounter_nr'], $temp['bill_item_nr'],$temp1['item_unit_cost'], 1, $temp1['item_unit_cost'],date("Y-m-d G:i:s") );
+//				    	$eComBill->createBillItem($parsedParamList['encounter_nr'], $temp['bill_item_nr'],$temp1['item_unit_cost'], 1, $temp1['item_unit_cost'],date("Y-m-d G:i:s") );
 					  	// Load the visual signalling functions
 						include_once($root_path.'include/core/inc_visual_signalling_fx.php');
 						// Set the visual signal
 						setEventSignalColor($pn,SIGNAL_COLOR_DIAGNOSTICS_REQUEST);
 						//echo $sql;
 						header("location:".$root_path."modules/laboratory/labor_test_request_aftersave.php".URL_REDIRECT_APPEND."&edit=$edit&saved=insert&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=chemlabor&noresize=$noresize&batch_nr=$batch_nr");
-						exit;
+
+                        //billing
+                        $sql10="SELECT batch_nr,encounter_nr,send_date FROM care_test_request_" . $subtarget . " WHERE batch_nr=".$batch_nr."";
+                        if ($temp10 = $db->Execute ( $sql10 )) {
+                            $buf10 = $temp10->FetchRow ();
+                            $bill_item_date=$buf10['send_date'];
+                        }
+
+                        if($result_tests = $lab_obj->GetTestsToDoB($batch_nr))
+                        {
+                            $para_array=array();
+                            while($row_tests = $result_tests->FetchRow()) {
+                                $sql2="select tp.bill_item_nr, bi.item_unit_cost from care_test_param as tp left join care_billing_item as bi on (tp.bill_item_nr=bi.item_code) where tp.id='".$row_tests['paramater_name']."'";
+                                //echo $sql2;
+                                $para_array[]=$row_tests['paramater_name'];
+                                //var_dump($row_tests);
+
+                                $temp=$db->execute($sql2);
+                                if($temp->recordcount()){
+                                    $buf=$temp->fetchrow();
+//                                    $eComBill->createBillItem($pn, $buf['bill_item_nr'],$buf['item_unit_cost'], 1, $buf['item_unit_cost'],date("Y-m-d G:i:s") );
+                                    $eComBill->createBillItem($pn, $buf['bill_item_nr'],$buf['item_unit_cost'], 1, $buf['item_unit_cost'],$bill_item_date );
+                            }
+                            }
+//                            //var_dump($para_array);
+                            if((in_array('_wbc__hematology',$para_array))&&(in_array('_rbc__hematology',$para_array))&&(in_array('_hgb__hematology',$para_array))&&(in_array('_hct__hematology',$para_array))&&(in_array('_plt__hematology',$para_array))&&(in_array('_pct__hematology',$para_array))&&(in_array('_mcv__hematology',$para_array))&&(in_array('_mch__hematology',$para_array))&&(in_array('_mchc__hematology',$para_array))&&(in_array('_rdw__hematology',$para_array))&&(in_array('_mpv__hematology',$para_array))&&(in_array('_pdw__hematology',$para_array))&&(in_array('_%lym__hematology',$para_array))&&(in_array('_#lym__hematology',$para_array))&&(in_array('_%mon__hematology',$para_array))&&(in_array('_#mon__hematology',$para_array))&&(in_array('_%gra__hematology',$para_array))&&(in_array('_#gra__hematology',$para_array))){
+                                //echo 'is_array';
+//                                $eComBill->createBillItem($pn, 'CTM','55000', 1, '55000',date("Y-m-d G:i:s") );
+                                $price= $eComBill->getPriceItemcode(ITEM_CODE_CTM);
+                                $eComBill->createBillItem($pn, ITEM_CODE_CTM,$price, 1,$price,$bill_item_date );
+                            }
+//                            $code_bill_xn = 'abc';
+                            //lay gia cua xn - neu chua co thi lay gia mac dinh
+                            // insert vao bill
+                        }
+                        //billing
+                        exit;
 					}else{
 					     echo "<p>$sql<p>$LDDbNoSave";
 						 $mode='';
@@ -1015,22 +1054,22 @@ ob_end_flush();
 //echo $sTemp;
 ?>
   <td colspan="10" align="left"><div class=fva2_ml10><font color="#000099">
-			 <?php echo "Ngày gởi: ";
+              <?php echo "Ngày gởi: ";
 
-							//gjergji : new calendar
-			
-			//end : gjergji
-			if ($stored_request['send_date']=="")
-				$dateshow=date("Y-m-d G:i:s");
-			else $dateshow=$stored_request['send_date'];
-			
-			echo $calendar->show_calendar($calendar,$date_format,'date',$dateshow);
-			if(isset($stored_request['send_date']))
-			{echo '<input type="text" size="5" id="time" name="time" value="'.@convertTimeToLocal(formatDate2Local($stored_request['send_date'],$date_format,0,1)).'">';
-			}else{
-			echo '<input type="text" size="5" id="time" name="time" value="'.date("H:i").'">';
-			}
-			//end gjergji ?>
+              //gjergji : new calendar
+
+              //end : gjergji
+              if ($stored_request['send_date']=="")
+                  $dateshow=date("Y-m-d G:i:s");
+              else $dateshow=$stored_request['send_date'];
+
+              echo $calendar->show_calendar($calendar,$date_format,'date',$dateshow);
+              if(isset($stored_request['send_date']))
+              {echo '<input type="text" size="5" id="time" name="time" value="'.@convertTimeToLocal(formatDate2Local($stored_request['send_date'],$date_format,0,1)).'">';
+              }else{
+                  echo '<input type="text" size="5" id="time" name="time" value="'.date("H:i").'">';
+              }
+              //end gjergji ?>
 		
 			<?php echo 'BS gửi yêu cầu' ?>:
 			<input type="text" name="send_doctor" size=37 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['send_doctor'];else echo $pers_name;?>">

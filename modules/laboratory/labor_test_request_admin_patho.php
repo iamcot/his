@@ -84,8 +84,8 @@ if($dblink_ok) {
 
                                       header('Content-Type: text/html; charset=utf-8');                                          //đã thêm
                                       echo "<script type='text/javascript'>";                                                   //đã thêm
-//                                      echo "alert('Kết quả đã được lưu');";
-                                      echo "alert('$LDNotifySave');";                                                           //đã thêm
+                                      echo "alert('Kết quả đã được lưu');";
+//                                      echo "alert('$LDNotifySave');";                                                           //đã thêm
                                       echo "window.location.replace('".$thisfile.URL_REDIRECT_APPEND."&edit=".$edit."&saved=update&pn=".$pn."&station=".$station."&user_origin=".$user_origin."&status=".$status."&target=".$target."&subtarget=".$subtarget."&batch_nr=".$batch_nr."&noresize=".$noresize."')"; //đã thêm
                                       echo "</script>";                                                                         //đã thêm
 

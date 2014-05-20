@@ -149,11 +149,19 @@ $tpdf->Cell(60,5,"Ngày ".date("d",strtotime($ngaygoi))." tháng ".date("m",strt
 $tpdf->SetFont('DejaVu','B',11);
 $tpdf->SetX(135);
 $tpdf->Cell(64,5,'BÁC SĨ CHỈ ĐỊNH',0,1,'C');
+/*
 $tpdf->SetX(135);
 $tpdf->Cell(0,25,' ',0,1,'C');
 $tpdf->SetFont('DejaVu','',11);
 $tpdf->SetX(135);
-$tpdf->Cell(60,5,'Họ tên:.....................................',0,1,'R');
+$tpdf->Cell(60,5,'Họ tên:.....................................',0,1,'R');        */
+//   đã sửa
+$tpdf->SetX(135);
+$tpdf->Cell(0,25,' ',0,1,'C');
+$tpdf->SetX(135);
+$tpdf->SetFont('DejaVu','',11);
+$tpdf->SetX(135);
+$tpdf->Cell(0,5,'Họ tên: '.$encounter_radio['send_doctor'],0,1,'R');
 
 $tpdf->Ln();
 $tpdf->SetFont('DejaVu','B',12);

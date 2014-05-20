@@ -140,7 +140,7 @@ switch ($mode) {
 			$sql = "SELECT * FROM care_test_findings_" . $db_request_table . " ";
 			$sql .= "INNER JOIN care_test_findings_" . $db_request_table_sub . " ON ";
 			$sql .= "( care_test_findings_" . $db_request_table . ".batch_nr = care_test_findings_" . $db_request_table_sub . ".batch_nr) ";
-			$sql .= "WHERE care_test_findings_" . $db_request_table . ".batch_nr='" . $batch_nr . "' ";			
+			$sql .= "WHERE care_test_findings_" . $db_request_table . ".batch_nr='" . $batch_nr . "' ";
 		}
 		if ($ergebnis = $db->Execute ( $sql )) {
 			if ($editable_rows = $ergebnis->RecordCount ()) {

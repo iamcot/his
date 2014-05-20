@@ -81,8 +81,9 @@ if($temp->recordcount()){
 	
 	<tr bgcolor="#ffffff">
 		<td colspan=2 align="right"><div class=fva2_ml10>
-		 <?php echo $LDDate ?>:
-		<font face="courier" size=2 color="#000000">&nbsp;<?php 
+<!--		 --><?php //echo $LDDate ?><!--:-->
+        <?php echo 'Ngày Yêu cầu XN' ?>:
+                <font face="courier" size=2 color="#000000">&nbsp;<?php
 		
 		            
 					  echo formatDate2Local($stored_request['send_date'],$date_format); 
@@ -104,8 +105,8 @@ if($temp->recordcount()){
 		
 	<tr bgcolor="#ffffff">
 		<td colspan=2 align="right"><div class=fva2_ml10><font color="#000099">
-		 <?php echo $LDDate ?>
-		
+<!--		 --><?php //echo $LDDate ?>
+        <?php echo 'Ngày Trả kết quả XN' ?>
 		<?php
 		//gjergji : new calendar
 		

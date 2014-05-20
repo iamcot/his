@@ -5,7 +5,12 @@ $lang_tables[]='search.php';
 define('LANG_FILE','konsil.php');
 define('NO_2LEVEL_CHK',1);
 
-$sql="select td.* ,fd.results from care_test_request_visinh as td , care_test_findings_visinh as fd where fd.batch_nr=td.batch_nr and fd.status NOT IN ('deleted','hidden','inactive','void') and td.batch_nr='".$batch_nr."' and td.encounter_nr='".$pn."'";
+//$sql="select td.* ,fd.results from care_test_request_visinh as td , care_test_findings_visinh as fd where fd.batch_nr=td.batch_nr and fd.status NOT IN ('deleted','hidden','inactive','void') and td.batch_nr='".$batch_nr."' and td.encounter_nr='".$pn."'";
+$sql="SELECT fd.*,td.results AS result,td.* FROM care_test_request_visinh AS td, care_test_findings_visinh AS fd
+      WHERE fd.batch_nr = td.batch_nr
+      AND fd.status NOT IN('deleted','hidden','inactive','void')
+      AND td.batch_nr='".$batch_nr."' and td.encounter_nr='".$pn."'
+";
 //echo $sql;
 $temp=$db->execute($sql);
 if($temp->recordcount()){
@@ -103,8 +108,9 @@ if($temp->recordcount()){
 	
 	<tr bgcolor="<?php echo $bgc1 ?>">
 		<td colspan=2 align="right"><div class=fva2_ml10>
-		 <?php echo $LDDate ?>:
-		<font face="courier" size=2 color="#000000">&nbsp;<?php            
+<!--		 --><?php //echo $LDDate ?><!--:-->
+         <?php echo 'Ngày Yêu cầu XN' ?>:
+                <font face="courier" size=2 color="#000000">&nbsp;<?php
 					  echo @formatDate2Local($stored_request['send_date'],$date_format); 
 					
 				  ?></font>&nbsp;
@@ -115,7 +121,7 @@ if($temp->recordcount()){
 	
 	<tr bgcolor="<?php echo $bgc1 ?>">
 		<td colspan=2 ><div class=fva2_ml10>
-		Kết quả
+		Kết quả   mp
 		 </td>
 		
 	</tr>
@@ -463,13 +469,14 @@ if($temp->recordcount()){
 	<tr bgcolor="<?php echo $bgc1 ?>">
 		<td colspan=2> 
 		 <div class=fva2_ml10>&nbsp;<br><font color="#000099"><?php echo $LDNotesTempReport ?></font><br>
-         <?php  echo stripslashes($stored_request['result']) ?>			
+         <?php  echo stripslashes($stored_request['result']) ?>
 		 </td>
 		</tr>	
 		
 	<tr bgcolor="<?php echo $bgc1 ?>">
 		<td colspan=2 align="right"><div class=fva2_ml10><font color="#000099">
-		 <?php echo $LDDate ?>
+<!--		 --><?php //echo $LDDate ?>
+         <?php echo 'Ngày Trả kết quả XN' ?>
 
 		<?php
 			//gjergji : new calendar

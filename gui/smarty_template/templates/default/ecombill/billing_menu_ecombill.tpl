@@ -7,7 +7,12 @@
 			<TD>
 				<TABLE cellSpacing=1 cellPadding=3 width=700>
 				<TBODY class="submenu">
-				{{if $LDSelectHospitalServices}}
+
+                {{if $LDMuchuong}}
+                {{$LDMuchuong}}
+
+                {{/if}}
+                {{if $LDSelectHospitalServices}}
 					{{$LDSelectLaboratoryTests}}
 				
 					{{include file="common/submenu_row_spacer.tpl"}}
@@ -47,6 +52,7 @@
 				{{if $LDPatienthasclearedallthebills}}
 					{{$LDPatienthasclearedallthebills}}
 				{{/if}}
+
 				</TBODY>
 				</TABLE>
 			</TD>

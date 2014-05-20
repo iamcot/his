@@ -131,8 +131,14 @@ switch($mode){
                 if($ergebnis=$core->Transact($sql3)){
                     $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql3, date('Y-m-d H:i:s'));
                     signalNewDiagnosticsReportEvent($result_date);
-                    header("location:$thisfile?sid=$sid&lang=$lang&edit=$edit&saved=insert&mode=edit&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize&batch_nr=$batch_nr&entry_date=$entry_date");
-					exit;
+//                    header("location:$thisfile?sid=$sid&lang=$lang&edit=$edit&saved=insert&mode=edit&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize&batch_nr=$batch_nr&entry_date=$entry_date");
+                    header('Content-Type: text/html; charset=utf-8');       //đã thêm
+                    echo "<script type='text/javascript'>";                 //đã thêm
+                    echo "alert('Kết quả đã được lưu.');";                           //đã thêm
+//            echo "alert('$LDNotifySave');";                                         //đã thêm
+                    echo "window.location.replace('".$thisfile."?sid=".$sid."&lang=".$lang."&edit=".$edit."&saved=insert&mode=edit&pn=".$pn."&station=".$station."&user_origin=".$user_origin."&status=".$status."&target=".$target."&subtarget=".$subtarget."&batch_nr=".$batch_nr."&entry_date=".$entry_date."')"; //đã thêm
+                    echo "</script>";
+                    exit;
 				}else{
 					echo "<p>$sql3<p>$LDDbNoSave"; 
 					// $mode='';
@@ -151,7 +157,7 @@ switch($mode){
 							'".$batch_nr."','".$pn."','".$dept_nr."', 
 							'".htmlspecialchars($results_doctor)."',
 							'".$results_doctor_nr."',
-							'".addslashes(htmlspecialchars($result))."',
+							'".addslashes(htmlspecialchars($results))."',
 							'".formatDate2STD($result_date,$date_format)."', '".date('H:i:s')."',
 							'initial',  
 							'Create: ".date('Y-m-d H:i:s')." = ".$_SESSION['sess_user_name']."\n',
@@ -162,8 +168,14 @@ switch($mode){
 				if($test=$core->Transact($sql2)){ 
 					$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql2, date('Y-m-d H:i:s'));
 					signalNewDiagnosticsReportEvent($result_date);
-					header("location:$thisfile?sid=$sid&lang=$lang&edit=$edit&saved=insert&mode=edit&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize&batch_nr=$batch_nr&entry_date=$entry_date");
-					exit;
+//					header("location:$thisfile?sid=$sid&lang=$lang&edit=$edit&saved=insert&mode=edit&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize&batch_nr=$batch_nr&entry_date=$entry_date");
+                    header('Content-Type: text/html; charset=utf-8');       //đã thêm
+                    echo "<script type='text/javascript'>";                 //đã thêm
+                    echo "alert('Kết quả đã được lưu.');";                           //đã thêm
+//            echo "alert('$LDNotifySave');";                                         //đã thêm
+                    echo "window.location.replace('".$thisfile."?sid=".$sid."&lang=".$lang."&edit=".$edit."&saved=insert&mode=edit&pn=".$pn."&station=".$station."&user_origin=".$user_origin."&status=".$status."&target=".$target."&subtarget=".$subtarget."&batch_nr=".$batch_nr."&entry_date=".$entry_date."')"; //đã thêm
+                    echo "</script>";
+                    exit;
 				}
 				else{
 					echo "<p>$sql2<p>$LDDbNoSave"; 
@@ -171,8 +183,14 @@ switch($mode){
 				}
 			}
 		 $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql, date('Y-m-d H:i:s'));	
-		header("location:".$thisfile."?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&batch_nr=$batch_nr&noresize=$noresize");
-		exit;
+//		header("location:".$thisfile."?sid=$sid&lang=$lang&edit=$edit&saved=update&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&batch_nr=$batch_nr&noresize=$noresize");
+            header('Content-Type: text/html; charset=utf-8');       //đã thêm
+            echo "<script type='text/javascript'>";                 //đã thêm
+            echo "alert('Kết quả đã được lưu.');";                           //đã thêm
+//            echo "alert('$LDNotifySave');";                                         //đã thêm
+            echo "window.location.replace('".$thisfile."?sid=".$sid."&lang=".$lang."&edit=".$edit."&saved=update&pn=".$pn."&station=".$station."&user_origin=".$user_origin."&status=".$status."&target=".$target."&subtarget=".$subtarget."&batch_nr=".$batch_nr."&entry_date=".$entry_date."')"; //đã thêm
+            echo "</script>";
+            exit;
 			
 		} else {
 			echo "<p>$sql<p>$LDDbNoSave";
@@ -251,20 +269,31 @@ if($batchrows && $pn){
 	}
 }
 if($lao){
-	$YC = 'Lao';
+	$YC = 'VTH01';
 }
 if($kstdr){
-	$YC = 'KSTĐR';
+//	$YC = 'KSTĐR';
+    $YC = 'VTH02';
 }
 if($huyettrang){
-	$YC = 'Huyết trắng';
+	$YC = 'VTH03';
 }
-$sql1 = "SELECT bill.bill_item_status, bill.bill_item_code
-		FROM care_test_request_".$db_request_table." AS req
-		INNER JOIN care_billing_item AS bill_it ON bill_it.item_description='$YC'
-		INNER JOIN care_billing_bill_item AS bill ON req.encounter_nr=bill.bill_item_encounter_nr AND DATE(req.send_date)=DATE(bill.bill_item_date) AND bill_it.item_code=bill.bill_item_code
-		WHERE req.batch_nr=$batch_nr
-		ORDER BY req.send_date DESC";
+//$sql1 = "SELECT bill.bill_item_status, bill.bill_item_code
+//		FROM care_test_request_".$db_request_table." AS req
+//		INNER JOIN care_billing_item AS bill_it ON bill_it.item_code='$YC'
+//		INNER JOIN care_billing_bill_item AS bill ON req.encounter_nr=bill.bill_item_encounter_nr AND DATE(req.send_date)=DATE(bill.bill_item_date) AND bill_it.item_code=bill.bill_item_code
+//		WHERE req.batch_nr=$batch_nr
+//		ORDER BY req.send_date DESC";
+$sql1="SELECT TR.batch_nr,TR.encounter_nr,TR.send_date,BB.bill_item_status
+          FROM care_test_request_" . $db_request_table . " AS TR
+          JOIN care_billing_bill_item AS BB ON TR.encounter_nr = BB.bill_item_encounter_nr
+          WHERE BB.bill_item_code='$YC'
+          AND DATE(BB.bill_item_date)=DATE(TR.send_date)
+          AND HOUR(BB.bill_item_date)=HOUR(TR.send_date)
+          AND MINUTE(BB.bill_item_date)=MINUTE(TR.send_date)
+          AND TR.batch_nr=".$batch_nr."
+          GROUP BY TR.batch_nr
+          ";
 if ($requests1 = $db->Execute ( $sql1 )) {
 	$bill = $requests1->FetchRow ();
 	$status_bill=$bill['bill_item_status'];
@@ -632,8 +661,9 @@ require('includes/inc_test_request_lister_fx.php');
 									<td align=center colspan=5 class="adm_item">Kết quả</td>
 								</tr>
 								<tr>
-									
-									<td width=45% align=center class="adm_item">(1-9 AFB)</td>
+
+                                    <td width=45% align=center class="adm_item">(1-9 AFB)</td>
+
 									<td width=15% align=center class="adm_item">Âm</td>
 									<td width=13% align=center class="adm_item">1+</td>
 									<td width=13% align=center class="adm_item">2+</td>
@@ -659,7 +689,7 @@ require('includes/inc_test_request_lister_fx.php');
 					</td>';
 					if($stored_request['results_mau_1']=="am"){
 					echo'<td align=center width=29%>
-						<input type="text" maxlength="5" value="" name="results_mau_1">
+						<input type="text" maxlength="5" value="" name="results_mau_1 ">
 					</td>
 					<td align=center width=14%>
 						<input type="radio" value="am" checked name="results_mau_1">
@@ -968,8 +998,8 @@ require('includes/inc_test_request_lister_fx.php');
   Bác sĩ xét nghiệm
 <!--       <input type="text" name="results_doctor" value="--><?php //if($read_form && $stored_request['results_doctor']) echo $stored_request['results_doctor'];else echo $pers_name; ?><!--" size=35 maxlength=35> -->
 <!--        <input type="hidden" name="results_doctor_nr" value="--><?php //if($read_form && $stored_request['results_doctor_nr']) echo $stored_request['results_doctor_nr']; else echo $pers_nr;?><!--"> <a href="javascript:popDocPer('doctor_nr')"><img --><?php //echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?><!-->-->
-            <input type="text" name="send_doctor" size=37 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['send_doctor'];else echo $pers_name;?>">
-            <input type="hidden" name="send_doctor_nr" value="<?php if(!empty( $stored_request['send_doctor_nr'])) echo $stored_request['send_doctor_nr'];else echo $pers_nr; ?>"> <a href="javascript:popDocPer('doctor_nr','send_doctor_nr','send_doctor')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
+            <input type="text" name="results_doctor" size=37 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['results_doctor'];else echo $pers_name;?>">
+            <input type="hidden" name="results_doctor_nr" value="<?php if(!empty( $stored_request['results_doctor_nr'])) echo $stored_request['results_doctor_nr'];else echo $pers_nr; ?>"> <a href="javascript:popDocPer('doctor_nr','results_doctor_nr','results_doctor')"><img <?php echo createComIcon($root_path,'l-arrowgrnlrg.gif','0','',TRUE) ?>>
         </td>
     </tr>
 		</table> 

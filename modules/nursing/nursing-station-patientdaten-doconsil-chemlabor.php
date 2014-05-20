@@ -101,6 +101,7 @@ function prepareTestElements()
 }
 require($root_path.'include/care_api_classes/class_ecombill.php');
 $eComBill = new eComBill;
+$subtarget = 'chemlabor';
 /* Start initializations */
 define('LANG_FILE','konsil_chemlabor.php');
 
@@ -195,7 +196,7 @@ if(isset($pn) && $pn) {
 					$data['modify_id']=$_SESSION['sess_user_name'];
 					$data['create_id']=$_SESSION['sess_user_name'];
 					$data['create_time']='NULL';
-					//echo $_POST['time'];
+					echo $_POST['time'];
 					//var_dump($data);
 					$diag_obj->setDataArray($data);
 				    if($diag_obj->insertDataFromInternalArray()){
@@ -213,20 +214,54 @@ if(isset($pn) && $pn) {
 					    	$diag_obj_sub->insertDataFromInternalArray();
 							
 				    	}
-				    	
+
 					  	// Load the visual signalling functions
 						include_once($root_path.'include/core/inc_visual_signalling_fx.php');
 						// Set the visual signal
 						setEventSignalColor($pn,SIGNAL_COLOR_DIAGNOSTICS_REQUEST);
 						//echo $sql;
 						header("location:".$root_path."modules/laboratory/labor_test_request_aftersave.php".URL_REDIRECT_APPEND."&edit=$edit&saved=insert&pn=$pn&station=$station&user_origin=$user_origin&status=$status&target=chemlabor&noresize=$noresize&batch_nr=$batch_nr");
-						exit;
+
+                        //billing
+                        $sql10="SELECT batch_nr,encounter_nr,send_date FROM care_test_request_" . $subtarget . " WHERE batch_nr=".$batch_nr."";
+                        if ($temp10 = $db->Execute ( $sql10 )) {
+                            $buf10 = $temp10->FetchRow ();
+                            $bill_item_date=$buf10['send_date'];
+                        }
+
+                        if($result_tests = $lab_obj->GetTestsToDo($batch_nr))
+                        {
+                            $para_array=array();
+                            //$temp_array=array('_nit__urine','_leu__urine','_uro__urine','_pro__urine','_ph__urine','_blo__urine','_ket__urine','_bil__urine','_glu__urine','_sg__urine');
+                            while($row_tests = $result_tests->FetchRow()) {
+                                $sql2="select tp.bill_item_nr, bi.item_unit_cost from care_test_param as tp left join care_billing_item as bi on (tp.bill_item_nr=bi.item_code) where tp.id='".$row_tests['paramater_name']."'";
+                                //echo $sql2;
+                                $para_array[]=$row_tests['paramater_name'];
+                                //var_dump($row_tests);
+
+                                $temp=$db->execute($sql2);
+                                if($temp->recordcount()){
+                                    $buf=$temp->fetchrow();
+//                                    $eComBill->createBillItem($pn, $buf['bill_item_nr'],$buf['item_unit_cost'], 1, $buf['item_unit_cost'],date("Y-m-d G:i:s") );
+                                    $eComBill->createBillItem($pn, $buf['bill_item_nr'],$buf['item_unit_cost'], 1, $buf['item_unit_cost'],$bill_item_date );
+                                }
+                            }
+                            //var_dump($para_array);
+                            if((in_array('_nit__urine',$para_array))&&(in_array('_leu__urine',$para_array))&&(in_array('_uro__urine',$para_array))&&(in_array('_pro__urine',$para_array))&&(in_array('_ph__urine',$para_array))&&(in_array('_blo__urine',$para_array))&&(in_array('_ket__urine',$para_array))&&(in_array('_bil__urine',$para_array))&&(in_array('_glu__urine',$para_array))&&(in_array('_sg__urine',$para_array))){
+                                //echo 'is_array';
+//                                $eComBill->createBillItem($pn, ITEM_CODE_NT,$eComBill->getPriceItemcode(ITEM_CODE_NT), 1,$eComBill->getPriceItemcode(ITEM_CODE_NT),date("Y-m-d G:i:s") );
+                                $price= $eComBill->getPriceItemcode(ITEM_CODE_NT);
+                                $eComBill->createBillItem($pn, ITEM_CODE_NT,$price, 1,$price,$bill_item_date );
+                            }
+                        }
+                        //billing
+
+                        exit;
 					}else{
 					     echo "<p>$sql<p>$LDDbNoSave";
 						 $mode='';
 					}
 	            } //end of prepareTestElements()
-					
 				break; // end of case 'save'
 							
 			case 'update':

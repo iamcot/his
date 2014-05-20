@@ -41,6 +41,7 @@ $LDalertEnterNumericValueforDiscount ='Giảm';//Enter the numeric value for dis
 $LDPatientName ='Tên bệnh nhân';//Patient name
 $LDeComBill ='Thông tin hóa đơn';//eComBill
 $LDPatientNumber ='Số thứ tự bệnh nhân';//Patient number
+$LDMuchuong='Nhập mức hưởng của bệnh nhân';
 $LDSelectHospitalServices ='Chọn các dịch vụ y tế ';//Select Hospital Services
 $LDSelectLaboratoryTests ='Chọn các kiểm xét nghiệm ';//Select Laboratory Tests
 $LDViewBill ='Xem các hóa đơn';//View Bill
