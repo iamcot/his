@@ -6,17 +6,20 @@ include_once($root_path.'include/core/inc_date_format_functions.php');
 
 $search=$_GET["search"];
 $encoder=$_GET["encoder"];
+$loai=$_GET["loai"];
+
 $response="";
 
 switch($mode){
 	case 'auto': 
 				$sql="SELECT khochan.*, main_sub.*, main_sub.price AS cost, donvi.unit_name_of_medicine     
 						FROM care_pharma_products_main AS khochan, care_pharma_products_main_sub AS main_sub, care_pharma_unit_of_medicine AS donvi  
-						WHERE donvi.unit_of_medicine=khochan.unit_of_medicine 
+						WHERE donvi.unit_of_medicine=khochan.unit_of_medicine
+						AND main_sub.typeput=$loai
 						AND khochan.product_encoder=main_sub.product_encoder 
-						AND (khochan.product_name LIKE '".$search."%' or khochan.product_name LIKE '% ".$search."%') 
-						ORDER BY product_name LIMIT 15 ";
-
+						AND (khochan.product_name LIKE '".$search."%' or khochan.product_name LIKE '% ".$search."%')
+						ORDER BY product_name, exp_date LIMIT 15 ";
+//                 echo $sql;
 				if($result = $db->Execute($sql)){
 					$n=$result->RecordCount();
 					$item_id=""; $item_value=""; 

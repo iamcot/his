@@ -921,10 +921,10 @@ class CabinetPharma extends Core {
 	function checkExistMedicineInAvaiDept($dept,$ward,$encoder,$lotid,$typeput){
 		global $db;
 		$this->sql="SELECT *
-					FROM $this->tb_phar_avai_dept AS dept, care_pharma_available_product AS pro 
+					FROM care_pharma_available_department AS dept, care_pharma_available_product AS pro
 					WHERE dept.available_product_id = pro.available_product_id 
-					AND dept.department='$dept' AND dept.ward_nr='$ward' AND typeput='$typeput'
-					AND pro.product_encoder='$encoder' AND pro.product_lot_id='$lotid'";		
+					AND dept.department='$dept' AND dept.ward_nr='$ward' AND dept.typeput='$typeput'
+					AND pro.product_encoder='$encoder' AND pro.product_lot_id='$lotid'";
 		if($this->result=$db->Execute($this->sql)) {
 			if($this->result->RecordCount()){
 				return $this->result->FetchRow();
@@ -938,7 +938,7 @@ class CabinetPharma extends Core {
 		$this->sql= "UPDATE $this->tb_phar_avai_dept AS dept, care_pharma_available_product AS pro
 					SET dept.available_number=dept.available_number".$cal."'$number' 
 					WHERE dept.available_product_id = pro.available_product_id 
-					AND pro.product_encoder='$encoder' AND pro.product_lot_id='$lotid' 
+					AND pro.product_encoder='$encoder' AND pro.product_lot_id='$lotid'
 					AND dept.department='$dept' AND dept.ward_nr='$ward' AND dept.typeput='$typeput'";
 		return $this->Transact($this->sql);		
 	}
@@ -1098,7 +1098,7 @@ class CabinetPharma extends Core {
 	}    
     //************************************************************************
     //************************************************************************
-    //Hóa ch?t
+    //Hï¿½a ch?t
     //************************************************************************
     //************************************************************************
     function listAllChemicalReturn($condition){

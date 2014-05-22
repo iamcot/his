@@ -91,7 +91,7 @@ switch ($issue_show['typeput']){
 					<td align="center" bgColor="#ffffff"><b>'.$rowIssue['units'].'</b></td>
 					<td align="right" bgColor="#ffffff">'.number_format($rowIssue['sumpres']).'</td>
 					<td align="right" bgColor="#ffffff">'.number_format($rowIssue['plus']).'</td>
-					<td bgColor="#ffffff"><input type="text" id="tonkho'.$i.'" value="'.intval($tonkhole).'" size="8"  style="text-align:right;border-color:white;border-style:solid;color:red;" readonly></td>	
+					<td bgColor="#ffffff"><input type="text" id="tonkho'.$i.'" value="'.intval($tonkhole).'" size="8"  style="text-align:right;border-color:white;border-style:solid;color:red;" readonly></td>
 					<td align="right" bgColor="#ffffff"><b>'.number_format($rowIssue['number_request']).'</b></td>
 					<td align="right" bgColor="#ffffff"><input id="receive['.$i.']" name="receive['.$i.']" type="text" size=3 value="'.$rowIssue['number_request'].'"> <input type="hidden" name="cost'.$i.'" value="'.$rowIssue['cost'].'"> </td>
 					<td align="center" bgColor="#ffffff">'.$rowIssue['note'].'</td>

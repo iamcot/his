@@ -197,7 +197,8 @@ ob_start();
 			$search = formatDate2STD($search,'dd/mm/yyyy');
 			$condition=" AND exp_date LIKE '".$search."%' ";
 		}
-		elseif (is_numeric($search))
+		else
+            if (is_numeric($search))
 			$condition=" AND product_lot_id LIKE '%".$search."%' ";
 		else
 			$condition=" AND product_name LIKE '%".$search."%' ";

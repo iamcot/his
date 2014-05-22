@@ -1335,8 +1335,9 @@ class Product extends Core {
 					".$dept_ward." 
                     AND khochan.product_encoder=tatcakhoa.product_encoder 
                     AND donvi.unit_of_medicine=khochan.unit_of_medicine  	
-                ORDER BY taikhoa.init_number  ".$updown." 
+                ORDER BY khochan.product_name, taikhoa.init_number  ".$updown."
 				".$limit_number;
+//            echo $this->sql;
 			if($this->result=$db->Execute($this->sql)) {
 				if($this->result->RecordCount()) {
 					 return $this->result;	 
@@ -1360,8 +1361,8 @@ class Product extends Core {
                     AND khochan.product_encoder=tatcakhoa.product_encoder 
                     AND donvi.unit_of_medicine=khochan.unit_of_medicine 
 					".$condition."
-                ORDER BY taikhoa.available_number ".$updown;
-			//echo $this->sql;	
+                ORDER BY khochan.product_name, taikhoa.available_number ".$updown;
+//			echo $this->sql;
 			if($this->result=$db->Execute($this->sql)) {
 				if($this->result->RecordCount()) {
 					 return $this->result;	 
@@ -1382,7 +1383,7 @@ class Product extends Core {
 						AND donvi.unit_of_medicine=khochan.unit_of_medicine 
 						AND khole.available_number>0 	
 						".$condition." 	
-					ORDER BY khochan.product_name 
+					ORDER BY khochan.product_name, khole.exp_date
 					".$limit_number; 
 				
 			if($this->result=$db->Execute($this->sql)) {
@@ -1523,7 +1524,7 @@ class Product extends Core {
 					GROUP BY source.product_encoder, source.price, source.exp_date
 					ORDER BY numbersum ".$updown."
 					".$limit_number; 
-				
+
 			if($this->result=$db->Execute($this->sql)) {
 				if($this->result->RecordCount()) {
 					 return $this->result;
@@ -1976,7 +1977,7 @@ class Product extends Core {
 					FROM care_pharma_available_product 
 					WHERE product_encoder='$encoder'
 					AND available_number>0 AND typeput='".$typeput."'
-					ORDER BY available_product_id";
+					ORDER BY exp_date";
 		if ($this->result=$db->Execute($this->sql)) {
 			$n=$this->result->RecordCount();
 		    if ($n) {

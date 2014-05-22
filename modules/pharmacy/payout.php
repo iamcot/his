@@ -263,7 +263,9 @@ function searchMedicine(id_number)
 }
 function Medicine_AutoComplete(i){
     var name_med='medicine'+i;
-    var includeScript = "includes/khochan_payout_autocomplete_medicine.php?mode=auto&k="+i;
+//    var loai=$("#typeput").val();
+    var loai=document.getElementById("typeput").value;
+    var includeScript = "includes/khochan_payout_autocomplete_medicine.php?mode=auto&k="+i+"&loai="+loai;
     new Ajax.Autocompleter(name_med,"hint",includeScript, {
             method: 'get',
             paramName: 'search',
@@ -346,8 +348,35 @@ function CheckDuplicateMedicine(){
         }
     }
 }
+//function deleteRow($id)
+//{
+//    var table = document.getElementById($id);
+//    var rowCount = table.rows.length;
+//    for(var i=0; i<rowCount; i++) {
+//        table.deleteRow(i);
+//    }
+//}
+function checkSelect()
+{
 
+//    var loai=  document.getElementById("typeput");
+//    if(loai.select.changed)
+//    {
+        var conf=confirm("Danh sách thuốc sẽ bị xóa! Bạn chấp nhận?");
+        if(conf==true)
+        {
+            var table = document.getElementById("my_table");
 
+            var rowCount = table.rows.length;
+            for(var i=1; i<rowCount; i++) {
+                table.row[i].innerHTML=
+            }
+        }
+        else
+            return false;
+//    }
+
+}
 -->
 </script>
 <?php
@@ -408,6 +437,7 @@ function load_health_station($select,$default)
 
     return $selected_box;
 }
+
 
 //***********************************NOI DUNG TRANG********************************
 $smarty->assign('TitleForm',$LDPUTINPAPER);
@@ -479,7 +509,7 @@ if(!isset($target) || ($target=='new') || ($target=='create')){
     $smarty->assign('sPlaceInput',load_health_station($select, $LDKhoLe));
     $smarty->assign('sTotalInput','<input type="text" id="total_money" name="total_money" class="input1"/>');
     $smarty->assign('sPutInIDInput','<input type="text" name="voucher_id" class="input1"/>');
-    $smarty->assign('sTypePut','<select name="typeput" id="typeput" class="input1" ><option value="0">'.$LDBH.'</option><option value="1" selected>'.$LDNoBH.'</option><option value="2">'.$LDCBTC.'</option></select>');
+    $smarty->assign('sTypePut','<select name="typeput" id="typeput" class="input1" onchange="checkSelect()" ><option value="0">'.$LDBH.'</option><option value="1" selected>'.$LDNoBH.'</option><option value="2">'.$LDCBTC.'</option></select>');
 
 }else{	//target=update
 
@@ -534,7 +564,7 @@ if(!isset($target) || ($target=='new') || ($target=='create')){
             $flag2='selected="selected"';
             break;
     }
-    $smarty->assign('sTypePut','<select name="typeput" id="typeput" class="input1" ><option value="0" '.$flag1.'>'.$LDBH.'</option><option value="1" '.$flag2.'>'.$LDNoBH.'</option><option value="2" '.$flag3.'>'.$LDCBTC.'</option></select>');
+    $smarty->assign('sTypePut','<select name="typeput" id="typeput" class="input1" onchange="checkSelect()"><option value="0" '.$flag1.'>'.$LDBH.'</option><option value="1" '.$flag2.'>'.$LDNoBH.'</option><option value="2" '.$flag3.'>'.$LDCBTC.'</option></select>');
 }
 
 

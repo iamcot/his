@@ -576,7 +576,7 @@ if($date_time=='')
 require_once ($root_path.'js/jscalendar/calendar.php');
 $calendar = new DHTML_Calendar($root_path.'js/jscalendar/', $lang, 'calendar-system', true);
 $calendar->load_files();
-echo $date_format;
+//echo $date_format;
 $smarty->assign('sCalendar',$calendar->show_calendar($calendar,$date_format,'date',$date_time));
 
 //$smarty->assign('sCalendar',$calendar->show_calendar($calendar,$date_format,'date_time',''));
