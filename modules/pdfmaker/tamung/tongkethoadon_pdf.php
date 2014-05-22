@@ -141,7 +141,7 @@ $html_vtyt='<table border="1" cellpadding="2">
                     <tr>
                         <td align="center"><b>Quỹ BHYT</b></td>
                         <td align="center"><b>Khác</b></td>
-                        <td align="center"><b>Người bệnh</b></td>>
+                        <td align="center"><b>Người bệnh</b></td>
                     </tr>
 
 			';
@@ -182,7 +182,7 @@ foreach ($list_item as $x => $v) {
     foreach ($list_date as $v1) {
         $tongthuoc += $v[$v1];
     }
-     $html_thuoc= '<tr>
+     $html_thuoc=   '<tr>
 							<td colspan="1" align="center">'.$list_info[$x]['name'].'</td>
 							<td colspan="1" align="center">'.$list_info[$x]['unit'].'</td>
 							<td align="center">'.$tongthuoc.'</td>
@@ -200,6 +200,7 @@ foreach ($list_item as $x => $v) {
 //$html_vtyt = $html_vtyt.ob_get_contents();
 //ob_clean();
 //Lay tat ca toa thuoc ngoai tru cua benh nhan
+$html_thuoc='';
 $presqry="SELECT prs.*,prsinfo.date_time_create,prsinfo.sum_date
 			FROM care_pharma_prescription AS prs, care_pharma_prescription_info AS prsinfo, care_pharma_type_of_prescription AS tp
 			WHERE prsinfo.encounter_nr='$patientno' AND prsinfo.prescription_id=prs.prescription_id
@@ -216,7 +217,7 @@ if(is_object($presresult))
         for ($i=0;$i<$countpres;$i++)
         {
             $pres=$presresult->FetchRow();
-            $html_thuoc = '<tr>
+            $html_thuoc.= '<tr>
 							<td colspan="1" align="center">'.$pres['product_name'].'</td>
 							<td colspan="1" align="center">'.$pres['number_of_unit'].'</td>
 							<td align="center">'.$pres['sum_number'].'</td>
@@ -226,10 +227,10 @@ if(is_object($presresult))
                             <td align="center">0</td>
                             <td align="center">'.number_format($pres['cost']*$pres['sum_number'] - $pres['cost']*$pres['sum_number']*$mh).'</td>
 						    </tr>';
-            $tongtienthuoc += $tongthuoc*$list_info[$x]['cost'];
-            $tongtienthuocBHYT += $tongthuoc*$list_info[$x]['cost']*$mh;
-            $tongtienthuocTra +=  $tongtienthuoc - $tongtienthuocBHYT;
-
+            $tongtienthuoc += $pres['cost']*$pres['sum_number'];
+            $tongtienthuocBHYT += $pres['cost']*$pres['sum_number']*$mh;
+            $tongtienthuocTra +=  $pres['cost']*$pres['sum_number'] - $pres['cost']*$pres['sum_number']*$mhT;
+            $stt++;
         }
     }
 
