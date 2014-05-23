@@ -53,6 +53,8 @@ $paymentresult=$db->Execute($paymentqry);
 if(is_object($paymentresult)) $payment=$paymentresult->FetchRow();
 
 
+$resultfinalqry= $eComBill->billAmountByEncounter($patientno);
+if(is_object($resultfinalqry)) $cntbill=$resultfinalqry->FetchRow();
 
 
 require_once($root_path.'classes/tcpdf/config/lang/eng.php');
@@ -128,7 +130,7 @@ $pdf->SetFont('dejavusans', '', 10);
 
 #---------------------------------- Show info of Prescription, Show info of Depot, Surgery, Laborator ---------------------------------------------
 //$pdf->Ln();
-
+$html_thuoc='';
 $html_vtyt='<table border="1" cellpadding="2">
 				<tr>
 					<td rowspan="2" width="15%" align="center"><b>NỘI DUNG</b></td>
@@ -182,7 +184,7 @@ foreach ($list_item as $x => $v) {
     foreach ($list_date as $v1) {
         $tongthuoc += $v[$v1];
     }
-     $html_thuoc=   '<tr>
+     $html_thuoc.=   '<tr>
 							<td colspan="1" align="center">'.$list_info[$x]['name'].'</td>
 							<td colspan="1" align="center">'.$list_info[$x]['unit'].'</td>
 							<td align="center">'.$tongthuoc.'</td>
@@ -197,10 +199,9 @@ foreach ($list_item as $x => $v) {
         $tongtienthuocTra +=  $tongtienthuoc - $tongtienthuocBHYT;
     $stt++;
 }
-//$html_vtyt = $html_vtyt.ob_get_contents();
-//ob_clean();
+
 //Lay tat ca toa thuoc ngoai tru cua benh nhan
-$html_thuoc='';
+
 $presqry="SELECT prs.*,prsinfo.date_time_create,prsinfo.sum_date
 			FROM care_pharma_prescription AS prs, care_pharma_prescription_info AS prsinfo, care_pharma_type_of_prescription AS tp
 			WHERE prsinfo.encounter_nr='$patientno' AND prsinfo.prescription_id=prs.prescription_id
@@ -342,6 +343,10 @@ if(is_object($itemresult))
         }
     }
 }
+//tính số tiền hóa đơn đã thanh toán
+$thanhtoan = $cntbill['total_outstanding'];
+//tính số tiền mà bệnh nhân tạm ứng
+$tamung= $payment['sumcost'];
 $html_vtyt .= ' <tr>
 					<td><b>1.Tên thuốc, hàm lượng </b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
 				</tr>
@@ -382,15 +387,20 @@ $html_vtyt .= ' <tr>
 
                 $finalbilldate = explode('/',formatDate2Local($final['final_date'],$date_format,false,false,$sepChars));
             $html_vtyt .= '<tr>
-					        <td colspan="10"><i><b>Tổng cộng (Cộng: 1+2+3+4+5+6+7+8+9): '.number_format($tongtienthuoc+$tongtienvtyt+$tongtienxndv).' </b></i></td>
+                            <td colspan="8"><i><b>Tổng cộng (Cộng: 1+2+3+4+5+6+7+8+9): &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;'.number_format($tongtienthuoc+$tongtienvtyt+$tongtienxndv).' vnd</b></i></td>
                           </tr>
                             <tr>
-                            <td  colspan="10"><i><b>Được giảm (BHYT): '.number_format($tongtienthuocBHYT+$tongtienvtytBHYT+$tongtienxndvBHYT).' </b></i></td>
+                            <td  colspan="8"><i><b>Được giảm (BHYT): &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;'.number_format($tongtienthuocBHYT+$tongtienvtytBHYT+$tongtienxndvBHYT).' vnd</b></i></td>
                             </tr>
                             <tr>
-                            <td  colspan="10"><i><b>Tổng số tiền sau khi giảm: '.number_format($tongtienthuocTra+$tongtienVTYTTra+$tongtienxndvTra).' </b></i></td>
+                            <td  colspan="8"><i><b>Tổng số tiền sau khi giảm: &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;'.number_format($tongtienthuocTra+$tongtienVTYTTra+$tongtienxndvTra).' vnd</b></i></td>
 				           </tr>
-
+                           < tr>
+                            <td  colspan="8"><i><b>Tổng số tiền đã thanh toán + tạm ứng: &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;'.number_format($thanhtoan + $tamung).' vnd</b></i></td>
+				           </tr>
+				           <tr>
+                            <td  colspan="8"><i><b>Còn lại: &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;'.number_format($tongtienthuocTra+$tongtienVTYTTra+$tongtienxndvTra - ($thanhtoan + $tamung)).' vnd</b></i></td>
+				           </tr>
 			</table>';
 $html_vtyt = $html_vtyt.ob_get_contents();
 ob_clean();
