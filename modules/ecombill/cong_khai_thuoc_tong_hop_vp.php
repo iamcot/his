@@ -660,7 +660,7 @@ $smarty->assign('LDAmountAfterDiscount',$LDAmountAfterDiscount);
 $smarty->assign('LDAmountAfterDiscountValue',number_format($discamt));
 $sTempMoney = convertMoney($discamt);
 $smarty->assign('money_afterdisc_Reader',$sTempMoney);
- /*
+//số tiền thanh toán+ tạm ứng
 $smarty->assign('LDAmountPreviouslyReceived',$LDAmountPreviouslyReceived);
 $smarty->assign('LDAmountPreviouslyReceivedValue',number_format($cntbill['total_outstanding']+$payment['sumcost']));
 $sTempMoney = convertMoney($cntbill['total_outstanding']+$payment['sumcost']);
@@ -677,7 +677,7 @@ else {
     $sTempMoney = $LDTru.' '.$sTempMoney;
 }
 $smarty->assign('money_due_Reader',$sTempMoney);
-
+ /*
 //No truoc
 $old_resume = $oldenc_totalbill - $oldenc_discount - $oldenc_totaloutstanding - $oldenc_totalpayment;
 $smarty->assign('LDOldResume',$LDNoTruoc);

@@ -28,7 +28,13 @@ if(!isset($Pres)) $Pres = new Prescription;
 if(!isset($PresMed)) $PresMed = new PrescriptionMedipot;
 
 $Encounter->loadEncounterData($patientno);
-
+//----nang-------
+$patqry="SELECT e.*,p.* FROM care_encounter AS e, care_person AS p WHERE e.encounter_nr=$patientno AND e.pid=p.pid";
+$resultpatqry=$db->Execute($patqry);
+if(is_object($resultpatqry)) $patient=$resultpatqry->FetchRow();
+else $patient=array();
+$mh = $patient['muchuong'];
+echo $mh;
 $breakfile='patient_bill_links.php'.URL_APPEND.'&patientno='.$patientno.'&full_en='.$full_en.'&target='.$target;
 $returnfile='patient_bill_links.php'.URL_APPEND.'&patientno='.$patientno.'&full_en='.$full_en.'&target='.$target;
 
@@ -145,7 +151,7 @@ if($billid == "currentbill") {
 		$oldbilltotal=$buffer['bill_amount'];
 		$oldbilloutstanding=$buffer['bill_outstanding'];
 		$discount = $buffer['bill_discount'];
-	
+       // $discount = $mh*
 		$totaldue = $oldbilltotal-$oldbilloutstanding;
 	}
 	$smarty->assign('discount', number_format($discount));
@@ -580,7 +586,8 @@ $smarty->assign('LDTotal',$LDTotal);
 if($billid=="currentbill") { 
 	$LDTotalBillAmountData = $total; 
 	include($root_path.'classes/money/baohiem.php');
-	$discount = TienBaoHiem($insurance_nr, $insurance_start, $insurance_exp,$total_for_insur, $insurance_start, $is_traituyen);
+	//$discount = TienBaoHiem($insurance_nr, $insurance_start, $insurance_exp,$total_for_insur, $insurance_start, $is_traituyen);
+    $discount = $mh*$LDTotalBillAmountData; //------>n sửa số tiền giảm bảo hiểm y tế dựa trên mức hưởng
 	//echo $total_for_insur;
 	if($target=='nursing')
 		$smarty->assign('discount', number_format($discount));

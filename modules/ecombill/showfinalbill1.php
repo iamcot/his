@@ -600,7 +600,7 @@ $smarty->assign('LDAmountAfterDiscount',$LDAmountAfterDiscount);
 $smarty->assign('LDAmountAfterDiscountValue',number_format($discamt));
 $sTempMoney = convertMoney($discamt);
 $smarty->assign('money_afterdisc_Reader',$sTempMoney);
-/*
+
 $smarty->assign('LDAmountPreviouslyReceived',$LDAmountPreviouslyReceived);
 $smarty->assign('LDAmountPreviouslyReceivedValue',number_format($cntbill['total_outstanding']+$payment['sumcost']));
 $sTempMoney = convertMoney($cntbill['total_outstanding']+$payment['sumcost']);
@@ -617,16 +617,16 @@ else {
    $sTempMoney = $LDTru.' '.$sTempMoney;
 }
 $smarty->assign('money_due_Reader',$sTempMoney);
-
+/*
 //No truoc
 $old_resume = $oldenc_totalbill - $oldenc_discount - $oldenc_totaloutstanding - $oldenc_totalpayment;
 $smarty->assign('LDOldResume',$LDNoTruoc);
 $smarty->assign('LDOldResumeValue',number_format($old_resume));
 if($old_resume>=0)
-   $sTempMoney = convertMoney($old_resume);
+  $sTempMoney = convertMoney($old_resume);
 else {
-   $sTempMoney = convertMoney(-$old_resume);
-   $sTempMoney = $LDTru.' '.$sTempMoney;
+  $sTempMoney = convertMoney(-$old_resume);
+  $sTempMoney = $LDTru.' '.$sTempMoney;
 }
 $smarty->assign('money_oldresume_Reader',$sTempMoney);
 
@@ -634,21 +634,21 @@ $smarty->assign('money_oldresume_Reader',$sTempMoney);
 $smarty->assign('LDCurrentPaidAmount',$LDFinalPaidAmount);
 $smarty->assign('LDCurrentPaidAmountValue',number_format($total_resume+$old_resume));
 if(($total_resume+$old_resume)>=0)
-   $sTempMoney = convertMoney($total_resume+$old_resume);
+  $sTempMoney = convertMoney($total_resume+$old_resume);
 else {
-   $sTempMoney = convertMoney(-($total_resume+$old_resume));
-   $sTempMoney = $LDTru.' '.$sTempMoney;
+  $sTempMoney = convertMoney(-($total_resume+$old_resume));
+  $sTempMoney = $LDTru.' '.$sTempMoney;
 }
 $smarty->assign('money_paid_Reader',$sTempMoney);
 
- //Benh nhan tra
+//Benh nhan tra
 $smarty->assign('LDPatientPaid',$LDBenhNhanTraSauCung);
 $smarty->assign('LDPatientPaidValue',number_format($final['final_amount_recieved']));
 if($final['final_amount_recieved']>=0)
-   $sTempMoney = convertMoney($final['final_amount_recieved']);
+  $sTempMoney = convertMoney($final['final_amount_recieved']);
 else {
-   $sTempMoney = convertMoney(-$final['final_amount_recieved']);
-   $sTempMoney = $LDTru.' '.$sTempMoney;
+  $sTempMoney = convertMoney(-$final['final_amount_recieved']);
+  $sTempMoney = $LDTru.' '.$sTempMoney;
 }
 $smarty->assign('money_patientpaid_Reader',$sTempMoney);
 
@@ -657,10 +657,10 @@ $lastdue=$total_resume+$old_resume-$final['final_amount_recieved'];
 $smarty->assign('LDAmountDueLast',$LDConlaisaucung);
 $smarty->assign('LDAmountDueLastValue',number_format($lastdue));
 if($lastdue>=0)
-   $sTempMoney = convertMoney($lastdue);
+  $sTempMoney = convertMoney($lastdue);
 else {
-   $sTempMoney = convertMoney(-$lastdue);
-   $sTempMoney = $LDTru.' '.$sTempMoney;
+  $sTempMoney = convertMoney(-$lastdue);
+  $sTempMoney = $LDTru.' '.$sTempMoney;
 }
 $smarty->assign('money_duelast_Reader',$sTempMoney);
 */
