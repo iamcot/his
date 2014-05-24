@@ -126,7 +126,7 @@ $s=$s_obj->BASIC_String();
 			if(empty($oitem)) $oitem='encounter_nr';			
 			if(empty($odir)) $odir='DESC'; # default, latest pid at top
 			
-			$sql2=" WHERE ( enc.encounter_nr='$suchwort'  OR enc.encounter_nr $sql_LIKE '%$suchwort%' OR enc.encounter_nr $sql_LIKE '%$suchwort'  OR reg.insurance_nr $sql_LIKE '%$suchwort')";   // OR reg.insurance_nr $sql_LIKE '%$suchwort'
+			$sql2=" WHERE (reg.insurance_nr $sql_LIKE '%$suchwort')";   // OR reg.insurance_nr $sql_LIKE '%$suchwort'
 	    } else {
 			# Try to detect if searchkey is composite of first name + last name
 			if(stristr($searchkey,',')){
@@ -180,7 +180,7 @@ $s=$s_obj->BASIC_String();
 			$dbtable='FROM care_encounter as enc,care_person as reg ';
 
 			$sql='SELECT enc.encounter_nr, enc.encounter_class_nr, enc.is_discharged,enc.insurance_class_nr,enc.current_dept_nr,
-								reg.name_last, reg.name_first, reg.date_birth, reg.addr_zip,reg.sex '.$dbtable.$sql2;
+								reg.name_last, reg.name_first, reg.date_birth, reg.addr_zip,reg.sex, reg.insurance_nr '.$dbtable.$sql2;
 			//echo $sql;
 	
 			if($ergebnis=$db->SelectLimit($sql,$pagen->MaxCount(),$pagen->BlockStartIndex()))
@@ -329,6 +329,7 @@ if($mode=='search'||$mode=='paginate'){
 		$smarty->assign('LDZipCode',$pagen->makeSortLink($LDZipCode,'addr_zip',$oitem,$odir,$targetappend));
 		$smarty->assign('LDDepartment',$pagen->makeSortLink($LDDepartment,'current_dept_nr',$oitem,$odir,$targetappend));
 		$smarty->assign('LDInsuranceType',$pagen->makeSortLink($LDInsuranceType,'insurance_class_nr',$oitem,$odir,$targetappend));
+        $smarty->assign('LDInsuranceNr', $pagen->makeSortLink($LDInsuranceNr,'insurance_nr',$oitem,$odir,$targetappend ));
 		$smarty->assign('LDOptions',$LDOptions);
 
 		$sTemp = '';
@@ -356,7 +357,7 @@ if($mode=='search'||$mode=='paginate'){
 			}
 			$smarty->assign('sLastName',ucfirst($zeile['name_last']));
 			$smarty->assign('sFirstName',ucfirst($zeile['name_first']));
-
+             $smarty->assign('sInsurance_nr', $zeile['insurance_nr']) ;
 			#
 			# If person is dead show a black cross
 			#

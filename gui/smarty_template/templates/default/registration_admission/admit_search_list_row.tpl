@@ -11,5 +11,6 @@
 	<td>&nbsp;{{$sZipCode}}</td>
 	<td>&nbsp;{{$sDept}}</td>
 	<td>&nbsp;{{$sInsuranceType}}</td>
+    <td>&nbsp;{{$sInsurance_nr}}</td>
 	<td align="center">&nbsp;{{$sOptions}} {{$sHiddenBarcode}}</td>
 </tr>

@@ -135,7 +135,7 @@ class GuiInputPerson {
         if(!isset($insurance_show)) $insurance_show=TRUE;
 
         $newdata=1;
-
+        $flag=0;
         $error=0;
         $dbtable='care_person';
 
@@ -154,7 +154,7 @@ class GuiInputPerson {
         $photo_path = (is_dir($root_path.$GLOBAL_CONFIG['person_foto_path'])) ? $GLOBAL_CONFIG['person_foto_path'] : $this->default_photo_path;
 
         if (($mode=='save') || ($mode=='forcesave')) {
-
+            $flag=1;
             # If saving is not forced, validate important elements
             if($mode!='forcesave') {
                 # clean and check input data variables
@@ -412,7 +412,8 @@ class GuiInputPerson {
 
                 $zeile=$data_obj->FetchRow();
                 extract($zeile);
-
+                $insurance_start=@formatDate2STD($insurance_start,$date_format);
+                $insurance_exp=@formatDate2STD($insurance_exp,$date_format);
                 # Get the related insurance data
                 $p_insurance=&$pinsure_obj->getPersonInsuranceObject($pid);
                 if($p_insurance==FALSE) {

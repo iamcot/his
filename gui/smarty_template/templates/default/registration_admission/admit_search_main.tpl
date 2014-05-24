@@ -54,6 +54,7 @@
 			<td>{{$LDZipCode}}</td>
 			<td>{{$LDDepartment}}</td>
 			<td>{{$LDInsuranceType}}</td>
+            <td>{{$LDInsuranceNr}} </td>
 			<td>&nbsp;{{$LDOptions}}</td>         
 		</tr>
 

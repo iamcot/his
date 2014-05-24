@@ -92,7 +92,7 @@ $LDAdmWantSearch='Tìm bệnh nhân'; //'I am looking for a patient';
 $LDAdmWantArchive='Tìm thử trong tủ hồ sơ'; //'I need to research in the archive';
 
 $fieldname=array('Mã bệnh nhân','Họ','Tên','Ngày sinh','Tùy chọn');
-$LDEntryPrompt='Nhập từ khóa tìm kiếm như họ, tên'; 
+$LDEntryPrompt='Nhập từ khóa tìm kiếm như họ, tên, số thẻ BHYT';
 //'Enter the search keyword. For example: lastname, or firstname, or date of birth, etc.';
 $LDSEARCH='TÌM'; //'SEARCH';
 
@@ -383,7 +383,7 @@ $LDOptsForPatient='Thông tin hồ sơ bệnh án'; //'Options for this patient'
 $LDRegisterNewPerson='Đăng ký hồ sơ cá nhân'; //'Register a new person';
 
 /* 2003-05-17 EL */
-$LDEnterPersonSearchKey='Nhập từ khóa tìm kiếm như mã hồ sơ cá nhân, họ, tên, số thẻ bảo hiểm, ngày sinh';
+$LDEnterPersonSearchKey='Nhập từ khóa tìm kiếm như mã hồ sơ cá nhân, họ, tên, số thẻ BHYT, ngày sinh';
 //'Enter search keyword: e.g. PID, first name, family name, or birth date';
 $LDPersonData='Thông tin cá nhân'; //'Personal data';
 
