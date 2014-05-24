@@ -91,12 +91,12 @@ if(isset($is_logged_out) && $is_logged_out) {
 
 <?php require($root_path.'include/core/inc_passcheck_mask.php') ?>
 
-<p><!-- 
+<p><!--
 <img src="../img/small_help.gif" > <a href="<?php echo $root_path; ?>main/ucons.php<?php echo URL_APPEND; ?>">Was ist login?</a><br>
 <img src="../img/small_help.gif" > <a href="<?php echo $root_path; ?>main/ucons.php<?php echo URL_APPEND; ?>">Wieso soll ich mich einloggen?</a><br>
 <img src="../img/small_help.gif" > <a href="<?php echo $root_path; ?>main/ucons.php<?php echo URL_APPEND; ?>">Was bewirkt das einloggen?</a><br>
  -->
-<p>
+    <p>
 <?php
 require($root_path.'include/core/inc_load_copyrite.php');
 ?>

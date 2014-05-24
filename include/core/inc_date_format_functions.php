@@ -134,46 +134,46 @@ function formatShortDate2Local($month,$day,$localFormat,$sepChars=null)
    
 }
 
-//function check_date($date){
-//    $flag=1;
-//    $sepChars=array('-','.','/',':',',');
-//    if(strlen($date) > 4){
-//        for($i=0;$i<sizeof($sepChars);$i++)
-//        {
-//            if(strchr($date,$sepChars[$i]))
-//            {
-//                $loc_array=explode($sepChars[$i],$date);
-//                break;
-//            }
-//        }
-//
-//        if(strlen($loc_array[0]) ==4 ){
-//            $vYear=$loc_array[0];
-//            $vMonth=$loc_array[1];
-//            $vDay=$loc_array[2];
-//        }else if(strlen($loc_array[2])==4){
-//            $vYear=$loc_array[2];
-//            $vMonth=$loc_array[1];
-//            $vDay=$loc_array[0];
-//        } else $flag=0;
-//
-//        if($flag==1){
-//
-//            if($vMonth==1 || $vMonth==3 || $vMonth==5 || $vMonth==7 || $vMonth==8 || $vMonth==10 || $vMonth==12){
-//                if($vDay>31) $flag=0;
-//            }
-//            else if($vMonth==4 || $vMonth==6 ||$vMonth==9 || $vMonth==11){
-//                if($vDay>30) $flag=0;
-//            }
-//            else if($vMonth==2){
-//                if($vDay>29 && $vYear %4==0)     $flag=0;
-//                else if($vDay>28 && $vYear % 4 !=0) $flag=0;
-//            }
-//            else $flag=0;
-//        }
-//        return $flag;
-//    }
-//}
+function check_date($date){
+    $flag=1;
+   $sepChars=array('-','.','/',':',',');
+   if(strlen($date) > 4){
+       for($i=0;$i<sizeof($sepChars);$i++)
+       {
+           if(strchr($date,$sepChars[$i]))
+           {
+               $loc_array=explode($sepChars[$i],$date);
+               break;
+           }
+       }
+
+       if(strlen($loc_array[0]) ==4 ){
+           $vYear=$loc_array[0];
+           $vMonth=$loc_array[1];
+           $vDay=$loc_array[2];
+       }else if(strlen($loc_array[2])==4){
+           $vYear=$loc_array[2];
+           $vMonth=$loc_array[1];
+           $vDay=$loc_array[0];
+       } else $flag=0;
+
+       if($flag==1){
+
+           if($vMonth==1 || $vMonth==3 || $vMonth==5 || $vMonth==7 || $vMonth==8 || $vMonth==10 || $vMonth==12){
+               if($vDay>31) $flag=0;
+           }
+           else if($vMonth==4 || $vMonth==6 ||$vMonth==9 || $vMonth==11){
+               if($vDay>30) $flag=0;
+           }
+           else if($vMonth==2){
+               if($vDay>29 && $vYear %4==0)     $flag=0;
+               else if($vDay>28 && $vYear % 4 !=0) $flag=0;
+           }
+           else $flag=0;
+       }
+       return $flag;
+   }
+}
 
 function formatDate2STD($localDate,$localFormat,&$sepChars=null)
 {

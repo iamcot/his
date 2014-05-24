@@ -407,9 +407,10 @@ class GuiSearchPerson {
 			$this->smarty->assign('LDLastName',$pagen->makeSortLink($LDLastName,'name_last',$oitem,$odir,$this->targetappend));
 			$this->smarty->assign('LDFirstName',$pagen->makeSortLink($LDFirstName,'name_first',$oitem,$odir,$this->targetappend));
 			$this->smarty->assign('LDBday',$pagen->makeSortLink($LDBday,'date_birth',$oitem,$odir,$this->targetappend));
+            $this->smarty->assign('LDInsuranceNr', $pagen->makeSortLink($LDInsuranceNr, 'insurance_nr',$oitem,$odir,$this->targetappend));
 			$this->smarty->assign('LDZipCode',$pagen->makeSortLink($LDZipCode,'addr_zip',$oitem,$odir,$this->targetappend));
 			$this->smarty->assign('LDLanKhamGanDay',$pagen->makeSortLink($LDLanKhamGanDay,'encounter_date',$oitem,$odir,$this->targetappend));
-			
+
 			if(!empty($this->targetfile)){
 				$this->smarty->assign('LDOptions',$LDOptions);
 			}
@@ -442,10 +443,11 @@ class GuiSearchPerson {
 						else $this->smarty->assign('sCrossIcon','');
 					
 					$this->smarty->assign('sBday',formatDate2Local($zeile['date_birth'],$date_format));
+
 					$sql="SELECT * FROM care_encounter WHERE pid='".$zeile['pid']."' AND encounter_date=(SELECT max(encounter_date) FROM care_encounter WHERE pid='".$zeile['pid']."') ";
 					$buf=$db->Execute($sql);
 					if($buf->RecordCount()){
-					$buf2=$buf->FetchRow();
+					    $buf2=$buf->FetchRow();
 						
 						if($buf2['is_discharged']==0){		
 					
@@ -465,6 +467,7 @@ class GuiSearchPerson {
 								
 					
 					$this->smarty->assign('sZipCode',$zeile['addr_zip']);
+                    $this->smarty->assign('LDInsuranceNr', $zeile['insurance_nr']) ;
 					
 					if($withtarget){
 

@@ -383,7 +383,7 @@ $LDOptsForPatient='Thông tin hồ sơ bệnh án'; //'Options for this patient'
 $LDRegisterNewPerson='Đăng ký hồ sơ cá nhân'; //'Register a new person';
 
 /* 2003-05-17 EL */
-$LDEnterPersonSearchKey='Nhập từ khóa tìm kiếm như mã hồ sơ cá nhân, họ, tên, ngày sinh'; 
+$LDEnterPersonSearchKey='Nhập từ khóa tìm kiếm như mã hồ sơ cá nhân, họ, tên, số thẻ bảo hiểm, ngày sinh';
 //'Enter search keyword: e.g. PID, first name, family name, or birth date';
 $LDPersonData='Thông tin cá nhân'; //'Personal data';
 

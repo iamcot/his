@@ -54,7 +54,7 @@
 			<td>{{$LDFirstName}}</td>
 			<td>{{$LDBday}}</td>
 			<td>{{$LDZipCode}}</td>
-			
+			<td>Số thẻ bảo hiểm</td>
 			<td>Lần khám gần đây</td>
 			<td>{{$LDOptions}}</td>
 		</tr>

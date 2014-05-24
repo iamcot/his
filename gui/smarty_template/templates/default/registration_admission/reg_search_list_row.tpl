@@ -7,9 +7,9 @@
 	<td>&nbsp;{{$sSex}}</td>
 	<td>&nbsp;{{$sLastName}}</td>
 	<td>&nbsp;{{$sFirstName}} {{$sCrossIcon}}</td>
-	<td>&nbsp;{{$sBday}}</td>	
+	<td>&nbsp;{{$sBday}}</td>
 	<td>&nbsp;{{$sZipCode}}</td>
-	
+    <td>&nbsp;{{$LDInsuranceNr}}</td>
 	<td>&nbsp;{{$LDLanKhamGanDay}}</td>
 	<td>&nbsp;{{$sOptions}} {{$sHiddenBarcode}}</td>
 </tr>

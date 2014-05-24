@@ -1041,7 +1041,7 @@ $s=$s_obj->BASIC_String();
 			if(empty($oitem)) $oitem='pid';
 			if(empty($odir)) $odir='DESC'; # default, latest pid at top
 
-			$sql2="	WHERE pid=$suchwort OR pid $sql_LIKE '%$suchwort%' OR pid $sql_LIKE '%$suchwort'";
+			$sql2="	WHERE pid=$suchwort OR pid $sql_LIKE '%$suchwort%' OR pid $sql_LIKE '%$suchwort' or insurance_nr like '%$suchwort'";
 
 		} else {
 			# Try to detect if searchkey is composite of first name + last name
@@ -1114,13 +1114,13 @@ $s=$s_obj->BASIC_String();
 							}else{
 								$sql2=" WHERE (CONCAT(name_last,' ',name_first) $sql_LIKE '$searchkey%') OR (CONCAT(name_last,' ', name_first) $sql_LIKE '%$searchkey%')
 								OR (CONCAT(name_last,' ',name_first) $sql_LIKE '".$s_obj->upper($searchkey)."%') OR (CONCAT(name_last,' ', name_first) $sql_LIKE '%".$s_obj->upper($searchkey)."%')			
-									OR (CONCAT(name_last,' ',name_first) $sql_LIKE '".substr($searchkey,0,1).$s_obj->lower(substr($searchkey,1))."%') OR (CONCAT(name_last,' ', name_first) $sql_LIKE '%".substr($searchkey,0,1).$s_obj->lower(substr($searchkey,1))."%')									
+								OR (CONCAT(name_last,' ',name_first) $sql_LIKE '".substr($searchkey,0,1).$s_obj->lower(substr($searchkey,1))."%') OR (CONCAT(name_last,' ', name_first) $sql_LIKE '%".substr($searchkey,0,1).$s_obj->lower(substr($searchkey,1))."%')
 								";
 							}
 						}else{
 							$sql2=" WHERE (CONCAT(name_last,' ',name_first) $sql_LIKE '$searchkey%') OR (CONCAT(name_last,' ', name_first) $sql_LIKE '%$searchkey%')
 							OR (CONCAT(name_last,' ',name_first) $sql_LIKE '".$s_obj->upper($searchkey)."%') OR (CONCAT(name_last,' ', name_first) $sql_LIKE '%".$s_obj->upper($searchkey)."%')		
-								OR (CONCAT(name_last,' ',name_first) $sql_LIKE '".substr($searchkey,0,1).$s_obj->lower(substr($searchkey,1))."%') OR (CONCAT(name_last,' ', name_first) $sql_LIKE '%".substr($searchkey,0,1).$s_obj->lower(substr($searchkey,1))."%')	
+							OR (CONCAT(name_last,' ',name_first) $sql_LIKE '".substr($searchkey,0,1).$s_obj->lower(substr($searchkey,1))."%') OR (CONCAT(name_last,' ', name_first) $sql_LIKE '%".substr($searchkey,0,1).$s_obj->lower(substr($searchkey,1))."%')
 							";
 						}
 					}
@@ -1140,7 +1140,7 @@ $s=$s_obj->BASIC_String();
 		# Set the sorting directive
 		if(isset($oitem)&&!empty($oitem)) $sql3 =" ORDER BY $oitem $odir";
 
-		$this->sql='SELECT pid, name_last, name_first, date_birth, addr_zip, sex, death_date, status FROM '.$this->buffer.$sql3;
+		$this->sql='SELECT pid, name_last, name_first, date_birth, addr_zip, sex, death_date, status, insurance_nr FROM '.$this->buffer.$sql3;
 		//echo $this->sql;
 		if($this->res['ssl']=$db->SelectLimit($this->sql,$maxcount,$offset)){
 			if($this->rec_count=$this->res['ssl']->RecordCount()) {
