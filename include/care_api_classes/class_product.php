@@ -1981,14 +1981,17 @@ class Product extends Core {
 		if ($this->result=$db->Execute($this->sql)) {
 			$n=$this->result->RecordCount();
 		    if ($n) {
+                $list_lotid=array();
 				for ($i=0;$i<$n;$i++){
 					$lotid = $this->result->FetchRow();
 					if ($lotid['available_number']<$number) {
-						$list_lotid = array($lotid['product_lot_id'] => $lotid['available_number']);
+						$list_lotid =array($lotid['product_lot_id'] => $lotid['available_number']);
 						$number = $number - $lotid['available_number'];
 					} else {
-						$list_lotid = array($lotid['product_lot_id'] => $number);
+//						$list_lotid =array($lotid['product_lot_id'] =>$number);
+                        $list_lotid[($lotid['product_lot_id'])] =  $number;
 						break;
+
 					}
 				}
 		        return $list_lotid;

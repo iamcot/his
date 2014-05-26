@@ -365,12 +365,12 @@ function checkSelect()
         var conf=confirm("Danh sách thuốc sẽ bị xóa! Bạn chấp nhận?");
         if(conf==true)
         {
-            var table = document.getElementById("my_table");
+            var table = document.getElementById("my_table")
 
-            var rowCount = table.rows.length;
-            for(var i=1; i<rowCount; i++) {
-                table.row[i].innerHTML=
-            }
+//            var rowCount = table.rows.length;
+//            for(var i=1; i<rowCount; i++) {
+//                table.row[i].innerHTML=
+//            }
         }
         else
             return false;
