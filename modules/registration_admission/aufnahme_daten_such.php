@@ -126,7 +126,7 @@ $s=$s_obj->BASIC_String();
 			if(empty($oitem)) $oitem='encounter_nr';			
 			if(empty($odir)) $odir='DESC'; # default, latest pid at top
 			
-			$sql2=" WHERE (reg.insurance_nr $sql_LIKE '%$suchwort')";   // OR reg.insurance_nr $sql_LIKE '%$suchwort'
+			$sql2=" WHERE (reg.insurance_nr $sql_LIKE '%$suchwort' or enc.encounter_nr $sql_LIKE '%$suchwort' or  enc.encounter_nr $sql_LIKE '$suchwort%' or enc.encounter_nr $sql_LIKE '%$suchwort%'  or enc.encounter_nr= '%$suchwort' )";   // OR reg.insurance_nr $sql_LIKE '%$suchwort'
 	    } else {
 			# Try to detect if searchkey is composite of first name + last name
 			if(stristr($searchkey,',')){
