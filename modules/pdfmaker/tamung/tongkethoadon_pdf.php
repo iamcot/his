@@ -13,9 +13,9 @@ require_once($root_path.'include/care_api_classes/class_ecombill.php');
 
 $eComBill = new eComBill;
 $ward = new Ward;
-//$Encounter = new Encounter;
+$Encounter = new Encounter;
 $sepChars=array('-','.','/',':',',');
-
+$Encounter->loadEncounterData($patientno);//==>nang
 
 //Lay info Benh nhan
 $patqry="SELECT e.*,p.* FROM care_encounter AS e, care_person AS p WHERE e.encounter_nr=$patientno AND e.pid=p.pid";
@@ -64,9 +64,9 @@ require_once($root_path.'classes/tcpdf/tcpdf.php');
 $pdf = new TCPDF('L', 'mm', 'A4', true, 'UTF-8', false);
 
 // set document information
-$pdf->SetAuthor('TT Y tế Tân Uyên');
-$pdf->SetTitle('Phiếu Công Khai Thuốc và Tổng Hợp Viện Phí');
-$pdf->SetMargins(5, 8, 3);
+//$pdf->SetAuthor('TT Y tế Tân Uyên');
+//$pdf->SetTitle('Phiếu Công Khai Thuốc và Tổng Hợp Viện Phí');
+//$pdf->SetMargins(5, 8, 3);
 
 // remove default header/footer
 $pdf->setPrintHeader(false);
@@ -98,7 +98,7 @@ $header_2='<table border="0" width="100%" cellpadding="0">
                 <td>Họ tên người bệnh: '.$patient['name_last'].' '.$patient['name_first'].'</td>
                 <td>Ngày sinh: '.formatDate2Local($patient['date_birth'],$date_format).'</td>
                 <td>Giới tính: '.$sex_patient.'</td>
-                <td>Địa chỉ: '.$patient['addr_str_nr'].' '.$patient['addr_str'].'</td>
+                <td>Địa chỉ: '.$Encounter->encounter['phuongxa_name'].' '.$Encounter->encounter['quanhuyen_name'].'<br>'.$Encounter->encounter['citytown_name'].'</td>
             </tr>
             <tr>
                 <td>Phòng: '.$patient['current_room_nr'].' &nbsp; &nbsp; &nbsp; &nbsp;Số giường: </td>
@@ -113,7 +113,7 @@ $header_2='<table border="0" width="100%" cellpadding="0">
             </tr>
             <tr>
                 <td colspan=3>Chuẩn đoán: '.$patient['referrer_diagnosis'].'</td> &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
-                &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;<td>Tổng số ngày điều trị:'.$tongngaydieutri.' </td>
+                &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; <td>Tổng số ngày điều trị:'.$tongngaydieutri.' </td>
             </tr>
 
         </table>';
@@ -131,7 +131,7 @@ $pdf->SetFont('dejavusans', '', 10);
 #---------------------------------- Show info of Prescription, Show info of Depot, Surgery, Laborator ---------------------------------------------
 //$pdf->Ln();
 $html_thuoc='';
-$html_vtyt='<table border="1" cellpadding="2">
+$html='<table border="1" cellpadding="2">
 				<tr>
 					<td rowspan="2" width="15%" align="center"><b>NỘI DUNG</b></td>
 					<td rowspan="2" align="center" width="20%"><b>Ngày</b></td>
@@ -238,6 +238,7 @@ if(is_object($presresult))
 }
 
 //Gop chung VTYT va Hoa chat
+$html_vtyt_hc='';
 $depotqry="SELECT med.*,medinfo.date_time_create,medinfo.sum_date FROM care_med_prescription AS med, care_med_prescription_info AS medinfo WHERE medinfo.encounter_nr='$patientno' AND medinfo.prescription_id=med.prescription_id ORDER BY med.prescription_id";
 $depotresult=$db->Execute($depotqry);
 $count_depot=0;
@@ -250,8 +251,9 @@ if(is_object($depotresult))
     for ($i=0;$i<$count_depot;$i++)
     {
         $depot=$depotresult->FetchRow();
-        $html_vtyt .= '<tr>
-							<td colspan="1" align="center">'.$depot['product_name'].'</td>
+        $namedepot = $depot['product_name'];
+        $html_vtyt_hc.= '<tr>
+					    	<td colspan="1" align="center">'.$depot['product_name'].'</td>
 							<td colspan="1" align="center">'.formatDate2Local($depot['date_time_create'],'dd/mm',false,false,$sepChars).'</td>
 							<td align="center">'.$depot['sum_number'].'</td>
 							<td align="center">'.number_format($depot['cost']).'</td>
@@ -259,25 +261,26 @@ if(is_object($depotresult))
 							<td align="center">'.number_format($depot['cost']*$depot['sum_number']*$mh).'</td>
                             <td align="center">0</td>
                             <td align="center">'.number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh).'</td>
-						';
+					</tr>';
         $tongtienvtyt+= $tongtienvtyt+ $depot['cost']*$depot['sum_number'];
         $tongtienvtytTBHYT += $depot['cost']*$depot['sum_number']*$mh;
         $tongtienVTYTTra +=  $tongtienvtyt - $tongtienvtytBHYT;
+        $stt++;
     }
 }
 $depotqry1="SELECT med.*,medinfo.date_time_create,medinfo.sum_date FROM care_chemical_prescription AS med, care_chemical_prescription_info AS medinfo WHERE medinfo.encounter_nr='$patientno' AND medinfo.prescription_id=med.prescription_id ORDER BY med.prescription_id";
-$depotresult=$db->Execute($depotqry1);
+$depotresult1=$db->Execute($depotqry1);
 $count_HC=0;
 $tongtienHC=0;
 $tongtienHCBHYT=0;
 $tongtienHCTra=0;
-if(is_object($depotresult))
+if(is_object($depotresult1))
 {
-    $count_depot=$depotresult->RecordCount();
+    $count_HC=$depotresult1->RecordCount();
     for ($i=0;$i<$count_HC;$i++)
     {
-        $depot=$depotresult->FetchRow();
-        $html_vtyt .= '<tr>
+        $depot=$depotresult1->FetchRow();
+        $html_vtyt_hc.= '<tr>
 							<td colspan="1" align="center">'.$depot['product_name'].'</td>
 							<td colspan="1" align="center">'.formatDate2Local($depot['date_time_create'],'dd/mm',false,false,$sepChars).'</td>
 							<td align="center">'.$depot['sum_number'].'</td>
@@ -290,11 +293,13 @@ if(is_object($depotresult))
         $tongtienHC += $tongtienHC+ $depot['cost']*$depot['sum_number'];
         $tongtienHCBHYT += $tongtienHC+ $depot['cost']*$depot['sum_number']*$mh;
         $tongtienHCTra +=$tongtienHC - $tongtienHCBHYT;
+        $stt++;
     }
 }
 $count_depot += $count_HC;
 $tongtienvtyt += $tongtienHC;
-
+$tongtienvtytTBHYT += $tongtienHCBHYT;
+$tongtienVTYTTra   +=$tongtienHCTra;
 
 
 $tongtienxndv=0;
@@ -309,7 +314,7 @@ if(is_object($itemresult))
     {
         $item=$itemresult->FetchRow();
 
-        $row_item=	'<tr>
+        $row_item='<tr>
 						<td colspan="1" align="center">'.$item['item_description'].'</td>
 						<td colspan="1" align="center">'.formatDate2Local($item['bill_item_date'],'dd/mm',false,false,$sepChars).'</td>
 						<td align="center">'.$item['bill_item_units'].'</td>
@@ -347,13 +352,14 @@ if(is_object($itemresult))
 $thanhtoan = $cntbill['total_outstanding'];
 //tính số tiền mà bệnh nhân tạm ứng
 $tamung= $payment['sumcost'];
-$html_vtyt .= ' <tr>
-					<td><b>1.Tên thuốc, hàm lượng </b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+$html.= ' <tr>
+					<td colspan="1"><b>1.Tên thuốc, hàm lượng </b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
 				</tr>
 				'.$html_thuoc.'
 				<tr>
-					<td><b>2. Y cụ</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+					<td colspan="1"><b>2. Y cụ + Hóa chất</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
 				</tr>
+               '.$html_vtyt_hc.'
                 <tr>
                     <td colspan="1"><b>3. Thủ thuật, phẫu thuật</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                 </tr>
@@ -385,8 +391,8 @@ $html_vtyt .= ' <tr>
 					<td colspan="1"><b>10. Khác</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
 				</tr>'.$sTempKhac;
 
-                $finalbilldate = explode('/',formatDate2Local($final['final_date'],$date_format,false,false,$sepChars));
-            $html_vtyt .= '<tr>
+               // $finalbilldate = explode('/',formatDate2Local($final['final_date'],$date_format,false,false,$sepChars));
+            $html.= '<tr>
                             <td colspan="8"><i><b>Tổng cộng (Cộng: 1+2+3+4+5+6+7+8+9): &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;'.number_format($tongtienthuoc+$tongtienvtyt+$tongtienxndv).' vnd</b></i></td>
                           </tr>
                             <tr>
@@ -402,9 +408,9 @@ $html_vtyt .= ' <tr>
                             <td  colspan="8"><i><b>Còn lại: &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;'.number_format($tongtienthuocTra+$tongtienVTYTTra+$tongtienxndvTra - ($thanhtoan + $tamung)).' vnd</b></i></td>
 				           </tr>
 			</table>';
-$html_vtyt = $html_vtyt.ob_get_contents();
+$html = $html.ob_get_contents();
 ob_clean();
-$pdf->writeHTML($html_vtyt);
+$pdf->writeHTML($html);
 
 //$pdf->writeHTML($htmlcol1);
 $pdf->selectColumn(1);

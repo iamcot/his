@@ -22,6 +22,7 @@ $eComBill = new eComBill;
 $ward = new Ward;
 $Encounter = new Encounter;
 
+$Encounter->loadEncounterData($patientno);//==>nang
 //Lay info Benh nhan
 $patqry="SELECT e.*,p.* FROM care_encounter AS e, care_person AS p WHERE e.encounter_nr=$patientno AND e.pid=p.pid";
 
@@ -235,7 +236,7 @@ $smarty->assign('LDBillDate',$LDBillDate.': '.formatDate2Local($final['final_dat
 $smarty->assign('LDPatientName',$LDPatientFullName.': '.$patient['name_last'].' '.$patient['name_first']);
 $smarty->assign('LDDateofBirth',$LDDateofBirth.': '.formatDate2Local($patient['date_birth'],$date_format));
 $smarty->assign('LDSex',$LDSex.': '.$sex_patient);
-$smarty->assign('LDPatientAddress',$LDPatientAddress.': '.$patient['addr_str_nr'].' '.$patient['addr_str']);
+$smarty->assign('LDPatientAddress',$LDPatientAddress.': '.$Encounter->encounter['phuongxa_name'].' '.$Encounter->encounter['quanhuyen_name'].'<br>'.$Encounter->encounter['citytown_name']); //==>n
 $smarty->assign('LDRoom',$LDRoom.': '.$patient['current_room_nr']);
 $smarty->assign('LDBedNr',$LDBedNr.': ');
 $smarty->assign('LDDateofAdmission',$LDDateofAdmission.': '.formatDate2Local($patient['encounter_date'],$date_format));

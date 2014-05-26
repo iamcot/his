@@ -34,17 +34,23 @@ $resultbillqry=$db->Execute($billqry);
 
 		$buffer=$resultbillqry->FetchRow();
 		$totalbill=$buffer['sum'];
-		$totaldis=$buffer['sumdis'];
+		//$totaldis=$buffer['sumdis'];
 	}
 	
 //items still not paid	
 $listitemnotpaid = $eComBill->listAllTotalCostNotPaid($patientno);	
 if(is_object($listitemnotpaid)){
 	while ($itemnotpaid =$listitemnotpaid->FetchRow()) { 
-		$totalbill += $itemnotpaid['total'];
+		$totalbill += $itemnotpaid['total'];    //tổng số tiền chi phí khám bệnh
 	}
 }
-
+// số tiền giảm BHYT
+$patqry="SELECT e.*,p.* FROM care_encounter AS e, care_person AS p WHERE e.encounter_nr=$patientno AND e.pid=p.pid";
+$resultpatqry=$db->Execute($patqry);
+if(is_object($resultpatqry)) $patient=$resultpatqry->FetchRow();
+else $patient=array();
+$mh = $patient['muchuong'];
+$giamBHYT = $totalbill*$mh; // tính số tiền giảm BHYT
 //payment
 $totalpayment=0;
 $paymentqry="SELECT SUM(payment_amount_total) AS sum, create_id FROM care_billing_payment WHERE payment_encounter_nr='$patientno'";
@@ -55,7 +61,8 @@ $resultpaymentqry=$db->Execute($paymentqry);
 		$totalpayment=$buffer['sum'];
 	}
 
-$due=$totalbill-$totalpayment-$totaldis;
+//$due=$totalbill-$totalpayment-$totaldis -$giamBHYT;
+$due=$totalbill-$totalpayment-$giamBHYT; // số tiền bệnh nhân trả
 
 # Start Smarty templating here
  /**
@@ -178,10 +185,12 @@ $smarty->assign('ItemLine',$sListRows);
 
 
 
+
 $smarty->assign('LDTotalBillAmount',$LDTotalBillAmount);
 $smarty->assign('LDTotalBillAmountValue',"<b>".number_format($totalbill)."</b>");
 $smarty->assign('LDOutstandingAmount',$LDOutstandingAmount1);
-$smarty->assign('LDOutstandingAmountValue',number_format($totalpayment+$totaldis));
+//$smarty->assign('LDOutstandingAmountValue',number_format($totalpayment+$totaldis+$giamBHYT));
+$smarty->assign('LDOutstandingAmountValue',number_format($totalpayment+$giamBHYT));//---nang
 $smarty->assign('LDAmountDue',$LDAmountDue);
 $smarty->assign('LDAmountDueValue',number_format($due));
 

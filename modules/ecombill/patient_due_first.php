@@ -34,7 +34,11 @@ $resultpatqry=$db->Execute($patqry);
 if(is_object($resultpatqry)) $patient=$resultpatqry->FetchRow();
 else $patient=array();
 $mh = $patient['muchuong'];
-echo $mh;
+// xem dạng điều trị
+$in_out = $patient['encounter_class_nr'];//noi tru hay ngoai tru
+if($in_out==1) $in_out_patient= 'Nội trú';
+else $in_out_patient='Ngoại trú';
+//echo $mh;
 $breakfile='patient_bill_links.php'.URL_APPEND.'&patientno='.$patientno.'&full_en='.$full_en.'&target='.$target;
 $returnfile='patient_bill_links.php'.URL_APPEND.'&patientno='.$patientno.'&full_en='.$full_en.'&target='.$target;
 
@@ -123,7 +127,9 @@ $smarty->assign('sFormTag','<form name="patientbill" method="POST">');
 
 $smarty->assign('LDGeneralInfo',$LDGeneralInfo);
 $smarty->assign('LDPatientName',$LDPatientName);
-$smarty->assign('LDPatientNameData',$Encounter->encounter['title'] . ' - ' . $Encounter->encounter['name_last'].' '.$Encounter->encounter['name_first']);
+//$smarty->assign('LDPatientNameData',$Encounter->encounter['title'] . ' - ' . $Encounter->encounter['name_last'].' '.$Encounter->encounter['name_first']);
+$smarty->assign('LDPatientNameData',$Encounter->encounter['title']. $Encounter->encounter['name_last'].' '.$Encounter->encounter['name_first']);     //====>nang
+$smarty->assign('LDReceiptNumber',$LDBillNo);
 $smarty->assign('LDReceiptNumber',$LDBillNo);
 if($billid == "currentbill") { 
 	$receiptid =  $billno; 
@@ -134,7 +140,8 @@ else {
 	$smarty->assign('LDReceiptNumberData',$receiptid);
 }
 $smarty->assign('LDPatientAddress',$LDPatientAddress);
-$smarty->assign('LDPatientAddressData',$Encounter->encounter['addr_str'].' '.$Encounter->encounter['addr_str_nr'].'<br>'.$Encounter->encounter['addr_zip'].' '.$Encounter->encounter['addr_citytown_nr']);
+//$smarty->assign('LDPatientAddressData',$Encounter->encounter['addr_str'].' '.$Encounter->encounter['addr_str_nr'].'<br>'.$Encounter->encounter['addr_zip'].' '.$Encounter->encounter['addr_citytown_nr']);
+$smarty->assign('LDPatientAddressData',$Encounter->encounter['phuongxa_name'].' '.$Encounter->encounter['quanhuyen_name'].'<br>'.$Encounter->encounter['citytown_name']);
 
 $smarty->assign('LDPaymentDate', $LDBillDate);
 
@@ -159,7 +166,8 @@ if($billid == "currentbill") {
 
 $smarty->assign('LDPaymentDateData', $billDate);
 $smarty->assign('LDPatientType', $LDPatientType );
-$smarty->assign('LDPatientTypeData', $Encounter->encounter['encounter_class_nr']);
+//$smarty->assign('LDPatientTypeData', $Encounter->encounter['encounter_class_nr']);
+$smarty->assign('LDPatientTypeData', $in_out_patient);//==>nang
 $smarty->assign('LDDateofBirth', $LDDateofBirth );
 $smarty->assign('LDDateofBirthData', formatDate2Local($Encounter->encounter['date_birth'],$date_format) );
 $smarty->assign('LDSex', $LDSex );
