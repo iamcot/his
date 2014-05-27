@@ -1134,7 +1134,7 @@ class CabinetPharma extends Core {
         $this->sql="SELECT *
                     FROM $this->tb_chemical_avai_dept AS dept, care_chemical_available_product AS pro 
                     WHERE dept.available_product_id = pro.available_product_id 
-                    AND dept.department='$dept' AND dept.ward_nr='$ward' AND typeput='$typeput' 
+                    AND dept.department='$dept' AND dept.ward_nr='$ward' AND dept.typeput='$typeput'
                     AND pro.product_encoder='$encoder' AND pro.product_lot_id='$lotid'";		
         if($this->result=$db->Execute($this->sql)) {
                 if($this->result->RecordCount()){
