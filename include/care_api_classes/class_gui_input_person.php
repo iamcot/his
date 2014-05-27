@@ -190,7 +190,7 @@ class GuiInputPerson {
                 }
 
                 if(($update)) {
-                    if(check_date($insurance_start)==0 || check_date($insurance_exp)==0) {
+                    if((check_date($insurance_start)==0 || check_date($insurance_exp)==0) && $insurance_class__nr==1) {
                         echo "<script type='text/javascript'>";
                         echo "alert('Ngày tháng trong BHYT sai. Cập nhật lại');";
                         echo "</script>";
@@ -307,7 +307,7 @@ class GuiInputPerson {
 
                 } else {
                     # Prepare internal data to be stored together with the user input data
-                    if(check_date($_POST['insurance_start'])==0 || check_date($_POST['insurance_exp'])==0) {
+                    if((check_date($insurance_start)==0 || check_date($insurance_exp)==0) && $insurance_class__nr==1) {
                         echo "<script type='text/javascript'>";
                         echo "alert('Ngày tháng trong BHYT sai. Cập nhật lại');";
                         echo "</script>";
