@@ -2,17 +2,16 @@
 error_reporting(E_COMPILE_ERROR|E_ERROR|E_CORE_ERROR);
 require('./roots.php');
 require($root_path.'include/core/inc_environment_global.php');
+define('NO_CHAIN',1);
 $local_user='aufnahme_user';
 $lang_tables[]='departments.php';
 require($root_path.'include/core/inc_front_chain_lang.php');
 define('MAX_ROW_PP',40); //size 8
 define('WIDTH_BT',10); //size 8
 
-
-
 $classpathFPDF=$root_path.'classes/fpdf/';
 $fontpathFPDF=$classpathFPDF.'font/unifont/';
-define("_SYSTEM_TTFONTS",$fontpathFPDF);
+//define("_SYSTEM_TTFONTS",$fontpathFPDF);
 require_once($root_path.'classes/tcpdf/config/lang/eng.php');
 require_once($root_path.'classes/tcpdf/tcpdf.php');
 include($classpathFPDF.'tfpdf.php');

@@ -16,14 +16,17 @@ require($root_path.'include/core/inc_front_chain_lang.php');
  # Window bar title
  $smarty->assign('title','Báo cáo thống kê');
  $smarty->assign('aTKKNgT','<a href="javascript:opendiv5(\'kngtru\')">Thống kê khám bệnh</a>');
+
  $smarty->assign('aKKB','<a href="javascript:opendiv(\'kkb\')">Khoa Khám Bệnh</a>');
  $smarty->assign('aDTNT','<a href="javascript:opendiv(\'dtnt\')">Điều trị nội trú</a>');
  $smarty->assign('aDTALL','<a href="javascript:opendiv(\'all\')">Toàn bệnh viện (Biểu 15-BCH)</a>');
+
  $smarty->assign('aVaoKhoa','<a href="javascript:opendiv2(\'vaokhoa\')">TK BN Vào Khoa</a>');
  $smarty->assign('aRaKhoa','<a href="javascript:opendiv2(\'rakhoa\')">TK BN Ra Khoa</a>');
  $smarty->assign('aVaoVien','<a href="javascript:opendiv2(\'vaovien\')">TK BN Vào Viện</a>');
  $smarty->assign('aRaVien','<a href="javascript:opendiv2(\'ravien\')">TK BN Ra Viện</a>');
  $smarty->assign('aChuyenVien','<a href="javascript:opendiv2(\'chuyenvien\')">TK BN Chuyển Viện</a>');
+
  $smarty->assign('aDieutrinoitru','<a href="javascript:opendiv3(\'dieutrinoitru\')">TK Điều trị nội trú</a>');
  $smarty->assign('ab031dt','<a href="javascript:opendiv3(\'b031dt\')">Hoạt động điều trị (Biểu 03.1-ĐT)</a>');
  $smarty->assign('ab05skss','<a href="javascript:opendiv3(\'b05skss\')">Sức khỏe sinh sản(Biểu 05-SKSS)</a>');
@@ -33,6 +36,7 @@ require($root_path.'include/core/inc_front_chain_lang.php');
  $smarty->assign('aTKKBday','<a href="javascript:opendiv3(\'tkkb\')">Thống kê Khoa Khám bệnh</a>');
  $smarty->assign('aTKHSCCday','<a href="javascript:opendiv3(\'tkhscc\')">Thống kê Khám bệnh Khoa HSCC</a>');
  $smarty->assign('aBCTUKSAN','<a href="javascript:opendiv3(\'bctuks\')">Báo cáo tuần Khoa Sản</a>');
+
  $smarty->assign('aBCTKSAN','<a href="javascript:opendiv4(\'bctks\')">Báo cáo tháng Khoa Sản</a>');
  $smarty->assign('aBM07KSAN','<a href="javascript:opendiv4(\'bm07ks\')">Thống kê khám chữa phụ khoa và nạo phá thai</a>');
 

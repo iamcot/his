@@ -2,6 +2,7 @@
 error_reporting(E_COMPILE_ERROR|E_ERROR|E_CORE_ERROR);
 require('./roots.php');
 require($root_path.'include/core/inc_environment_global.php');
+define('NO_CHAIN',1);
 $local_user='aufnahme_user';
 require($root_path.'include/core/inc_front_chain_lang.php');
 define('MAX_ROW_PP',44); //size 8
@@ -84,16 +85,18 @@ if($daydiff->d==0 && $daydiff->m==0 && $daydiff->y==0) //trong ngay
 	$strshortdate = "Ngay_".date("d-m-Y",strtotime($datefrom))."_".date("d-m-Y",strtotime($dateto));
 	}
 	//echo $strdatebc;
+
 $classpathFPDF=$root_path.'classes/fpdf/';
 $fontpathFPDF=$classpathFPDF.'font/unifont/';
-define("_SYSTEM_TTFONTS",$fontpathFPDF);
+//define("_SYSTEM_TTFONTS",$fontpathFPDF);
 require_once($root_path.'classes/tcpdf/config/lang/eng.php');
 require_once($root_path.'classes/tcpdf/tcpdf.php');
 include($classpathFPDF.'tfpdf.php');
 $tpdf = new TCPDF('L', 'mm', 'A4', true, 'UTF-8',false);
+
     $tpdf->SetTitle($strdatebc);
     $tpdf->SetAuthor('Vien KH-CN VN - Phong CN Tinh Toan & CN Tri Thuc');
-    $tpdf->SetMargins(5, 8, 3);    
+    $tpdf->SetMargins(5, 8, 3);
     // remove default header/footer
     $tpdf->setPrintHeader(false);
     $tpdf->setPrintFooter(false);
@@ -106,18 +109,14 @@ $tpdf = new TCPDF('L', 'mm', 'A4', true, 'UTF-8',false);
 
 $header_1='<table  >
                 <tr>
-                    <td width="30%">
-                            SỞ Y TẾ BÌNH DƯƠNG<br>
-                            '.PDF_HOSNAME.'
-                    </td>
+                    <td width="30%">SỞ Y TẾ BÌNH DƯƠNG<br>'.PDF_HOSNAME.'</td>
                     <td align="center" width="50%">
                     	<b><font size="15">TÌNH HÌNH BỆNH TẬT TỬ VONG</font></b><br><br>
                         <i>('.$strdatebc.')</i>
                     </td>
                     <td align="right" width="18%">Biểu 15-BCH</td>
                 </tr>
-                
-                </table>';
+            </table>';
     $tpdf->writeHTML($header_1);
     $tpdf->SetFont('dejavusans', '', 8);
    $header2 = '
@@ -153,7 +152,7 @@ $header_1='<table  >
 		<td  align="center" width="5%"><b>TS</b></td>
 		<td  align="center" width="5%"><b>Dưới 5 Tuổi</b></td>
    </tr>';
-   // $tpdf->writeHTML($header2);
+    //$tpdf->writeHTML($header2);
     $header3 = '<tr>
 	    <td align="center"  width="3%">VN</td>
 	    <td align="center" width="'.WIDTH_BT.'%"></td>
@@ -162,7 +161,7 @@ $header_1='<table  >
 	    <td align="center" width="5%">8</td><td align="center" width="5%">9</td><td align="center" width="5%">10</td><td align="center" width="5%">11</td>
 	    <td align="center" width="5%">12</td><td align="center" width="5%">13</td><td align="center" width="5%">14</td><td align="center" width="5%">15</td>
     </tr>';
-    // $tpdf->writeHTML($header2);
+     //$tpdf->writeHTML($header2);
 
     //content
     $content = '';
@@ -181,72 +180,73 @@ $header_1='<table  >
 		else if($id=='dtnt') $where ="AND v.encounter_class_nr = 1";
 		else $where = "AND ((v.encounter_class_nr = 2 AND v.current_dept_nr = (SELECT nr FROM care_department WHERE id=5))OR v.encounter_class_nr = 1)";
 	$sql="SELECT DISTINCT(v.vncode), v.info,v.icd10, v.icd10more, v.sname,
-				(SELECT COUNT(v2.encounter_nr) FROM dfck_bttv_view v2 
+				(SELECT COUNT(v2.encounter_nr) FROM dfck_bttv_view v2
 					WHERE v2.vncode = v.vncode AND v2.encounter_class_nr = 2
-					AND DATE_FORMAT(v2.encounter_date,'%Y-%m-%d')>= '".date("Y-m-d",strtotime($datefrom))."' 
-					AND DATE_FORMAT(v2.encounter_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."' 
+					AND DATE_FORMAT(v2.encounter_date,'%Y-%m-%d')>= '".date("Y-m-d",strtotime($datefrom))."'
+					AND DATE_FORMAT(v2.encounter_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."'
 					AND v2.current_dept_nr = (SELECT nr FROM care_department WHERE id=5)) sumkb,
-				(SELECT COUNT(v3.encounter_nr) FROM dfck_bttv_view v3 
-					WHERE v3.vncode = v.vncode 
-					AND DATE_FORMAT(v3.encounter_date,'%Y-%m-%d')>= '".date("Y-m-d",strtotime($datefrom))."' 
-				AND DATE_FORMAT(v3.encounter_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."' 
+				(SELECT COUNT(v3.encounter_nr) FROM dfck_bttv_view v3
+					WHERE v3.vncode = v.vncode
+					AND DATE_FORMAT(v3.encounter_date,'%Y-%m-%d')>= '".date("Y-m-d",strtotime($datefrom))."'
+				AND DATE_FORMAT(v3.encounter_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."'
 					AND v3.current_dept_nr = (SELECT nr FROM care_department WHERE id=5)
 					AND ((DATE_FORMAT(NOW(),'%Y') - SUBSTR(v3.birthyear,1,4)) < 15 )  AND v3.encounter_class_nr = 2) sumkid,
-				(SELECT COUNT(v4.encounter_nr) FROM dfck_bttv_view v4 
+				(SELECT COUNT(v4.encounter_nr) FROM dfck_bttv_view v4
 					WHERE v4.vncode = v.vncode AND v4.current_dept_nr = (SELECT nr FROM care_department WHERE id=5)
-					AND DATE_FORMAT(v4.death_date,'%Y-%m-%d')>= '".date('Y-m-d',strtotime($datefrom))."' 
-					AND DATE_FORMAT(v4.death_date,'%Y-%m-%d')<= '".date('Y-m-d',strtotime($dateto))."' 
+					AND DATE_FORMAT(v4.death_date,'%Y-%m-%d')>= '".date('Y-m-d',strtotime($datefrom))."'
+					AND DATE_FORMAT(v4.death_date,'%Y-%m-%d')<= '".date('Y-m-d',strtotime($dateto))."'
 					 AND v4.encounter_class_nr = 2) sumdead,
-				(SELECT COUNT(v5.encounter_nr) FROM dfck_bttv_view v5 WHERE v5.vncode = v.vncode 
-					AND DATE_FORMAT(v5.encounter_date,'%Y-%m-%d')>= '".date("Y-m-d",strtotime($datefrom))."' 
-				AND DATE_FORMAT(v5.encounter_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."' 
+				(SELECT COUNT(v5.encounter_nr) FROM dfck_bttv_view v5 WHERE v5.vncode = v.vncode
+					AND DATE_FORMAT(v5.encounter_date,'%Y-%m-%d')>= '".date("Y-m-d",strtotime($datefrom))."'
+				AND DATE_FORMAT(v5.encounter_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."'
 					AND v5.sex ='f' AND v5.current_dept_nr = (SELECT nr FROM care_department WHERE id=5)
 					 AND v5.encounter_class_nr = 2
 					) sumf,
-				(SELECT COUNT(v6.encounter_nr) FROM dfck_bttv_view v6 WHERE v6.vncode = v.vncode 
-					AND DATE_FORMAT(v6.encounter_date,'%Y-%m-%d')>= '".date("Y-m-d",strtotime($datefrom))."' 
-				AND DATE_FORMAT(v6.encounter_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."' 
+				(SELECT COUNT(v6.encounter_nr) FROM dfck_bttv_view v6 WHERE v6.vncode = v.vncode
+					AND DATE_FORMAT(v6.encounter_date,'%Y-%m-%d')>= '".date("Y-m-d",strtotime($datefrom))."'
+				AND DATE_FORMAT(v6.encounter_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."'
 					AND v6.encounter_class_nr = 1) sumpain,
-				(SELECT COUNT(v7.encounter_nr) FROM dfck_bttv_view v7 WHERE v7.vncode = v.vncode 
-					AND DATE_FORMAT(v7.encounter_date,'%Y-%m-%d')>= '".date("Y-m-d",strtotime($datefrom))."' 
-				AND DATE_FORMAT(v7.encounter_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."' 
+				(SELECT COUNT(v7.encounter_nr) FROM dfck_bttv_view v7 WHERE v7.vncode = v.vncode
+					AND DATE_FORMAT(v7.encounter_date,'%Y-%m-%d')>= '".date("Y-m-d",strtotime($datefrom))."'
+				AND DATE_FORMAT(v7.encounter_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."'
 					AND v7.encounter_class_nr = 1 AND v7.sex='f') sumpainf,
-				(SELECT COUNT(v8.encounter_nr) FROM dfck_bttv_view v8 WHERE v8.vncode = v.vncode AND v8.encounter_class_nr = 1 
+				(SELECT COUNT(v8.encounter_nr) FROM dfck_bttv_view v8 WHERE v8.vncode = v.vncode AND v8.encounter_class_nr = 1
 					AND DATE_FORMAT(v8.death_date,'%Y-%m-%d')>= '".date("Y-m-d",strtotime($datefrom))."'
 					AND DATE_FORMAT(v8.death_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."') sumpaindead,
-				(SELECT COUNT(v9.encounter_nr) FROM dfck_bttv_view v9 WHERE v9.vncode = v.vncode AND v9.encounter_class_nr = 1 
+				(SELECT COUNT(v9.encounter_nr) FROM dfck_bttv_view v9 WHERE v9.vncode = v.vncode AND v9.encounter_class_nr = 1
 					AND DATE_FORMAT(v9.death_date,'%Y-%m-%d')>= '".date("Y-m-d",strtotime($datefrom))."'
 					AND DATE_FORMAT(v9.death_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."' AND v9.sex='f') sumpaindeadf,
-				(SELECT COUNT(v10.encounter_nr) FROM dfck_bttv_view v10 WHERE v10.vncode = v.vncode 
-					AND DATE_FORMAT(v10.encounter_date,'%Y-%m-%d')>= '".date("Y-m-d",strtotime($datefrom))."' 
-				AND DATE_FORMAT(v10.encounter_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."' 
+				(SELECT COUNT(v10.encounter_nr) FROM dfck_bttv_view v10 WHERE v10.vncode = v.vncode
+					AND DATE_FORMAT(v10.encounter_date,'%Y-%m-%d')>= '".date("Y-m-d",strtotime($datefrom))."'
+				AND DATE_FORMAT(v10.encounter_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."'
 					AND v10.encounter_class_nr = 1
 					AND ((DATE_FORMAT(NOW(),'%Y') - SUBSTR(v10.birthyear,1,4)) < 15 ) ) sumpainkid,
-				(SELECT COUNT(v11.encounter_nr) FROM dfck_bttv_view v11 WHERE v11.vncode = v.vncode 
-					AND DATE_FORMAT(v11.encounter_date,'%Y-%m-%d')>= '".date("Y-m-d",strtotime($datefrom))."' 
-				AND DATE_FORMAT(v11.encounter_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."' 
+				(SELECT COUNT(v11.encounter_nr) FROM dfck_bttv_view v11 WHERE v11.vncode = v.vncode
+					AND DATE_FORMAT(v11.encounter_date,'%Y-%m-%d')>= '".date("Y-m-d",strtotime($datefrom))."'
+				AND DATE_FORMAT(v11.encounter_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."'
 					AND v11.encounter_class_nr = 1
 					AND ((DATE_FORMAT(NOW(),'%Y') - SUBSTR(v11.birthyear,1,4)) < 5 )) sumpainkid5,
 				(SELECT COUNT(v12.encounter_nr) FROM dfck_bttv_view v12 WHERE v12.vncode = v.vncode AND v12.encounter_class_nr = 1
-					AND ((DATE_FORMAT(NOW(),'%Y') - SUBSTR(v12.birthyear,1,4)) < 15 ) 
+					AND ((DATE_FORMAT(NOW(),'%Y') - SUBSTR(v12.birthyear,1,4)) < 15 )
 					AND DATE_FORMAT(v12.death_date,'%Y-%m-%d')>= ".date("Y-m-d",strtotime($datefrom))."
 					AND DATE_FORMAT(v12.death_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."') sumpainkiddead,
 				(SELECT COUNT(v13.encounter_nr) FROM dfck_bttv_view v13 WHERE v13.vncode = v.vncode AND v13.encounter_class_nr = 1
-					AND ((DATE_FORMAT(NOW(),'%Y') - SUBSTR(v13.birthyear,1,4)) < 5 ) 
+					AND ((DATE_FORMAT(NOW(),'%Y') - SUBSTR(v13.birthyear,1,4)) < 5 )
 					AND DATE_FORMAT(v13.death_date,'%Y-%m-%d')>= ".date("Y-m-d",strtotime($datefrom))."
 					AND DATE_FORMAT(v13.death_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."' ) sumpainkiddead5
 				FROM dfck_bttv_view v
 				WHERE v.vncode!='' and v.vncode!='NULL'
-				AND DATE_FORMAT(v.encounter_date,'%Y-%m-%d')>= '".date("Y-m-d",strtotime($datefrom))."' 
-				AND DATE_FORMAT(v.encounter_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."' 
-				$where 				
+				AND DATE_FORMAT(v.encounter_date,'%Y-%m-%d')>= '".date("Y-m-d",strtotime($datefrom))."'
+				AND DATE_FORMAT(v.encounter_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."'
+				$where
 				ORDER BY v.vncode";
 	
 			//echo $sql;
+
 		$crrsec = "";
 
 		if($rs = $db->Execute($sql)){
-			if($rs->RecordCount()){
+			if(1){              //$rs->RecordCount()
 				$i=1;			
 				$numline = 1;
 				$nowpage = 1;	
@@ -322,7 +322,7 @@ $footer = '<table width=100%>
             </tr>            
             </table>';
             if ( ($numline+8) >= MAX_ROW_PP ) {                       
-					     	//$tpdf->writeHTML($header3.$content.'</table><div align="right">Trang '.$nowpage.'</div>');
+					     	$tpdf->writeHTML($header3.$content.'</table><div align="right">Trang '.$nowpage.'</div>');
 					  		$tpdf->AddPage(); // page break.
 					  		//$content = "";
 					  		//$numline = 1;

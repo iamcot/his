@@ -11,9 +11,10 @@ $dept_obj= new Department;
 $deptinfo = $dept_obj->getDeptAllInfo($dept);
 
  $str = "<p>".PDF_HOSNAME."</p>
- 			<center><B>THỐNG KÊ KHÁM BỆNH KHOA ".$$deptinfo['LD_var']."<br>
+ 			<center><B>THỐNG KÊ KHÁM BỆNH ".mb_strtoupper($deptinfo['name_formal'], "utf8")."<br>
  		Ngày ".date("d/m/Y",strtotime($datefrom)).(($datefrom != $dateto)?" tới ngày ".date("d/m/Y",strtotime($dateto))."":"")."</B>
  ";
+//strtoupper($deptinfo['name_formal'])
 $str .= "<table ><thead>
 <tr>
 <td rowspan='2'>STT </td>
