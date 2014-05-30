@@ -118,10 +118,11 @@ $smarty->assign('service',$service);
 $smarty->assign('pbSubmit','<input type="image"  '.createLDImgSrc($root_path,'savedisc.gif','0','middle').'>');
 $smarty->assign('pbCancel','<a href="'.$breakfile.'" ><img '.createLDImgSrc($root_path,'close2.gif','0','middle').' title="'.$LDCancel.'" align="middle"></a>');
 
-$cbx='';
-for($j=1; $j<=15; $j++){
-	$cbx .= '<option>'.$j.'</option>';
-}
+//$cbx='';
+$txt='';
+//for($j=1; $j<=15; $j++){
+//    $cbx .= '<option>'.$j.'</option>';
+//}
 /**
 * show Template
 */
@@ -135,9 +136,16 @@ if($cntLT){
 		$smarty->assign('itemName',$item['item_description']);
 		$smarty->assign('itemCode',$item['item_code']);
 		$smarty->assign('itemPrice',number_format($item['item_unit_cost']));
-		$smarty->assign('quantity','<select size="1" name="nounits' .$cnt .'" id="nounits' .$cnt .'">'.$cbx.'</select>');
+//		$smarty->assign('quantity','<select size="1" name="nounits' .$cnt .'" id="nounits' .$cnt .'">'.$cbx.'</select>');
+        $smarty->assign('quantity','<input type="text" size="1" name="nounits' .$cnt .'" id="nounits' .$cnt .'">'.$txt.' </input>');
 
-		$itemcode=$item['item_code'];
+//        if(!preg_match('/([0-9]+)/i',$_REQUEST['vidu1']))
+//        if(preg_match('/([0-9]+)/i',$txt))
+//        {
+//            echo "Bạn phải nhập số!";
+//        }
+
+        $itemcode=$item['item_code'];
 		$itemcode1=$itemcode1.$itemcode;
 		$itemcode1=$itemcode1."#";
 		
