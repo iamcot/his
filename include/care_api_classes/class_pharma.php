@@ -2512,13 +2512,13 @@ class Pharma extends Core {
 
         $this->sql = "SELECT DISTINCT source.monthreport, source.product_encoder, T.number AS ton, T.price AS giaton, N.number AS nhap, N.price AS gianhap, X.number AS xuat, X.price AS giaxuat, T.exp_date AS hanton, N.exp_date AS hannhap, T.lotid AS loton, N.lotid AS lonhap, X.lotid AS loxuat, main.product_name
 			FROM  ( SELECT *
-					  FROM $view_ton WHERE $view_ton.monthreport='01' AND $view_ton.yearreport='2013'
+					  FROM $view_ton WHERE $view_ton.monthreport='$ton_month' AND $view_ton.yearreport='$ton_year'
 					  UNION
 					  SELECT *
-					  FROM view_thuoc_nhap WHERE view_thuoc_nhap.monthreport='01' AND view_thuoc_nhap.yearreport='2013'  AND pharma_type IN (1,2,3)
+					  FROM view_thuoc_nhap WHERE view_thuoc_nhap.monthreport='$ton_month' AND view_thuoc_nhap.yearreport='$ton_year'  AND pharma_type IN (1,2,3)
 					  UNION
 					  SELECT *
-					  FROM view_thuoc_xuat WHERE view_thuoc_xuat.monthreport='01' AND view_thuoc_xuat.yearreport='2013'  AND pharma_type IN (1,2,3)
+					  FROM view_thuoc_xuat WHERE view_thuoc_xuat.monthreport='$ton_month' AND view_thuoc_xuat.yearreport='$ton_year'  AND pharma_type IN (1,2,3)
 					) AS source
 			LEFT JOIN $view_ton AS T ON source.product_encoder = T.product_encoder AND source.monthreport=T.monthreport AND source.price=T.price
 			LEFT JOIN view_thuoc_nhap AS N ON source.product_encoder = N.product_encoder AND source.monthreport = N.monthreport AND source.price=N.price AND N.monthreport='01' AND N.yearreport='2013'

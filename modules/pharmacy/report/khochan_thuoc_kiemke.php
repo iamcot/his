@@ -161,7 +161,7 @@ function ChotKiemKe(update_id){
 	if (name!=null)
 	{
 		document.listmedform.action="<? echo $fileforward; ?>&target=save&ngaydau=<?php echo $chotngaydau; ?>&ngaycuoi=<?php echo $chotngaycuoi; ?>&update_id="+update_id+"&kkthang="+name;
-		document.listmedform.submit();
+//		document.listmedform.submit();
 	}
 
 }
