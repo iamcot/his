@@ -60,7 +60,7 @@ $LDTestName ='Tên kiểm tra';//Test Name
 $LDTestCode ='Mã số kiểm tra';//Test Code
 $LDCostperunit ='Chi phí';//Cost per unit
 //$LDNumberofUnits ='Số lần';//Number of units
-$LDNumberofUnits ='Số phút';//Number of units
+$LDNumberofUnits ='Số lần/Số phút';//Number of units
 $LDAddtoPatientBill ='Thêm vào hóa đơn bệnh nhân ';//Add to patient bill
 
 /* 2003-10-19 DHC Echoes from confirmLabtests.php  */
@@ -83,7 +83,7 @@ $LDBillingInformation ='Thông tin về hóa đơn';//Billing Information
 $LDDescription ='Mô tả';//Description
 $LDCostperUnit ='Đơn giá';//Cost per unit
 //$LDUnits ='Số lần';//Units
-$LDUnits ='Số phút';//Units
+$LDUnits ='Số lần/Số phút';//Units
 $LDTotalCost ='Tổng chi phí';//Total cost
 $LDItemType ='Loại Dịch vụ';//Item type
 $LDMedicalServices ='Dịch vụ y tế';//Medical Services
