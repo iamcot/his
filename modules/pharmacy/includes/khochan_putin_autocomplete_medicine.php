@@ -10,10 +10,10 @@ $response="";
 
 switch($mode){
 	case 'auto': 
-				$sql="SELECT khochan.*, donvi.unit_name_of_medicine     
-						FROM care_pharma_products_main AS khochan, care_pharma_unit_of_medicine AS donvi  
-						WHERE donvi.unit_of_medicine=khochan.unit_of_medicine 
-						AND (khochan.product_name LIKE '".$search."%' or khochan.product_name LIKE '% ".$search."%') 
+				$sql="SELECT khochan.*, donvi.unit_name_of_medicine
+						FROM care_pharma_products_main AS khochan, care_pharma_unit_of_medicine AS donvi
+						WHERE donvi.unit_of_medicine=khochan.unit_of_medicine
+						AND (khochan.product_name LIKE '".$search."%' or khochan.product_name LIKE '% ".$search."%')
 						ORDER BY product_name LIMIT 15 ";
 
 				if($result = $db->Execute($sql)){
@@ -27,7 +27,6 @@ switch($mode){
 							echo '<li id="'.$k.'@#'.$medicine["product_encoder"].'">';
 							echo '<div><font color="#FF0000">'.$medicine["product_name"].'</font></div>';
 							echo '<span>-- '.$medicine["price"].' vnd/'.$medicine["unit_name_of_medicine"].'-- '.$medicine["available_number"].'<br>&nbsp;</span></li>';
-
 						}
 						echo '</ul>';
 						//$response = $item_id.'@'.$item_value;
