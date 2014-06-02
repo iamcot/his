@@ -248,7 +248,18 @@ if (!$mode) {/* Get the pending test requests */
     elseif($bill_item_code=="HSM35"){       //	LDL Chol    - LDL.C               32
         $YC = 'HSM35';
     }
-
+    elseif($bill_item_code=="HSM33"){      //Amyl T.P -    Amyl toàn phần/EPS         33
+        $YC = 'HSM33';
+    }
+    elseif($bill_item_code=="HSM32"){       //Amyl T  - Amyl tụy/EPS             34
+        $YC = 'HSM32';
+    }
+    elseif($bill_item_code=="HSM34"){       //CHE   -    CHE            35
+        $YC = 'HSM34';
+    }
+    elseif($bill_item_code=="HSM16"){       //Fibrinogen   - Fibrinogen          36
+        $YC = 'HSM16';
+    }
 //	$sql1 = "SELECT bill.bill_item_status, bill.bill_item_code
 //			FROM care_test_request_" . $subtarget . " AS req
 //			INNER JOIN care_test_request_chemlabor_sub AS req_sub ON req_sub.batch_nr=req.batch_nr
