@@ -385,7 +385,6 @@ if(!empty($top_rs) && isset($top_rs)) {
 			$LD_Elements[$column][$row]['value'] = $parameters['name'];
 			$LD_Elements[$column][$row]['id'] = $parameters['id'];
 			}
-			
 		}
 	}
 }
