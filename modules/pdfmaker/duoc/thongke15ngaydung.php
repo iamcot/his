@@ -201,7 +201,7 @@ if(is_object($listReport)){
 	for ($j;$j<=$end_day;$j++)
 		echo '<td></td>';
 	$congkhoan_total+=$total;
-	echo	'<td align="right">'.$total.'</td>';	//Tong cong		
+	echo	'<td align="right">'.$i.'</td>';	//Tong cong
 	echo	'<td></td>	</tr>';		//Note
 			
 	$sTempDiv = $sTempDiv.ob_get_contents();				
@@ -223,7 +223,7 @@ $html = $html.' <tr>
 					<td></td> <td><b><i>Cộng khoản:</i></b></td>';
 for($j=1;$j<=18;$j++)
 	$html= $html.'	<td></td>';
-$html = $html.'		<td align="right"><b>'.number_format($congkhoan_total).'</b></td><td></td>
+$html = $html.'		<td align="right"><b>'.number_format($i).'</b></td><td></td>
 				</tr>
 			</table>';				
 $pdf->writeHTML($html, true, 0, true, 0);
