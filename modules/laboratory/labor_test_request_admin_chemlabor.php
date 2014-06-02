@@ -152,6 +152,103 @@ if (!$mode) {/* Get the pending test requests */
     elseif($bill_item_code=="ION04"){
         $YC = 'ION04';
     }
+    elseif($bill_item_code=="HSM01"){         //Glucose       1
+        $YC = 'HSM01';
+    }
+    elseif($bill_item_code=="HSM02"){         //Fructosamin   2
+        $YC = 'HSM02';
+    }
+    elseif($bill_item_code=="HSM03"){         //Urea          3
+        $YC = 'HSM03';
+    }
+    elseif($bill_item_code=="HSM04"){         //Creatinin      4
+        $YC = 'HSM04';
+    }
+//    elseif($bill_item_code=="HSM04"){         //Cl           5
+//        $YC = 'HSM04';
+//    }
+    elseif($bill_item_code=="HSM05"){          //Acid Uric     6
+        $YC = 'HSM05';
+    }
+    elseif($bill_item_code=="HSM18"){       //Calci   - Ca ion hóa / ISE  7
+        $YC = 'HSM18';
+    }
+    elseif($bill_item_code=="HSM20"){       //LDH  -  LDH/DGKC            8
+        $YC = 'HSM20';
+    }
+    elseif($bill_item_code=="HSM21"){       //α HBDG - α HBDH             9
+        $YC = 'HSM21';
+    }
+    elseif($bill_item_code=="HSM22"){       //CBK      -  CPK/DGKC        10
+        $YC = 'HSM22';
+    }
+    elseif($bill_item_code=="HSM23"){       //CBK-MB -  CPK - MB/DGKC      11
+        $YC = 'HSM23';
+    }
+    elseif($bill_item_code=="HSM06"){      //SGOT    - SGOT                12
+        $YC = 'HSM06';
+    }
+    elseif($bill_item_code=="HSM07"){      //SGPT   - SGPT                 13
+        $YC = 'HSM07';
+    }
+    elseif($bill_item_code=="HSM25"){       //ACP T.P  -  ACP toàn phần      14
+        $YC = 'HSM25';
+    }
+    elseif($bill_item_code=="HSM24"){       //ACP T.L  -  ACP tiền liệt       15
+        $YC = 'HSM24';
+    }
+    elseif($bill_item_code=="HSM36"){       //ALP T.P    -  ALP toàn phần     16
+        $YC = 'HSM36';
+    }
+//    elseif($bill_item_code=="HSM21"){       //GGT/Szasz -                   17
+//        $YC = 'HSM21';
+//    }
+    elseif($bill_item_code=="HSM08"){        //BilirubinT.P -  Bilirubin - toàn phần/liên hợp  18
+        $YC = 'HSM08';
+    }
+    elseif($bill_item_code=="HSM09"){        //BilirubinT.T -   Bilirubin - liên hợp       19
+        $YC = 'HSM09';
+    }
+    elseif($bill_item_code=="HSM10"){        //Fe - Sắt trưởng thành                       20
+        $YC = 'HSM10';
+    }
+    elseif($bill_item_code=="HSM26"){        //Ferritin/tt   - Ferritin/ tt            21
+        $YC = 'HSM26';
+    }
+    elseif($bill_item_code=="HSM27"){        //Transferrin   - Transferrin/ tt             22
+        $YC = 'HSM27';
+    }
+    elseif($bill_item_code=="HSM11"){       //Protein T.P  - Protein t. phần/ Biuet               23
+        $YC = 'HSM11';
+    }
+//    elseif($bill_item_code=="HSM20"){       //Albumin                      24
+//        $YC = 'HSM20';
+//    }
+    elseif($bill_item_code=="HSM21"){       //Globulin    -    Globulin             28
+        $YC = 'HSM21';
+    }
+    elseif($bill_item_code=="HSM29"){       //Tỉ số A/G   -  Tỉ số A/G                26
+        $YC = 'HSM29';
+    }
+    elseif($bill_item_code=="HSM30"){       //ApoA1     - Apo.A1/SK                  27
+        $YC = 'HSM30';
+    }
+    elseif($bill_item_code=="HSM31"){      //ApoB     - Apo.B/SK                    28
+        $YC = 'HSM31';
+    }
+    elseif($bill_item_code=="HSM12"){      //Triglycerid    -  Triglycerit/tt GPO-PAP             29
+        $YC = 'HSM12';
+    }
+    elseif($bill_item_code=="HSM13"){       //Cholesterol - Cholesterol t.phần/CHOD               30
+        $YC = 'HSM13';
+    }
+    elseif($bill_item_code=="HSM14"){       //HDL Chol   - HDL.C                 31
+        $YC = 'HSM14';
+    }
+    elseif($bill_item_code=="HSM35"){       //	LDL Chol    - LDL.C               32
+        $YC = 'HSM35';
+    }
+
 //	$sql1 = "SELECT bill.bill_item_status, bill.bill_item_code
 //			FROM care_test_request_" . $subtarget . " AS req
 //			INNER JOIN care_test_request_chemlabor_sub AS req_sub ON req_sub.batch_nr=req.batch_nr
