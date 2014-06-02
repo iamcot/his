@@ -190,7 +190,7 @@ class GuiInputPerson {
                 }
 
                 if(($update)) {
-                    if((check_date($insurance_start)==0 || check_date($insurance_exp)==0) && $insurance_class__nr==1) {
+                    if((check_date($insurance_start)==0 || check_date($insurance_exp)==0) && $insurance_class_nr==1) {
                         echo "<script type='text/javascript'>";
                         echo "alert('Ngày tháng trong BHYT sai. Cập nhật lại');";
                         echo "</script>";
@@ -307,7 +307,7 @@ class GuiInputPerson {
 
                 } else {
                     # Prepare internal data to be stored together with the user input data
-                    if(check_date($_POST['insurance_start'])==0 || check_date($_POST['insurance_exp'])==0) {
+                    if((check_date($_POST['insurance_start'])==0 || check_date($_POST['insurance_exp'])==0 ) && $_POST['insurance_class_nr'] ==1) {     //&& $_POST[''])
                         echo "<script type='text/javascript'>";
                         echo "alert('Ngày tháng trong BHYT sai. Cập nhật lại');";
                         echo "</script>";
@@ -795,12 +795,16 @@ class GuiInputPerson {
                 $("#showthang").show();
                 $("#showthang").css("display","inline");
                 $("#baotin").css("color","red");
+                $("#f-calendar-field-4").mask("99/99/9999");
+                $("#f-calendar-field-4").val("");
 
             }else{
                 $("#showtuoi").show();
                 $("#showthang").hide();
                 $("#thang").val('');
                 $("#baotin").css("color","black");
+                $("#f-calendar-field-4").unmask();
+                $("#f-calendar-field-4").val("");
             }
 
         }
@@ -1012,14 +1016,14 @@ class GuiInputPerson {
         }
         //$iRowSpanCount++;
         $this->smarty->assign('LDRegTime',$LDRegTime);
-        $this->smarty->assign('LDInputDate',$LDInputDate);
+//        $this->smarty->assign('LDInputDate',$LDInputDate);
         if($update){
             $this->smarty->assign('sRegTime',convertTimeToLocal(formatDate2Local($date_reg,$date_format,0,1)));
         }else{
             $this->smarty->assign('sRegTime','<input onkeypress="return tabE(this,event)"  tabindex=1 name="time_reg" id="time_reg" type="text" value="'.date('H:i').'">');
         }
-        $this->smarty->assign('sInputTime',convertTimeToLocal(formatDate2Local($date_input,$date_format,0,1)));
-        $this->smarty->assign('sInputDate',formatDate2Local($date_input,$date_format).'<input name="date_input" type="hidden" value="'.$date_input.'">');
+//        $this->smarty->assign('sInputTime',convertTimeToLocal(formatDate2Local($date_input,$date_format,0,1)));
+//        $this->smarty->assign('sInputDate',formatDate2Local($date_input,$date_format).'<input name="date_input" type="hidden" value="'.$date_input.'">');
         // Made hideable as suggested by Kurt brauchli
         /*
         if (!$GLOBAL_CONFIG['person_title_hide']){
@@ -1329,8 +1333,10 @@ class GuiInputPerson {
         $this->smarty->assign('LDInsuranceStart',$LDInsuranceStart);
         //$this->smarty->assign('sInsStartDayInput',$calendar->show_calendar($calendar,$date_format,'insurance_start',$insurance_start));
         if(!empty($insurance_start)) $sTemp = $insurance_start;
+        if(check_date($insurance_start) ==0) $sTemp=" / / ";
         $this->smarty->assign('sInsStartDayInput','<input onkeypress="return tabE(this,event)" id="f-calendar-field-2" tabindex=11  type="text" name="insurance_start"  value="'.$sTemp.'" style="width:96%;" >');
         if(!empty($insurance_exp)) $sTemp =$insurance_exp;
+        if(check_date($insurance_exp) ==0) $sTemp=" / / ";
         $this->smarty->assign('sInsExpDayInput','<input onkeypress="return tabE(this,event)" id="f-calendar-field-3" tabindex=12  type="text" name="insurance_exp"  value="'.$sTemp.'" style="width:96%;">');
         $this->smarty->assign('LDInsuranceExp',$LDInsuranceExp);
 
