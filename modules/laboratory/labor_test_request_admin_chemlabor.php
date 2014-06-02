@@ -245,10 +245,10 @@ if (!$mode) {/* Get the pending test requests */
     elseif($bill_item_code=="HSM14"){       //HDL Chol   - HDL.C                 31         x
         $YC = 'HSM14';
     }
-    elseif($bill_item_code=="HSM35"){       //	LDL Chol    - LDL.C               32
+    elseif($bill_item_code=="HSM35"){       //	xLDL Chol    - LDL.C               32
         $YC = 'HSM35';
     }
-    elseif($bill_item_code=="HSM33"){      //Amyl T.P -    Amyl toàn phần/EPS         33      x
+    elseif($bill_item_code=="HSM33"){      //xAmyl T.P -    Amyl toàn phần/EPS         33      x
         $YC = 'HSM33';
     }
     elseif($bill_item_code=="HSM32"){       //Amyl T  - Amyl tụy/EPS             34
