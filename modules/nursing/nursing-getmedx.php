@@ -16,7 +16,10 @@ require_once($root_path.'include/care_api_classes/class_encounter.php');
 $enc_obj= new Encounter;
 $enc_obj->loadEncounterData($pn);
 $isDischarged = $enc_obj->Is_Discharged($pn);	//xuat vien chua?
-
+//==>n
+require_once ('../../js/jscalendar/calendar.php');
+$calendar = new DHTML_Calendar('../../js/jscalendar/', $lang, 'calendar-system', true);
+$calendar->load_files();
 /**
  * CARE2X Integrated Hospital Information System Deployment 2.1 - 2004-10-02
  * GNU General Public License
@@ -69,7 +72,6 @@ if ($ward_nr!='' && $ward_nr!='0'){
 	mode='update': cap nhat toa thuoc (update) => xong => header(mode='')
 */
 
-
 //Luu lai don thuoc (save prescription)
 if($mode=='save'){
     $saved=false;
@@ -83,12 +85,13 @@ if($mode=='save'){
             $lastId=1;
         else $lastId = $pres_id['prescription_id']+1;
         $datetime = date("Y-m-d G:i:s"); //$_POST['prescribe_date']
-
+   //echo     $datetime = $_POST['f-calendar-field-1'] ;
+      // $a= $_POST['prescribe_date'] ;
         $pharma_prescription_info = array('prescription_id' => $lastId,
             'prescription_type' => $prescription_type_nr,
             'dept_nr' => $dept_nr,
             'ward_nr' => $ward_nr,
-            'date_time_create'=> $datetime,
+            'date_time_create'=>$datetime,
             'symptoms' => '',
             'diagnosis' => $diagnosis,
             'note' => $notes,
@@ -810,6 +813,7 @@ function submitMainForm() {
         <?php echo '<a href="javascript:addPrescription();" ><img style="cursor:pointer;" '. createLDImgSrc($root_path,'add.png','0') . ' title="'.  $LDAdd.'"> '.$LDAdd1.'</a>'; ?>
         <br>
         <br />
+
         <table id="prescriptionTable" width="100%">
             <tr>
                 <td><strong><?php echo $LDMedFormDose; ?></strong></td>
@@ -835,35 +839,64 @@ function submitMainForm() {
                     $init_maxelements = $old_pres->RecordCount();
                     for($i=1; $i<=$init_maxelements; $i++){
                         $old_pres_row = $old_pres->FetchRow();
-                        echo '<tr id="elem'.$i.'">';
-                        //encoder + name
-                        echo 	'<td><input type="hidden" name="b'.$i.'" value="'.$old_pres_row['product_encoder'].'"><img src="../../gui/img/common/default/info3.gif" onclick="popinfo(\''.$old_pres_row['product_encoder'].'\')"><input type="hidden" name="m'.$i.'" value="'.$old_pres_row['product_name'].'">'.$old_pres_row['product_name'].'</td>';
-                        //Ham luong
-                        echo 	'<td><input type="hidden" name="d'.$i.'" value="'.$old_pres_row['desciption'].'">'.$old_pres_row['desciption'].'</td>';
-                        //So luong, Don gia
-                        echo 	'<td><input type="hidden" name="o'.$i.'" value="'.$old_pres_row['sum_number'].'">'.$old_pres_row['sum_number'].'<input type="hidden" name="c'.$i.'" value="'.$old_pres_row['cost'].'"></td>';
-                        //Don vi
-                        echo 	'<td><input type="hidden" name="u'.$i.'" value="'.$old_pres_row['note'].'">'.$old_pres_row['note'].'</td>';
-                        //So lo
-                        echo 	'<td><input type="hidden" name="l'.$i.'" value="'.$old_pres_row['lotid'].'">'.$old_pres_row['lotid'].'</td>';
-                        //speed
-                        echo 	'<td><input type="hidden" name="p'.$i.'" value="'.$old_pres_row['speed'].'">'.$old_pres_row['speed'].'</td>';
-                        //thoi gian
-                        echo 	'<td><input type="hidden" name="t'.$i.'" value="'.$old_pres_row['time_use'].'">'.$old_pres_row['time_use'].'</td>';
-                        //duong truyen
-                        echo 	'<td><input type="hidden" name="a'.$i.'" value="'.$old_pres_row['type_use'].'">'.$old_pres_row['type_use'].'</td>';
-                        //ghi chu
-                        echo 	'<td><input type="hidden" name="n'.$i.'" value="'.$old_pres_row['morenote'].'">'.$old_pres_row['morenote'].'</td>';
-                        //elemRemove
-                        echo 	'<td valign="middle" ><img src="../../gui/img/common/default/delete2.gif" style="cursor:pointer;" onclick="removeMedicament(\'elem'.$i.'\')" ></td>';
-                        echo '</tr>';
+                        /*  echo '<tr id="elem'.$i.'">';
+                             //encoder + name
+
+                               echo'<td><input type="hidden" name="b'.$i.'" value="'.$old_pres_row['product_encoder'].'"><img src="../../gui/img/common/default/info3.gif" onclick="popinfo(\''.$old_pres_row['product_encoder'].'\')">
+                            <input type="hidden" name="m'.$i.'" value="'.$old_pres_row['product_name'].'">'.$old_pres_row['product_name'].'</td>';
+                             //Ham luong
+                             echo 	'<td><input type="hidden" name="d'.$i.'" value="'.$old_pres_row['desciption'].'">'.$old_pres_row['desciption'].'</td>';
+                             //So luong, Don gia
+                             echo 	'<td><input type="hidden" name="o'.$i.'" value="'.$old_pres_row['sum_number'].'">'.$old_pres_row['sum_number'].'<input type="hidden" name="c'.$i.'" value="'.$old_pres_row['cost'].'"></td>';
+                             //Don vi
+                             echo 	'<td><input type="hidden" name="u'.$i.'" value="'.$old_pres_row['note'].'">'.$old_pres_row['note'].'</td>';
+                             //So lo
+                             echo 	'<td><input type="hidden" name="l'.$i.'" value="'.$old_pres_row['lotid'].'">'.$old_pres_row['lotid'].'</td>';
+                             //speed
+                             echo 	'<td><input type="hidden" name="p'.$i.'" value="'.$old_pres_row['speed'].'">'.$old_pres_row['speed'].'</td>';
+                             //thoi gian
+                             echo 	'<td><input type="hidden" name="t'.$i.'" value="'.$old_pres_row['time_use'].'">'.$old_pres_row['time_use'].'</td>';
+                             //duong truyen
+                             echo 	'<td><input type="hidden" name="a'.$i.'" value="'.$old_pres_row['type_use'].'">'.$old_pres_row['type_use'].'</td>';
+                             //ghi chu
+                             echo 	'<td><input type="hidden" name="n'.$i.'" value="'.$old_pres_row['morenote'].'">'.$old_pres_row['morenote'].'</td>';
+                             //elemRemove
+                             echo 	'<td valign="middle" ><img src="../../gui/img/common/default/delete2.gif" style="cursor:pointer;" onclick="removeMedicament(\'elem'.$i.'\')" ></td>';
+                             echo '</tr>';  */
+                            //==>n sửa
+                              echo '<tr id="elem'.$i.'">';
+                             echo'<td><input type="hidden" name="b'.$i.'" value="'.$old_pres_row['product_encoder'].'"><img src="../../gui/img/common/default/info3.gif" onclick="popinfo(\''.$old_pres_row['product_encoder'].'\')">
+                            <input type="hidden" name="m'.$i.'" value="'.$old_pres_row['product_name'].'" >'.$old_pres_row['product_name'].'</td>';
+                             //Ham luong
+                             echo 	'<td><input  name="d'.$i.'" value="'.$old_pres_row['desciption'].'"></td>';
+                             //So luong, Don gia
+                             echo 	'<td><input name="o'.$i.'" value="'.$old_pres_row['sum_number'].'"><input type="hidden" name="c'.$i.'" value="'.$old_pres_row['cost'].'"></td>';
+                             //Don vi
+                             echo 	'<td><input  name="u'.$i.'" value="'.$old_pres_row['note'].'"></td>';
+                             //So lo
+                             echo 	'<td><input  name="l'.$i.'" value="'.$old_pres_row['lotid'].'"></td>';
+                             //speed
+                             echo 	'<td><input  name="p'.$i.'" value="'.$old_pres_row['speed'].'"></td>';
+                             //thoi gian
+                             echo 	'<td><input  name="t'.$i.'" value="'.$old_pres_row['time_use'].'"></td>';
+                             //duong truyen
+                             echo 	'<td><input  name="a'.$i.'" value="'.$old_pres_row['type_use'].'"></td>';
+                             //ghi chu
+                             echo 	'<td><input  name="n'.$i.'" value="'.$old_pres_row['morenote'].'"></td>';
+                             //elemRemove
+                             echo 	'<td valign="middle" ><img src="../../gui/img/common/default/delete2.gif" style="cursor:pointer;" onclick="removeMedicament(\'elem'.$i.'\')" ></td>';
+                             echo '</tr>';
+
                     }
                     $generalnote=$old_pres_row['generalnote'];
                     $mode='update';
                 }
             }
             ?>
+
         </table>
+
+        <br>
         <table>
             <tr valign="top">
                 <td valign="top"><label><?php echo $LDNotes; ?> : </label></td>
@@ -898,7 +931,10 @@ function submitMainForm() {
                         ?>
                     </select>
                 </td>
+
             </tr>
+
+
             <tr><td colspan="3">
                     <br>&nbsp;<br>
                     <a href="javascript:submitMainForm();"><img <?php echo createLDImgSrc($root_path,'savedisc.gif','0') ?> alt="<?php echo $LDSave ?>"></a>&nbsp;&nbsp;

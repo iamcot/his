@@ -513,18 +513,18 @@ if(is_object($itemresult))
         $smarty->assign('LDItemNumberOf',$item['bill_item_units']);
         $smarty->assign('LDItemUnitCost',number_format($item['bill_item_unit_cost']));
         $smarty->assign('LDItemSumCost',number_format($item['bill_item_units']*$item['bill_item_unit_cost']));
-        if($muchuong!=0){
-            $smarty->assign('LDItemSumCostBHYT',number_format($item['bill_item_units']*$item['bill_item_unit_cost']*$muchuong));   //nang
+        if($groupnr==22){ // không cho giảm BHYT của xét nghiệm máu
+            $smarty->assign('LDItemSumCostBHYT',number_format($item['bill_item_units']*$item['bill_item_unit_cost']*0));   //nang
             $smarty->assign('LDItemSumCostKhac','');//nang
-            $smarty->assign('LDItemSumCostTra',number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*$muchuong)); //nang
+            $smarty->assign('LDItemSumCostTra',number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*0)); //nang
         }   else{
             $smarty->assign('LDItemSumCostBHYT',number_format($item['bill_item_units']*$item['bill_item_unit_cost']*$mh));   //nang
             $smarty->assign('LDItemSumCostKhac','');//nang
             $smarty->assign('LDItemSumCostTra',number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*$mh)); //nang
         }
         $tongtienDichVu += $item['bill_item_units']*$item['bill_item_unit_cost'];
-        if($muchuong!=0){
-            $tongtienDichVuBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*$muchuong;   //nang
+        if($groupnr==22){  //xet không cho giảm BHYT của xét nghiệm máu
+            $tongtienDichVuBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*0;   //nang
         }   else{
             $tongtienDichVuBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*$mh;   //nang
         }

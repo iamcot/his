@@ -244,5 +244,5 @@ $pdf->ln(20);
 	</tr>
 </table>';    
 $pdf->writeHTML($tbl1, true, false, false, false, '');
-
+ob_clean();
 $pdf->Output('giayxacnhanBNtuvong.pdf', 'I');		
