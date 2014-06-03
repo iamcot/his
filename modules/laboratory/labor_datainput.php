@@ -289,23 +289,23 @@ ob_start();
 </style>
 
 <script language="javascript" name="j1">
-<!--
+
 /*
-function pruf(d) {
-	if(d.job_id.value == "" ) {
-		alert("<?php echo $LDAlertJobId ?>");
-			d.job_id.focus();
-			 return false;
-		} else {
-			if(d.test_date){
-				if(!d.test_date.value)
-				{ alert("<?php echo $LDAlertTestDate ?>");
-					d.test_date.focus();
-					return false;
-				} else
-					return true;
-			}
-		}
+<!--function pruf(d) {-->
+<!--	if(d.job_id.value == "" ) {-->
+<!--		alert("--><?php //echo $LDAlertJobId ?><!--");-->
+<!--			d.job_id.focus();-->
+<!--			 return false;-->
+<!--		} else {-->
+<!--			if(d.test_date){-->
+<!--				if(!d.test_date.value)-->
+<!--				{ alert("--><?php //echo $LDAlertTestDate ?><!--");-->
+<!--					d.test_date.focus();-->
+<!--					return false;-->
+<!--				} else-->
+<!--					return true;-->
+<!--			}-->
+<!--		}-->
 }        */
 function chkselect(d) {
  	if(d.parameterselect.value=="<?php echo $parameterselect ?>"){
@@ -485,18 +485,18 @@ $smarty->assign('sSelectGroupHiddenInputs',$sTemp);
 # Collect hidden inputs for the parameter group selector
 //ob_start();
 ?>
-<!-- <input type=hidden name="encounter_nr" value="<?php echo $encounter_nr; ?>">
-<input type=hidden name="job_id" value="<?php echo $job_id; ?>">
-<input type=hidden name="sid" value="<?php echo $sid; ?>">
-<input type=hidden name="lang" value="<?php echo $lang; ?>">
-<input type=hidden name="update" value="<?php echo $update; ?>">
-<input type=hidden name="allow_update" value="<?php if( isset($allow_update)) echo $allow_update; ?>">
-<input type=hidden name="batch_nr" value="<?php if(isset($row['batch_nr'])) echo $row['batch_nr']; ?>">
-<input type=hidden name="newid" value="<?php echo $newid; ?>">
-<input type=hidden name="std_date" value="<?php echo $std_date; ?>">
-<input type=hidden name="user_origin" value="<?php echo $user_origin; ?>">
-<input type=hidden name="changegroup" value="1">
-<input type=hidden name="saved" value="0"> -->
+<!--<!-- <input type=hidden name="encounter_nr" value="--><?php //echo $encounter_nr; ?><!--">-->
+<!--<input type=hidden name="job_id" value="--><?php //echo $job_id; ?><!--">-->
+<!--<input type=hidden name="sid" value="--><?php //echo $sid; ?><!--">-->
+<!--<input type=hidden name="lang" value="--><?php //echo $lang; ?><!--">-->
+<!--<input type=hidden name="update" value="--><?php //echo $update; ?><!--">-->
+<!--<input type=hidden name="allow_update" value="--><?php //if( isset($allow_update)) echo $allow_update; ?><!--">-->
+<!--<input type=hidden name="batch_nr" value="--><?php //if(isset($row['batch_nr'])) echo $row['batch_nr']; ?><!--">-->
+<!--<input type=hidden name="newid" value="--><?php //echo $newid; ?><!--">-->
+<!--<input type=hidden name="std_date" value="--><?php //echo $std_date; ?><!--">-->
+<!--<input type=hidden name="user_origin" value="--><?php //echo $user_origin; ?><!--">-->
+<!--<input type=hidden name="changegroup" value="1">-->
+<!--<input type=hidden name="saved" value="0"> -->-->
 <?php
 
 /*$sTemp = ob_get_contents();
