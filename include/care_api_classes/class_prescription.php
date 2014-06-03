@@ -648,7 +648,7 @@ class Prescription extends Core {
                 AND prs.prescription_type = t.prescription_type
             ORDER BY prs.date_time_create";   */
         //thu
-        $this->sql="SELECT prs.*, pr.*, prs.note AS totalnote, t.prescription_type_name AS type_name, dm.product_name
+        $this->sql="SELECT prs.*, pr.*, prs.note AS totalnote, t.prescription_type_name AS type_name, pr.product_name
 			  FROM $this->tb_phar_pres_info AS prs, $this->tb_phar_pres AS pr, $this->tb_phar_pres_type AS t,
 					care_pharma_products_main AS dm
 			  WHERE prs.encounter_nr='".$encounter_nr."'

@@ -107,7 +107,6 @@ $kb_ck_1=$kb_ck->fetchrow();
 require_once($root_path.'classes/tcpdf/config/lang/eng.php');
 require_once($root_path.'classes/tcpdf/tcpdf.php');
 
-
 $fpdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
 $fpdf->AddPage();
 $fpdf->SetTitle('Phieu Kham Benh Vao Vien');
@@ -500,7 +499,7 @@ $fpdf->SetFont('dejavusans','',10);
 $fpdf->SetX(135);
 $fpdf->Cell(60,5,'Họ tên:.....................................',0,0,'L');
 
-
+ob_clean();
 //$fpdf->Output();
 $fpdf->Output('PhieuKhamBenhVaoVien.pdf', 'I');
 

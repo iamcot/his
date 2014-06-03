@@ -391,7 +391,8 @@ $pdf->writeHTML($tbl, true, false, false, false, '');
 //';
 $pdf->writeHTML($tb1, true, false, false, false, '');
 // -----------------------------------------------------------------------------
-
+$tb1 = $tb1.ob_get_contents();
+ob_clean();
 $pdf->Output('tuvongtruocvaovien.pdf', 'I');
 //============================================================+
 // END OF FILE                                                
