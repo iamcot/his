@@ -276,5 +276,6 @@
                 </tr>
             </table>';
     $pdf->writeHTML($tbl1, true, false, false, false, '');
+    ob_clean();
     $pdf->Output('Giaycamdoan.pdf', 'I');
 ?>

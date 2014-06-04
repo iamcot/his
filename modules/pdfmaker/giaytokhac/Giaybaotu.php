@@ -210,5 +210,6 @@
                 </tr>
               </table>';    
     $pdf->writeHTML($tb_foot, true, false, false, false, '');
+    ob_clean();
     $pdf->Output('Giaybaotu.pdf', 'I');
 ?>

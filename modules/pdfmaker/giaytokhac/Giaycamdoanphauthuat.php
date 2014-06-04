@@ -258,7 +258,7 @@ $tbl.=' </td>
 	</tr>
 </table>';
 $pdf->writeHTML($tbl, true, false, false, false, '');
-
+ob_clean();
 $pdf->Output('GiaycamdoanPT.pdf', 'I');
 
 //============================================================+
