@@ -279,10 +279,17 @@
                                 $src = imagecreatefrompng($root_path.'gui/img/common/default/arrow_bdcd.PNG');
                                 break;
                         }
+                        /*
                         if($bp['dochongkhop']=='Có'){
                             $oy2_1='_';
                         }else{
                             $oy2_1='C';
+                        }
+                         */
+                        if($bp['dochongkhop']=='Có'){  //==>n
+                            $oy2_1='C';
+                        }else{
+                            $oy2_1='_';
                         }
                         if($bp['cotucung']>=3 && $i==0){
                             if(3<=$bp['cotucung'] && $bp['cotucung']<4){

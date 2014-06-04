@@ -189,7 +189,7 @@ $pdf->writeHTMLCell(0, 25, '', '', $html3, 0, 1, 0, true, 'L', true);
 $pdf->lastPage();
 
 // -----------------------------------------------------------------------------
-
+ob_clean();
 //Close and output PDF document
 $pdf->Output('PhieuNhapKho.pdf', 'I');
 

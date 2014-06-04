@@ -643,7 +643,7 @@ if(is_object($resultfinalqry)) $cntbill=$resultfinalqry->FetchRow();
 //$cntbill['total_amount'] += $tongtienthuoc + $tongtienVTYT + $tongtienHC + $tongtienDichVu;
 $cntbill['total_amount'] = $tongtienthuoc + $tongtienVTYT + $tongtienHC + $tongtienDichVu;
 //$cntbill['total_amount'] += $tongtienthanhtoan + $tongtienVTYTTra + $tongtienHCTra + $tongtienDichVuTra;    //nang
-$cntbill['total_discount'] += $tongtienBHYT + $tongtienVTYTBHYT + $tongtienHCBHYT + $tongtienDichVuBHYT;  //nang- tinh so tien dc giam BHYT
+$cntbill['total_discount'] = $tongtienBHYT + $tongtienVTYTBHYT + $tongtienHCBHYT + $tongtienDichVuBHYT;  //nang- tinh so tien dc giam BHYT
 
 $smarty->assign('LDTotal',$LDTotalFinalBill.': ');
 $smarty->assign('LDTotalValue',number_format($cntbill['total_amount'])); 				//$final['final_total_bill_amount']
