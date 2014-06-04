@@ -12,7 +12,7 @@ extract($_POST);
 
 //type = dongy,tayy; ngaydau, ngaycuoi, update_id, kkthang = 08/2012
 
-$patmenu="khochan_thuoc_kiemke.php".URL_REDIRECT_APPEND."&pid=".$_SESSION['sess_pid'].'&type='.$type;
+$patmenu="khochan_thuoc_kiemke.php".URL_REDIRECT_APPEND."&pid=".$_SESSION['sess_pid'].'&type='.$type.'&todate='.$ngaycuoi;
 if(!isset($Pharma)) $Pharma=new Pharma;
 		
 $temp = explode('/',$kkthang);

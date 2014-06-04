@@ -59,7 +59,7 @@ function chkform(d) {
 }
 function printOut(select_type,month,year)
 {
-	urlholder="<?php echo $root_path;?>modules/pdfmaker/duoc/khochan_thuoc_nhapxuatton.php<?php echo URL_APPEND; ?>&type=medicine&select_type="+select_type+"&month="+month+"&year="+year;
+	urlholder="<?php echo $root_path;?>modules/pdfmaker/duoc/khole_thuoc_xuatnhapton.php<?php echo URL_APPEND; ?>&type=medicine&select_type="+select_type+"&month="+month+"&year="+year;
 	testprintpdf=window.open(urlholder,"NhapXuatTon","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
 }
 function Save(alertsave){

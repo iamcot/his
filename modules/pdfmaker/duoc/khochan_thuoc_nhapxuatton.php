@@ -348,7 +348,7 @@ $pdf->writeHTMLCell(0, 25, '', '', $html2, 0, 1, 0, true, 'L', true);
 $pdf->lastPage();
 //
 //// -----------------------------------------------------------------------------
-
+ob_clean();
 //Close and output PDF document
 $pdf->Output('KhoChan_BaocaoXNTthuoc.pdf', 'I');
 

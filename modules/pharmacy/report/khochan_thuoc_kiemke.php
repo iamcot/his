@@ -144,7 +144,7 @@ function printOut(select_type,flag)
 }
 function chkform(d) {	
 	document.listmedform.action="";
-	document.listmedform.submit();
+	document.listmedform.reload();
 }
 function selectTypeMed() {
 	var temp_i = document.getElementById("type_med").selectedIndex;
@@ -162,6 +162,8 @@ function ChotKiemKe(update_id){
 	if (name!=null)
 	{
 		document.listmedform.action="<?php echo $fileforward; ?>&target=save&ngaydau=<?php echo $chotngaydau; ?>&ngaycuoi=<?php echo $chotngaycuoi; ?>&update_id="+update_id+"&kkthang="+name;
+//        var search = document.getElementById('search').value;
+<!--        window.location.replace("--><?php //echo $thisfile;?><!--&search="+search+"&todate=--><?php //echo $chotngaycuoi?><!--");-->
         document.listmedform.submit();
 
 	}
@@ -208,7 +210,7 @@ switch($type){
 
 ob_start();
 ?>
-<form name="listmedform" method="POST"  onSubmit="return chkform(this)">
+<form name="listmedform" method="POST"  >
 <center>
 <table cellSpacing="1" cellPadding="2" border="0" width="95%">
 	<tr><th align="left" colspan="4"><font size="3" color="#5f88be"><?php echo $LDKhoChan; ?></th>

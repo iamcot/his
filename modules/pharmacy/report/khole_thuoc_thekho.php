@@ -97,13 +97,23 @@ function chkform(d) {
 function printout() {
 	window.print();
 }
+//function Medicine_AutoComplete(){
+//	var name_med='medicine';
+//	var includeScript = "khole_autocomplete_medicine.php";
+//	new Ajax.Autocompleter(name_med,"hint",includeScript, {
+//			afterUpdateElement : setSelectionId
+//		}
+//	);
+//}
 function Medicine_AutoComplete(){
-	var name_med='medicine';
-	var includeScript = "khole_autocomplete_medicine.php";
-	new Ajax.Autocompleter(name_med,"hint",includeScript, {
-			afterUpdateElement : setSelectionId
-		}
-	);
+    var name_med='medicine';
+    var includeScript =  "khole_autocomplete_medicine.php?type=<?php echo $type; ?>";
+    new Ajax.Autocompleter(name_med,"hint",includeScript, {
+            method: 'POST',
+            paramName: 'search',
+            afterUpdateElement : setSelectionId
+        }
+    );
 }
 function setSelectionId(div,li) {
 	document.getElementById('encoder').value = li.id;
@@ -194,53 +204,53 @@ if ($t_day>$end_day)
 //require_once($root_path.'include/care_api_classes/class_cabinet_pharma.php');
 //$CabinetPharma = new CabinetPharma;
 		
-/*$listReport = $CabinetPharma->report15Day($fromdate,$todate);
-if(is_object($listReport)){
-	ob_start();	
-	while($rowReport = $listReport->FetchRow())	{
-		if (!isset($old_encode) || ($old_encode!=$rowReport['product_encoder'])) {
-			if (isset($old_encode)){
-				for ($j;$j<=$end_day;$j++)
-					echo '<td></td>';
-				echo	'<th>'.$total.'</th>';	//Tong cong		
-				echo	'<td></td>	</tr>';		//Note
-			}
-			$old_encode=$rowReport['product_encoder'];
-			$j=(int)$f_day;
-			$flag=1; $total=0;
-			$i++;
-		}else $flag=0;
-		
-			
-		if ($flag){
-			echo '<tr bgColor="#ffffff" >';
-			echo	'<td align="center">'.$i.'</td>'; //STT
-			echo	'<td>'.$rowReport['product_name'].'</td>';	//Ten thuoc
-			echo 	'<td align="center">'.$rowReport['unit_name_of_medicine'].'</td>';  //Don vi
-			echo	'<td> </td>';	//Quy cach?		
-		}
-		for($j;$j<=(int)$rowReport['at_day'];$j++) {
-			if ($j==(int)$rowReport['at_day']){
-				echo '<td>'.$rowReport['total'].'</td>';  //Ngay
-				$total+=$rowReport['total'];
-				$j++;
-				break;
-			}
-			else
-				echo '<td></td>';
-		}
-							
-	}
-	for ($j;$j<=$end_day;$j++)
-		echo '<td></td>';
-	echo	'<th>'.$total.'</th>';	//Tong cong		
-	echo	'<td></td>	</tr>';		//Note
-			
-	$sTempDiv = $sTempDiv.ob_get_contents();				
-	ob_end_clean();
-		
-} else $sTempDiv='<tr bgColor="#ffffff" ><td colspan="11">'.$LDItemNotFound.'</td></tr>';
- */
+//$listReport = $CabinetPharma->report15Day($fromdate,$todate);
+//if(is_object($listReport)){
+//	ob_start();
+//	while($rowReport = $listReport->FetchRow())	{
+//		if (!isset($old_encode) || ($old_encode!=$rowReport['product_encoder'])) {
+//			if (isset($old_encode)){
+//				for ($j;$j<=$end_day;$j++)
+//					echo '<td></td>';
+//				echo	'<th>'.$total.'</th>';	//Tong cong
+//				echo	'<td></td>	</tr>';		//Note
+//			}
+//			$old_encode=$rowReport['product_encoder'];
+//			$j=(int)$f_day;
+//			$flag=1; $total=0;
+//			$i++;
+//		}else $flag=0;
+//
+//
+//		if ($flag){
+//			echo '<tr bgColor="#ffffff" >';
+//			echo	'<td align="center">'.$i.'</td>'; //STT
+//			echo	'<td>'.$rowReport['product_name'].'</td>';	//Ten thuoc
+//			echo 	'<td align="center">'.$rowReport['unit_name_of_medicine'].'</td>';  //Don vi
+//			echo	'<td> </td>';	//Quy cach?
+//		}
+//		for($j;$j<=(int)$rowReport['at_day'];$j++) {
+//			if ($j==(int)$rowReport['at_day']){
+//				echo '<td>'.$rowReport['total'].'</td>';  //Ngay
+//				$total+=$rowReport['total'];
+//				$j++;
+//				break;
+//			}
+//			else
+//				echo '<td></td>';
+//		}
+//
+//	}
+//	for ($j;$j<=$end_day;$j++)
+//		echo '<td></td>';
+//	echo	'<th>'.$total.'</th>';	//Tong cong
+//	echo	'<td></td>	</tr>';		//Note
+//
+//	$sTempDiv = $sTempDiv.ob_get_contents();
+//	ob_end_clean();
+//
+//} else $sTempDiv='<tr bgColor="#ffffff" ><td colspan="11">'.$LDItemNotFound.'</td></tr>';
+//
 $smarty->assign('divItem',$sTempDiv);
  
  
