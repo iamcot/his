@@ -7,7 +7,7 @@ define('NO_CHAIN',1);
 require_once($root_path.'include/core/inc_front_chain_lang.php');
 require_once($root_path.'include/core/inc_date_format_functions.php');
 include_once($root_path.'include/care_api_classes/class_pharma.php');
-
+require_once($root_path.'classes/money/convertMoney.php');
 
 if(!isset($Pharma)) $Pharma = new Pharma;
 switch($type){
@@ -166,8 +166,15 @@ $html2='<table width="100%">
 			<td align="right"><b>'.number_format($total).'</b></td>
 			<td width="5%"></td>
 		</tr>
+		<tr>
+			<td width="60%" align="right"><b>Thành tiền</b></td>
+			<td align="right">'.convertMoney($total).'</td>
+			<td width="5%"></td>
+		</tr>
 		</table>';
-$pdf->writeHTMLCell(0, 10, '', '', $html2, 0, 1, 0, true, 'L', true);
+
+$pdf->writeHTMLCell(0,20, '', '', $html2, 0, 1, 0, true, 'L', true);
+
 
 $pdf->Ln();
 $html3='<table width="100%">

@@ -153,6 +153,7 @@ function selectTypeMed() {
 	document.listmedform.submit();
 }
 function ChotKiemKe(update_id){
+
 	var warning = "";
 	if(update_id!=''){
 		warning = "<?php echo $LDKiemKeWaring; ?>";
@@ -160,9 +161,11 @@ function ChotKiemKe(update_id){
 	var name=prompt(warning + "\n" + "<?php echo $LDChotKiemKeVao.' '.$ngaydaux.' '.$LDDen.' '.$ngaycuoix.' '.$LDChoThang ?>","<?php echo $thangbaocao; ?>");
 	if (name!=null)
 	{
-		document.listmedform.action="<? echo $fileforward; ?>&target=save&ngaydau=<?php echo $chotngaydau; ?>&ngaycuoi=<?php echo $chotngaycuoi; ?>&update_id="+update_id+"&kkthang="+name;
-//		document.listmedform.submit();
+		document.listmedform.action="<?php echo $fileforward; ?>&target=save&ngaydau=<?php echo $chotngaydau; ?>&ngaycuoi=<?php echo $chotngaycuoi; ?>&update_id="+update_id+"&kkthang="+name;
+        document.listmedform.submit();
+
 	}
+
 
 }
 </script>

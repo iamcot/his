@@ -2510,7 +2510,7 @@ class Pharma extends Core {
 						break;	
 		}		
 
-        $this->sql = "SELECT DISTINCT source.monthreport, source.product_encoder, T.number AS ton, T.price AS giaton, N.number AS nhap, N.price AS gianhap, X.number AS xuat, X.price AS giaxuat, T.exp_date AS hanton, N.exp_date AS hannhap, T.lotid AS loton, N.lotid AS lonhap, X.lotid AS loxuat, main.product_name
+        $this->sql = "SELECT DISTINCT source.monthreport,unit.unit_name_of_medicine, source.product_encoder, T.number AS ton, T.price AS giaton, N.number AS nhap, N.price AS gianhap, X.number AS xuat, X.price AS giaxuat, T.exp_date AS hanton, N.exp_date AS hannhap, T.lotid AS loton, N.lotid AS lonhap, X.lotid AS loxuat, main.product_name
 			FROM  ( SELECT *
 					  FROM $view_ton WHERE $view_ton.monthreport='$ton_month' AND $view_ton.yearreport='$ton_year'
 					  UNION
@@ -2521,8 +2521,8 @@ class Pharma extends Core {
 					  FROM view_thuoc_xuat WHERE view_thuoc_xuat.monthreport='$ton_month' AND view_thuoc_xuat.yearreport='$ton_year'  AND pharma_type IN (1,2,3)
 					) AS source
 			LEFT JOIN $view_ton AS T ON source.product_encoder = T.product_encoder AND source.monthreport=T.monthreport AND source.price=T.price
-			LEFT JOIN view_thuoc_nhap AS N ON source.product_encoder = N.product_encoder AND source.monthreport = N.monthreport AND source.price=N.price AND N.monthreport='01' AND N.yearreport='2013'
-			LEFT JOIN view_thuoc_xuat AS X ON source.product_encoder = X.product_encoder AND source.monthreport = X.monthreport AND source.price=X.price AND X.monthreport='01' AND X.yearreport='2013'
+			LEFT JOIN view_thuoc_nhap AS N ON source.product_encoder = N.product_encoder AND source.monthreport = N.monthreport AND source.price=N.price AND N.monthreport='$ton_month' AND N.yearreport='$ton_year'
+			LEFT JOIN view_thuoc_xuat AS X ON source.product_encoder = X.product_encoder AND source.monthreport = X.monthreport AND source.price=X.price AND X.monthreport='$ton_month' AND X.yearreport='$ton_year'
 			JOIN care_pharma_products_main AS main ON main.product_encoder = source.product_encoder  AND main.pharma_type IN (1,2,3)
 			JOIN care_pharma_unit_of_medicine AS unit ON unit.unit_of_medicine=main.unit_of_medicine
 			ORDER BY source.product_encoder";

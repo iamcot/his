@@ -365,7 +365,7 @@ function checkSelect()
         var conf=confirm("Danh sách thuốc sẽ bị xóa! Bạn chấp nhận?");
         if(conf==true)
         {
-               document.newform.submit();
+               document.newform.reset();
         }
         else
             return false;
