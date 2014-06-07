@@ -342,12 +342,14 @@ class Issuepaper extends Core {
 	 * @param int number_receive
 	 * @return boolean
 	 */
-	function setReceiveMedicineInIssue($medicine_nr,$receive_number) {
+	function setReceiveMedicineInIssue($medicine_nr,$receive_number,$lot_id,$cost) {
 	    global $db;
 		if(!$medicine_nr) return FALSE;
 
 		$this->sql="UPDATE $this->tb_phar_issue
-						SET number_receive='".$receive_number."' 
+						SET number_receive='".$receive_number."',
+						lot_id = '$lot_id',
+                        cost = '$cost'
 						WHERE nr='".$medicine_nr."' ";
 
 		return $this->Transact($this->sql);	

@@ -50,7 +50,11 @@ $patmenu="../nursing-issuepaper-listdepot.php".URL_REDIRECT_APPEND."&pid=".$_SES
 if(!isset($issue_obj)) $issue_obj=new IssuePaper;
 if(!isset($pres_obj)) $pres_obj=new Prescription;
 
-
+/*
+ * Lúc chọn thuốc chỉ lấy tên và mã thuốc,
+ * không LƯU đến số lô và giá tiền
+ *
+ */
 		
 switch($mode){
 		case 'new':
@@ -108,7 +112,8 @@ switch($mode){
 							'plus' => $plus,
 							'number_request' => $_POST['sum'.$j], 
 							'number_receive' => '',
-							'cost' => $_POST['cost'.$j],
+//							'cost' => $_POST['cost'.$j],
+                            'cost' => '',
 							'note' => $_POST['note'.$j]
 						);
 						$issue_obj->insertDataFromArray($pharma_issue_paper);
@@ -168,7 +173,8 @@ switch($mode){
 							'plus' => $plus,
 							'number_request' => $_POST['sum'.$j], //ngay uong 3 lan
 							'number_receive' => '',
-							'cost' => $_POST['cost'.$j],
+//							'cost' => $_POST['cost'.$j],
+                            'cost' => '',
 							'note' => $_POST['note'.$j]
 							);
 							//$issue_obj->setDataArray(&$pharma_issue_paper);

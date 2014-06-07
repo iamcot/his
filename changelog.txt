@@ -1,3 +1,10 @@
+2014-06-07
+* Điều dưỡng lúc lập phiếu lĩnh chưa tính giá tiền, thêm cột lot_id vào bảng issue_paper
+* Lúc phát thuốc tự lấy số lô và giá tiền của mã thuốc tương ứng
+(hiện tại chỉ lấy lô cũ nhất, dự tính sẽ cho chọn số lô từ select box)
+* Sửa lại câu truy vấn và cách hiển thị trong danh mục tủ thuốc của điều dưỡng
+
+
 2014-03-25:-----------------
 + thêm tính năng sửa giá thuốc cho BHYT trước khi tính viện phí và phát thuốc,
 * patient_due_first: khong tinh lai gia tien khi thanh toan vi BHYT da chinh gia roi
