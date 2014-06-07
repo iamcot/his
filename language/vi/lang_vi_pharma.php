@@ -461,6 +461,7 @@ $LDChemicalReport='Báo cáo sử dụng hóa chất';
 $LDTypePutIn1='Dành cho';
 $LDBH='Bảo hiểm y tế';
 $LDNoBH='Sự nghiệp';
+$LDTamThan='Thuốc hướng Tâm thần/Tiền chất';
 $LDPlsEnterPutInVat='Nhập thuế GTGT';
 $LDVAT='Thuế GTGT ';
 $LDChemical_KP='Hóa chất kinh phí';

@@ -11,6 +11,7 @@
 	</tr>
 	<tr>
 		<th align="left">{{$LDTYPE}}:&nbsp;&nbsp;&nbsp;{{$sTypePut}}</th>
+        <td align="right">{{$LDTT}}: {{$sTypePutTT}}</td>
         <td align="right">{{$LDDate}}: {{$sCalendar}}</td>
 	</tr>
 	<tr>
