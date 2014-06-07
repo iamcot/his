@@ -1329,11 +1329,12 @@ class Product extends Core {
 				$limit_number ='LIMIT '.$start_from.', '.$number_items_per_page;
 			}			
 			
-		$this->sql="SELECT DISTINCT khochan.product_name, donvi.unit_name_of_medicine, khochan.product_encoder, khochan.sodangky, tatcakhoa.product_lot_id, tatcakhoa.exp_date, taikhoa.*    
-                FROM care_pharma_available_department AS taikhoa, care_pharma_available_product AS tatcakhoa, care_pharma_products_main AS  khochan, care_pharma_unit_of_medicine AS donvi 
+		$this->sql="SELECT DISTINCT khochan.product_name, donvi.unit_name_of_medicine, khochan.product_encoder, khochan.sodangky, tatcakhoa.product_lot_id, tatcakhoa.exp_date, taikhoa.*
+                FROM care_pharma_available_department AS taikhoa, care_pharma_available_product AS tatcakhoa, care_pharma_products_main AS  khochan, care_pharma_unit_of_medicine AS donvi
                 WHERE taikhoa.available_product_id=tatcakhoa.available_product_id 
 					".$dept_ward." 
-                    AND khochan.product_encoder=tatcakhoa.product_encoder 
+                    AND khochan.product_encoder=tatcakhoa.product_encoder
+
                     AND donvi.unit_of_medicine=khochan.unit_of_medicine  	
                 ORDER BY khochan.product_name, taikhoa.init_number  ".$updown."
 				".$limit_number;
@@ -1354,11 +1355,12 @@ class Product extends Core {
 			if ($ward_nr!='')
 				$dept_ward.= " AND taikhoa.ward_nr='".$ward_nr."' ";
 				
-			$this->sql="SELECT DISTINCT khochan.product_name, donvi.unit_name_of_medicine, khochan.product_encoder, khochan.sodangky, tatcakhoa.product_lot_id, tatcakhoa.exp_date , taikhoa.*   
-                FROM care_pharma_available_department AS taikhoa, care_pharma_available_product AS tatcakhoa, care_pharma_products_main AS  khochan, care_pharma_unit_of_medicine AS donvi 
+			$this->sql="SELECT DISTINCT khochan.product_name, donvi.unit_name_of_medicine, khochan.product_encoder, khochan.sodangky, tatcakhoa.product_lot_id, tatcakhoa.exp_date , taikhoa.*
+                FROM care_pharma_available_department AS taikhoa, care_pharma_available_product AS tatcakhoa, care_pharma_products_main AS  khochan, care_pharma_unit_of_medicine AS donvi
                 WHERE taikhoa.available_product_id=tatcakhoa.available_product_id 
 					".$dept_ward." 
-                    AND khochan.product_encoder=tatcakhoa.product_encoder 
+                    AND khochan.product_encoder=tatcakhoa.product_encoder
+
                     AND donvi.unit_of_medicine=khochan.unit_of_medicine 
 					".$condition."
                 ORDER BY khochan.product_name, taikhoa.available_number ".$updown;

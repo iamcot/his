@@ -254,6 +254,9 @@ $LDListGuide1='Số lượng tồn <= 0';
 $LDListGuide2='0 < số lượng tồn < số lượng ban đầu';
 $LDListGuide3='Số lượng tồn >= số lượng ban đầu';
 $LDInitNumber='Số lượng ban đầu';
+$LDGetNumberInday='Số lượng lĩnh về trong ngày';
+$LDUseNumber='Số lượng sử dụng';
+$LDNotUseNumber='Số lượng không sử dụng';
 $LDSortUp='Sắp xếp tăng dần';
 $LDSortDown='Sắp xếp giảm dần';
 

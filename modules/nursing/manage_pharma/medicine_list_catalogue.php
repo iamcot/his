@@ -174,7 +174,10 @@ ob_start();
 		<th><?php echo $LDWard; ?></th>
 		<th><?php echo $LDCabinetMedicineSum; ?>&nbsp;
 			<a href="javascript:sortUp()"><input type="image" <?php echo createComIcon($root_path,$picup,'0','',TRUE) ?> onclick="" title="<?php echo $LDSortUp; ?>"></a>&nbsp;<a href="javascript:sortDown()"><input type="image" <?php echo createComIcon($root_path,$picdown,'0','',TRUE) ?> onclick="" title="<?php echo $LDSortDown; ?>"></a></th>	
-		<th><?php echo $LDInitNumber; ?></th>	
+		<th><?php echo $LDInitNumber; ?></th>
+        <th><?php echo $LDGetNumberInday; ?></th>
+        <th><?php echo $LDUseNumber; ?></th>
+        <th><?php echo $LDNotUseNumber; ?></th>
 	</tr>																																
 	<?php 
 	if ($search==''){
@@ -238,6 +241,9 @@ ob_start();
 								<td>'.$rowIssue['ward_nr'].'</td>
 								<td align="center">'.$rowItem['available_number'].'</td>								
 								<td align="center">'.$rowItem['init_number'].'</td>
+								<td align="center">'.$rowItem['number_receive'].'</td>
+								<td align="center">'.$rowItem['use_number'].'</td>
+								<td align="center">'.$rowItem['not_use_number'].'</td>
 							</tr>';
 		}
 		echo $sTemp;

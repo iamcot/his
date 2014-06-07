@@ -406,7 +406,7 @@ require('includes/inc_test_request_lister_fx.php');
 						$item_code=$item['item_bill_code'];
 				}
 					$sql_bill="SELECT * FROM care_billing_bill_item
-							WHERE bill_item_code='".$item['item_bill_code']."' AND bill_item_encounter_nr='".$pn."' AND bill_item_date='".$stored_request['bill_time']."'";
+							WHERE bill_item_code='".$item['item_bill_code']."' AND bill_item_encounter_nr='".$pn."' AND bill_item_date='".$stored_request['create_time']."'";   //bill_time
 					//echo $sql_bill;
 					if($bill=$db->Execute($sql_bill)){
 						if($bill->RecordCount()){
