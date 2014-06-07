@@ -332,7 +332,7 @@ if($target=='depot')
 {
 	$smarty->assign('depot',true);
 	$smarty->assign('sTypePut','<select name="typeput" class="input1" onChange="alertselected(this)"><option value="0">'.$LDBH.'</option><option value="1" selected>'.$LDNoBH.'</option><option value="2">'.$LDCBTC.'</option></select>');
-    $smarty->assign('sTypePutTT','<input type="checkbox" name="cbTT" value="tt" />');
+
 	$smarty->assign('AddRow','<a href="javascript:;" onclick="insertRow();">&nbsp;[+]&nbsp;'.$LDAddRowMedicine.'</a>');
 	$type=0; $style=''; $readonly='';
 	
@@ -571,6 +571,8 @@ if($target=='depot')
 //*********************************************************************************
 
 include_once($root_path.'include/core/inc_date_format_functions.php');
+$smarty->assign('sTypePutTT','<input type="checkbox" name="cbTT" value="tt" />'); //mp
+
 //mp
 if($date_time=='')
     $date_time=date('Y-m-d');
