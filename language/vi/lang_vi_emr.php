@@ -93,7 +93,7 @@
     
     $LDTuvong='Giấy xác nhận bệnh nhân tử vong';
     $LDCamDoanPT='Giấy cam đoan phẫu thuật';
-    $LDTuvongtruoc='Bệnh án bệnh nhân tử vong <br/> trước khi vào viện';
+    $LDTuvongtruoc='Biên bản bệnh nhân tử vong <br/> trước khi vào viện';
     $LDXNDTNgoaitru='Giấy xác nhận điều trị ngoại trú';
     $LDGiayCamdoan='Giấy cam đoan';
     $LDNguoicamdoan='Người làm cam đoan';

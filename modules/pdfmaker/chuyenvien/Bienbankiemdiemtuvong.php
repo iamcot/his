@@ -137,7 +137,9 @@ $fpdf->Ln();
 $fpdf->SetFont('','B');
 $fpdf->Cell(135,5,PDF_HOSNAME,0,0,'L');
 $fpdf->SetFont('','');
-$fpdf->Cell(150,5,'Số vào viện:.........................',0,1,'L');
+if(!empty($pregnancy['sovaovien_notes']))  {
+$fpdf->Cell(150,5,'Số vào viện: ...'.$pregnancy['sovaovien_notes']."...",0,1,'L');
+} else  $fpdf->Cell(150,5,'Số vào viện:................................',0,1,'L');
 
 $fpdf->Ln(); 
 $fpdf->SetFont('DejaVu','B',18);
