@@ -1,3 +1,6 @@
+2014-06-10
+- update database thành phố quận huyện và phường xã
+
 2014-06-09
 * phiếu lĩnh thuốc từ khoa nội trú, cấp phát thuốc, phân bổ thuốc và phát thuốc cho BN đều dùng available_product_id
 * chỉnh sửa các bảng liên quan bằng script
