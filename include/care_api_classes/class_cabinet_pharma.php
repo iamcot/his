@@ -939,7 +939,8 @@ class CabinetPharma extends Core {
 	    global $db;
 		if($available_product_id=='') return FALSE;
 		$this->sql= "UPDATE $this->tb_phar_avai_dept AS dept
-					SET dept.available_number=dept.available_number".$cal."'$number' 
+					SET dept.available_number=dept.available_number".$cal."'$number',
+					 init_number = '$number'
 					WHERE dept.available_product_id = '$available_product_id'
 					AND dept.department='$dept' AND dept.ward_nr='$ward' AND dept.typeput='$typeput' LIMIT 1";
 		return $this->Transact($this->sql);		
@@ -953,7 +954,7 @@ class CabinetPharma extends Core {
 //			//Get id from khole
 //			$avai_id=$result1->FetchRow();
 						
-			$this->sql="INSERT INTO $this->tb_phar_avai_dept (available_product_id,department,ward_nr,available_number,typeput,update_at,create_at) VALUES ('".$available_product_id."','$dept','$ward','$number','$typeput',now(),now())";
+			$this->sql="INSERT INTO $this->tb_phar_avai_dept (available_product_id,department,ward_nr,available_number,typeput,update_at,create_at,init_number) VALUES ('".$available_product_id."','$dept','$ward','$number','$typeput',now(),now(),'$number')";
 			return $this->Transact($this->sql);
 //		} else {return false;}
 	}
