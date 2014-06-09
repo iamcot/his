@@ -416,7 +416,7 @@ class Issuepaper extends Core {
 	    global $db;
 		$this->sql="SELECT sum(available_number) AS total 
 					FROM care_pharma_available_product 
-					WHERE product_encoder='$encoder' AND typeput='$typeput'
+					WHERE product_encoder='$encoder'
 					GROUP BY product_encoder";
             if($this->result=$db->Execute($this->sql)) {
                     if($this->result->RecordCount()){

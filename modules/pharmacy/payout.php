@@ -356,22 +356,22 @@ function CheckDuplicateMedicine(){
 //        table.deleteRow(i);
 //    }
 //}
-function checkSelect()
-{
-
-//    var loai=  document.getElementById("typeput");
-//    if(loai.select.changed)
-//    {
-        var conf=confirm("Danh sách thuốc sẽ bị xóa! Bạn chấp nhận?");
-        if(conf==true)
-        {
-               document.newform.reset();
-        }
-        else
-            return false;
-//    }
-
-}
+//function checkSelect()
+//{
+//
+////    var loai=  document.getElementById("typeput");
+////    if(loai.select.changed)
+////    {
+//        var conf=confirm("Danh sách thuốc sẽ bị xóa! Bạn chấp nhận?");
+//        if(conf==true)
+//        {
+//               document.newform.reset();
+//        }
+//        else
+//            return false;
+////    }
+//
+//}
 -->
 </script>
 <?php
