@@ -67,9 +67,9 @@ foreach ($medicine_nr AS $nr)
 				#Insert in care_pharma_department_archive, issue_paper, get_use=1
 				$Cabinet->insertArchive($dept, $ward, $encoder, $$dxavailable_product_id, '1', $receive_med[$nr], $$dxcost, $issue_id, 0, 0, 0, 0, $receive_user, $typeput);
 				
-				if($value>0){
-					$Issue->setMedicineReceiveOfPresInIssue($issue_id, $encoder, $receive_med[$nr]);
-				}
+				//if($value>0){
+			    $Issue->setMedicineReceiveOfPresInIssue($issue_id, $encoder, $receive_med[$nr]);
+				//}
 				
 			//}
 			if($type==1){
