@@ -861,11 +861,11 @@ class CabinetPharma extends Core {
 		}else{return false;}
 	}
 		
-	function insertArchive($dept, $ward, $product_encoder, $product_lotid, $get_use, $number, $cost=0, $issuepaper_id=0, $pres_id=0, $use_id=0, $return_id=0, $destroy_id=0, $user, $typeput){
+	function insertArchive($dept, $ward, $product_encoder, $available_product_id, $get_use, $number, $cost=0, $issuepaper_id=0, $pres_id=0, $use_id=0, $return_id=0, $destroy_id=0, $user, $typeput){
 		global $db;	
 		
-		$this->sql="INSERT INTO $this->tb_phar_archive(nr,dept_nr,ward_nr,typeput,product_encoder,product_lot_id,get_use,number,cost,issuepaper_id,pres_id, use_id,return_id,destroy_id,at_date_time,user)
-                    VALUES (0, '$dept', '$ward', '$typeput', '$product_encoder', '$product_lotid', '$get_use', '$number', '$cost', '$issuepaper_id', '$pres_id', '$use_id', '$return_id', '$destroy_id', CURRENT_TIMESTAMP, '$user')";
+		$this->sql="INSERT INTO $this->tb_phar_archive(nr,dept_nr,ward_nr,typeput,product_encoder,available_product_id,get_use,number,cost,issuepaper_id,pres_id, use_id,return_id,destroy_id,at_date_time,user)
+                    VALUES (0, '$dept', '$ward', '$typeput', '$product_encoder', '$available_product_id', '$get_use', '$number', '$cost', '$issuepaper_id', '$pres_id', '$use_id', '$return_id', '$destroy_id', CURRENT_TIMESTAMP, '$user')";
 		return $this->Transact($this->sql);	
 	}
 	
@@ -912,19 +912,22 @@ class CabinetPharma extends Core {
 		
 	
 	//--------------------------------------------Available Department-----------------------------------------
-	/** 5/02/2012
-	 * Updates care_pharma_available_department
-	 * @param $encoder, $lotid, $number_use, $cal='+','-'
-	 * @process: if not exist=> insert, else update
-	 * @return boolean
-	 */
-	function checkExistMedicineInAvaiDept($dept,$ward,$encoder,$lotid,$typeput){
+    /** 2014-06-9
+     * kiem tra ton cua tu thuoc kho va cap nhat hoac them moi dua tren available_product_id
+     * @param $dept
+     * @param $ward
+     * @param $encoder , $lotid, $number_use, $cal='+','-'
+     * @param $available_product_id
+     * @param $typeput
+     * @process: if not exist=> insert, else update
+     * @return boolean
+     */
+	function checkExistMedicineInAvaiDept($dept,$ward,$encoder,$available_product_id,$typeput){
 		global $db;
 		$this->sql="SELECT *
-					FROM care_pharma_available_department AS dept, care_pharma_available_product AS pro
-					WHERE dept.available_product_id = pro.available_product_id 
-					AND dept.department='$dept' AND dept.ward_nr='$ward' AND dept.typeput='$typeput'
-					AND pro.product_encoder='$encoder' AND pro.product_lot_id='$lotid'";
+					FROM care_pharma_available_department AS dept
+					WHERE dept.available_product_id = '$available_product_id'
+					AND dept.department='$dept' AND dept.ward_nr='$ward' AND dept.typeput='$typeput'";
 		if($this->result=$db->Execute($this->sql)) {
 			if($this->result->RecordCount()){
 				return $this->result->FetchRow();
@@ -932,31 +935,30 @@ class CabinetPharma extends Core {
 		} else { return false; }       
 	} 
 	 
-	function updateMedicineAvaiDept($encoder, $lotid, $dept, $ward, $number, $cal, $typeput) {
+	function updateMedicineAvaiDept($encoder, $available_product_id, $dept, $ward, $number, $cal, $typeput) {
 	    global $db;
-		if($encoder=='') return FALSE;
-		$this->sql= "UPDATE $this->tb_phar_avai_dept AS dept, care_pharma_available_product AS pro
+		if($available_product_id=='') return FALSE;
+		$this->sql= "UPDATE $this->tb_phar_avai_dept AS dept
 					SET dept.available_number=dept.available_number".$cal."'$number' 
-					WHERE dept.available_product_id = pro.available_product_id 
-					AND pro.product_encoder='$encoder' AND pro.product_lot_id='$lotid'
-					AND dept.department='$dept' AND dept.ward_nr='$ward' AND dept.typeput='$typeput'";
+					WHERE dept.available_product_id = '$available_product_id'
+					AND dept.department='$dept' AND dept.ward_nr='$ward' AND dept.typeput='$typeput' LIMIT 1";
 		return $this->Transact($this->sql);		
 	}
 	
-	function insertMedicineAvaiDept($encoder, $lotid, $dept, $ward, $number, $typeput){
+	function insertMedicineAvaiDept($encoder, $available_product_id, $dept, $ward, $number, $typeput){
 	    global $db;
-		if($encoder=='') return FALSE;
-		$this->sql="SELECT available_product_id FROM care_pharma_available_product WHERE product_encoder='$encoder' AND product_lot_id='$lotid' AND typeput='$typeput'";
-		if($result1=$db->Execute($this->sql)){
-			//Get id from khole
-			$avai_id=$result1->FetchRow();
+		if($available_product_id=='') return FALSE;
+//		$this->sql="SELECT available_product_id FROM care_pharma_available_product WHERE product_encoder='$encoder' AND product_lot_id='$lotid' AND typeput='$typeput'";
+//		if($result1=$db->Execute($this->sql)){
+//			//Get id from khole
+//			$avai_id=$result1->FetchRow();
 						
-			$this->sql="INSERT INTO $this->tb_phar_avai_dept (available_product_id,department,ward_nr,available_number,typeput) VALUES ('".$avai_id['available_product_id']."','$dept','$ward','$number','$typeput')";
+			$this->sql="INSERT INTO $this->tb_phar_avai_dept (available_product_id,department,ward_nr,available_number,typeput,update_at,create_at) VALUES ('".$available_product_id."','$dept','$ward','$number','$typeput',now(),now())";
 			return $this->Transact($this->sql);
-		} else {return false;}
+//		} else {return false;}
 	}
 	
-	/** 5/02/2012
+	/** 2014-09-06 CoT
 	 * Updates care_pharma_available_department
 	 * @param $encoder, $number_use
 	 * @process: priority to use first_lotid
@@ -994,31 +996,72 @@ class CabinetPharma extends Core {
 	/** 24/02/2012
 	 * Functions for distribute dept into wards
 	 */
-	function ShowDistributeCabinet($dept_nr, $current_page, $number_items_per_page)
+	function ShowDistributeCabinet($dept_nr,$contidtion="", $current_page=0, $number_items_per_page=0)
     {
+//        global $db;
+//        $dept_ward = "";
+//		$dept_ward .= "AND (ward_nr='0' OR ward_nr='') ";
+//		if ($dept_nr!='')
+//			$dept_ward = " AND taikhoa.department='".$dept_nr."' ";
+//		if ($current_page!='' && $number_items_per_page!='') {
+//			$start_from =($current_page-1)*$number_items_per_page;
+//			$limit_number ='LIMIT '.$start_from.', '.$number_items_per_page;
+//		}
+//
+//		$this->sql="SELECT DISTINCT khochan.product_name, donvi.unit_name_of_medicine, khochan.product_encoder, tatcakhoa.product_lot_id, tatcakhoa.exp_date, taikhoa.*
+//                FROM $this->tb_phar_avai_dept AS taikhoa, care_pharma_available_product AS tatcakhoa, care_pharma_products_main AS  khochan, care_pharma_unit_of_medicine AS donvi, care_ward
+//                WHERE taikhoa.available_product_id=tatcakhoa.available_product_id
+//					".$dept_ward."
+//                    AND khochan.product_encoder=tatcakhoa.product_encoder
+//                    AND donvi.unit_of_medicine=khochan.unit_of_medicine
+//                    AND taikhoa.available_number>0
+//                ORDER BY khochan.product_name
+//				".$limit_number;
+//		if($this->result=$db->Execute($this->sql)) {
+//			if($this->result->RecordCount()) {
+//				 return $this->result;
+//			} else { return false; }
+//		} else { return false; }
         global $db;
-		$dept_ward .= "AND (ward_nr='0' OR ward_nr='') ";
-		if ($dept_nr!='')
-			$dept_ward = " AND taikhoa.department='".$dept_nr."' ";
-		if ($current_page!='' && $number_items_per_page!='') {		
-			$start_from =($current_page-1)*$number_items_per_page; 
-			$limit_number ='LIMIT '.$start_from.', '.$number_items_per_page;
-		}			
-			
-		$this->sql="SELECT DISTINCT khochan.product_name, donvi.unit_name_of_medicine, khochan.product_encoder, tatcakhoa.product_lot_id, tatcakhoa.exp_date, taikhoa.*    
-                FROM $this->tb_phar_avai_dept AS taikhoa, care_pharma_available_product AS tatcakhoa, care_pharma_products_main AS  khochan, care_pharma_unit_of_medicine AS donvi, care_ward 
-                WHERE taikhoa.available_product_id=tatcakhoa.available_product_id 
-					".$dept_ward." 
-                    AND khochan.product_encoder=tatcakhoa.product_encoder 
-                    AND donvi.unit_of_medicine=khochan.unit_of_medicine 
-                    AND taikhoa.available_number>0 	
-                ORDER BY khochan.product_name   
-				".$limit_number;
-		if($this->result=$db->Execute($this->sql)) {
-			if($this->result->RecordCount()) {
-				 return $this->result;	 
-			} else { return false; }
-		} else { return false; }                   
+        $dept_ward = " AND (taikhoa.ward_nr='0' OR taikhoa.ward_nr='')  ";
+        if ($dept_nr != '')
+            $dept_ward .= " AND taikhoa.department='" . $dept_nr . "' ";
+//        if ($current_page != '' && $number_items_per_page != '') {
+//            $start_from = ($current_page - 1) * $number_items_per_page;
+//            $limit_number = 'LIMIT ' . $start_from . ', ' . $number_items_per_page;
+//        }
+        //tong hop thuoc de phan phoi nen group theo available_product_id
+        $this->sql = "SELECT
+		    khochan.product_name,
+              donvi.unit_name_of_medicine,
+              khochan.product_encoder,
+              khochan.sodangky,
+              tatcakhoa.product_lot_id,
+              tatcakhoa.exp_date,
+              taikhoa.department,
+            taikhoa.ward_nr,
+            taikhoa.available_number,
+            taikhoa.typeput ,
+            taikhoa.available_product_id,
+            taikhoa.id
+                FROM care_pharma_available_department AS taikhoa, care_pharma_available_product AS tatcakhoa, care_pharma_products_main AS  khochan, care_pharma_unit_of_medicine AS donvi
+                WHERE taikhoa.available_product_id=tatcakhoa.available_product_id
+					" . $dept_ward . "
+                    AND khochan.product_encoder=tatcakhoa.product_encoder
+                    AND taikhoa.available_number>0
+                    AND donvi.unit_of_medicine=khochan.unit_of_medicine
+                     ".$contidtion."
+                ORDER BY khochan.product_name";
+//        echo $this->sql;
+        if ($this->result = $db->Execute($this->sql)) {
+            if ($this->result->RecordCount()) {
+                return $this->result;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 		
 	function SearchDistributeCabinet($dept_nr, $condition)
@@ -1085,15 +1128,16 @@ class CabinetPharma extends Core {
 	function updateMedAvaiDept($id, $value){
 	    global $db;	
 		$this->sql="UPDATE $this->tb_phar_avai_dept 
-					SET available_number=available_number+'$value' 
+					SET available_number=available_number+'$value',
+					 init_number =  '$value'
 					WHERE ID='$id' ";
 		return $this->Transact($this->sql);
 	}
 	
 	function insertMedAvaiDept($avai_pro_id, $dept, $ward, $value){
 	    global $db;	
-		$this->sql="INSERT INTO $this->tb_phar_avai_dept(ID,available_product_id,department,ward_nr,available_number,init_number)
-                    VALUES (0,'$avai_pro_id','$dept','$ward',$value,'0')";
+		$this->sql="INSERT INTO $this->tb_phar_avai_dept(available_product_id,department,ward_nr,available_number,init_number,typeput,update_at,create_at)
+                    VALUES ('$avai_pro_id','$dept','$ward',$value,'$value',(SELECT typeput FROM care_pharma_available_product where available_product_id=$avai_pro_id),now(),now())";
 		return $this->Transact($this->sql);
 	}    
     //************************************************************************

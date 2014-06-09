@@ -1498,15 +1498,15 @@ class Product extends Core
         global $db;
         $dept_ward = '';
         if ($dept_nr != '')
-            $dept_ward = " AND taikhoa.department='" . $dept_nr . "' ";
+            $dept_ward .= " AND taikhoa.department='" . $dept_nr . "' ";
         if ($ward_nr != '')
             $dept_ward .= " AND taikhoa.ward_nr='" . $ward_nr . "' ";
-        if ($current_page != '' && $number_items_per_page != '') {
-            $start_from = ($current_page - 1) * $number_items_per_page;
-            $limit_number = 'LIMIT ' . $start_from . ', ' . $number_items_per_page;
-        }
-
-        $this->sql = "SELECT a.* FROM (SELECT
+//        if ($current_page != '' && $number_items_per_page != '') {
+//            $start_from = ($current_page - 1) * $number_items_per_page;
+//            $limit_number = 'LIMIT ' . $start_from . ', ' . $number_items_per_page;
+//        }
+       //tong hop thuoc de xem tong so luong nen group theo ten thuoc
+        $this->sql = "SELECT
 		    khochan.product_name,
               donvi.unit_name_of_medicine,
               khochan.product_encoder,
@@ -1531,7 +1531,7 @@ class Product extends Core
                       	" . $condition . "
                       	GROUP BY khochan.product_encoder, taikhoa.ward_nr,taikhoa.typeput
                 ORDER BY ward_nr, khochan.product_name, taikhoa.init_number " . $updown . "
-				" . $limit_number .") a WHERE a.tonkho > 0";
+				";
         //echo $this->sql;
         if ($this->result = $db->Execute($this->sql)) {
             if ($this->result->RecordCount()) {
@@ -2276,13 +2276,14 @@ class Product extends Core
     function getLastLotID($encoder, $typeput)
     {
         global $db;
-        $this->sql = "SELECT product_encoder, product_lot_id, available_number, price
+        $this->sql = "SELECT product_encoder, product_lot_id, available_number, price,available_product_id
 					FROM care_pharma_available_product
 					WHERE product_encoder='$encoder'
-					AND available_number>0 AND typeput='" . $typeput . "'
+					AND available_number > 0 AND typeput='" . $typeput . "'
 					AND product_lot_id IS NOT NULL
-					ORDER BY exp_date
+					ORDER BY exp_date,available_product_id
 					LIMIT 1";
+//        echo $this->sql;
         if ($this->result = $db->Execute($this->sql)) {
             $n = $this->result->RecordCount();
             if ($n) {
@@ -2433,7 +2434,15 @@ class Product extends Core
             return false;
         }
     }
-
+    function updateMedicineAvaiProductByAvailID( $available_product_id, $number, $cal)
+    {
+        global $db;
+        if ($available_product_id == '') return FALSE;
+        $this->sql = "UPDATE care_pharma_available_product
+					SET available_number=available_number" . $cal . "'$number'
+					WHERE available_product_id='$available_product_id'";
+        return $this->Transact($this->sql);
+    }
     function updateMedicineAvaiProduct($encoder, $lotid, $number, $cal, $typeput)
     {
         global $db;

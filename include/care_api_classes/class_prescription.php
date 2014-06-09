@@ -429,7 +429,29 @@ class Prescription extends Core {
             }else{return false;}
         }else{return false;}
     }
-
+    function getLastLotIDfromEncodeInDept($encoder,$condition,$number,$typeput){
+        global $db;
+        $this->sql = "SELECT  pro.available_product_id
+            FROM   care_pharma_available_department AS dept, care_pharma_available_product AS pro
+            WHERE  pro.available_product_id = dept.available_product_id
+            AND pro.product_encoder = '".$encoder."'
+            AND dept.`available_number` > $number
+            AND dept.typeput = $typeput
+            ".$condition."
+            ORDER BY pro.exp_date
+            LIMIT 1";
+        //echo $this->sql;
+        if ($this->result = $db->Execute($this->sql)) {
+            if ($this->result->RecordCount()) {
+                $row = $this->result->FetchRow();
+                return $row['available_product_id'];
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
     /** 18/10/2011
      * Get general info of a prescription, based on the prescription id
      * Tuyen
@@ -883,14 +905,14 @@ class Prescription extends Core {
         return $this->Transact($this->sql);
     }
 
-    function IssueMedicineForPatient($enc_nr, $date_issue, $encoder, $number, $pres_id) {
+    function IssueMedicineForPatient($enc_nr, $date_issue, $encoder, $number, $pres_id,$available_product_id) {
         global $db;
         global $_SESSION;
         if($encoder=='') return FALSE;
         $this->sql="INSERT INTO care_pharma_prescription_issue
-					(enc_nr, date_issue, product_encoder, number, pres_id, create_id)
+					(enc_nr, date_issue, product_encoder, available_product_id,number, pres_id, create_id)
 					VALUES
-					('".$enc_nr."', '".$date_issue."', '".$encoder."', '".$number."', '".$pres_id."', '".$_SESSION['sess_user_name']."');";
+					('".$enc_nr."', '".$date_issue."', '".$encoder."', '".$available_product_id."','".$number."', '".$pres_id."', '".$_SESSION['sess_user_name']."');";
         return $this->Transact($this->sql);
     }
     function getMedicineIssue($pres_id, $product_encoder){

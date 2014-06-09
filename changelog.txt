@@ -1,3 +1,7 @@
+2014-06-09
+* phiếu lĩnh thuốc từ khoa nội trú, cấp phát thuốc, phân bổ thuốc và phát thuốc cho BN đều dùng available_product_id
+* chỉnh sửa các bảng liên quan bằng script
+
 2014-06-07
 * Điều dưỡng lúc lập phiếu lĩnh chưa tính giá tiền, thêm cột lot_id vào bảng issue_paper
 * Lúc phát thuốc tự lấy số lô và giá tiền của mã thuốc tương ứng

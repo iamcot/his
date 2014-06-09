@@ -12,6 +12,9 @@ $logs = new AccessLog();
 $total = $_POST['total_items'];
 $date_issue	= formatDate2STD($_POST['dateissue'],'dd/mm/yyyy');
 
+include_once($root_path.'include/care_api_classes/class_cabinet_pharma.php');
+if(!isset($Cabinet)) $Cabinet=new CabinetPharma;
+
 //total_items, enc_nr$i, encoder$i, number$i, pres_id$i
 
 $patmenu="../manage_pharma/medicine_use_patient.php".URL_REDIRECT_APPEND."&pid=".$_SESSION['sess_pid']."&ward_nr=".$_POST['ward_nr'].'&dept_nr='.$_POST['dept_nr'];
@@ -27,9 +30,26 @@ if($isdelete=='delete'){
 		$encoder_dx = 'encoder'.$i;
 		$number_dx='number'.$i;
 		$pres_dx='pres_id'.$i;
-		if($$number_dx>0)
-			$Pres->IssueMedicineForPatient($$enc_dx, $date_issue, $$encoder_dx, $$number_dx, $$pres_dx);
-	}
+
+
+        if($$number_dx>0) {
+            $presinfo = $Pres->getPrescriptionInfo($$pres_dx);
+            //lay lot_id hien tai trong tu thuoc cua ma~ thuoc tuong ung
+            $contition = " AND dept.department = '".$presinfo['dept_nr']."' ";
+            if($presinfo['ward_nr']!='') $contition .=" AND dept.ward_nr = '".$presinfo['ward_nr']."' ";
+
+            $available_product_id = $Pres->getLastLotIDfromEncodeInDept($$encoder_dx,$contition,$$number_dx,$presinfo['typeput']);
+            //2014-06-09 CoT, update tu thuoc khoa sau khi phat thuoc
+             if($available_product_id != false || $available_product_id!=''){
+                 $Cabinet->updateMedicineAvaiDept($$encoder_dx, $available_product_id, $presinfo['dept_nr'], $presinfo['ward_nr'], $$number_dx,'-', $presinfo['typeput']);
+
+                 $Pres->IssueMedicineForPatient($$enc_dx, $date_issue, $$encoder_dx, $$number_dx, $$pres_dx,$available_product_id);
+             }
+
+
+        }
+
+        }
 }
 		
 if($no_redirect==''){

@@ -107,7 +107,7 @@ switch ($issue_show['typeput']) {
                     if($lastlot != null){
                         $tonkhole = $lastlot['available_number'];
                         $giatien = $lastlot['price'];
-                        $lotid = $lastlot['product_lot_id'];
+                        $available_product_id = $lastlot['available_product_id'];
                     }
 
 
@@ -120,7 +120,7 @@ switch ($issue_show['typeput']) {
 					<td bgColor="#ffffff"><input type="text" id="tonkho' . $i . '" value="' . intval($tonkhole) . '" size="8"  style="text-align:right;border-color:white;border-style:solid;color:red;" readonly></td>
 					<td>
 					    <input readonly type="text" name="cost' . $i . '" value="' . $giatien . '" size="8"  style="text-align:right;border-color:white;border-style:solid;color:red;">
-					    <input type="hidden" name="lot_id' . $i . '" value="' . $lotid . '">
+					    <input type="hidden" name="available_product_id' . $i . '" value="' . $available_product_id . '">
 					</td>
 					<td align="right" bgColor="#ffffff"><b>' . number_format($rowIssue['number_request']) . '</b></td>
 					<td align="right" bgColor="#ffffff">

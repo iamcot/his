@@ -204,12 +204,13 @@ ob_start();
             </tr>
             <?php
             if (!isset($typeput)) $typeput = 0;
+            $condition = '';
+            if ($typeput > -1)
+                $condition = " AND taikhoa.typeput = $typeput ";
             if ($search == '') {
                 //current_page, number_items_per_page, total_items, total_pages, location=1,2,3
                 //$number_items_per_page = 20;
-                $condition = '';
-                if ($typeput > -1)
-                    $condition = " AND taikhoa.typeput = $typeput ";
+
 
 //                if ($listItem = $Product->SearchCatalogCabinet($dept_nr, $ward_nr, $condition, $updown)) {
 //                    $total_items = $listItem->RecordCount();
@@ -226,12 +227,12 @@ ob_start();
             } else {
                 if (strrpos($search, '/') || strrpos($search, '-')) {
                     $search = formatDate2STD($search, 'dd/mm/yyyy');
-                    $condition = " AND exp_date LIKE '" . $search . "%' ";
+                    $condition .= " AND exp_date LIKE '" . $search . "%' ";
                 } else
                     if (is_numeric($search))
-                        $condition = " AND product_lot_id LIKE '%" . $search . "%' ";
+                        $condition .= " AND product_lot_id LIKE '%" . $search . "%' ";
                     else
-                        $condition = " AND product_name LIKE '%" . $search . "%' ";
+                        $condition .= " AND product_name LIKE '%" . $search . "%' ";
 
 
                 $listItem = $Product->SearchCatalogCabinet($dept_nr, $ward_nr, $condition, $updown);
