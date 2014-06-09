@@ -254,6 +254,9 @@ $LDListGuide1='Số lượng tồn <= 0';
 $LDListGuide2='0 < số lượng tồn < số lượng ban đầu';
 $LDListGuide3='Số lượng tồn >= số lượng ban đầu';
 $LDInitNumber='Số lượng ban đầu';
+$LDGetNumberInday='Số lượng lĩnh về trong ngày';
+$LDUseNumber='Số lượng sử dụng';
+$LDNotUseNumber='Số lượng không sử dụng';
 $LDSortUp='Sắp xếp tăng dần';
 $LDSortDown='Sắp xếp giảm dần';
 
@@ -458,6 +461,7 @@ $LDChemicalReport='Báo cáo sử dụng hóa chất';
 $LDTypePutIn1='Dành cho';
 $LDBH='Bảo hiểm y tế';
 $LDNoBH='Sự nghiệp';
+$LDTamThan='Thuốc hướng Tâm thần/Tiền chất';
 $LDPlsEnterPutInVat='Nhập thuế GTGT';
 $LDVAT='Thuế GTGT ';
 $LDChemical_KP='Hóa chất kinh phí';

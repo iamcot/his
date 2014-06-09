@@ -51,7 +51,7 @@ if(!$mode) {	//$mode='' : load all issuepaper
 		$condition=" WHERE status_finish='0' AND type='0' ORDER BY date_time_create ";
 	else	//type='sum'
 		$condition=" WHERE status_finish='0' AND type='1' ORDER BY date_time_create ";
-	$list_issue = $IssuePaper->listAllIssuePaper($condition);
+	$list_issue = $IssuePaper->listAllIssuePaper($condition);          //list ds chua phat
 	
 	if(is_object($list_issue)){
 		$batchrows = $list_issue->RecordCount();		//So luong all cac don thuoc cua benh nhan dang cho
