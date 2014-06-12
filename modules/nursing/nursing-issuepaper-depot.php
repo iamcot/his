@@ -321,8 +321,8 @@ $smarty->assign('sRegForm','<form name="createdepotform" method="POST"  onSubmit
 $smarty->assign('deptname',$LDDept.': '.$deptname);
 $smarty->assign('ward',$LDWard.': '.$wardname);
 //$smarty->assign('titleForm',$LDISSUEPAPER);
-$smarty->assign('titleForm','<div id="titleForm1"></div>');
-$smarty->assign('sTypePutTT','<input type="checkbox" id="titleFormCk"  onclick="OnChangeCheckbox(this)" />');
+$smarty->assign('titleForm','<div id="titleForm1" ></div>');                                 //đã thêm
+$smarty->assign('sTypePutTT','<input type="checkbox" id="titleFormCk"  onclick="OnChangeCheckbox(this)" />');   //đã thêm
 $smarty->assign('LDSTT',$LDSTT);
 $smarty->assign('LDPresID',$LDMedicineID);
 $smarty->assign('LDPresName',$LDMedicineName);
