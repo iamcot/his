@@ -285,6 +285,17 @@ function CheckDuplicateMedicine(){
 	}
 }
 
+function OnChangeCheckbox (checkbox) {
+    if (checkbox.checked) {
+//        alert ("The check box is checked.");
+    document.getElementById("titleForm1").innerHTML="<?php echo $LDISSUEPAPER1; ?>";
+    }
+    else {
+//        alert ("The check box is not checked.");
+        document.getElementById("titleForm1").innerHTML= "<?php echo $LDISSUEPAPER; ?>";
+    }
+}
+
 -->
 </script>
 
@@ -313,6 +324,7 @@ $smarty->assign('sRegForm','<form name="createdepotform" method="POST"  onSubmit
 $smarty->assign('deptname',$LDDept.': '.$deptname);
 $smarty->assign('ward',$LDWard.': '.$wardname);
 $smarty->assign('titleForm',$LDISSUEPAPER);
+$smarty->assign('sTypePutTT','<input type="checkbox" id="titleForm1"  onclick="OnChangeCheckbox(this)" />');
 $smarty->assign('LDSTT',$LDSTT);
 $smarty->assign('LDPresID',$LDMedicineID);
 $smarty->assign('LDPresName',$LDMedicineName);
@@ -325,12 +337,15 @@ $smarty->assign('LDTotal',$LDTotal);
 $smarty->assign('LDInventory',$LDInventory);
 $smarty->assign('LDDate',$LDDay);//đã thêm
 $smarty->assign('LDTYPE',$LDTypePutIn1);
+$smarty->assign('LDTT',$LDTamThan);  //đã thêm
+
 
 
 if($target=='depot') 
 {
 	$smarty->assign('depot',true);
-	$smarty->assign('sTypePut','<select name="typeput" class="input1" onChange="alertselected(this)"><option value="0" selected>'.$LDBH.'</option><option value="1" >'.$LDNoBH.'</option><option value="2">'.$LDCBTC.'</option></select>');
+	$smarty->assign('sTypePut','<select name="typeput" class="input1" onChange="alertselected(this)"><option value="0">'.$LDBH.'</option><option value="1" selected>'.$LDNoBH.'</option><option value="2">'.$LDCBTC.'</option></select>');
+
 	$smarty->assign('AddRow','<a href="javascript:;" onclick="insertRow();">&nbsp;[+]&nbsp;'.$LDAddRowMedicine.'</a>');
 	$type=0; $style=''; $readonly='';
 	
@@ -569,6 +584,8 @@ if($target=='depot')
 //*********************************************************************************
 
 include_once($root_path.'include/core/inc_date_format_functions.php');
+$smarty->assign('sTypePutTT','<input type="checkbox" name="cbTT" value="tt" />'); //mp
+
 //mp
 if($date_time=='')
     $date_time=date('Y-m-d');
