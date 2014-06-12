@@ -1030,7 +1030,7 @@ $s_obj=new exec_String();
 $s=$s_obj->BASIC_String();	
 //$s=$s_obj->upper($str);
 		if(is_numeric($suchwort)) {
-			$suchwort=(int) $suchwort;
+//			$suchwort=(int) $suchwort;
 			//$numeric=1;
 			$this->is_nr=False;
 

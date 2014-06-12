@@ -1,3 +1,7 @@
+2014-06-12
+Hiền:
+- ../module/pdfmaker/.. Chỉnh sửa thông tin các báo cáo trong "các giấy tờ cần in ấn"
+
 2014-06-10
 - update database thành phố quận huyện và phường xã
 

@@ -57,7 +57,7 @@ if($enc_obj->loadEncounterData()){
 
 # Fetch insurance and encounter classes
 $encounter_class=$enc_obj->getEncounterClassInfo($encounter['encounter_class_nr']);
-$insurance_class=$enc_obj->getInsuranceClassInfo($encounter['insurance_class_nr']);
+$insurance_class=$enc_obj->getInsuranceClassInfo($encounter['pinsurance_class_nr']);
 
 # Resolve the encounter class name
 if (isset($$encounter_class['LD_var'])&&!empty($$encounter_class['LD_var'])){
@@ -155,8 +155,14 @@ $str=$encounter['name_last']." ".$encounter['name_first'];
 
 $s=$s_obj->BASIC_String();	
 $s=$s_obj->upper($str);
-$namsinh=date("Y",strtotime($encounter['date_birth']));
+
+if($encounter['thang']>0){
+    $namsinh=date("Y",strtotime($encounter['date_birth']));
+} else {
+    $namsinh=    $encounter['date_birth'];
+}
 $tuoi=date("Y")-$namsinh;
+
 
 $y=$fpdf->GetY();
 $fpdf->Cell(120,5,"1.Họ và Tên:(In hoa) ".$s."        2.Sinh ngày:",0,0,'L');
@@ -168,7 +174,7 @@ if($tuoi<10){
 $fpdf->Cell(0,5," ".substr(formatDate2Local($encounter['date_birth'],$date_format),0,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),1,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),3,1)."    ".substr(formatDate2Local($encounter['date_birth'],$date_format),4,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),6,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),7,1)."    ".substr(formatDate2Local($encounter['date_birth'],$date_format),8,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),9,1)."                  ".$tuoi." ",0,0,'L');
 }
 else{
-$fpdf->Cell(0,5," ".substr(formatDate2Local($encounter['date_birth'],$date_format),0,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),1,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),3,1)."    ".substr(formatDate2Local($encounter['date_birth'],$date_format),4,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),6,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),7,1)."    ".substr(formatDate2Local($encounter['date_birth'],$date_format),8,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),9,1)."             ".substr($tuoi,0,1)."   ".substr($tuoi,1,1)." ",0,0,'L');
+$fpdf->Cell(0,5," ".substr(formatDate2Local($encounter['date_birth'],$date_format),0,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),1,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),2,1)."    ".substr(formatDate2Local($encounter['date_birth'],$date_format),3,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),4,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),5,1)."    ".substr(formatDate2Local($encounter['date_birth'],$date_format),6,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),7,1)."                     ".substr($tuoi,0,1)."   ".substr($tuoi,1,1)." ",0,0,'L');
 }
 $fpdf->Ln();
 
@@ -213,13 +219,13 @@ if(!empty($encounter['addr_str_nr'])){
 $y=$fpdf->GetY();
 $x=$fpdf->GetX();
 if((!empty($encounter['quanhuyen_name']))&&(!empty($encounter['citytown_name']))){
-	$fpdf->Cell(0,5,"Huyện (Q,Tx) ".$encounter['quanhuyen_name']."                                  Tỉnh, thành phố ".$encounter['citytown_name'],0,1,'L');
+	$fpdf->Cell(0,5,"Huyện (Q,Tx): ".$encounter['quanhuyen_name']."                                           Tỉnh, thành phố: ".$encounter['citytown_name'],0,1,'L');
 }else if((!empty($encounter['quanhuyen_name']))&&(empty($encounter['citytown_name']))){
-	$fpdf->Cell(0,5,"Huyện (Q,Tx) ".$encounter['quanhuyen_name']."                           Tỉnh, thành phố.............................................. ",0,1,'L');
+	$fpdf->Cell(0,5,"Huyện (Q,Tx): ".$encounter['quanhuyen_name']."                                           Tỉnh, thành phố:.............................................. ",0,1,'L');
 }else if((empty($encounter['quanhuyen_name']))&&(!empty($encounter['citytown_name']))){
-	$fpdf->Cell(0,5,"Huyện (Q,Tx):.......................................                  Tỉnh, thành phố ".$encounter['citytown_name'],0,1,'L');
+	$fpdf->Cell(0,5,"Huyện (Q,Tx):.......................................                                    Tỉnh, thành phố: ".$encounter['citytown_name'],0,1,'L');
 }else{
-	$fpdf->Cell(0,5,'Huyện (Q,Tx):.......................................                  Tỉnh, thành phố................................................',0,1,'L');
+	$fpdf->Cell(0,5,'Huyện (Q,Tx):.......................................                                    Tỉnh, thành phố:................................................',0,1,'L');
 }
 $fpdf->DrawRect($x+70,$y,5,4.5,2);
 $fpdf->DrawRect($x+172,$y,5,4.5,3);
@@ -258,7 +264,7 @@ $fpdf->Cell(0,5,"9.Đối tượng: 1.BHYT      2.Thu phí        3.Miễn      
 }
 $fpdf->Ln();
 if(!empty($encounter['insurance_exp'])){
-$insexp=formatDate2STD($encounter['insurance_exp'],$date_format);
+$insexp=formatDate2STD($encounter['pinsurance_exp'],$date_format);
 	$fpdf->Cell(129,5,"10. BHYT: giá trị đến "."Ngày ".date("d",strtotime($insexp))." tháng ".date("m",strtotime($insexp))." năm ".date("Y",strtotime($insexp))."  ".$LDInsuranceNr.":",0,0,'L');
 }else{
 	$fpdf->Cell(129,5,'10. BHYT: giá trị đến ngày.......tháng........năm...............    Số thẻ BHYT  ',0,0,'L');
@@ -267,25 +273,25 @@ $y=$fpdf->GetY();
 $x=$fpdf->GetX();
 $fpdf->DrawRect($x,$y,10,4.5,4);
 $fpdf->DrawRect($x+44,$y,18,4.5,1);
-$fpdf->Cell(0,5,substr($encounter['insurance_nr'],0,2)."      ".substr($encounter['insurance_nr'],3,1)."         ".substr($encounter['insurance_nr'],5,2)."      ".substr($encounter['insurance_nr'],8,2)."   ".substr($encounter['insurance_nr'],11,3).substr($encounter['insurance_nr'],15,5),0,0,'L');
+$fpdf->Cell(0,5,substr($encounter['pinsurance_nr'],0,2)."      ".substr($encounter['pinsurance_nr'],3,1)."         ".substr($encounter['pinsurance_nr'],5,2)."      ".substr($encounter['pinsurance_nr'],8,2)."   ".substr($encounter['pinsurance_nr'],11,3).substr($encounter['pinsurance_nr'],15,5),0,0,'L');
 $fpdf->Ln();
 if(!empty($encounter['hotenbaotin'])){
-	$fpdf->Cell(0,5,"11. Họ tên, địa chỉ người nhà khi cần báo tin:"." Tên ".$encounter['hotenbaotin'],0,1,'L');
+	$fpdf->Cell(0,5,"11. Họ tên, địa chỉ người nhà khi cần báo tin: ".$encounter['hotenbaotin'],0,1,'L');
 }else{
 	$fpdf->Cell(0,5,'11. Họ tên, địa chỉ người nhà khi cần báo tin:.................................................................................................. ',0,1,'L');
 }
 if((!empty($encounter['dcbaotin']))&&(!empty($encounter['dtbaotin']))){
-	$fpdf->Cell(0,5,"Địa chỉ ".$encounter['dcbaotin']." Điện thoại số"." ".$encounter['dtbaotin'],0,1,'L');
+	$fpdf->Cell(0,5,"Địa chỉ: ".$encounter['dcbaotin']." Điện thoại số"." ".$encounter['dtbaotin'],0,1,'L');
 }else if((!empty($encounter['dcbaotin']))&&(empty($encounter['dtbaotin']))){
-	$fpdf->Cell(0,5,"Địa chỉ ".$encounter['dcbaotin']."                         Điện thoại số................................................................. ",0,1,'L');
+	$fpdf->Cell(0,5,"Địa chỉ: ".$encounter['dcbaotin']."                         Điện thoại số................................................................. ",0,1,'L');
 }else if((empty($encounter['dcbaotin']))&&(!empty($encounter['dtbaotin']))){
-	$fpdf->Cell(0,5,"...................................................................................Điện thoại số ".$encounter['dtbaotin'],0,1,'L');
+	$fpdf->Cell(0,5,"Địa chỉ:...................................................................................................         Điện thoại số: ".$encounter['dtbaotin'],0,1,'L');
 }else{
-	$fpdf->Cell(0,5,'...................................................................................Điện thoại số................................................................. ',0,1,'L');
+	$fpdf->Cell(0,5,'Địa chỉ: ...........................................................................   Điện thoại số: ................................................................. ',0,1,'L');
 }
 $ngayden=formatDate2Local($encounter['encounter_date'],$date_format);
 $gioden=formatDate2Local($encounter['encounter_date'],$date_format,TRUE,TRUE);
-$fpdf->Cell(0,5,"12. Đến khám bệnh lúc: ".date("H",strtotime($gioden))." giờ ".date("m",strtotime($gioden))." phút........ngày ".substr($ngayden,0,2)." tháng ".substr($ngayden,3,2)." năm ".substr($ngayden,6,4),0,1,'L');
+$fpdf->Cell(0,5,"12. Đến khám bệnh lúc: ".date("H",strtotime($gioden))." giờ ".date("m",strtotime($gioden))." phút, ngày ".substr($ngayden,0,2)." tháng ".substr($ngayden,3,2)." năm ".substr($ngayden,6,4),0,1,'L');
 $fpdf->Cell(138,5,'13. Chẩn đoán của nơi giới thiệu:...................................................................... ',0,0,'L');
 $y=$fpdf->GetY();
 $x=$fpdf->GetX();

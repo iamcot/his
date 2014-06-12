@@ -207,8 +207,13 @@ $pdf->DrawRect2(($x+173),($y+207), 5, 4.5, 4);
 $pdf->DrawRect(($x+108),($y+212), 5, 4.5, 1);
 $pdf->DrawRect2(($x+173),($y+217), 5, 4.5, 4);
 // -----------------------------------------------------------------------------
-$namsinh=date("Y",strtotime($encounter['date_birth']));
+if($encounter['thang']>0){
+    $namsinh=date("Y",strtotime($encounter['date_birth']));
+} else {
+    $namsinh=    $encounter['date_birth'];
+}
 $tuoi=date("Y")-$namsinh;
+
 $ngayden=formatDate2Local($encounter['encounter_date'],$date_format);
 $gioden=formatDate2Local($encounter['encounter_date'],$date_format,TRUE,TRUE);
 //echo $encounter['date_birth'];
@@ -222,15 +227,16 @@ $tb1='
 			<td>1. Họ và tên <i>(In hoa)</i>   '.str_pad("..".$s, 50, ".", STR_PAD_RIGHT).'</td>
 			
 			<td align="left">2. Sinh ngày:';
-	if($tuoi<10){
-$tb1.=substr(formatDate2Local($encounter['date_birth'],$date_format),0,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),1,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),3,1)."    ".substr(formatDate2Local($encounter['date_birth'],$date_format),4,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),6,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),7,1)."    ".substr(formatDate2Local($encounter['date_birth'],$date_format),8,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),9,1)."                  ".$tuoi;
+if($encounter['tuoi']<10){
+    if(strlen($encounter['date_birth'])>4){
+        $tb1.='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.substr(formatDate2Local($encounter['date_birth'],$date_format),0,1)."&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),1,1)."&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),3,1)."&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),4,1)."&nbsp;&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),6,1)."&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),7,1)."&nbsp;&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),8,1)."&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),9,1)."&nbsp;&nbsp;&nbsp;".$tuoi;
+    }else{
+        $tb1.='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.substr(formatDate2Local($encounter['date_birth'],$date_format),0,1)."&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),1,1)."&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),2,1)."&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),3,1)."&nbsp;&nbsp;&nbsp;&nbsp;".$tuoi;
+    }
 }else{
-if(strlen($encounter['date_birth'])>4){
-$tb1.='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.substr(formatDate2Local($encounter['date_birth'],$date_format),0,1)."&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),1,1)."&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),3,1)."&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),4,1)."&nbsp;&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),6,1)."&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),7,1)."&nbsp;&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),8,1)."&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),9,1)."&nbsp;&nbsp;&nbsp;".substr($tuoi,0,1)."&nbsp;&nbsp;&nbsp;".substr($tuoi,1,1);
-}else{
-$tb1.='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.substr(formatDate2Local($encounter['date_birth'],$date_format),0,1)."&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),1,1)."&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),2,1)."&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),3,1)."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".substr($tuoi,0,1)."&nbsp;&nbsp;&nbsp;".substr($tuoi,1,1);
+    $tb1.='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.substr(formatDate2Local($encounter['date_birth'],$date_format),0,1)."&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),1,1)."&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),2,1)."&nbsp;&nbsp;&nbsp;".substr(formatDate2Local($encounter['date_birth'],$date_format),3,1)."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".substr($tuoi,0,1)."&nbsp;&nbsp;".substr($tuoi,1,1);
+
 }
-}		
 	$tb1.='</td>	</tr>
 		<tr>';
 		if($encounter['sex']=='m'){
@@ -284,14 +290,15 @@ $tb1.='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.substr(formatDate2Local($encounter['date_
 		</tr>';
 		}
 	$tb1.='	<tr>
-			<td colspan="2">11. Họ tên, địa chỉ người nhà khi cần báo tin:...................................................................................................</td>
+	        <td colspan="2">11. Họ tên, địa chỉ người nhà khi cần báo tin: '.$encounter['hotenbaotin'].'.</td>
 		</tr>
 		<tr>
-			<td width="50%">.....................................................................................</td>
+			<td width="50%">Địa chỉ:.....................................................................</td>
 			<td width="50%">Điện thoại số:.............................................................</td>
 		</tr>
 	</table>
-';
+        ';
+
 $pdf->writeHTML($tb1, true, false, false, false, '');
 // -----------------------------------------------------------------------------
 $tb1='<b style="font-size:100%">II. QUẢN LÝ NGƯỜI BỆNH</b>';

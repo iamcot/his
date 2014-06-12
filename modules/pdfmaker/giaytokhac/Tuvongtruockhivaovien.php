@@ -75,6 +75,12 @@ $sql="SELECT m.value
                 }
             }            
         }
+if($status['thang']>0){
+    $namsinh=date("Y",strtotime($status['date_birth']));
+} else {
+    $namsinh=    $status['date_birth'];
+}
+$tuoi=date("Y")-$namsinh;
 
 $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8',false);
 $pdf->SetTitle('');
@@ -124,7 +130,7 @@ $tbl='<table>
             <tr>
                 <td width="3%"></td>
                 <td width="75%">- Họ và tên bệnh nhân: '.$status['name_last'].' '.$status['name_first'].' </td>
-                <td width="27%">Tuổi: '.$status['tuoi'].'</td>';
+                <td width="27%">Tuổi: '.$tuoi.'</td>';
 //                <td width="22%">';
 //                if($status['sex']=='f'){
 //                        $tbl.='Nam/Nữ: ...'.$LDFemale.'......';
