@@ -356,6 +356,39 @@ if($batchrows){
                                                 </tr>
 
 
+                                                <?php
+                                                echo '<table width="100%"><tr><td>'.$LDReqTest.': </td><td align="right">'.$LDThanhToan.': </td></tr></table>';
+                                                echo '<table width="100%" style="font-family:courier;font-size:small;" >';
+                                                //$note="";
+                                                if (is_object($item_test)){
+                                                    for ($i=0;$i<$item_test->RecordCount();$i++){
+                                                        $item = $item_test->FetchRow();
+                                                        echo "<tr><td><a href=\"javascript:ShowResult('".$item['item_bill_code']."')\">".$item['item_bill_name'].'</a></td><td align="right">';
+                                                        if($item_code=='' && $i==0){
+                                                            $item_code=$item['item_bill_code'];
+                                                        }
+                                                        $sql_bill="SELECT * FROM care_billing_bill_item
+							WHERE bill_item_code='".$item['item_bill_code']."' AND bill_item_encounter_nr='".$pn."' AND bill_item_date='".$stored_request['create_time']."'";   //bill_time
+                                                        //echo $sql_bill;
+                                                        if($bill=$db->Execute($sql_bill)){
+                                                            if($bill->RecordCount()){
+                                                                $bill_row=$bill->FetchRow();
+                                                            }else $bill_row['bill_item_status']=0;
+                                                        }
+
+                                                        if($bill_row['bill_item_status']){
+                                                            $tempfinish=$LDFinish; $tempfinish1='check-r.gif';
+                                                        }
+                                                        else{
+                                                            $tempfinish=$LDNotYet; $tempfinish1='warn.gif';
+                                                        }
+                                                        echo $tempfinish.' ';
+                                                        echo '<img '.createComIcon($root_path,$tempfinish1,'0','',TRUE).'> </td></tr>';
+                                                    }
+                                                }
+                                                echo '</table>';
+                                                ?>
+
 
                                                 <tr bgcolor="<?php echo $bgc1 ?>">
                                                     <td colspan=2 align="right"><div class=fva2_ml10>
