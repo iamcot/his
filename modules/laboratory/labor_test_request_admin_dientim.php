@@ -137,11 +137,15 @@ if($batchrows && $pn){
                 if($editable_rows=$ergebnis->RecordCount()){
                     $stored_request=$ergebnis->FetchRow();
                     $edit_form=1;
+
+                    $sql1="SELECT * FROM care_test_request_dientim_sub WHERE batch_nr=".$batch_nr;
+                    $item_test=$db->Execute($sql1);
                 }
             }else{
                 echo "<p>$sql<p>$LDDbNoRead";
             }
         }
+        $uploadfile= $uploadfile.$pn.'&pid='.$enc_obj->encounter['pid'];
     }else{
         $mode='';
         $pn='';
@@ -355,9 +359,11 @@ if($batchrows){
                                                     </td>
                                                 </tr>
 
+                                                <tr bgcolor="<?php echo $bgc1 ?>">
+                                                    <td colspan=2><div class=fva2_ml10>
 
                                                 <?php
-                                                echo '<table width="100%"><tr><td>'.$LDReqTest.': </td><td align="right">'.$LDThanhToan.': </td></tr></table>';
+                                                echo '<table width="100%"><tr> <td align="right">'.$LDThanhToan.': </td></tr></table>';
                                                 echo '<table width="100%" style="font-family:courier;font-size:small;" >';
                                                 //$note="";
                                                 if (is_object($item_test)){
@@ -368,7 +374,7 @@ if($batchrows){
                                                             $item_code=$item['item_bill_code'];
                                                         }
                                                         $sql_bill="SELECT * FROM care_billing_bill_item
-							WHERE bill_item_code='".$item['item_bill_code']."' AND bill_item_encounter_nr='".$pn."' AND bill_item_date='".$stored_request['create_time']."'";   //bill_time
+							                                        WHERE bill_item_code='".$item['item_bill_code']."' AND bill_item_encounter_nr='".$pn."' AND bill_item_date='".$stored_request['create_time']."'";   //bill_time
                                                         //echo $sql_bill;
                                                         if($bill=$db->Execute($sql_bill)){
                                                             if($bill->RecordCount()){
@@ -388,7 +394,8 @@ if($batchrows){
                                                 }
                                                 echo '</table>';
                                                 ?>
-
+                                                    </td>
+                                                </tr>
 
                                                 <tr bgcolor="<?php echo $bgc1 ?>">
                                                     <td colspan=2 align="right"><div class=fva2_ml10>
