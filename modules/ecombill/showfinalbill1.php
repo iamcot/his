@@ -303,7 +303,7 @@ foreach ($list_item as $x => $v) {
         //echo '<td align="center">'.$v[$v1].'</td>';
         $tongthuoc += $v[$v1];
     }
-    $tongtienthuoc = $tongthuoc*$list_info[$x]['cost'];
+    $tongtienthuoc += $tongthuoc*$list_info[$x]['cost'];
     //</tr></table></td>
     //  echo '<td align="right">'.$tongthuoc.'</td><td align="right">'.number_format($list_info[$x]['cost']).'</td><td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']).'</td></tr>';
     //nang
