@@ -133,17 +133,26 @@ $smarty->assign('calendar',$LDDateIssue.': '.$calendar->show_calendar($calendar,
 		$condition.=' AND prs.ward_nr='.$ward_nr.' ';
 	if ($dept_nr!='' && $dept_nr!='0')
 		$condition.=' AND prs.dept_nr='.$dept_nr.' ';
-	
+
 	$sql=	"SELECT prs.prescription_id, prs.encounter_nr, prs.date_time_create, enc.current_room_nr, 
 				per.name_first, per.name_last, per.sex, per.tuoi  
 			FROM care_pharma_prescription_info AS prs, care_encounter AS enc, care_person AS per 
-			WHERE prs.in_issuepaper<>'0' AND prs.status_finish='1' AND prs.phieutheodoi='0'
+			WHERE prs.in_issuepaper<>'0' AND prs.status_finish='1'
 				AND prs.encounter_nr=enc.encounter_nr 
 				".$condition." 
 				AND(prs.prescription_type='0397' OR prs.prescription_type='0398') AND prs.total_cost>0 AND prs.dongphatthuoc='0' 
 				AND per.pid=enc.pid 
 				ORDER BY enc.current_room_nr, prs.prescription_id ";
-			
+  /*
+$sql=	"SELECT prs.prescription_id, prs.encounter_nr, prs.date_time_create, enc.current_room_nr,
+				per.name_first, per.name_last, per.sex, per.tuoi
+			FROM care_pharma_prescription_info AS prs, care_encounter AS enc, care_person AS per
+			WHERE prs.in_issuepaper<>'0' AND prs.status_finish='1' AND prs.phieutheodoi='0'
+				AND prs.encounter_nr=enc.encounter_nr
+				".$condition."
+				AND(prs.prescription_type='0397' OR prs.prescription_type='0398') AND prs.total_cost>0 AND prs.dongphatthuoc='0'
+				AND per.pid=enc.pid
+				ORDER BY enc.current_room_nr, prs.prescription_id ";     */
 	if($listpres=$db->Execute($sql))
 	{
 		$count = $listpres->RecordCount();

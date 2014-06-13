@@ -44,12 +44,12 @@ switch($mode){
 
 /* Get pending prescription */
 if(!$mode) {	//$mode='' : load all pres	
-	if (!$typeInOut || $typeInOut=='all')
-		$list_pres = $Pres->getAllPresByTypePatient('allpatient','0','0');
+	if (!$typeInOut || $typeInOut=='outpatient')
+		$list_pres = $Pres->getAllPresByTypePatient('outpatient','0','0');
 	elseif ($typeInOut=='inpatient')
 		$list_pres = $Pres->getAllPresByTypePatient('inpatient','0','0');
 	else
-		$list_pres = $Pres->getAllPresByTypePatient('outpatient','0','0');
+		$list_pres = $Pres->getAllPresByTypePatient('allpatient','0','0');
 	
 	if(is_object($list_pres)){
 		$batchrows = $list_pres->RecordCount();		//So luong all cac don thuoc cua benh nhan dang cho

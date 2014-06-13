@@ -124,11 +124,19 @@
     $time_tv=explode(' ',$data_array['53']);
     $date_tv=@formatDate2Local($time_tv['0'], $date_format);
     $noitv=explode('@',$data_array['57']);
-    $tb_body='<table>
+
+    if($status['thang']>0){
+        $namsinh=date("Y",strtotime($status['date_birth']));
+    } else {
+        $namsinh=    $status['date_birth'];
+    }
+    $tuoi=date("Y")-$namsinh;
+
+        $tb_body='<table>
                 <tr>
                     <td width="7%"></td>
                     <td width="65%">- Họ tên người bệnh: '.$status['name_last'].' '.$status['name_first'].'</td>
-                    <td width="15%">Tuổi: '.$status['tuoi'].'</td>
+                    <td width="15%">Tuổi: '.$tuoi.'</td>
                     <td>Nam/Nữ: ';
                     if($status['sex']=='f'){
                         $tb_body.=$LDFemale;

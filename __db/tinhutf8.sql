@@ -1,4 +1,4 @@
-/* Update Thành phố */
+/* Update ThÃ nh phá» */
 
 ALTER TABLE `histudb`.`care_address_citytown`
    CHANGE `use_frequency` `use_frequency` BIGINT(20) UNSIGNED DEFAULT '0' NULL ,
@@ -13,13 +13,13 @@ ALTER TABLE care_address_citytown ADD ThanhPho_Tinh NCHAR(20) AFTER NAME;
 DELETE FROM care_address_citytown WHERE zip_code != 0650;
 
 INSERT INTO care_address_citytown (`zip_code`, `name`, `ThanhPho_Tinh`, `iso_country_id`) VALUES
-/*('74', 'BÃ¬nh DÆ°Æ¡ng', 'Tỉnh','084'),*/
-('01', 'HÃ  Ná»i', 'ThÃ nh Phá»','084'),
-('02', 'HÃ  Giang', 'Tá»nh','084'),
+/*('74', 'BÃ¬nh DÆ°Æ¡ng', 'Tá»nh','084'),*/
+('01', 'HÃ  Ná»i', 'ThÃ nh Phá»','084'),
+('02', 'HÃ  Giang', 'Tá»nh','084'),
 ('04', 'Cao Báº±ng', 'Tá»nh','084'),
 ('06', 'Báº¯c Káº¡n', 'Tá»nh','084'),
 ('08', 'TuyÃªn Quang', 'Tá»nh','084'),
-('10', 'LÃ o Cai', 'Tá»nh','084'),
+('10', 'LÃ o Cai', 'Tá»nh','084'),
 ('11', 'Äiá»n BiÃªn', 'Tá»nh','084'),
 ('12', 'Lai ChÃ¢u', 'Tá»nh','084'),
 ('14', 'SÆ¡n La', 'Tá»nh','084'),
@@ -33,19 +33,19 @@ INSERT INTO care_address_citytown (`zip_code`, `name`, `ThanhPho_Tinh`, `iso_cou
 ('26', 'VÄ©nh PhÃºc', 'Tá»nh','084'),
 ('27', 'Báº¯c Ninh', 'Tá»nh','084'),
 ('30', 'Háº£i DÆ°Æ¡ng', 'Tá»nh','084'),
-('31', 'Háº£i PhÃ²ng', 'ThÃ nh Phá»','084'),
+('31', 'Háº£i PhÃ²ng', 'ThÃ nh Phá»','084'),
 ('33', 'HÆ°ng YÃªn', 'Tá»nh','084'),
 ('34', 'ThÃ¡i BÃ¬nh', 'Tá»nh','084'),
-('35', 'HÃ  Nam', 'Tá»nh','084'),
+('35', 'HÃ  Nam', 'Tá»nh','084'),
 ('36', 'Nam Äá»nh', 'Tá»nh','084'),
 ('37', 'Ninh BÃ¬nh', 'Tá»nh','084'),
 ('38', 'Thanh HÃ³a', 'Tá»nh','084'),
 ('40', 'Nghá» An', 'Tá»nh','084'),
-('42', 'HÃ  TÄ©nh', 'Tá»nh','084'),
+('42', 'HÃ  TÄ©nh', 'Tá»nh','084'),
 ('44', 'Quáº£ng BÃ¬nh', 'Tá»nh','084'),
 ('45', 'Quáº£ng Trá»', 'Tá»nh','084'),
 ('46', 'Thá»«a ThiÃªn Huáº¿', 'Tá»nh','084'),
-('48', 'ÄÃ  Náºµng', 'ThÃ nh Phá»','084'),
+('48', 'ÄÃ  Náºµng', 'ThÃ nh Phá»','084'),
 ('49', 'Quáº£ng Nam', 'Tá»nh','084'),
 ('51', 'Quáº£ng NgÃ£i', 'Tá»nh','084'),
 ('52', 'BÃ¬nh Äá»nh', 'Tá»nh','084'),
@@ -61,18 +61,18 @@ INSERT INTO care_address_citytown (`zip_code`, `name`, `ThanhPho_Tinh`, `iso_cou
 ('70', 'BÃ¬nh PhÆ°á»c', 'Tá»nh','084'),
 ('72', 'TÃ¢y Ninh', 'Tá»nh','084'),
 ('75', 'Äá»ng Nai', 'Tá»nh','084'),
-('77', 'BÃ  Rá»a - VÅ©ng TÃ u', 'Tá»nh','084'),
-('79', 'Há» ChÃ­ Minh', 'ThÃ nh Phá»','084'),
+('77', 'BÃ  Rá»a - VÅ©ng TÃ u', 'Tá»nh','084'),
+('79', 'Há» ChÃ­ Minh', 'ThÃ nh Phá»','084'),
 ('80', 'Long An', 'Tá»nh','084'),
 ('82', 'Tiá»n Giang', 'Tá»nh','084'),
 ('83', 'Báº¿n Tre', 'Tá»nh','084'),
-('84', 'TrÃ  Vinh', 'Tá»nh','084'),
+('84', 'TrÃ  Vinh', 'Tá»nh','084'),
 ('86', 'VÄ©nh Long', 'Tá»nh','084'),
 ('87', 'Äá»ng ThÃ¡p', 'Tá»nh','084'),
 ('89', 'An Giang', 'Tá»nh','084'),
 ('91', 'KiÃªn Giang', 'Tá»nh','084'),
-('92', 'Cáº§n ThÆ¡', 'ThÃ nh Phá»','084'),
+('92', 'Cáº§n ThÆ¡', 'ThÃ nh Phá»','084'),
 ('93', 'Háº­u Giang', 'Tá»nh','084'),
 ('94', 'SÃ³c TrÄng', 'Tá»nh','084'),
 ('95', 'Báº¡c LiÃªu', 'Tá»nh','084'),
-('96', 'CÃ  Mau', 'Tá»nh','084');
+('96', 'CÃ  Mau', 'Tá»nh','084');

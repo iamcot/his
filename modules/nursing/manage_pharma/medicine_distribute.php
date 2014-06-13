@@ -89,6 +89,7 @@ function CheckValue(i) {
 	var nj=<?php echo $number_ward; ?>;
 	var value=0;
 	for (var j=0;j<nj;j++){
+        if(document.getElementById('item'+i+'_'+j).value=='') document.getElementById('item'+i+'_'+j).value = 0;
 		value=value+ parseInt(document.getElementById('item'+i+'_'+j).value);
 	}
 	if(value==sum_value){
@@ -152,7 +153,7 @@ ob_start();
 							<td align="center"><input type="text" id="sum'.$j.'" value="'.$rowItem['available_number'].'" size="7" readonly style="text-align:center;border-color:white;border-style:solid;background-color:#FFAAFF;" ></td>';
 			if($number_ward)
 				for ($i=0;$i<$number_ward;$i++)
-					$sTemp=$sTemp.'<td align="center"><input type="text" name="med['.$rowItem['available_product_id'].'_'.$list_wardnr[$i].']" id="item'.$j.'_'.$i.'" size="2" value="0" onBlur="CheckValue('.$j.')"></td>';			
+					$sTemp=$sTemp.'<td align="center"><input ondblclick="this.value=\'\'" type="text" name="med['.$rowItem['available_product_id'].'_'.$list_wardnr[$i].']" id="item'.$j.'_'.$i.'" size="2" value="0" onBlur="CheckValue('.$j.')"></td>';
 			$sTemp=$sTemp.'</tr>';
 		}
 	}

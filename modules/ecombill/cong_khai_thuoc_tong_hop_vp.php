@@ -294,6 +294,12 @@ $pres_noitru = "SELECT iss.*, sum(iss.number) AS sum, prs.product_name, prs.note
 					WHERE iss.enc_nr='".$patientno."' AND prs.prescription_id=iss.pres_id AND prs.product_encoder=iss.product_encoder
 					GROUP BY iss.product_encoder, iss.date_issue
 					ORDER BY iss.product_encoder, iss.date_issue";
+/*$pres_noitru = "SELECT prs.*,prsinfo.date_time_create,prsinfo.sum_date
+			FROM care_pharma_prescription AS prs, care_pharma_prescription_info AS prsinfo, care_pharma_type_of_prescription AS tp
+			WHERE prsinfo.encounter_nr='".$patientno."' AND prsinfo.prescription_id=prs.prescription_id
+			AND prsinfo.prescription_type=tp.prescription_type
+			AND prsinfo.status_finish=1 AND tp.group_pres=1
+			ORDER BY prs.prescription_id" */;
 
 $list_item = array();
 $list_date = array();
@@ -303,7 +309,7 @@ $list_info = array();
 if($pres_item_noitru=$db->Execute($pres_noitru)){
     for($i=0;$i<$pres_item_noitru->RecordCount();$i++){
         $item = $pres_item_noitru->FetchRow();
-        $list_item[$item['product_encoder']][$item['date_issue']]= $item['number'];
+        $list_item[$item['product_encoder']][$item['date_issue']]= $item['sum'];   //==>n đổi $item['number'] thành  $item['sum']
         if(!in_array($item['date_issue'], $list_date)){
             $k++;
             $list_date[$k]=$item['date_issue'];
@@ -350,8 +356,57 @@ foreach ($list_item as $x => $v) {
 }
 $sTempPres = $sTempPres.ob_get_contents();
 ob_end_clean();
+ /*
+//thu lấy truyền dịch cho phiếu công khai bênh nội trú==> n
+$presqry="SELECT prs.*,prsinfo.date_time_create,prsinfo.sum_date
+			FROM care_pharma_prescription AS prs, care_pharma_prescription_info AS prsinfo, care_pharma_type_of_prescription AS tp
+			WHERE prsinfo.encounter_nr='$patientno' AND prsinfo.prescription_id=prs.prescription_id
+			AND prsinfo.prescription_type=tp.prescription_type
+			AND prsinfo.status_finish=1 AND tp.group_pres=1
+			ORDER BY prs.prescription_id";
+$presresult=$db->Execute($presqry);
+if(is_object($presresult))
+{
+    if($presresult->RecordCount()>0)
+    {
+        for ($i=0;$i<$presresult->RecordCount();$i++)
+        {
+            $pres=$presresult->FetchRow();
+            $end = date("d/m/Y", strtotime($pres['date_time_create'] . "+".($pres['sum_date']-1)." day"));
 
-
+            //$smarty->assign('LDItemNr',$stt);
+            $smarty->assign('LDItemPrescriptionName',$pres['product_name']);
+            $smarty->assign('LDItemUnit',$pres['note']);
+            //$smarty->assign('LDItemDate',formatDate2Local($pres['date_time_create'],$date_format).' - '.$end.' ('.$pres['sum_date'].' '.$LDdate.')');
+            $smarty->assign('LDItemSumUnit',$pres['number_receive']);
+            $smarty->assign('LDItemEnterPriceUnit',($pres['cost']));
+            $smarty->assign('LDItemSumCost',number_format($pres['cost']*$pres['number_receive']));
+            if($muchuong!=0){
+                $smarty->assign('LDItemSumCostBHYT',number_format($pres['cost']*$pres['number_receive']*$muchuong));   //nang
+                $smarty->assign('LDItemSumCostKhac','');//nang
+                $smarty->assign('LDItemSumCostTra',number_format($pres['cost']*$pres['number_receive'] - $pres['cost']*$pres['number_receive']*$muchuong)); //nang
+            }   else{
+                $smarty->assign('LDItemSumCostBHYT',number_format($pres['cost']*$pres['number_receive']*$mh));   //nang
+                $smarty->assign('LDItemSumCostKhac','');//nang
+                $smarty->assign('LDItemSumCostTra',number_format($pres['cost']*$pres['number_receive'] - $pres['cost']*$pres['number_receive']*$mh)); //nang
+            }
+            $tongtienthuoc += ($pres['cost']*$pres['number_receive']);
+            if($muchuong!=0){
+                $tongtienBHYT += ($pres['cost']*$pres['number_receive'])*$muchuong;
+            }   else{
+                $tongtienBHYT += ($pres['cost']*$pres['number_receive'])*$mh;
+            }
+            $tongtienkhac = '';
+            $tongtienthanhtoan += $tongtienthuoc - $tongtienBHYT;
+            $stt++;
+            ob_start();
+            $smarty->display('ecombill/showfinalbill_pres_line.tpl');
+            $sTempPres = $sTempPres.ob_get_contents();
+            ob_end_clean();
+        }
+    }
+}
+ //==>n   */
 //Neu ngoai tru (group_pres=0)
 $presqry="SELECT prs.*,prsinfo.date_time_create,prsinfo.sum_date
 			FROM care_pharma_prescription AS prs, care_pharma_prescription_info AS prsinfo, care_pharma_type_of_prescription AS tp

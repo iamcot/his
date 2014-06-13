@@ -342,7 +342,7 @@ $tpdf->MultiCell($w,5,"HỌ VÀ TÊN: ".$s."\n"
 ."BẰNG CHỮ:".convertMoney($ecombill_obj->getTamung($tamung_id))."\n"
 ."ĐIỀU TRỊ TẠI KHOA:...........................................................",0,'L');
 	$tpdf->SetX($x);
-	$tpdf->Cell($w,5,"Dầu Tiếng, ngày ".date("d")." tháng " .date("m")." năm ".date("Y"),0,1,'R');
+	$tpdf->Cell($w,5,"Tân Uyên, ngày ".date("d")." tháng " .date("m")." năm ".date("Y"),0,1,'R');
 	$tpdf->SetX($x);
 	$tpdf->Cell($w/2,5,'KT VIỆN PHÍ',0,0,'L');
 	$tpdf->Cell($w/2,5,'HC KHOA         ',0,1,'C');

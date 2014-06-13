@@ -153,8 +153,13 @@ $fpdf->SetFont('','');
 $s_obj->BASIC_String();
 $fpdf->Cell(130,5,"- ".$LDFullName_patient.": ...".$status['name_last'].' '.$status['name_first'].'...',0,0,'L');
 
-$namsinh=date("Y",strtotime($encounter['date_birth']));
-$tuoi=$status['tuoi'];
+if($status1['thang']>0){
+    $namsinh=date("Y",strtotime($status1['date_birth']));
+} else {
+    $namsinh=    $status1['date_birth'];
+}
+$tuoi=date("Y")- $namsinh;
+
 $fpdf->Cell(0,5,"Tuổi ...".$tuoi."... Giới tính ...".$sex.'...',0,1,'L');
 if($convert_ngaynhapvien)
     $fpdf->Cell(85,5,"- ".$LDNgaynhapvien.": ...".$convert_ngaynhapvien.'...',0,0,'L');

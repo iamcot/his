@@ -342,12 +342,14 @@ class Issuepaper extends Core {
 	 * @param int number_receive
 	 * @return boolean
 	 */
-	function setReceiveMedicineInIssue($medicine_nr,$receive_number) {
+	function setReceiveMedicineInIssue($medicine_nr,$receive_number,$dxavailable_product_id,$cost) {
 	    global $db;
 		if(!$medicine_nr) return FALSE;
 
 		$this->sql="UPDATE $this->tb_phar_issue
-						SET number_receive='".$receive_number."' 
+						SET number_receive='".$receive_number."',
+						available_product_id = '$dxavailable_product_id',
+                        cost = '$cost'
 						WHERE nr='".$medicine_nr."' ";
 
 		return $this->Transact($this->sql);	
@@ -414,7 +416,7 @@ class Issuepaper extends Core {
 	    global $db;
 		$this->sql="SELECT sum(available_number) AS total 
 					FROM care_pharma_available_product 
-					WHERE product_encoder='$encoder' AND typeput='$typeput'
+					WHERE product_encoder='$encoder'
 					GROUP BY product_encoder";
             if($this->result=$db->Execute($this->sql)) {
                     if($this->result->RecordCount()){

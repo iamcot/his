@@ -166,7 +166,7 @@ $list_info = array();
 if($pres_item_noitru=$db->Execute($pres_noitru)){
     for($i=0;$i<$pres_item_noitru->RecordCount();$i++){
         $item = $pres_item_noitru->FetchRow();
-        $list_item[$item['product_encoder']][$item['date_issue']]= $item['number'];
+        $list_item[$item['product_encoder']][$item['date_issue']]= $item['sum'];   //==>n đổi $item['number'] thành  $item['sum']
         if(!in_array($item['date_issue'], $list_date)){
             $k++;
             $list_date[$k]=$item['date_issue'];
@@ -230,7 +230,7 @@ if(is_object($presresult))
 						    </tr>';
             $tongtienthuoc += $pres['cost']*$pres['sum_number'];
             $tongtienthuocBHYT += $pres['cost']*$pres['sum_number']*$mh;
-            $tongtienthuocTra +=  $pres['cost']*$pres['sum_number'] - $pres['cost']*$pres['sum_number']*$mhT;
+            $tongtienthuocTra +=  $pres['cost']*$pres['sum_number'] - $pres['cost']*$pres['sum_number']*$mh;
             $stt++;
         }
     }
@@ -262,9 +262,11 @@ if(is_object($depotresult))
                             <td align="center">0</td>
                             <td align="center">'.number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh).'</td>
 					</tr>';
-        $tongtienvtyt+= $tongtienvtyt+ $depot['cost']*$depot['sum_number'];
+       // $tongtienvtyt+= $tongtienvtyt+ $depot['cost']*$depot['sum_number'];
+        $tongtienvtyt +=  $depot['cost']*$depot['sum_number'];
         $tongtienvtytTBHYT += $depot['cost']*$depot['sum_number']*$mh;
-        $tongtienVTYTTra +=  $tongtienvtyt - $tongtienvtytBHYT;
+        $tongtienVTYTTra += $depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh;
+       // $tongtienVTYTTra +=  $tongtienvtyt - $tongtienvtytBHYT;
         $stt++;
     }
 }
@@ -290,8 +292,9 @@ if(is_object($depotresult1))
                             <td align="center">0</td>
                             <td align="center">'.number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh).'</td>
 						</tr>';
-        $tongtienHC += $tongtienHC+ $depot['cost']*$depot['sum_number'];
-        $tongtienHCBHYT += $tongtienHC+ $depot['cost']*$depot['sum_number']*$mh;
+       // $tongtienHC += $tongtienHC+ $depot['cost']*$depot['sum_number'];
+        $tongtienHC +=  $depot['cost']*$depot['sum_number'];
+        $tongtienHCBHYT += $depot['cost']*$depot['sum_number']*$mh;
         $tongtienHCTra +=$tongtienHC - $tongtienHCBHYT;
         $stt++;
     }
@@ -313,7 +316,19 @@ if(is_object($itemresult))
     for ($i=0;$i<$countItem;$i++)
     {
         $item=$itemresult->FetchRow();
-
+        $groupnr = $item['item_group_nr'];
+        if($groupnr==22){
+            $row_item='<tr>
+						<td colspan="1" align="center">'.$item['item_description'].'</td>
+						<td colspan="1" align="center">'.formatDate2Local($item['bill_item_date'],'dd/mm',false,false,$sepChars).'</td>
+						<td align="center">'.$item['bill_item_units'].'</td>
+						<td align="center">'.number_format($item['bill_item_unit_cost']).'</td>
+						<td align="center">'.number_format($item['bill_item_units']*$item['bill_item_unit_cost']).'</td>
+                        <td align="center">'.number_format($item['bill_item_units']*$item['bill_item_unit_cost']*0).'</td>
+                        <td align="center">0</td>
+                        <td align="center">'.number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*0).'</td>
+					  </tr>';
+        }   else{
         $row_item='<tr>
 						<td colspan="1" align="center">'.$item['item_description'].'</td>
 						<td colspan="1" align="center">'.formatDate2Local($item['bill_item_date'],'dd/mm',false,false,$sepChars).'</td>
@@ -323,11 +338,19 @@ if(is_object($itemresult))
                         <td align="center">'.number_format($item['bill_item_units']*$item['bill_item_unit_cost']*$mh).'</td>
                         <td align="center">0</td>
                         <td align="center">'.number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*$mh).'</td>
-					  </tr>';
-        $tongtienxndv += $tongtienxndv+ $item['bill_item_units']*$item['bill_item_unit_cost'];
-        $tongtienxndvBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*$mh;
-        $tongtienxndvTra += $tongtienxndv - $tongtienxndvBHYT;
-        $groupnr = $item['item_group_nr'];
+					  </tr>';   }
+
+        //$tongtienxndv += $tongtienxndv+ $item['bill_item_units']*$item['bill_item_unit_cost'];
+        $tongtienxndv +=  $item['bill_item_units']*$item['bill_item_unit_cost'];
+        if($groupnr==22){  //xet không cho giảm BHYT của xét nghiệm máu
+            $tongtienxndvBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*0;   //nang
+        }   else{
+            $tongtienxndvBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*$mh;  //nang
+        }
+       // $tongtienxndvTra +=$item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*$mh;
+        $tongtienxndvTra = $tongtienxndv - $tongtienxndvBHYT;
+
+
         if ($groupnr<=25){								//Xet nghiem 1->25
             $sTempLabor .= $row_item;
         } elseif ($groupnr==26 || $groupnr==28 || $groupnr==39){ 	//XQuang 26
@@ -352,6 +375,8 @@ if(is_object($itemresult))
 $thanhtoan = $cntbill['total_outstanding'];
 //tính số tiền mà bệnh nhân tạm ứng
 $tamung= $payment['sumcost'];
+$tienBHYT =  $tongtienxndvBHYT+ $tongtienvtytTBHYT + $tongtienthuocBHYT;
+//echo $tienBHYT;
 $html.= ' <tr>
 					<td colspan="1"><b>1.Tên thuốc, hàm lượng </b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
 				</tr>

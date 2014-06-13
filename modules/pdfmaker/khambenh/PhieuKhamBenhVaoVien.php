@@ -155,30 +155,26 @@ $str=$encounter['name_last']." ".$encounter['name_first'];
 
 $s=$s_obj->BASIC_String();	
 $s=$s_obj->upper($str);
-$namsinh=date("Y",strtotime($encounter['date_birth']));
-$ngaysinh=date("d",strtotime($encounter['date_birth']));
-$thangsinh=date("m",strtotime($encounter['date_birth']));
-
+if($encounter['thang']>0){
+    $namsinh=date("Y",strtotime($encounter['date_birth']));
+} else {
+    $namsinh=    $encounter['date_birth'];
+}
+$tuoi=date("Y")-$namsinh;
 
 $y=$fpdf->GetY();
 $fpdf->Cell(120,5,"1.Họ và Tên:(In hoa) ".$s."        2.Sinh ngày:",0,0,'L');
 $x=$fpdf->GetX();
 $fpdf->DrawRect($x,$y,5,4.5,8);
 $fpdf->DrawRect($x+58,$y,5,4.5,2);
-if($encounter['tuoi']<10){
-	if(strlen($encounter['date_birth'])>4){
-$fpdf->Cell(0,5," ".substr(formatDate2Local($encounter['date_birth'],$date_format),0,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),1,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),3,1)."    ".substr(formatDate2Local($encounter['date_birth'],$date_format),4,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),6,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),7,1)."    ".substr(formatDate2Local($encounter['date_birth'],$date_format),8,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),9,1)."                  ".$encounter['tuoi']." ",0,0,'L');
-	}else{
-	$fpdf->Cell(0,5,"                      ".substr(formatDate2Local($encounter['date_birth'],$date_format),0,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),1,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),2,1)."    ".substr(formatDate2Local($encounter['date_birth'],$date_format),3,1)."                 ".$encounter['tuoi']." ",0,0,'L');
-	}
+
+if($tuoi<10){
+    $fpdf->Cell(0,5," ".substr(formatDate2Local($encounter['date_birth'],$date_format),0,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),1,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),3,1)."    ".substr(formatDate2Local($encounter['date_birth'],$date_format),4,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),6,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),7,1)."    ".substr(formatDate2Local($encounter['date_birth'],$date_format),8,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),9,1)."                  ".$tuoi." ",0,0,'L');
 }
 else{
-	if(strlen($encounter['date_birth'])>4){
-$fpdf->Cell(0,5," ".substr(formatDate2Local($encounter['date_birth'],$date_format),0,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),1,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),3,1)."    ".substr(formatDate2Local($encounter['date_birth'],$date_format),4,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),6,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),7,1)."    ".substr(formatDate2Local($encounter['date_birth'],$date_format),8,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),9,1)."             ".substr($encounter['tuoi'],0,1)."   ".substr($encounter['tuoi'],1,1)." ",0,0,'L');
-	}else{
-	$fpdf->Cell(0,5,"                      ".substr(formatDate2Local($encounter['date_birth'],$date_format),0,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),1,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),2,1)."    ".substr(formatDate2Local($encounter['date_birth'],$date_format),3,1)."            ".substr($encounter['tuoi'],0,1)."   ".substr($encounter['tuoi'],1,1),0,0,'L');
-	}
+    $fpdf->Cell(0,5," ".substr(formatDate2Local($encounter['date_birth'],$date_format),0,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),1,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),2,1)."    ".substr(formatDate2Local($encounter['date_birth'],$date_format),3,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),4,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),5,1)."    ".substr(formatDate2Local($encounter['date_birth'],$date_format),6,1)."   ".substr(formatDate2Local($encounter['date_birth'],$date_format),7,1)."                     ".substr($tuoi,0,1)."   ".substr($tuoi,1,1)." ",0,0,'L');
 }
+
 $fpdf->Ln();
 
 $y=$fpdf->GetY();
@@ -297,13 +293,13 @@ if(!empty($encounter['hotenbaotin'])){
 	$fpdf->Cell(0,5,'11. Họ tên, địa chỉ người nhà khi cần báo tin:.................................................................................................. ',0,1,'L');
 }
 if((!empty($encounter['dcbaotin']))&&(!empty($encounter['dtbaotin']))){
-	$fpdf->Cell(0,5,"Địa chỉ ".$encounter['dcbaotin']." Điện thoại số"." ".$encounter['dtbaotin'],0,1,'L');
+    $fpdf->Cell(0,5,"Địa chỉ: ".$encounter['dcbaotin']." Điện thoại số"." ".$encounter['dtbaotin'],0,1,'L');
 }else if((!empty($encounter['dcbaotin']))&&(empty($encounter['dtbaotin']))){
-	$fpdf->Cell(0,5,"Địa chỉ ".$encounter['dcbaotin']."                         Điện thoại số................................................................. ",0,1,'L');
+    $fpdf->Cell(0,5,"Địa chỉ: ".$encounter['dcbaotin']."                         Điện thoại số................................................................. ",0,1,'L');
 }else if((empty($encounter['dcbaotin']))&&(!empty($encounter['dtbaotin']))){
-	$fpdf->Cell(0,5,"...................................................................................Điện thoại số ".$encounter['dtbaotin'],0,1,'L');
+    $fpdf->Cell(0,5,"Địa chỉ:...................................................................................................         Điện thoại số: ".$encounter['dtbaotin'],0,1,'L');
 }else{
-	$fpdf->Cell(0,5,'...................................................................................Điện thoại số................................................................. ',0,1,'L');
+    $fpdf->Cell(0,5,'Địa chỉ: ................................................................   Điện thoại số: ................................................................. ',0,1,'L');
 }
 $ngayden=formatDate2Local($encounter['encounter_date'],$date_format);
 $gioden=@convertTimeToLocal(formatDate2Local($encounter['encounter_date'],$date_format,0,1));

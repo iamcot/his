@@ -34,7 +34,7 @@ $resultbillqry=$db->Execute($billqry);
 
 		$buffer=$resultbillqry->FetchRow();
 		$totalbill=$buffer['sum'];
-		//$totaldis=$buffer['sumdis'];
+		$totaldis=$buffer['sumdis'];
 	}
 	
 //items still not paid	
@@ -61,8 +61,8 @@ $resultpaymentqry=$db->Execute($paymentqry);
 		$totalpayment=$buffer['sum'];
 	}
 
-//$due=$totalbill-$totalpayment-$totaldis -$giamBHYT;
-$due=$totalbill-$totalpayment-$giamBHYT; // số tiền bệnh nhân trả
+$due=$totalbill- $totalpayment- $totaldis ;
+//$due=$totalbill-$totalpayment-$giamBHYT; // số tiền bệnh nhân trả
 
 # Start Smarty templating here
  /**
@@ -189,8 +189,8 @@ $smarty->assign('ItemLine',$sListRows);
 $smarty->assign('LDTotalBillAmount',$LDTotalBillAmount);
 $smarty->assign('LDTotalBillAmountValue',"<b>".number_format($totalbill)."</b>");
 $smarty->assign('LDOutstandingAmount',$LDOutstandingAmount1);
-//$smarty->assign('LDOutstandingAmountValue',number_format($totalpayment+$totaldis+$giamBHYT));
-$smarty->assign('LDOutstandingAmountValue',number_format($totalpayment+$giamBHYT));//---nang
+$smarty->assign('LDOutstandingAmountValue',number_format($totalpayment+$totaldis));
+//$smarty->assign('LDOutstandingAmountValue',number_format($totalpayment+$giamBHYT));//---nang
 $smarty->assign('LDAmountDue',$LDAmountDue);
 $smarty->assign('LDAmountDueValue',number_format($due));
 

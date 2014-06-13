@@ -285,11 +285,19 @@ function CheckDuplicateMedicine(){
 	}
 }
 
+function OnChangeCheckbox (checkbox) {
+    if (checkbox.checked) {
+        document.getElementById("titleForm1").innerHTML="<?php echo $LDISSUEPAPER1; ?>";
+    }
+    else {
+        document.getElementById("titleForm1").innerHTML= "<?php echo $LDISSUEPAPER; ?>";
+    }
+}
+
 -->
 </script>
 
 <?php
-
 $sTemp = ob_get_contents();
 ob_end_clean();
 
@@ -312,7 +320,9 @@ $smarty->assign('sRegForm','<form name="createdepotform" method="POST"  onSubmit
 
 $smarty->assign('deptname',$LDDept.': '.$deptname);
 $smarty->assign('ward',$LDWard.': '.$wardname);
-$smarty->assign('titleForm',$LDISSUEPAPER);
+//$smarty->assign('titleForm',$LDISSUEPAPER);
+$smarty->assign('titleForm','<div id="titleForm1" ></div>');                                 //đã thêm
+$smarty->assign('sTypePutTT','<input type="checkbox" id="titleFormCk"  onclick="OnChangeCheckbox(this)" />');   //đã thêm
 $smarty->assign('LDSTT',$LDSTT);
 $smarty->assign('LDPresID',$LDMedicineID);
 $smarty->assign('LDPresName',$LDMedicineName);
@@ -326,6 +336,7 @@ $smarty->assign('LDInventory',$LDInventory);
 $smarty->assign('LDDate',$LDDay);//đã thêm
 $smarty->assign('LDTYPE',$LDTypePutIn1);
 $smarty->assign('LDTT',$LDTamThan);  //đã thêm
+
 
 
 if($target=='depot') 
@@ -571,7 +582,7 @@ if($target=='depot')
 //*********************************************************************************
 
 include_once($root_path.'include/core/inc_date_format_functions.php');
-$smarty->assign('sTypePutTT','<input type="checkbox" name="cbTT" value="tt" />'); //mp
+//$smarty->assign('sTypePutTT','<input type="checkbox" name="cbTT" value="tt" />'); //mp
 
 //mp
 if($date_time=='')

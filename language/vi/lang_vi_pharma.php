@@ -130,6 +130,7 @@ $LDRequestMedipotWardTxt='Các phiếu yêu cầu cấp phát VTYT đang chờ';
 # 17/11/11 - Tuyen - issuepaper
 $LDIssuePaper='Phiếu lĩnh thuốc';
 $LDISSUEPAPER='PHIẾU LĨNH THUỐC';
+$LDISSUEPAPER1='PHIẾU LĨNH THUỐC HƯỚNG TÂM THẦN (TIỀN CHẤT)';
 $LDSelectWard='Chọn khoa phòng';
 $LDPrescriptionTxt='Từ các toa trong tờ điều trị của bệnh nhân';
 $LDPrescriptionTab='Tổng hợp từ các tờ điều trị của bệnh nhân';

@@ -162,7 +162,7 @@ $list_info = array();
 if($pres_item_noitru=$db->Execute($pres_noitru)){
 	for($i=0;$i<$pres_item_noitru->RecordCount();$i++){
 		$item = $pres_item_noitru->FetchRow();
-		$list_item[$item['product_encoder']][$item['date_issue']]= $item['number'];
+		$list_item[$item['product_encoder']][$item['date_issue']]= $item['sum'];   //==>n đổi $item['number'] thành  $item['sum']
 		if(!in_array($item['date_issue'], $list_date)){
 			$k++;
 			$list_date[$k]=$item['date_issue'];
