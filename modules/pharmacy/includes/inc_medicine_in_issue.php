@@ -98,7 +98,7 @@ switch ($issue_show['typeput']) {
 
                 <?php for ($i = 1; $i <= $medicine_count; $i++) {
                     $rowIssue = $medicine_in_pres->FetchRow();
-                    //$tonkhole = $IssuePaper->searchMedicineInAvaiProduct($rowIssue['product_encoder'], $issue_show['typeput']);
+//                    $tonkhole = $IssuePaper->searchMedicineInAvaiProduct($rowIssue['product_encoder'], $issue_show['typeput']);
                     $tonkhole = 0;
                     $giatien = 0;
                     $lotid = '';
