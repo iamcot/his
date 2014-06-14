@@ -39,7 +39,8 @@ $bgc1='#ffffff';  // entry form's background color
 $abtname=get_meta_tags($root_path."global_conf/$lang/konsil_tag_dept.pid");
 
 $formtitle=$LDDienTim;
-						
+
+$target='dientim';
 $db_request_table=$target;
 define('_BATCH_NR_INIT_',70000000); 
 /*
@@ -84,8 +85,8 @@ $core = & new Core;
 	   }		
      }
 	 
-
-	   
+     $ITEM_CODE_DT='0259';
+	 $ITEM_NAME_DT='Đo điện tim';
 	 if(!isset($mode))   $mode="";
 		
 		  switch($mode)
@@ -111,9 +112,16 @@ $core = & new Core;
 
 							      if($ergebnis=$core->Transact($sql))
        							  {
+//                                    if($n>0){
+//                                        for ($i=0; $i<$n; $i++){
+                                            $sql33="INSERT INTO care_test_request_".$db_request_table."_sub
+                                                                                  (sub_id, batch_nr, encounter_nr, item_bill_code, item_bill_name)
+                                                                                  VALUES
+                                                                                  ('0', '".$batch_nr."','".$pn."','".$ITEM_CODE_DT."','".$ITEM_NAME_DT."')";
+                                            $core->Transact($sql33);
 
 										//Vien phi
-											$sql_bill="SELECT * FROM care_billing_item WHERE item_code='0259'";
+											$sql_bill="SELECT * FROM care_billing_item WHERE item_code='".$ITEM_CODE_DT."'";
 											if($re=$db->Execute($sql_bill))							
 											{
 												$temp=$re->FetchRow();
@@ -122,11 +130,12 @@ $core = & new Core;
 													(bill_item_id, bill_item_encounter_nr, bill_item_code, bill_item_unit_cost, bill_item_units, 
 													bill_item_amount, bill_item_date, bill_item_status, bill_item_bill_no)
 													VALUES
-													('0', '".$pn."', '0259', '".$temp['item_unit_cost']."', '1', 
+													('0', '".$pn."', '".$ITEM_CODE_DT."', '".$temp['item_unit_cost']."', '1',
 													'".$temp['item_unit_cost']."', '".date('Y-m-d H:i:s')."', '0', '0' )" ;
 												$db->Execute($sql_bill1);												
 											}
-									
+//                                        }
+//                                    }
 								  	// Load the visual signalling functions
 									include_once($root_path.'include/core/inc_visual_signalling_fx.php');
 									// Set the visual signal 
@@ -157,6 +166,18 @@ $core = & new Core;
 										  							
 							      if($ergebnis=$core->Transact($sql))
        							  {
+                                      $sql="DELETE FROM care_test_request_".$db_request_table."_sub WHERE batch_nr='".$batch_nr."'";
+                                      $core->Transact($sql);
+
+
+                                          $sql55="INSERT INTO care_test_request_".$db_request_table."_sub
+                                                                                  (sub_id, batch_nr, encounter_nr, item_bill_code, item_bill_name)
+                                                                                  VALUES
+                                                                                  ('0', '".$batch_nr."','".$pn."','".$ITEM_CODE_DT."','".$ITEM_NAME_DT."')";
+                                          $core->Transact($sql55);
+
+
+
 									//echo $sql;
 								  	// Load the visual signalling functions
 									include_once($root_path.'include/core/inc_visual_signalling_fx.php');
@@ -188,6 +209,9 @@ $core = & new Core;
 					        {
      					       $stored_request=$ergebnis->FetchRow();
 							   $edit_form=1;
+                                $sql="SELECT * FROM care_test_request_".$db_request_table."_sub WHERE batch_nr='".$batch_nr."' ";
+                                if($item_ergebnis = $db->Execute($sql))
+                                    $value_edit = $item_ergebnis->RecordCount();
 					         }
 			             }
 						 
@@ -199,7 +223,7 @@ $core = & new Core;
   
           if(!$mode) /* Get a new batch number */
 		  {
-		                $sql="SELECT batch_nr FROM care_test_request_dientim ORDER BY batch_nr DESC";
+		                $sql="SELECT batch_nr FROM care_test_request_".$db_request_table." ORDER BY batch_nr DESC";
 		                if($ergebnis=$db->SelectLimit($sql,1))
        		            {
 				            if($batchrows=$ergebnis->RecordCount())

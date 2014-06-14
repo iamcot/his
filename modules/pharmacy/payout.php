@@ -504,7 +504,7 @@ if(!isset($target) || ($target=='new') || ($target=='create')){
     $smarty->assign('sPlaceInput',load_health_station($select, $LDKhoLe));
     $smarty->assign('sTotalInput','<input type="text" id="total_money" name="total_money" class="input1"/>');
     $smarty->assign('sPutInIDInput','<input type="text" name="voucher_id" class="input1"/>');
-    $smarty->assign('sTypePut','<select name="typeput" id="typeput" class="input1" onchange="checkSelect()" ><option value="0">'.$LDBH.'</option><option value="1" selected>'.$LDNoBH.'</option><option value="2">'.$LDCBTC.'</option></select>');
+    $smarty->assign('sTypePut','<select name="typeput" id="typeput" class="input1" onchange="checkSelect()" ><option value="0" selected>'.$LDBH.'</option><option value="1" >'.$LDNoBH.'</option><option value="2">'.$LDCBTC.'</option></select>');
 
 }else{	//target=update
 

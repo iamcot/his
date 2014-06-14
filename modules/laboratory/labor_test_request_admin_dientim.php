@@ -36,6 +36,7 @@ require_once($root_path.'include/core/inc_front_chain_lang.php'); ///* invoke th
 require_once($root_path.'global_conf/inc_global_address.php');
 
 $thisfile= basename(__FILE__);
+$uploadfile= $root_path.'modules/radiology/upload.php'.URL_APPEND.'&user_origin='.$local_user.'&encounter_nr=';
 
 $bgc1='#ffffff'; /* The main background color of the form */
 $edit_form=0; /* Set form to non-editable*/
@@ -69,7 +70,8 @@ switch($mode){
 										  status='received',
 										  history=".$core->ConcatHistory("Update ".date('Y-m-d H:i:s')." ".$_SESSION['sess_user_name']."\n").",
 										  modify_id = '".$_SESSION['sess_user_name']."',
-										  modify_time='".date('YmdHis')."'
+										  modify_time='".date('YmdHis')."'  ,
+										  create_time='".date('YmdHis')."'
 					WHERE batch_nr = '".$batch_nr."'";
 
         if($ergebnis=$core->Transact($sql)){

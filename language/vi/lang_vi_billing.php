@@ -60,7 +60,7 @@ $LDTestName ='Tên kiểm tra';//Test Name
 $LDTestCode ='Mã số kiểm tra';//Test Code
 $LDCostperunit ='Chi phí';//Cost per unit
 //$LDNumberofUnits ='Số lần';//Number of units
-$LDNumberofUnits ='Số lần/Số phút';//Number of units
+$LDNumberofUnits ='Số lần-Số phút';//Number of units
 $LDAddtoPatientBill ='Thêm vào hóa đơn bệnh nhân ';//Add to patient bill
 
 /* 2003-10-19 DHC Echoes from confirmLabtests.php  */
