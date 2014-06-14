@@ -16,10 +16,11 @@ switch($mode){
 						WHERE (khochan.product_name LIKE '".$search."%' or khochan.product_name LIKE '% ".$search."%') 	 
 						AND khochan.product_encoder=khole.product_encoder AND khole.available_number>0
 						AND donvi.unit_of_medicine=khochan.unit_of_medicine 
-						AND khochan.pharma_type IN (1,3,4) 
+						AND khochan.pharma_type IN (1,3,4)
+						AND khole.typeput=".$_GET['typeput']."
 						GROUP BY khole.product_encoder, khole.typeput 
 						ORDER BY khochan.product_name LIMIT 15";
-
+                 //echo $sql;
 				if($result = $db->Execute($sql)){
 					$n=$result->RecordCount();
 					$item_id=""; $item_value=""; 
@@ -51,6 +52,7 @@ switch($mode){
 						care_pharma_products_main AS khochan, care_pharma_unit_of_medicine AS donvi  				 
 						WHERE khochan.product_name='".$search."' 
 						AND khochan.product_encoder=khole.product_encoder khole.available_number>0
+						AND khole.typeput=".$_GET['typeput']."
 						AND donvi.unit_of_medicine=khochan.unit_of_medicine
 						GROUP BY khole.product_encoder, khole.typeput";
 				//echo $sql;
