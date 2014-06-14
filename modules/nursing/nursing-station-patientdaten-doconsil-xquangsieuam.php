@@ -182,8 +182,6 @@ $core = & new Core;
 													'".$temp['item_unit_cost']."', '".date('Y-m-d H:i:s')."', '0', '0' )" ;
 												$db->Execute($sql_bill1);												
 											}
-		    
-											
 										}
 									}
 									//echo $sql;
