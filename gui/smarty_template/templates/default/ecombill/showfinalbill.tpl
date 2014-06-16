@@ -21,7 +21,8 @@
 <p>
 <div align="center">
 <center>
-<font face="Arial" size="4" color="#000000"><b>{{$LDTitleFinalBill}}</b></font>
+<font face="Arial" size="4" color="#000000"><b>{{$LDTitleFinalBill}}</b></font><br>
+<font face="Arial" size="3" color="#000000">{{$LDLayMuchuong}}</font>
 <table border="0" width="95%">
 <tr>
     <td colspan="2" bgcolor=#dddddd>

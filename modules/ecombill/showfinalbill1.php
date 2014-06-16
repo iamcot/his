@@ -196,6 +196,7 @@ if(is_object($paymentresult)) $payment=$paymentresult->FetchRow();
 
 # Show Info Patient
 $smarty->assign('LDTitleFinalBill',$LDTitleFinalBill);
+$smarty->assign('LDLayMuchuong',$LDLayMuchuong.':'.$mh*100 .'%')  ;
 $smarty->assign('LDWard',$LDWard.': '.$wardname);
 
 $smarty->assign('LDPatientNumber',$LDPatientNumber.': '.$patientno);

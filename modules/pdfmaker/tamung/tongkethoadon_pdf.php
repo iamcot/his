@@ -85,8 +85,10 @@ $header_1='<table><tr>
 			<td width="25%"><b><br><br><br>
              Khoa phòng: '.$wardname.'</b>
 			</td>
-			<td align="center" width="50%"><b><font size="14">PHIẾU CÔNG KHAI THUỐC VÀ TỔNG HỢP VIỆN PHÍ</font></b></td>
-		</tr></table>';
+			<td align="center" width="50%"><b><font size="14">PHIẾU CÔNG KHAI THUỐC VÀ TỔNG HỢP VIỆN PHÍ</font></b><br><br><font size="10">Mức hưởng:'.$mh*100 .'%</font></td>
+		    </tr>
+
+		</table>';
 $header_2='<table border="0" width="100%" cellpadding="0">
             <tr>
                 <td>Mã bệnh nhân: '.$patientno.'</td>
@@ -268,7 +270,7 @@ if(is_object($depotresult))
         $tongtienvtytTBHYT += $depot['cost']*$depot['sum_number']*$mh;
         $tongtienVTYTTra += $depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh;
        // $tongtienVTYTTra +=  $tongtienvtyt - $tongtienvtytBHYT;
-        $stt++;
+       // $stt++;
     }
 }
 $depotqry1="SELECT med.*,medinfo.date_time_create,medinfo.sum_date FROM care_chemical_prescription AS med, care_chemical_prescription_info AS medinfo WHERE medinfo.encounter_nr='$patientno' AND medinfo.prescription_id=med.prescription_id ORDER BY med.prescription_id";
@@ -298,7 +300,7 @@ if(is_object($depotresult1))
         $tongtienHCBHYT += $depot['cost']*$depot['sum_number']*$mh;
         $tongtienHCTra +=  $depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh;
       //  $tongtienHCTra +=$tongtienHC - $tongtienHCBHYT;
-        $stt++;
+       //$stt++;
     }
 }
 $count_depot += $count_HC;

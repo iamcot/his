@@ -212,6 +212,7 @@ $LDFemale='Nữ';
 
 //08-11-11 -Tuyen
 $LDTitleFinalBill='PHIẾU CÔNG KHAI THUỐC VÀ TỔNG HỢP VIỆN PHÍ';
+$LDLayMuchuong='Mức hưởng';
 $LDWard='Khoa phòng';
 $LDPatientFullName='Họ tên người bệnh';
 $LDRoom='Phòng';
