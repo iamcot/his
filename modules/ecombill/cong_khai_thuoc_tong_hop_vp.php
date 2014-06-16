@@ -350,7 +350,8 @@ foreach ($list_item as $x => $v) {
     }
     $tongtienkhac = '';
     $tongtienthanhtoan = $tongtienthuoc - $tongtienBHYT; // tính so tien benh nhan can tra
-    echo '<td align="center">'.$tongthuoc.'</td><td align="right">'.number_format($list_info[$x]['cost']).'</td><td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']).'<td align="right">'.$tongtienBHYT.'<td align="right">'.$tongtienkhac.'<td align="right">'.$tongtienthanhtoan.'</td></tr>';
+    echo '<td align="center">'.$tongthuoc.'</td><td align="right">'.number_format($list_info[$x]['cost']).'</td><td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']).'<td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']*$mh).'<td align="right">'.$tongtienkhac.'<td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']-$tongthuoc*$list_info[$x]['cost']*$mh).'</td></tr>';
+ //   echo '<td align="center">'.$tongthuoc.'</td><td align="right">'.number_format($list_info[$x]['cost']).'</td><td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']).'<td align="right">'.$tongtienBHYT.'<td align="right">'.$tongtienkhac.'<td align="right">'.$tongtienthanhtoan.'</td></tr>';
     /////////////////
     $stt++;
 }
@@ -698,12 +699,11 @@ if(is_object($resultfinalqry)) $cntbill=$resultfinalqry->FetchRow();
 //$cntbill['total_amount'] += $tongtienthuoc + $tongtienVTYT + $tongtienHC + $tongtienDichVu;
 $cntbill['total_amount'] = $tongtienthuoc + $tongtienVTYT + $tongtienHC + $tongtienDichVu;
 //$cntbill['total_amount'] += $tongtienthanhtoan + $tongtienVTYTTra + $tongtienHCTra + $tongtienDichVuTra;    //nang
-$cntbill['total_discount'] = $tongtienBHYT + $tongtienVTYTBHYT + $tongtienHCBHYT + $tongtienDichVuBHYT;  //nang- tinh so tien dc giam BHYT
-
 $smarty->assign('LDTotal',$LDTotalFinalBill.': ');
 $smarty->assign('LDTotalValue',number_format($cntbill['total_amount'])); 				//$final['final_total_bill_amount']
 $sTempMoney = convertMoney($cntbill['total_amount']);
 $smarty->assign('money_total_Reader',$sTempMoney);
+$cntbill['total_discount'] = $tongtienBHYT + $tongtienVTYTBHYT + $tongtienHCBHYT + $tongtienDichVuBHYT;  //nang- tinh so tien dc giam BHYT
 
 $smarty->assign('LDDiscountonTotalAmount',$LDDiscountonTotalAmount);
 $smarty->assign('LDDiscountonTotalAmountValue',number_format($cntbill['total_discount'])); 			//$final['final_discount']

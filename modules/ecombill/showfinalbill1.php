@@ -308,11 +308,12 @@ foreach ($list_item as $x => $v) {
     //  echo '<td align="right">'.$tongthuoc.'</td><td align="right">'.number_format($list_info[$x]['cost']).'</td><td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']).'</td></tr>';
     //nang
 
-    $tongtienBHYT = $tongthuoc*$list_info[$x]['cost']*$mh ;
+    $tongtienBHYT += $tongthuoc*$list_info[$x]['cost']*$mh ;
     // $tongtienBHYT = $tongthuoc*$list_info[$x]['cost']*$muchuong; // tinh so tien BHYT gi?m  v?n ch?a xác ??nh ?c ph?n tr?m gi?m
     $tongtienkhac = '';
-    $tongtienthanhtoan = $tongtienthuoc - $tongtienBHYT; // tính so tien benh nhan can tra
-    echo '<td align="center">'.$tongthuoc.'</td><td align="right">'.number_format($list_info[$x]['cost']).'</td><td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']).'<td align="right">'.$tongtienBHYT.'<td align="right">'.$tongtienkhac.'<td align="right">'.$tongtienthanhtoan.'</td></tr>';
+    $tongtienthanhtoan += $tongtienthuoc - $tongtienBHYT; // tính so tien benh nhan can tra
+    echo '<td align="center">'.$tongthuoc.'</td><td align="right">'.number_format($list_info[$x]['cost']).'</td><td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']).'<td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']*$mh).'<td align="right">'.$tongtienkhac.'<td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']-$tongthuoc*$list_info[$x]['cost']*$mh).'</td></tr>';
+  //  echo '<td align="center">'.$tongthuoc.'</td><td align="right">'.number_format($list_info[$x]['cost']).'</td><td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']).'<td align="right">'.$tongtienBHYT.'<td align="right">'.$tongtienkhac.'<td align="right">'.$tongtienthanhtoan.'</td></tr>';
     /////////////////
     $stt++;
 }
@@ -539,6 +540,13 @@ if(is_object($itemresult))
             $sTempBed = $sTempBed.ob_get_contents();
             ob_end_clean();
         }
+        else
+        {										//Khac
+            ob_start();
+            $smarty->display('ecombill/showfinalbill_other_line.tpl');
+            $sTempKhac = $sTempKhac.ob_get_contents();
+            ob_end_clean();
+        }
     }
 }
 
@@ -591,7 +599,12 @@ if($sTempBed)
 else
     $smarty->assign('ItemBed',$noItem);
 
-
+//Cac dich vu khac
+$smarty->assign('LDKhac','10. '.$LDKhac);
+if($sTempBed)
+    $smarty->assign('ItemKhac',$sTempKhac);
+else
+    $smarty->assign('ItemKhac',$noItem);
 
 # Show Final Bill 
 //Lay info Hoa don

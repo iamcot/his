@@ -196,7 +196,8 @@ foreach ($list_item as $x => $v) {
 						</tr>';
         $tongtienthuoc += $tongthuoc*$list_info[$x]['cost'];
         $tongtienthuocBHYT += $tongthuoc*$list_info[$x]['cost']*$mh;
-        $tongtienthuocTra +=  $tongtienthuoc - $tongtienthuocBHYT;
+    $tongtienthuocTra += $tongthuoc*$list_info[$x]['cost']  - $tongthuoc*$list_info[$x]['cost']*$mh ;
+        //$tongtienthuocTra +=  $tongtienthuoc - $tongtienthuocBHYT;
     $stt++;
 }
 
@@ -295,7 +296,8 @@ if(is_object($depotresult1))
        // $tongtienHC += $tongtienHC+ $depot['cost']*$depot['sum_number'];
         $tongtienHC +=  $depot['cost']*$depot['sum_number'];
         $tongtienHCBHYT += $depot['cost']*$depot['sum_number']*$mh;
-        $tongtienHCTra +=$tongtienHC - $tongtienHCBHYT;
+        $tongtienHCTra +=  $depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh;
+      //  $tongtienHCTra +=$tongtienHC - $tongtienHCBHYT;
         $stt++;
     }
 }
@@ -421,7 +423,7 @@ $html.= ' <tr>
                             <td colspan="8"><i><b>Tổng cộng (Cộng: 1+2+3+4+5+6+7+8+9): &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;'.number_format($tongtienthuoc+$tongtienvtyt+$tongtienxndv).' vnd</b></i></td>
                           </tr>
                             <tr>
-                            <td  colspan="8"><i><b>Được giảm (BHYT): &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;'.number_format($tongtienthuocBHYT+$tongtienvtytBHYT+$tongtienxndvBHYT).' vnd</b></i></td>
+                            <td  colspan="8"><i><b>Được giảm (BHYT): &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;'.number_format($tienBHYT).' vnd</b></i></td>
                             </tr>
                             <tr>
                             <td  colspan="8"><i><b>Tổng số tiền sau khi giảm: &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;'.number_format($tongtienthuocTra+$tongtienVTYTTra+$tongtienxndvTra).' vnd</b></i></td>
