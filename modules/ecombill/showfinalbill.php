@@ -482,14 +482,14 @@ else
 		$smarty->assign('LDItemNumberOf',$item['bill_item_units']); 
 		$smarty->assign('LDItemUnitCost',number_format($item['bill_item_unit_cost'])); 
 		$smarty->assign('LDItemSumCost',number_format($item['bill_item_units']*$item['bill_item_unit_cost']));
-        /*
+
         $smarty->assign('LDItemSumCostBHYT',number_format($item['bill_item_units']*$item['bill_item_unit_cost']*$mh));   //nang
         $smarty->assign('LDItemSumCostKhac','');//nang
         $smarty->assign('LDItemSumCostTra',number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*$mh)); //nang
         $tongtienDichVu += $item['bill_item_units']*$item['bill_item_unit_cost'];
         $tongtienDichVuBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*$mh;   //nang
-        $tongtienDichVuTra += $tongtienDichVu - $tongtienDichVuBHYT; //nang   */
-        if($groupnr==22){ // không cho giảm BHYT của xét nghiệm máu
+        $tongtienDichVuTra += $tongtienDichVu - $tongtienDichVuBHYT; //nang
+      /*  if($groupnr==22){ // không cho giảm BHYT của xét nghiệm máu
             $smarty->assign('LDItemSumCostBHYT',number_format($item['bill_item_units']*$item['bill_item_unit_cost']*0));   //nang
             $smarty->assign('LDItemSumCostKhac','');//nang
             $smarty->assign('LDItemSumCostTra',number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*0)); //nang
@@ -504,7 +504,7 @@ else
         }   else{
             $tongtienDichVuBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*$mh;   //nang
         }
-        $tongtienDichVuTra += $tongtienDichVu - $tongtienDichVuBHYT; //nang
+        $tongtienDichVuTra += $tongtienDichVu - $tongtienDichVuBHYT; //nang   */
 
         if ($groupnr<=25){								//Xet nghiem 1->25
 			ob_start();

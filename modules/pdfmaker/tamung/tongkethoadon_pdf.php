@@ -321,7 +321,7 @@ if(is_object($itemresult))
     {
         $item=$itemresult->FetchRow();
         $groupnr = $item['item_group_nr'];
-        if($groupnr==22){
+       /* if($groupnr==22){
             $row_item='<tr>
 						<td colspan="1" align="center">'.$item['item_description'].'</td>
 						<td colspan="1" align="center">'.formatDate2Local($item['bill_item_date'],'dd/mm',false,false,$sepChars).'</td>
@@ -332,7 +332,7 @@ if(is_object($itemresult))
                         <td align="center">0</td>
                         <td align="center">'.number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*0).'</td>
 					  </tr>';
-        }   else{
+        }   else{ */
         $row_item='<tr>
 						<td colspan="1" align="center">'.$item['item_description'].'</td>
 						<td colspan="1" align="center">'.formatDate2Local($item['bill_item_date'],'dd/mm',false,false,$sepChars).'</td>
@@ -342,15 +342,16 @@ if(is_object($itemresult))
                         <td align="center">'.number_format($item['bill_item_units']*$item['bill_item_unit_cost']*$mh).'</td>
                         <td align="center">0</td>
                         <td align="center">'.number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*$mh).'</td>
-					  </tr>';   }
+					  </tr>';
+    //}
 
         //$tongtienxndv += $tongtienxndv+ $item['bill_item_units']*$item['bill_item_unit_cost'];
         $tongtienxndv +=  $item['bill_item_units']*$item['bill_item_unit_cost'];
-        if($groupnr==22){  //xet không cho giảm BHYT của xét nghiệm máu
+       /* if($groupnr==22){  //xet không cho giảm BHYT của xét nghiệm máu
             $tongtienxndvBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*0;   //nang
-        }   else{
+        }   else{     */
             $tongtienxndvBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*$mh;  //nang
-        }
+       // }
        // $tongtienxndvTra +=$item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*$mh;
         $tongtienxndvTra = $tongtienxndv - $tongtienxndvBHYT;
 

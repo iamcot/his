@@ -586,20 +586,21 @@ if($billid == "currentbill" && $target!='nursing') {
 }
 
 $smarty->assign('pbCancel','<a href="'.$breakfile.'" ><img '.createLDImgSrc($root_path,'close2.gif','0','middle').' title="'.$LDCancel.'" align="middle"></a>');
-
+ /*
 // trừ cho xet nghiệm máu
 $xetnghiemmau =0;
 if($lb1['item_type']=="LT" && $lb1['item_code']=='CTM') {
     $xetnghiemmau=($labres['bill_item_unit_cost'])*($labres['bill_item_units'])*$mh;
 //echo $xetnghiemmau;
-}
+}    */
 //Tong
 $smarty->assign('LDTotal',$LDTotal);
 if($billid=="currentbill") { 
 	$LDTotalBillAmountData = $total; 
 	include($root_path.'classes/money/baohiem.php');
 	//$discount = TienBaoHiem($insurance_nr, $insurance_start, $insurance_exp,$total_for_insur, $insurance_start, $is_traituyen);
-    $discount = $mh*$LDTotalBillAmountData - $xetnghiemmau; //------>n sửa số tiền giảm bảo hiểm y tế dựa trên mức hưởng
+    $discount = $mh*$LDTotalBillAmountData ;
+   // $discount = $mh*$LDTotalBillAmountData - $xetnghiemmau; //------>n sửa số tiền giảm bảo hiểm y tế dựa trên mức hưởng
 	//echo $total_for_insur;
 	if($target=='nursing')
 		$smarty->assign('discount', number_format($discount));
