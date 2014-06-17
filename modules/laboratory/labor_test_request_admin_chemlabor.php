@@ -90,7 +90,7 @@ switch ($mode) {
 				$para_array=array();
             }
 
-            $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql, date('Y-m-d H:i:s')); //them dong nay
+//            $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql, date('Y-m-d H:i:s')); //them dong nay
             signalNewDiagnosticsReportEvent ( '', 'labor_test_request_printpop.php' );
             header ( "location:" . $thisfile . URL_REDIRECT_APPEND . "&edit=$edit&pn=$pn&user_origin=$user_origin&status=$status&target=$target&subtarget=$subtarget&noresize=$noresize" );
 
