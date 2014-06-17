@@ -359,6 +359,12 @@ if(!empty($encounter['tiensubenhgiadinh'])){
 }
 $fpdf->Ln();
 
+//xet phù:
+if($kb_ck_1['phù']==0){
+    $phu='Không';
+}else{
+    $phu ='Có';
+}
 //Khám bệnh
 $fpdf->SetFont('','B',10);
 $fpdf->Cell(140,7,'IV.KHÁM BỆNH:',0,0,'L');
@@ -369,6 +375,8 @@ $fpdf->Cell(25,5,'1. Toàn thân:',0,1,'L');
 $fpdf->SetFont('','',10);
 if(!empty($kb_ck_1['toanthan_notes'])){
 	$fpdf->MultiCell(70,5,$kb_ck_1['toanthan_notes'],0,'L');
+    $fpdf->Ln();
+   // $fpdf->MultiCell(0,5,'Phù:'.$phu.''.', Tuần hoàn '.$kb_ck_1['tuanhoan_notes'].', Hô hấp '.$kb_ck_1['hohap_notes'].', Tiêu hóa '.$kb_ck_1['tieuhoa_notes'].', Tiết niệu '.$kb_ck_1['thantietnieusinhduc_notes'].', Các bộ phận khác '.$kb_ck_1 ['khac_notes'],0,'L');
 }else{
 	$fpdf->Cell(70,5,'.....................................................................................................',0,0,'L');
 	$fpdf->Ln();
@@ -419,6 +427,7 @@ $fpdf->SetFont('','',10);
 if($buf->recordcount()){
  while($temp=$buf->fetchrow()){
  $fpdf->Cell(0,5,$temp['reporting_dept'],0,0,'L');
+     $fpdf->Ln();
  }
 }else{
 $fpdf->Cell(0,5,'..............................................................................................................',0,0,'L');
@@ -427,7 +436,6 @@ $fpdf->SetFont('','',10);
 $fpdf->Cell(0,5,'.........................................................................................................................................................................',0,0,'L');
 $fpdf->Ln();
 $fpdf->Cell(0,5,'.........................................................................................................................................................................',0,0,'L');
-
 }
 
 $fpdf->Ln();
@@ -493,10 +501,10 @@ $fpdf->Cell(0,25,' ',0,1,'C');
 $fpdf->SetFont('dejavusans','',10);
 //$fpdf->Cell(60,5,'Họ tên:.....................................',0,0,'L');
 $fpdf->SetX(135);
-$fpdf->Cell(60,5,'Họ tên:.....................................',0,0,'L');
+$fpdf->Cell(60,5,'Họ tên:',0,0,'L');
+$fpdf->Cell(0,0,$kb_ck_1['create_id'],0,0,'R');
 
 ob_clean();
-//$fpdf->Output();
 $fpdf->Output('PhieuKhamBenhVaoVien.pdf', 'I');
 
 

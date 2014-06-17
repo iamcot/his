@@ -280,9 +280,9 @@ $pdf->writeHTML($html_thuoc);
 // add a page: Trang 2
 $pdf->AddPage();
 $pdf->setEqualColumns(2,600);
-
+$html_vtyt='';
  //Lay tat ca VTYT cua benh nhan
-$html_vtyt='<table border="1" cellpadding="2">
+$html_vtyt.='<table border="1" cellpadding="2">
 				<tr>
 					<td rowspan="2" width="15%"><b>NỘI DUNG</b></td>
 					<td colspan="8" align="center" width="45%"><b>Ngày</b></td>
@@ -314,6 +314,7 @@ $html_vtyt='<table border="1" cellpadding="2">
 							<td>'.number_format($depot['cost']*$depot['sum_number']).'</td>
 						</tr>';
 		$tongtienvtyt= $tongtienvtyt+ $depot['cost']*$depot['sum_number'];
+      //  $stt++;
 	}	
  } 
  $depotqry1="SELECT med.*,medinfo.date_time_create,medinfo.sum_date FROM care_chemical_prescription AS med, care_chemical_prescription_info AS medinfo WHERE medinfo.encounter_nr='$patientno' AND medinfo.prescription_id=med.prescription_id ORDER BY med.prescription_id";
@@ -322,7 +323,7 @@ $html_vtyt='<table border="1" cellpadding="2">
  $tongtienHC=0;
  if(is_object($depotresult)) 
  {
-	$count_depot=$depotresult->RecordCount();
+	$count_HC=$depotresult->RecordCount();
 	for ($i=0;$i<$count_HC;$i++)
 	{	
 		$depot=$depotresult->FetchRow();		
@@ -334,6 +335,7 @@ $html_vtyt='<table border="1" cellpadding="2">
 							<td>'.number_format($depot['cost']*$depot['sum_number']).'</td>
 						</tr>';
 		$tongtienHC= $tongtienHC+ $depot['cost']*$depot['sum_number'];
+        //$stt++;
 	}	
  } 
  $count_depot += $count_HC;
