@@ -975,7 +975,19 @@ class Prescription extends Core {
 						WHERE prescription_id='$pres_id'";
         return $this->Transact($this->sql);
     }
+    function getEncouterNumberOfPres($pres_id){
+        global $db;
+        $this->sql="SELECT encounter_nr,status_finish
+                    FROM care_pharma_prescription_info
+					WHERE prescription_id='".$pres_id."'
+					LIMIT 1";
 
+        if ($this->result=$db->Execute($this->sql)) {
+            if ($this->result->RecordCount()) {
+                return $this->result;
+            }else{return false;}
+        }else{return false;}
+    }
     //**********************************************************************
     //**********************************************************************
     //Hoa chat

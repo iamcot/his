@@ -1,3 +1,7 @@
+2014-06-18
+Hồng Phương:
+* Cho bệnh nhân ngoại trú xuất viện sau khi phát toa.
+
 2014-06-12
 Hiền:
 - ../module/pdfmaker/.. Chỉnh sửa thông tin các báo cáo trong "các giấy tờ cần in ấn"

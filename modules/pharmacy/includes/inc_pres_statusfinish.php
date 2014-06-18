@@ -6,6 +6,8 @@ require_once($root_path.'include/core/inc_environment_global.php');
 include_once($root_path.'include/care_api_classes/class_prescription.php');
 include_once($root_path.'include/care_api_classes/class_cabinet_pharma.php');
 include_once($root_path.'include/care_api_classes/class_product.php');
+require_once($root_path.'include/care_api_classes/class_encounter.php');
+$enc_obj=new Encounter();
 require_once($root_path.'include/core/access_log.php');
 $logs = new AccessLog();
 if(!isset($Product)) $Product=new Product;
@@ -84,17 +86,28 @@ if(!$no_redirect){
 	$Pres->setCostPres($pres_id,$totalcost);
 	//$no_redirect=$Pres->getLastQuery();
 }
+if($pres_type='0399' or $pres_type='0400')
+{
+    $pres_show=$Pres->getEncouterNumberOfPres($pres_id);
+            $encounterofpres=$pres_show->FetchRow();
 
+    $discharged_type = 1;
+			$encounter_nr = $encounterofpres['encounter_nr'];
+    $date=($typedate=='currentdate')?date('Y-m-d'):$patient['date'];
+    $time=($typedate=='currentdate')?date('H:i'):$patient['time'];
+    //echo $date.''.$time;
+    $enc_obj->Discharge($encounter_nr,'',$discharged_type,$date,$time);
+}
 
 
 
 
 #Go back to previous page
-if (!$radiovalue || $radiovalue=='1')
+if ( $radiovalue=='1')
 		$typeInOut='all';
 	elseif ($radiovalue=='2')
 		$typeInOut='inpatient';
-	else
+	elseif(!$radiovalue || $radiovalue=='3')
 		$typeInOut='outpatient';
 
 $patmenu="../pharma_request_medicine_patient.php".URL_REDIRECT_APPEND."&full_en=".$_POST['encounter_nr']."&lang=".$_POST['lang']."&target=$target&pid=".$_SESSION['sess_pid']."&radiovalue=".$radiovalue."&typeInOut=".$typeInOut."&user_origin=".$user_origin;

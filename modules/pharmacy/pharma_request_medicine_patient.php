@@ -10,6 +10,7 @@ require_once($root_path.'global_conf/inc_global_address.php');
 require_once($root_path.'include/core/inc_date_format_functions.php');
 include_once($root_path.'include/care_api_classes/class_prescription.php');
 require_once($root_path.'include/care_api_classes/class_ward.php');
+include_once($root_path.'include/care_api_classes/class_encounter.php');
 
 if(!isset($Pres)) $Pres = new Prescription;
 		
@@ -75,7 +76,7 @@ if(!$mode) {	//$mode='' : load all pres
 /* Check for the prescription id = $pres_id. If available get the patients data */
 if($batchrows && $pres_id){
 	
-	include_once($root_path.'include/care_api_classes/class_encounter.php');
+//	include_once($root_path.'include/care_api_classes/class_encounter.php');
 	$enc_obj=new Encounter;
 	if( $enc_obj->loadEncounterData($pn)) {
 
@@ -167,6 +168,7 @@ function mysubmit(type,pres_id){
     console.log(type);
     if(type=='send'){
         FinishPres(pres_id);
+
     }
     else if(type=='edit'){
         document.form_test_request.action="includes/inc_pres_edit.php?pres_id="+ pres_id+"&radiovalue=<?php echo $radiovalue; ?>&user_origin=<?php echo $user_origin; ?>";
@@ -199,11 +201,29 @@ function FinishPres(pres_id)
 		
 	var r=confirm("<?php echo $LDGiveMedicine; ?>");
 	if (r==true) {
-		document.form_test_request.action="includes/inc_pres_statusfinish.php?pres_id="+ pres_id+"&radiovalue=<?php echo $radiovalue; ?>&user_origin=<?php echo $user_origin; ?>";
-		document.form_test_request.submit();
+		document.form_test_request.action="includes/inc_pres_statusfinish.php?pres_id="+ pres_id+"&radiovalue=<?php echo $radiovalue; ?>&user_origin=<?php echo $user_origin; ?>&pres_type=<?php echo $pres_show['prescription_type']?>";
+        document.form_test_request.submit();
+//        document.form_test_request.afterFinish(pres_id);
 	} else
 		return false;
 }
+
+<!--function afterFinish(pres_id)-->
+<!--{-->
+<!--    document.form_test_request.action="--><?php
+//            $pres_show=$Pres->getEncouterNumberOfPres($pres_id);
+////            $encounterofpres=$pres_show->FetchRow();
+//
+//            $discharged_type = 1;
+////			$encounter_nr = $encounterofpres['encounter_nr'];
+//			$date=($typedate=='currentdate')?date('Y-m-d'):$patient['date'];
+//			$time=($typedate=='currentdate')?date('H:i'):$patient['time'];
+//			//echo $date.''.$time;
+//		 	$enc_obj->Discharge($pn,'',$discharged_type,$date,$time);
+//		 	 ?><!--";-->
+<!--    document.form_test_request.submit();-->
+<!---->
+<!--}-->
 
 function printOut()
 {
@@ -462,11 +482,11 @@ require('includes/inc_pres_request_lister_fx.php');
 		<td> 
 			<table><!-- ***************     MENU CHON ALL/IN/OUT-PATIENT      ***************    -->
 				<tr><td>
-					<input type="radio" name="typeprespatient" id="all" value="1" onClick="RefreshList(this)" <?php if (!$typeInOut || $typeInOut=='all') echo 'checked'; ?>><?php echo $LDAllpatient; ?></td></tr>
+					<input type="radio" name="typeprespatient" id="all" value="1" onClick="RefreshList(this)" <?php if ( $typeInOut=='all') echo 'checked'; ?>><?php echo $LDAllpatient; ?></td></tr>
 				<tr><td>
 					<input type="radio" name="typeprespatient" id="inpatient" value="2" onClick="RefreshList(this)" <?php if ($typeInOut=='inpatient') echo 'checked'; ?>><?php echo $LDInpatient; ?></td></tr>
 				<tr><td>
-					<input type="radio" name="typeprespatient" id="outpatient" value="3" onClick="RefreshList(this)" <?php if ($typeInOut=='outpatient') echo 'checked'; ?>><?php echo $LDOutpatient; ?></td></tr>
+					<input type="radio" name="typeprespatient" id="outpatient" value="3" onClick="RefreshList(this)" <?php if (!$typeInOut ||$typeInOut=='outpatient') echo 'checked'; ?>><?php echo $LDOutpatient; ?></td></tr>
 			</table><!-- *********************************************************************    -->
 			<p>
 			<br>
