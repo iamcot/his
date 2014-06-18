@@ -171,7 +171,7 @@ $core = & new Core;
 										   '".$_SESSION['sess_user_name']."',
 										   '".date('YmdHis')."'
 										   )";
-                                  echo $sql;
+                                //  echo $sql;
 							      if($ergebnis=$core->Transact($sql))
        							  {	
 								  $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $sql, date('Y-m-d H:i:s'));
