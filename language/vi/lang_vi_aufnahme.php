@@ -178,7 +178,9 @@ $LDStartNewDoc='Lập bệnh án mới'; //'Start a new medocs document';
 $LDNoMedocsFound='Không tìm thấy hồ sơ bệnh án nào của bệnh nhân'; //'No medocs document of the patient found!';
 $LDAt='tại';//'at';		
 
-		
+
+$LDTatCaMedicine='Tất cả';
+$LDTamThanMedicine='Hướng Tâm Thần';
 $LDDept='Khoa'; //'Dept';
 $LDRoomNr='Số phòng'; //'Room nr';
 $LDWardNr='Thuộc khu'; //'Ward nr'

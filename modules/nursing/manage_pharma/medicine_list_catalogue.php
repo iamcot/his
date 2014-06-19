@@ -31,6 +31,7 @@ $breakfile = '../nursing-manage-medicine.php' . URL_APPEND . '&dept_nr=' . $dept
 $fileissue = '../nursing-issuepaper-depot.php' . URL_APPEND . '&dept_nr=' . $dept_nr . '&ward_nr=' . $ward_nr;
 $filereturn = 'medicine_return_medicine.php' . URL_APPEND . '&dept_nr=' . $dept_nr . '&ward_nr=' . $ward_nr;
 $urlsearch = $thisfile . URL_APPEND . '&dept_nr=' . $dept_nr . '&ward_nr=' . $ward_nr;
+$urlsearchMedicine= $thisfile . URL_APPEND . '&dept_nr=' . $dept_nr . '&ward_nr=' . $ward_nr;
 
 # Start Smarty templating here
 /**
@@ -66,6 +67,11 @@ ob_start();
     function searchValue() {
         var search = document.getElementById('search').value;
         document.listmedform.action = "<?php echo $urlsearch;?>&search=" + search;
+        document.listmedform.submit();
+    }
+    function searchMedicine() {
+        var search = document.getElementById('searchMedicine').value;
+        document.listmedform.action = "<?php echo $urlsearchMedicine;?>&search=" + search;
         document.listmedform.submit();
     }
     function sortUp() {
@@ -147,6 +153,28 @@ ob_start();
         <table cellSpacing="1" cellPadding="3" border="0" width="90%">
             <tr>
                 <th align="left"><font size="3" color="#5f88be"><?php echo $LDDept . ': ' . $deptname; ?></th>
+
+                <td align="left" rowspan="2">
+                <table>
+                    <tr>
+                        <td> Thuốc:     <br>
+                            <input type="radio" name="typeMedicine"
+                                <?php if (isset($typeMedicine) && $typeMedicine=="TatCa") echo "checked";?>
+                                   value="tatca">Tất cả
+                            <!--                            --><?php //echo $LDTatCaMedicine ;  ?><!--    -->
+
+                            <input type="radio" name="typeMedicine"
+                                <?php if (isset($typeMedicine) && $typeMedicine=="TamThan") echo "checked";?>
+                                   value="tamthan">Hướng Tâm Thần
+                            <!--                            --><?php //echo $LDTamThanMedicine ;  ?>   <br>
+<!--                            <input type="submit" name="submit" value="Chọn thuốc">-->
+                        </td>
+                        <td><a href="javascript:searchMedicine()"><input
+                                    type="image" <?php echo createComIcon($root_path, 'Search.png', '0', '', TRUE) ?>
+                                    onclick=""></a></td>
+                    </tr>
+                </table>
+
                 <td align="right" rowspan="2">
                     <table>
                         <tr>
