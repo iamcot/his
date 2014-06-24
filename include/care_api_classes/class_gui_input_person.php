@@ -1192,8 +1192,8 @@ class GuiInputPerson {
         if(!empty($address)) {
             if($address->RecordCount()) {
                 while($addr=$address->FetchRow()){
-                    if($addr_citytown_nr == $addr['nr'] ) $selected = ' selected '; else $selected = ' ';
-                    $sAddress .= '<option value="' . $addr['nr'] . '"' . $selected . ' >' . $addr['name'] . '</option>';
+                    if($addr_citytown_nr == $addr['zip_code'] ) $selected = ' selected '; else $selected = ' ';
+                    $sAddress .= '<option value="' . $addr['zip_code'] . '"' . $selected . ' >' . $addr['name'] . '</option>';
 
                 }
                 $sAddress .= '</select>';
@@ -1221,7 +1221,7 @@ class GuiInputPerson {
             }
         }else{
             //$sAddrQH='<select  onkeypress="return tabE(this,event)"  tabindex=7 name="addr_quanhuyen_nr" id="addr_quanhuyen_name" style="width:96%;" onblur="showXaphuong()">';
-            $sql="SELECT name, nr FROM care_address_quanhuyen WHERE citytown_id = (select a.nr from care_address_citytown a where a.use_frequency = (select max(b.use_frequency) from care_address_citytown b)) order by use_frequency DESC"; //edit 0310 - cot
+            $sql="SELECT name, nr FROM care_address_quanhuyen WHERE citytown_id in (select a.zip_code from care_address_citytown a where a.use_frequency = (select max(b.use_frequency) from care_address_citytown b)) order by use_frequency DESC"; //edit 0310 - cot
             $temp=$db->Execute($sql);
             if($temp->RecordCount()){
                 while($temp1=$temp->FetchRow())
@@ -1240,7 +1240,7 @@ class GuiInputPerson {
                 $sAddrPX.='<option  value="'.$addr_phuongxa_nr.'">'.$temp1['name'].'</option>';
             }
         }else{
-            $sql="SELECT name, nr FROM care_address_phuongxa WHERE quanhuyen_id = (select a.nr from care_address_quanhuyen a where a.use_frequency = (select max(b.use_frequency) from care_address_quanhuyen b))"; //edit 0310 - cot
+            $sql="SELECT name, nr FROM care_address_phuongxa WHERE quanhuyen_id in (select a.quanhuyen_id from care_address_quanhuyen a where a.use_frequency = (select max(b.use_frequency) from care_address_quanhuyen b))"; //edit 0310 - cot
             $temp=$db->Execute($sql);
             if($temp->RecordCount()){
                 while($temp1=$temp->FetchRow())
