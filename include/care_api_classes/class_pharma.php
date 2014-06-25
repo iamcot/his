@@ -2461,7 +2461,7 @@ class Pharma extends Core {
 		//Test fromday & today
 		if(($f_year!=$t_year)||($f_month!=$t_month)||($f_day>$t_day))
 			return FALSE;
-			
+
 		if($flag_equal)	$sign = "=";
 		else $sign = "";	
 			
@@ -2490,7 +2490,73 @@ class Pharma extends Core {
 	
 	//------------------------------------------ Cac bao cao thuoc khac ---------------------------------------------------------------
 	//---------------------------------------------------------------------------------------------------------------------------------
-	function Khochan_thuoc_nhapxuatton($typedongtay, $cond_typeput, $month, $year){
+    function Khochan_thuoc_nhapxuatton($typedongtay, $cond_typeput, $fromday, $today){
+        global $db;
+        /*
+        if ($month>1){
+            $ton_month = $month-1;
+            $ton_year = $year;
+        }else{
+            $ton_month = 12;
+            $ton_year = $year-1;
+        }  */
+        //Test format fromday
+        if (strpos($fromday,'-')<3) {
+            list($f_day,$f_month,$f_year) = explode("-",$fromday);
+            $fromday =$f_year.'-'.$f_month.'-'.$f_day;
+        }
+        // else
+        //   list($f_year,$f_month,$f_day) = explode("-",$fromday);
+        //Test format today
+        if (strpos($today,'-')<3) {
+            list($t_day,$t_month,$t_year) = explode("-",$today);
+            $today =$t_year.'-'.$t_month.'-'.$t_day;
+        }
+        //else
+        //  list($t_year,$t_month,$t_day) = explode("-",$today);
+
+        //Test fromday & today
+        //   if(($f_year!=$t_year)&&($f_month>$t_month)&&($f_day>=$t_day))
+        //     return FALSE;
+        if(($f_year!=$t_year)||($f_month>$t_month))
+            return FALSE;
+
+
+        switch($typedongtay){
+            case 'tayy': $view_ton ='view_thuoc_ton';
+                $dongtayy =' AND main.pharma_type IN (1,2,3) ';
+                $dongtayy_1 = ' AND pharma_type IN (1,2,3) ';
+                break;
+            case 'dongy': $view_ton ='view_thuoc_ton_dongy';
+                $dongtayy = ' AND main.pharma_type IN (4,8,9,10) ';
+                $dongtayy_1 = ' AND pharma_type IN (4,8,9,10) ';
+                break;
+        }
+        $this->sql="SELECT DISTINCT source.monthreport, source.product_encoder, T.number AS ton, T.price AS giaton, N.number AS nhap, N.price AS gianhap, X.number AS xuat, X.price AS giaxuat, T.exp_date AS hanton, N.exp_date AS hannhap, X.exp_date AS hanxuat, T.lotid AS loton, N.lotid AS lonhap, X.lotid AS loxuat, main.product_name, unit.unit_name_of_medicine, main.nuocsx
+			FROM  ( SELECT *
+					  FROM $view_ton WHERE MONTH(date_time) <= MONTH('$today') AND MONTH(date_time)>= MONTH ('$fromday') AND YEAR(date_time) = YEAR('$today') ".$dongtayy_1."
+					  UNION
+					  SELECT *
+					  FROM view_thuoc_nhap WHERE MONTH(date_time) <= MONTH('$today') AND MONTH(date_time)>= MONTH ('$fromday') AND YEAR(date_time) = YEAR('$today') ".$dongtayy_1."
+					  UNION
+					  SELECT *
+					  FROM view_thuoc_xuat WHERE MONTH(date_time) <= MONTH('$today') AND MONTH(date_time)>= MONTH ('$fromday') AND YEAR(date_time) = YEAR('$today') ".$dongtayy_1."
+					) AS source
+			LEFT JOIN $view_ton AS T ON source.product_encoder = T.product_encoder  AND source.price=T.price AND source.yearreport = YEAR(T.date_time) AND source.monthreport = MONTH(T.date_time)
+			LEFT JOIN view_thuoc_nhap AS N ON source.product_encoder = N.product_encoder  AND source.price=N.price AND source.yearreport = YEAR(N.date_time) AND source.monthreport = MONTH(N.date_time)
+			LEFT JOIN view_thuoc_xuat AS X ON source.product_encoder = X.product_encoder  AND source.price=X.price  AND source.yearreport = YEAR(X.date_time) AND source.monthreport = MONTH(X.date_time)
+			JOIN care_pharma_products_main AS main ON main.product_encoder = source.product_encoder ".$dongtayy." ".$cond_typeput."
+			JOIN care_pharma_unit_of_medicine AS unit ON unit.unit_of_medicine=main.unit_of_medicine
+			ORDER BY main.product_name, source.product_encoder, source.monthreport ";
+        //echo $this->sql;
+        //echo $this->sql;
+        if ($this->result=$db->Execute($this->sql)) {
+            if ($this->result->RecordCount()) {
+                return $this->result;
+            }else{return false;}
+        }else{return false;}
+    }
+	/*function Khochan_thuoc_nhapxuatton($typedongtay, $cond_typeput, $month, $year){
 		global $db;
 		if ($month>1){
 			$ton_month = $month-1;
@@ -2508,7 +2574,7 @@ class Pharma extends Core {
 						$dongtayy = ' AND main.pharma_type IN (4,8,9,10) ';
 						$dongtayy_1 = ' AND pharma_type IN (4,8,9,10) ';
 						break;	
-		}		
+		}
 
         $this->sql = "SELECT DISTINCT source.monthreport,unit.unit_name_of_medicine, source.product_encoder, T.number AS ton, T.price AS giaton, N.number AS nhap, N.price AS gianhap, X.number AS xuat, X.price AS giaxuat, T.exp_date AS hanton, N.exp_date AS hannhap, T.lotid AS loton, N.lotid AS lonhap, X.lotid AS loxuat, main.product_name
 			FROM  ( SELECT *
@@ -2546,12 +2612,12 @@ class Pharma extends Core {
 			ORDER BY source.product_encoder */
 
 	//	echo $this->sql;
-		if ($this->result=$db->Execute($this->sql)) {
+	/*	if ($this->result=$db->Execute($this->sql)) {
 			if ($this->result->RecordCount()) {				
 				return $this->result;
 			}else{return false;}
 		}else{return false;}
-	}	
+	}	*/
 	//Thong ke theo NHAP XUAT TON
 	function Khochan_sudungthuoc_thang($tayy_dongy, $pharma_group_id, $month, $year){
 		global $db;

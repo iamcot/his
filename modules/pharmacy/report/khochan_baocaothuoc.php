@@ -123,7 +123,32 @@ $smarty->assign('LDExpDate',$LDExpDate1);
 $smarty->assign('LDGiaNhap',$LDGiaNhap);
 $smarty->assign('LDGiaXuat',$LDGiaXuat);
 $smarty->assign('LDGiaTonCuoi',$LDGiaTonCuoi);
+//==>    n
+//Test format fromday
+if (isset($fromdate) && $fromdate!='' && strpos($fromdate,'-')<3) {
+    list($f_day,$f_month,$f_year) = explode("-",$fromdate);
+    $fromdate=$f_year.'-'.$f_month.'-'.$f_day;
+}
+else
+    list($f_year,$f_month,$f_day) = explode("-",$fromdate);
+//Test format today
+if (isset($todate) && $todate!='' && strpos($todate,'-')<3) {
+    list($t_day,$t_month,$t_year) = explode("-",$todate);
+    $todate=$t_year.'-'.$t_month.'-'.$t_day;
+}
+else
+    list($t_year,$t_month,$t_day) = explode("-",$todate);
 
+//$smarty->assign('monthreport',$LDMonth.': '.$f_month);
+$smarty->assign('LDMonthReport',$LDMonth.': '.$t_month.'/'.$t_year);
+
+//Calendar
+require_once ($root_path.'js/jscalendar/calendar.php');
+$calendar = new DHTML_Calendar($root_path.'js/jscalendar/',$lang,'calendar-system',true);
+$calendar->load_files();
+$date_format='dd-mm-yyyy';
+$smarty->assign('calendarfrom',$calendar->show_calendar($calendar,$date_format,'fromdate',$fromdate));
+$smarty->assign('calendarto',$calendar->show_calendar($calendar,$date_format,'todate',$todate));
 //Report in
 if(!isset($select_type) || $select_type=='')
 	$select_type=0;
@@ -162,14 +187,15 @@ $smarty->assign('inputby',$temp);
 
 	
 
-$smarty->assign('monthreport',$LDMonth.': <input type="text" id="showmonth" name="showmonth" size="1" value="'.$showmonth.'">/ <input type="text" id="showyear" name="showyear" size="3" value="'.$showyear.'">');
-$smarty->assign('LDMonthReport',$LDMonth.': '.$showmonth.'/'.$showyear);	
+//$smarty->assign('monthreport',$LDMonth.': <input type="text" id="showmonth" name="showmonth" size="1" value="'.$showmonth.'">/ <input type="text" id="showyear" name="showyear" size="3" value="'.$showyear.'">');
+//$smarty->assign('LDMonthReport',$LDMonth.': '.$showmonth.'/'.$showyear);
 	
 	
 $Tong_tondau =0; $Tong_nhap=0; $Tong_xuat=0; $Tong_toncuoi=0;
 
 //echo $type.'@'.@$cond_typeput."@".$showmonth.'@'.$showyear;
-$listReport = $Pharma->Khochan_thuoc_nhapxuatton($type, $cond_typeput, $showmonth, $showyear);
+//$listReport = $Pharma->Khochan_thuoc_nhapxuatton($type, $cond_typeput, $showmonth, $showyear);
+$listReport = $Pharma->Khochan_thuoc_nhapxuatton($type, $cond_typeput, $fromdate,$todate);
 //var_dump($listReport);
 if(is_object($listReport)){
 	//$maxid=$listReport->RecordCount();
@@ -384,7 +410,7 @@ if($anyreport=$Pharma->checkAnyReport_TonKhoChan($monthyear)){
 	$lastton_month=$anyreport['monthreport'];
 	$lastton_year=$anyreport['yearreport'];
 }
- 
+
 //echo $showmonth.' '.$showyear.' '.$lastton_year.' '.$lastton_month.' '.$lastton_id;
 
 if(($showyear>$lastton_year) || ($showmonth>$lastton_month && $showyear==$lastton_year)){
@@ -416,7 +442,8 @@ $smarty->assign('pbPrint','<a href="#"><img '.createLDImgSrc($root_path,'printou
 $smarty->assign('pbCancel','<a href="'.$breakfile.'" ><img '.createLDImgSrc($root_path,'close2.gif','0','middle').' title="'.$LDBackTo.'" align="middle"></a>');
 
 # Assign the page template to mainframe block
-$smarty->assign('sMainBlockIncludeFile','pharmacy/khochan_report.tpl');
+//$smarty->assign('sMainBlockIncludeFile','pharmacy/khochan_report.tpl');
+$smarty->assign('sMainBlockIncludeFile','pharmacy/khochan_report_thuoc.tpl');
 
 # Show main frame
 $smarty->display('common/mainframe.tpl');
