@@ -1192,8 +1192,8 @@ class GuiInputPerson {
         if(!empty($address)) {
             if($address->RecordCount()) {
                 while($addr=$address->FetchRow()){
-                    if($addr_citytown_nr == $addr['zip_code'] ) $selected = ' selected '; else $selected = ' ';
-                    $sAddress .= '<option value="' . $addr['zip_code'] . '"' . $selected . ' >' . $addr['name'] . '</option>';
+                    if($addr_citytown_nr == $addr['nr'] ) $selected = ' selected '; else $selected = ' ';
+                    $sAddress .= '<option value="' . $addr['nr'] . '"' . $selected . ' >' . $addr['name'] . '</option>';
 
                 }
                 $sAddress .= '</select>';
@@ -1509,6 +1509,7 @@ class GuiInputPerson {
         if($error||$error_person_exists) $this->smarty->assign('pbForceSave','<input  type="button" value="'.$LDForceSave.'" onClick="forceSave()">');
 
         if (!$newdata){
+
             ob_start();
             ?>
             <form action=<?php echo $thisfile; ?> method=post>
