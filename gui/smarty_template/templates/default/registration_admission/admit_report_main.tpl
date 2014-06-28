@@ -1,13 +1,14 @@
 <style>
 #menuleft{
 	float:left;
-	width: 300px;
+	width: 30%;
 	display: block;
 	border-right: 1px solid #e9e9e9;
 	min-height: 400px;
 }
 #contentright{
 	float: left;
+    width: 60%;
 	display: block;
 	padding: 10px;
 }

@@ -12,6 +12,7 @@ switch ($id) {
 }
 ?>
 <h2><? echo $khoa;?></h2>
+
 <?
 include_once($root_path.'include/care_api_classes/class_department.php');
 $dept_obj= new Department;
@@ -23,11 +24,13 @@ foreach($allMeDept as $dept){
 	echo '<option value="'.$dept['nr'].'">'.$$dept['LD_var'].'</option>';
 }
 ?>
-    <br>
+    </select>
+    <br style="clear: both">
 <span>Từ ngày: </span>
 <input id="datefrom" type="text" value="">
 <span> Đến ngày: </span>
 <input id="dateto" type="text"  value="">
+<br>
 <input type="button" value="Xem báo cáo" onclick="viewreporkngtru('<? echo $id;?>')">
 <script type="text/javascript">
 
