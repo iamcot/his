@@ -116,8 +116,14 @@ for($i=1;$i<($temp->recordcount());$i++){
     $other_type.='_'.$_POST['other_type_'.$i];
 }
 //var_dump($other_type);
+if($_POST['urgent']==on){
+    $urgent=1;
+}
+else $urgent=0;
+
 switch($mode)
 {
+
     case 'save':
 
         $sql="INSERT INTO care_test_request_".$db_request_table."
@@ -126,7 +132,7 @@ switch($mode)
 										  send_doctor,send_doctor_nr, status, 
 										  history,
 										  create_id, 
-										  create_time)
+										  create_time, urgent)
 										  VALUES 
 										  (
 										   '".$batch_nr."','".$pn."',	'".$other_type."',							   
@@ -134,7 +140,8 @@ switch($mode)
 										   '".htmlspecialchars($send_doctor)."','".$send_doctor_nr."', 'pending', 
 										   'Create: ".date('Y-m-d H:i:s')." = ".$_SESSION['sess_user_name']."\n',
 										   '".$_SESSION['sess_user_name']."',
-										   '".date('YmdHis')."'
+										   '".date('YmdHis')."',
+										   '".$urgent."'
 										   )";
 
         if($ergebnis=$core->Transact($sql))
@@ -266,6 +273,7 @@ switch($mode)
 if(!$mode) /* Get a new batch number */
 {
     $sql="SELECT batch_nr FROM care_test_request_".$db_request_table." ORDER BY batch_nr DESC";
+
     if($ergebnis=$db->SelectLimit($sql,1))
     {
         if($batchrows=$ergebnis->RecordCount())
@@ -466,6 +474,8 @@ ob_start();
                                             ?></td>
                                         <td bgcolor="<?php echo $bgc1 ?>"  class=fva2_ml10><div   class=fva2_ml10><font size=5 color="#0000ff"><b><?php echo $formtitle ?></b></font>
                                                 <br><?php echo $global_address[$target].'<br>'.$LDTel.'&nbsp;'.$global_phone[$target]; ?>
+                                                <br>   <br>   <br>   <br>
+                                                <?php echo "Khẩn cấp: "?> <input type="checkbox" id="urgent" name="urgent">
                                         </td>
                                     </tr>
                                     <tr>

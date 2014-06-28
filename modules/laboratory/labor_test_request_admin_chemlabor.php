@@ -105,8 +105,8 @@ switch ($mode) {
 
 
 if (!$mode) {/* Get the pending test requests */
-	$sql = "SELECT batch_nr,encounter_nr,send_date,dept_nr,room_nr FROM care_test_request_" . $subtarget . "
-			WHERE (status='pending' OR status='') ORDER BY  send_date DESC";
+	$sql = "SELECT batch_nr,encounter_nr,send_date,dept_nr,room_nr, urgent  FROM care_test_request_" . $subtarget . "
+			WHERE (status='pending' OR status='') ORDER BY  DATE(send_date) DESC, urgent DESC";
 
 	if ($requests = $db->Execute ( $sql )) {
 		/* If request is available, load the date format functions */

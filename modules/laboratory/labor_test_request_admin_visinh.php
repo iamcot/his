@@ -202,10 +202,10 @@ switch($mode){
 }// end of switch($mode)
 
 /* Get the pending test requests */
-if(!$mode) {
-	$sql="SELECT batch_nr,encounter_nr,send_date,dept_nr,lao,kstdr,huyettrang FROM care_test_request_".$db_request_table."
+if(!$mode ) {
+	$sql="SELECT batch_nr,encounter_nr,send_date,dept_nr,lao,kstdr,huyettrang, urgent FROM care_test_request_".$db_request_table."
 				WHERE (lao='1' OR kstdr='1' OR huyettrang='1')
-				AND (status='pending' OR status='received') ORDER BY  send_date DESC";
+				AND (status='pending' OR status='received') ORDER BY DATE(send_date) DESC, urgent DESC ";
 	if($requests=$db->Execute($sql)){
 		$batchrows=$requests->RecordCount();
 	 	if($batchrows && (!isset($batch_nr) || !$batch_nr)){
@@ -253,6 +253,7 @@ if($batchrows && $pn){
 					$edit_form=1;
 					$lao=$stored_request['lao'];
 					$kstdr=$stored_request['kstdr'];
+                    $urgent=$stored_request['urgent'];
 					$huyettrang=$stored_request['huyettrang'];
 					$sql1="SELECT * FROM care_test_request_radio_sub WHERE batch_nr=".$batch_nr;
 					$item_test=$db->Execute($sql1);
@@ -274,6 +275,7 @@ if($lao){
 if($kstdr){
 //	$YC = 'KSTĐR';
     $YC = 'VTH02';
+
 }
 if($huyettrang){
 	$YC = 'VTH03';
@@ -476,7 +478,8 @@ require('includes/inc_test_request_lister_fx.php');
 		}
 		?></td>
       <td bgcolor="<?php echo $bgc1 ?>"  class=fva2_ml10><div   class=fva2_ml10><font size=5 color="#0000ff"><b><?php echo $formtitle ?></b></font>
-		 <!--<br><?php echo $global_address[$subtarget].'<br>'.$LDTel.'&nbsp;'.$global_phone[$subtarget]; ?>-->
+		      <br><br><?php echo $global_address[$subtarget].'<br>'.$LDTel.'&nbsp;'.$global_phone[$subtarget]; ?>
+              <br> <?php echo "Khẩn cấp: "?> <input type="checkbox" <?php if($urgent==1){?> checked="checked"<?php } ?>>
 		 </td>
 		 </tr>
 	 <tr>

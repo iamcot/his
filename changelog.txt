@@ -3,8 +3,22 @@ Hồng Phương:
 * Cho bệnh nhân ngoại trú xuất viện sau khi phát toa.
 
 2014-06-12
-Hiền:
-- ../module/pdfmaker/.. Chỉnh sửa thông tin các báo cáo trong "các giấy tờ cần in ấn"
+Hiền:     Chỉnh sửa thông tin các báo cáo trong "các giấy tờ cần in ấn"
+- ../module/pdfmaker
+    + /benhan/benhmatnoi.php
+    + /benhan/benhannhi.php
+    + /benhan/Benhannoikhoa.php
+    + /benhanngoaitru/BenhAnNgoaiTru.php
+    + /chuyenvien/Benhanhoichan.php
+    + /chuyenvien/bienbankiemdiemtuvong.php
+    + /giaytokhac/Giaybaotu.php
+    + /giaytokhac/Tuvongtruockhivaovien.php
+    + /khambenh/PhieuKhamBenhVaoVien.php
+- .../include/care_api_classes
+    + /class_encounter.php
+    + /class_person.php
+    + /class_product.php
+
 
 2014-06-10
 - update database thành phố quận huyện và phường xã

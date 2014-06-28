@@ -863,7 +863,7 @@ if($edit){
    <td ><font size=1 face="arial" color= "purple"></td>
    <?php
 			echo '
-			          <td '.$tdbgcolor.'>';
+		          <td '.$tdbgcolor.'>';
 			if($edit) echo '<a href="javascript:setM(\'urgent\')">';
 			if($edit_form||$read_form)
 			{
@@ -881,7 +881,7 @@ if($edit){
 			{
 			   echo '<img src="b.gif"';
 			}
-			
+
 			echo ' border=0 width=18 height=6 id="urgent">';
 			if($edit) echo '</a><input type="hidden" name="urgent" value="'.$stored_request['urgent'].'">';
 			'</td>';

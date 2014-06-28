@@ -180,7 +180,7 @@ switch($mode){
 if(!$mode||$mode=='') {
 //	$sql="SELECT batch_nr,encounter_nr,send_date,dept_nr FROM care_test_request_".$db_request_table."
 //				WHERE status='pending' OR status='received' ORDER BY  send_date DESC";
-    $sql="SELECT TR.batch_nr,TR.encounter_nr,TR.send_date,BB.bill_item_status,BB.bill_item_code,TR.dept_nr
+    $sql="SELECT TR.batch_nr,TR.encounter_nr,TR.send_date,BB.bill_item_status,BB.bill_item_code,TR.dept_nr, TR.urgent
           FROM care_test_request_".$db_request_table." AS TR
           JOIN care_billing_bill_item AS BB ON TR.encounter_nr = BB.bill_item_encounter_nr
           WHERE (STATUS='pending' OR STATUS='received')
@@ -188,7 +188,7 @@ if(!$mode||$mode=='') {
           AND HOUR(BB.bill_item_date)=HOUR(TR.send_date)
           AND MINUTE(BB.bill_item_date)=MINUTE(TR.send_date)
           GROUP BY TR.batch_nr
-          ORDER BY  send_date DESC
+          ORDER BY  DATE(send_date) DESC, urgent DESC
           ";
 	if($requests=$db->Execute($sql)){
 		$batchrows=$requests->RecordCount();
@@ -197,6 +197,7 @@ if(!$mode||$mode=='') {
 			/* Check for the patietn number = $pn. If available get the patients data */
 		 	$pn=$test_request['encounter_nr'];
 			$batch_nr=$test_request['batch_nr'];
+         //   $urgent= $test_request['urgent'];
 		}
 	}else{
 		echo "<p>$sql<p>$LDDbNoRead";
@@ -231,6 +232,7 @@ if($batchrows && $pn){
 			if($ergebnis=$db->Execute($sql)){
 				if($editable_rows=$ergebnis->RecordCount()){
 					$stored_request=$ergebnis->FetchRow();
+                    $urgent= $stored_request['urgent'];
 					$edit_form=1;
 				}
 			}else{
@@ -422,6 +424,8 @@ require('includes/inc_test_request_lister_fx.php');
 		?></td>
       <td bgcolor="<?php echo $bgc1 ?>"  class=fva2_ml10><div   class=fva2_ml10><font size=5 color="#0000ff"><b><?php echo $formtitle ?></b></font>
 		 <br>
+             <br><?php echo $global_address[$subtarget].'<br>'.$LDTel.'&nbsp;'.$global_phone[$subtarget]; ?>
+              <br> <?php echo "Khẩn cấp: "?> <input type="checkbox" <?php if($urgent==1){?> checked="checked"<?php } ?>>
 		 </td>
 		 </tr>
 	 <tr>

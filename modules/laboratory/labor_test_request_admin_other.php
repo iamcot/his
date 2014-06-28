@@ -183,8 +183,8 @@ switch($mode){
 
 /* Get the pending test requests */
 if(!$mode||$mode=='') {
-	$sql="SELECT batch_nr,encounter_nr,send_date,dept_nr FROM care_test_request_".$db_request_table."
-				WHERE status='pending' OR status='received' ORDER BY  send_date DESC";
+	$sql="SELECT batch_nr,encounter_nr,send_date,dept_nr, urgent FROM care_test_request_".$db_request_table."
+				WHERE status='pending' OR status='received' ORDER BY  DATE(send_date) DESC, urgent DESC";
 
 
 
@@ -245,6 +245,7 @@ if($batchrows && $pn){
 			if($ergebnis=$db->Execute($sql)){
 				if($editable_rows=$ergebnis->RecordCount()){
 					$stored_request=$ergebnis->FetchRow();
+                    $urgent=$stored_request['urgent'];
 					$edit_form=1;
 				}
 			}else{
@@ -408,6 +409,8 @@ require('includes/inc_test_request_lister_fx.php');
 		?></td>
       <td bgcolor="<?php echo $bgc1 ?>"  class=fva2_ml10><div   class=fva2_ml10><font size=5 color="#0000ff"><b><?php echo $formtitle ?></b></font>
 		 <br>
+              <br><br><?php echo $global_address[$subtarget].'<br>'.$LDTel.'&nbsp;'.$global_phone[$subtarget]; ?>
+              <br> <?php echo "Khẩn cấp: "?> <input type="checkbox" <?php if($urgent==1){?> checked="checked"<?php } ?>>
 		 </td>
 		 </tr>
 	 <tr>

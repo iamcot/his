@@ -120,7 +120,10 @@ $core = & new Core;
 		}
 		//$request_all, $item_code
 		//Ham tach cac code_item trong list --------------
-		
+		if($_POST['urgent']==on){
+            $urgent=1;
+        }            else $urgent=0;
+
 		$data = substr($code_item,1,strlen($code_item));
 		$data_name = substr($request_all,1,strlen($request_all));
 		$data = $data.'#';
@@ -160,7 +163,7 @@ $core = & new Core;
 										  send_doctor,send_doctor_nr, status, 
 										  history,
 										  create_id, 
-										  create_time)
+										  create_time, urgent)
 										  VALUES 
 										  (
 										   '".$batch_nr."','".$pn."','".$dept_nr."',
@@ -169,7 +172,7 @@ $core = & new Core;
 										   '".htmlspecialchars($send_doctor)."','".$send_doctor_nr."', 'pending', 
 										   'Create: ".date('Y-m-d H:i:s')." = ".$_SESSION['sess_user_name']."\n',
 										   '".$_SESSION['sess_user_name']."',
-										   '".date('YmdHis')."'
+										   '".date('YmdHis')."', '".$urgent."'
 										   )";
                                 //  echo $sql;
 							      if($ergebnis=$core->Transact($sql))
@@ -241,7 +244,8 @@ $core = & new Core;
 										  send_doctor='".htmlspecialchars($send_doctor)."',send_doctor_nr='".$send_doctor_nr."', status='".$status."', 
 										  history=".$core->ConcatHistory("Update: ".date('Y-m-d H:i:s')." = ".$_SESSION['sess_user_name']."\n").",
 										  modify_id='".$_SESSION['sess_user_name']."',
-										  modify_time='".date('YmdHis')."'
+										  modify_time='".date('YmdHis')."' ,
+										  urgent='".$urgent."'
 										   WHERE batch_nr = '".$batch_nr."'";
 										  							
 							      if($ergebnis=$core->Transact($sql))
@@ -503,8 +507,9 @@ echo '
         }
 		?></td>
       <td bgcolor="<?php echo $bgc1 ?>"  class=fva2_ml10><div   class=fva2_ml10><font size=5 color="#0000ff"><b><?php echo $formtitle ?></b></font>
-		 <br><?php echo $global_address[$target].'<br>'.$LDTel.'&nbsp;'.$global_phone[$target]; ?>
-		 </td>
+		 <br> <?php echo $global_address[$target].'<br>'.$LDTel.'&nbsp;'.$global_phone[$target];  ?>
+              <br>   <br>   <br>   <br>
+              <?php echo "Khẩn cấp: "?> <input type="checkbox" id="urgent" name="urgent">
 		 </tr>
 	 <tr>
       <td bgcolor="<?php echo $bgc1 ?>" align="right" valign="bottom">	 
