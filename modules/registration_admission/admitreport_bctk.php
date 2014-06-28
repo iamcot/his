@@ -18,6 +18,7 @@ switch ($id) {
 }
 ?>
 <h2><? echo $khoa;?></h2>
+<br>
 <?
 include_once($root_path.'include/care_api_classes/class_department.php');
 $dept_obj= new Department;
@@ -27,6 +28,7 @@ $dept_obj= new Department;
 <input id="datefrom" type="text" value="">
 <span> Đến ngày: </span>
 <input id="dateto" type="text"  value="">
+<br>
 <input type="button" value="Xem báo cáo" onclick="viewreportk('<? echo $id;?>')">
 <script type="text/javascript">
 
