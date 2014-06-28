@@ -1,3 +1,6 @@
+2014-06-28:
+CoT: sửa file aufname_daten_such để khi nếu chỉ tìm kiếm thấy 1 kết quả thì sẽ dẫn thẳng tới trang bệnh nhân.
+
 2014-06-28
 Hiền: Check các xét nghiệm khẩn và sắp xếp các xét nghiệm ưu tiên theo thuộc tính khẩn
  - ../module/laboratory

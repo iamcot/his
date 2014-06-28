@@ -187,8 +187,9 @@ $s=$s_obj->BASIC_String();
        		{
 				if ($linecount=$ergebnis->RecordCount()) 
 				{
-					if(($linecount==1) &&$numeric&&($mode=='search'))
-					{ 
+					//if(($linecount==1) &&$numeric&&($mode=='search'))
+					if(($linecount==1))
+					{
 						$zeile=$ergebnis->FetchRow();
 						header('Location:aufnahme_daten_zeigen.php'.URL_REDIRECT_APPEND.'&from=such&encounter_nr='.$zeile['encounter_nr'].'&target=search');
 						exit;
