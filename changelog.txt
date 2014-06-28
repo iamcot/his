@@ -1,3 +1,17 @@
+2014-06-28
+Hiền: Check các xét nghiệm khẩn và sắp xếp các xét nghiệm ưu tiên theo thuộc tính khẩn
+ - ../module/laboratory
+        + /labor_test_request_admin_blood.php
+        + /labor_test_request_admin_chemlabor.php
+        + /labor_test_request_admin_duonghuyet.php
+        + /labor_test_request_admin_other.php
+        + /labor_test_request_admin_visinh.php
+ - ../nursing
+        + /nursing-station-patientdaten-doconsil-duonghuyet.php
+        + /nursing-station-patientdaten-doconsil_other.php
+        + /nursing-station-patientdaten-doconsil_visinh.php
+
+
 2014-06-18
 Hồng Phương:
 * Cho bệnh nhân ngoại trú xuất viện sau khi phát toa.
