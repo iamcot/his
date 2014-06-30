@@ -654,6 +654,8 @@ if($billid == "currentbill"){
 
 
 //<input type="hidden" name="outstanding" value="'. $outstanding .'">
+//thêm  <input type="hidden" id="discount1" name="discount1" value="'. $discount .'">
+//<input type="hidden" id="outstd1" name="outstd1" value="'. ($LDTotalBillAmountData - $discount) .'">
 $smarty->assign('sHiddenInputs','<input type="hidden" name="patientno" value="'. $patientno .'">
 								<input type="hidden" name="billno" value="'. $billno .'">
 								<input type="hidden" name="count" value="'. $count .'">

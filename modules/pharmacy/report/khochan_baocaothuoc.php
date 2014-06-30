@@ -132,7 +132,7 @@ $smarty->assign('LDExpDate',$LDExpDate1);
 $smarty->assign('LDGiaNhap',$LDGiaNhap);
 $smarty->assign('LDGiaXuat',$LDGiaXuat);
 $smarty->assign('LDGiaTonCuoi',$LDGiaTonCuoi);
-//==>    n
+//==>    nang
 //Test format fromday
 if (isset($fromdate) && $fromdate!='' && strpos($fromdate,'-')<3) {
     list($f_day,$f_month,$f_year) = explode("-",$fromdate);

@@ -30,7 +30,7 @@ $Pharma = new Pharma;
 
 	
 //$listItem = $Product->ShowKhoChanThuoc_Ton($dongtayy_cond, '', '', $cond_typeput, $todate);
-//==>    n
+//==>    nang
 //Test format fromday
 if (isset($fromdate) && $fromdate!='' && strpos($fromdate,'-')<3) {
     list($f_day,$f_month,$f_year) = explode("-",$fromdate);
