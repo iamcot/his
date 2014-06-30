@@ -605,8 +605,8 @@ if($billid=="currentbill") {
 	if($target=='nursing')
 		$smarty->assign('discount', number_format($discount));
 	else
-		$smarty->assign('discount', '<input type="text" id="discount" name="discount" value="'. $discount .'" size="10" onchange="ChangeOutStd()">');
-} 
+		$smarty->assign('discount', '<input type="text" id="discount" name="discount" value="'.number_format($discount) .'" size="10" onchange="ChangeOutStd()">');
+}
 else { 
 	$LDTotalBillAmountData = $oldbilltotal;
 }
@@ -631,9 +631,9 @@ $smarty->assign('LDOutstandingAmount',$LDOutstanding);
 if($billid == "currentbill"){
 	$smarty->assign('LDCurrentBill', TRUE);
 	if($target=='nursing')
-		$smarty->assign('outstd','<b>'.number_format($LDTotalBillAmountData - $discount).'</b>'); 
+		$smarty->assign('outstd','<b>'.number_format($LDTotalBillAmountData - $discount).'</b>');
 	else
-		$smarty->assign('outstd', '<input type="text" id="outstd" name="outstd" value="'.($LDTotalBillAmountData - $discount).'" size="10">');
+		$smarty->assign('outstd', '<input type="text" id="outstd" name="outstd" value="'.number_format($LDTotalBillAmountData - $discount).'" size="10">');
 } else {
 	$smarty->assign('LDOldBill', TRUE);
 	$smarty->assign('outstd',number_format($oldbilloutstanding));
@@ -641,10 +641,10 @@ if($billid == "currentbill"){
 	$sTempMoney = convertMoney($oldbilloutstanding);
 	$smarty->assign('money_outstd_Reader',$sTempMoney);
 	
-	$LDAmountDueData = $LDTotalBillAmountData-$oldbilloutstanding-$discount;
+	$LDAmountDueData = $LDTotalBillAmountData-$oldbilloutstanding-$discount; // còn lại
 	$smarty->assign('LDAmountDue',$LDAmountDue);
 	$smarty->assign('LDAmountDueData',number_format($LDAmountDueData));
-	$outstanding = $oldbilloutstanding;
+	$outstanding = $oldbilloutstanding;     //thanh toán
 	
 	$sTempMoney = convertMoney($LDAmountDueData);
 	$smarty->assign('money_due_Reader',$sTempMoney);
@@ -658,6 +658,8 @@ $smarty->assign('sHiddenInputs','<input type="hidden" name="patientno" value="'.
 								<input type="hidden" name="billno" value="'. $billno .'">
 								<input type="hidden" name="count" value="'. $count .'">
 								<input type="hidden" id="total" name="total" value="'. $total .'">
+								<input type="hidden" id="discount1" name="discount1" value="'. $discount .'">
+								<input type="hidden" id="outstd1" name="outstd1" value="'. ($LDTotalBillAmountData - $discount) .'">
 								<input type="hidden" id="outstanding" name="outstanding" value="'. $outstanding .'">
 								<input type="hidden" name="target" value="'. $target .'">
 								<input type="hidden" name="lang" value="'. $lang .'">

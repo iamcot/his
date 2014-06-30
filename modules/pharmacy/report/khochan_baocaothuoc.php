@@ -57,10 +57,19 @@ function chkform(d) {
 	document.reportform.action="<?php echo $thisfile; ?>";
 	document.reportform.submit();
 }
+/*
+urlholder="<?php echo $root_path;?>modules/pdfmaker/duoc/thongke15ngaydung.php<?php echo URL_APPEND; ?>&type=medicine&dept_nr="+dept+"&ward_nr="+ward+"&fromdate="+fromdate+"&todate="+todate;
+testprintpdf=window.open(urlholder,"ThongKe15NgayDung","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
+
 function printOut(select_type,month,year,lastmonth,lastyear)
 {
 	urlholder="<?php echo $root_path;?>modules/pdfmaker/duoc/khochan_thuoc_nhapxuatton.php<?php echo URL_APPEND; ?>&typeput="+select_type+"&typedongtay=<?php echo $type;?>"+"&month="+month+"&year="+year+"&lastmonth="+lastmonth+"&lastyear="+lastyear;
 	testprintpdf=window.open(urlholder,"NhapXuatTon","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
+}  */
+function printOut(select_type,fromdate,todate)
+{
+    urlholder="<?php echo $root_path;?>modules/pdfmaker/duoc/khochan_thuoc_nhapxuatton.php<?php echo URL_APPEND; ?>&typeput="+select_type+"&typedongtay=<?php echo $type;?>"+"&fromdate="+fromdate+"&todate="+todate;
+    testprintpdf=window.open(urlholder,"NhapXuatTon","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
 }
 function Save(alertsave){
 	if(alertsave=='ok'){		
@@ -438,7 +447,9 @@ $smarty->assign('sHiddenInputs',$sTempHidden);
 
 $smarty->assign('pbSubmit','<input type="image" '.createLDImgSrc($root_path,'showreport.gif','0','middle').'>');
 $smarty->assign('pbSave','<a href="#"><img '.createLDImgSrc($root_path,'savedisc.gif','0','middle').' align="middle" onclick="Save(\''.$alertsave.'\')" > </a>');
-$smarty->assign('pbPrint','<a href="#"><img '.createLDImgSrc($root_path,'printout.gif','0','middle').' align="middle" onclick="printOut(\''.$select_type.'\',\''.$showmonth.'\',\''.$showyear.'\',\''.$lastmonth.'\',\''.$lastyear.'\')"></a>');
+//$smarty->assign('pbPrint','<a href="#"><img '.createLDImgSrc($root_path,'printout.gif','0','middle').' align="middle" onclick="printOut(\''.$select_type.'\',\''.$showmonth.'\',\''.$showyear.'\',\''.$lastmonth.'\',\''.$lastyear.'\')"></a>');
+$smarty->assign('pbPrint','<a href="javascript:window.printOut(\''.$select_type.'\',\''.$fromdate.'\',\''.$todate.'\');"><img '.createLDImgSrc($root_path,'printout.gif','0','middle').' align="middle"></a>');
+
 $smarty->assign('pbCancel','<a href="'.$breakfile.'" ><img '.createLDImgSrc($root_path,'close2.gif','0','middle').' title="'.$LDBackTo.'" align="middle"></a>');
 
 # Assign the page template to mainframe block

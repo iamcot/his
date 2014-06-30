@@ -30,7 +30,21 @@ $Pharma = new Pharma;
 
 	
 //$listItem = $Product->ShowKhoChanThuoc_Ton($dongtayy_cond, '', '', $cond_typeput, $todate);
-
+//==>    n
+//Test format fromday
+if (isset($fromdate) && $fromdate!='' && strpos($fromdate,'-')<3) {
+    list($f_day,$f_month,$f_year) = explode("-",$fromdate);
+    $fromdate=$f_year.'-'.$f_month.'-'.$f_day;
+}
+else
+    list($f_year,$f_month,$f_day) = explode("-",$fromdate);
+//Test format today
+if (isset($todate) && $todate!='' && strpos($todate,'-')<3) {
+    list($t_day,$t_month,$t_year) = explode("-",$todate);
+    $todate=$t_year.'-'.$t_month.'-'.$t_day;
+}
+else
+    list($t_year,$t_month,$t_day) = explode("-",$todate);
 
 require_once($root_path.'classes/tcpdf/config/lang/eng.php');
 require_once($root_path.'classes/tcpdf/tcpdf.php');
@@ -74,13 +88,14 @@ $header='<table width="100%">
 			<font size="15"><b>BÁO CÁO XUẤT NHẬP TỒN KHO </b></font><br></td><td></td>
 		</tr>
 		<tr><td></td><td align="center">	
-				<font size="11"><b>Tháng: '.$month.'/'.$year.'</b></font><br>
+				<font size="11"><b>Tháng: '.$t_month.'/'.$t_year.'</b></font><br>
 				<font size="13"><b>THUỐC'.$titlereport.'</b></font></td><td></td>
 		</tr>
 		</table>';
 $pdf->writeHTML($header);
 $pdf->Ln();
-
+ //$t_month.'/'.$t_year
+//.$month.'/'.$year.
 
 //Load tieu de bang
 $html='	<table cellpadding="2" border="1">
@@ -116,7 +131,10 @@ $congnhap=0;
 $congxuat=0;
 $congtoncuoi=0;
 
-$listReport = $Pharma->Khochan_thuoc_nhapxuatton($dongtayy, $cond_typeput, $month, $year);
+//$listReport = $Pharma->Khochan_thuoc_nhapxuatton($dongtayy, $cond_typeput, $month, $year);
+//include_once($root_path.'include/care_api_classes/class_pharma.php');
+//if(!isset($Pharma)) $Pharma = new Pharma;
+$listReport = $Pharma->Khochan_thuoc_nhapxuatton($dongtayy, $cond_typeput,  $fromdate, $todate);
 /*switch($flag){
 	case 'tonkho': 
 			$listReport = $Pharma->Thuoc_TonKhoChan($month, $year, $cond_typeput.$dongtayy);

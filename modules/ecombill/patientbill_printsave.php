@@ -88,12 +88,12 @@ if(is_object($cheresult))
 }
 
 
-$billquery="INSERT INTO care_billing_bill (bill_bill_no, bill_encounter_nr, bill_date_time, bill_amount, bill_discount, bill_outstanding, create_id) VALUES ('$billno','$patientno','$presdate','$total','$discount','$outstd','".$_SESSION['sess_login_userid']."')";
+$billquery="INSERT INTO care_billing_bill (bill_bill_no, bill_encounter_nr, bill_date_time, bill_amount, bill_discount, bill_outstanding, create_id) VALUES ('$billno','$patientno','$presdate','$total','$discount1','$outstd1','".$_SESSION['sess_login_userid']."')";
 
 $core->Transact($billquery);
 $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $billquery, date('Y-m-d H:i:s'));
 
-$eComBill->createPaymentItem($patientno,$receipt_no,$presdatetime,$outstd,'0','0','0','0',$outstd,$billno);
+$eComBill->createPaymentItem($patientno,$receipt_no,$presdatetime,$outstd1,'0','0','0','0',$outstd1,$billno);
 $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $eComBill->getLastQuery(), date('Y-m-d H:i:s'));
 
 $patmenu="patient_bill_links.php".URL_REDIRECT_APPEND."&patientno=".$patientno."&full_en=".$full_en;
