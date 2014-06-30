@@ -1,10 +1,10 @@
-<style>
-    a{
-        line-height: 16px;
-        padding: 2px;
-        display: block;
-    }
-</style>
+<!--<style>-->
+<!--    a{-->
+<!--        line-height: 16px;-->
+<!--        padding: 2px;-->
+<!--        display: block;-->
+<!--    }-->
+<!--</style>-->
 <script language="javascript" src="../../js/wz_tooltip/wz_tooltip.js"></script>
 
 <?php
@@ -69,12 +69,12 @@ while($pres_show =$list_pres->FetchRow())
   	   	$result=&$enc_obj->encounter;							//Lay info benh nhan
   	   	$info = $result['name_last']. " " . $result['name_first'] . "<br>" . $timepres . "<br> PID: " . $result['pid']. "<br>" 		.$typepres. "<br>" .$LDPayBill.": ".$payment;
 		
-        echo " <a ".(($i%2==1)?$odd:'')." href=\"".$thisfile.URL_APPEND."&user_origin=".$user_origin."&radiovalue=".$radiovalue."&pn=".$pres_show['encounter_nr']."&pres_id=".$pres_show['prescription_id']."&typeInOut=".$typeInOut."&tracker=".$tracker."\" onmouseover=\"Tip('". $info ."',BGCOLOR,'". $bgcolor ."')\" >".$pres_show['prescription_id']."</a>";
+        echo " <a ".(($i%2==1)?$odd:'')." href=\"".$thisfile.URL_APPEND."&user_origin=".$user_origin."&radiovalue=".$radiovalue."&pn=".$pres_show['encounter_nr']."&pres_id=".$pres_show['prescription_id']."&typeInOut=".$typeInOut."&tracker=".$tracker."\" onmouseover=\"Tip('". $info ."',BGCOLOR,'". $bgcolor ."')\" >".$pres_show['prescription_id']."</a><br>";
    }
    else
    {
    	
-        echo "<img ".createComIcon($root_path,'redpfeil.gif','0','',TRUE)."> <FONT  onmouseover=\"Tip('". $info ."',BGCOLOR,'". $bgcolor ."')\"  size=3 color=\"red\">".$pres_show['prescription_id']."</font>";
+        echo "<img ".createComIcon($root_path,'redpfeil.gif','0','',TRUE)."> <FONT  onmouseover=\"Tip('". $info ."',BGCOLOR,'". $bgcolor ."')\"  size=2 color=\"red\">".$pres_show['prescription_id']."</font><br>";
         $track_item=$tracker;
    }
    /* Check for the barcode png image, if nonexistent create it in the cache */
