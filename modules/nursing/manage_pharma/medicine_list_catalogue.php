@@ -24,14 +24,20 @@ if ($ward_nr != '') {
         $wardname = $LDAllWard;
     }
 }
-
+//require_once($root_path . 'include/care_api_classes/class_listgroup.php');
+//$ListGroup =new ListGroup;
+//if ($pharma_group_id != '') {
+//    if ($typeinfo = $ListGroup->listPharmaGroupMedicine($pharma_group_id)) {
+//        $typeid = $typeinfo['pharma_group_id'];
+//    }
+//}
 
 $thisfile = basename(__FILE__);
 $breakfile = '../nursing-manage-medicine.php' . URL_APPEND . '&dept_nr=' . $dept_nr . '&ward_nr=' . $ward_nr;
 $fileissue = '../nursing-issuepaper-depot.php' . URL_APPEND . '&dept_nr=' . $dept_nr . '&ward_nr=' . $ward_nr;
 $filereturn = 'medicine_return_medicine.php' . URL_APPEND . '&dept_nr=' . $dept_nr . '&ward_nr=' . $ward_nr;
 $urlsearch = $thisfile . URL_APPEND . '&dept_nr=' . $dept_nr . '&ward_nr=' . $ward_nr;
-$urlsearchMedicine= $thisfile . URL_APPEND . '&dept_nr=' . $dept_nr . '&ward_nr=' . $ward_nr;
+//$urlsearchMedicine= $thisfile . URL_APPEND . '&dept_nr=' . $dept_nr . '&ward_nr=' . $ward_nr . '&pharma_group_id=' . $pharma_group_id;
 
 # Start Smarty templating here
 /**
@@ -70,9 +76,27 @@ ob_start();
         document.listmedform.submit();
     }
     function searchMedicine() {
-        var search = document.getElementById('searchMedicine').value;
-        document.listmedform.action = "<?php echo $urlsearchMedicine;?>&search=" + search;
+        var searchMe = document.getElementById('searchMedicine').value;
+        document.listmedform.action = "<?php echo $urlsearch;?>&searchMedicine=" + searchMe;
+        if(document.getElementsByName("type"))
+        {
+            if(document.)
+        }
         document.listmedform.submit();
+    }
+    function checkM(radio)
+    {
+//        var radioGroup = document.listmedform.typeMedicine;
+//        var radioGroup=document.getElementsByName("typeMedicine");
+//        var len= radio.length;
+//        for(i=0;i<len;i++)
+//        {
+//            if(radio[i].checked)
+//            {
+                alert(radio);
+//            }
+//        }
+//        document.listmedform.submit();
     }
     function sortUp() {
         document.getElementById('mode').value = 'sort_up';
@@ -158,16 +182,11 @@ ob_start();
                 <table>
                     <tr>
                         <td> Thuốc:     <br>
-                            <input type="radio" name="typeMedicine"
-                                <?php if (isset($typeMedicine) && $typeMedicine=="TatCa") echo "checked";?>
-                                   value="tatca">Tất cả
+                            <input type="radio" name="typeMedicine" onclick="checkM(this)"   value="tatca">Tất cả
                             <!--                            --><?php //echo $LDTatCaMedicine ;  ?><!--    -->
 
-                            <input type="radio" name="typeMedicine"
-                                <?php if (isset($typeMedicine) && $typeMedicine=="TamThan") echo "checked";?>
-                                   value="tamthan">Hướng Tâm Thần
+                            <input type="radio" name="typeMedicine" onclick="checkM(this)"      value="tamthan">Hướng Tâm Thần
                             <!--                            --><?php //echo $LDTamThanMedicine ;  ?>   <br>
-<!--                            <input type="submit" name="submit" value="Chọn thuốc">-->
                         </td>
                         <td><a href="javascript:searchMedicine()"><input
                                     type="image" <?php echo createComIcon($root_path, 'Search.png', '0', '', TRUE) ?>

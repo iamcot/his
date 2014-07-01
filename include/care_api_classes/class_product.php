@@ -1529,6 +1529,7 @@ class Product extends Core
                     AND khochan.product_encoder=tatcakhoa.product_encoder 
                     AND donvi.unit_of_medicine=khochan.unit_of_medicine
                       	" . $condition . "
+
                       	GROUP BY khochan.product_encoder, taikhoa.ward_nr,taikhoa.typeput
                 ORDER BY ward_nr, khochan.product_name, taikhoa.init_number " . $updown . "
 				";

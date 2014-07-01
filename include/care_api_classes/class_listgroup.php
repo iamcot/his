@@ -11,9 +11,14 @@ class ListGroup extends Core {
 	var $tb_gp_phar='care_pharma_group';
 	var $tb_gp_phar_sub='care_pharma_group_sub';
 	var $tb_gp_med='care_med_products_main_sub';	
-	var $tb_gp_chemical='care_chemical_group';	
+	var $tb_gp_chemical='care_chemical_group';
 
+    var $pharma_group_id;
 
+    function ListGroup($pharma_group_id=0) {
+        $this->pharma_group_id=$pharma_group_id;
+//        $this->Core();
+    }
 	
 	#Danh sach cac ham cua don vi -----------------------------------------------------------------------
 	
@@ -65,6 +70,15 @@ class ListGroup extends Core {
 			}else{return false;}
 		}else{return false;}		
 	}
+    function listPharmaGroupMedicine($pharma_group_id=0){
+        global $db;
+        $this->sql="SELECT * FROM $this->tb_gp_phar WHERE pharma_group_id='$pharma_group_id' ORDER BY pharma_group_id";
+        if ($this->result=$db->Execute($this->sql)) {
+            if ($this->result->RecordCount()) {
+                return $this->result->FetchRow();
+            }else{return false;}
+        }else{return false;}
+    }
 	function listPharmaGroupSub(){
 		global $db;
 		$this->sql="SELECT gps.*, gp.pharma_group_name  
@@ -76,7 +90,8 @@ class ListGroup extends Core {
 		        return $this->result;
 			}else{return false;}
 		}else{return false;}		
-	}	
+	}
+
 	function listMedGroup(){
 		global $db;
 		$this->sql="SELECT gp.*, type.type_name_of_med FROM $this->tb_gp_med AS gp, care_med_type_of_medicine AS type 
