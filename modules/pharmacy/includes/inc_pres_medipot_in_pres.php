@@ -36,14 +36,14 @@
 						<!-- Ten thuoc / lieu luong-->
 						<b>'.$medicine_pres['product_name'].'</b>
 					</td>
-					<td align="right" width="12%"><font color="#E41B17">'.number_format($tonkhochan).'</font></td>';
+					<td align="right" width="12%"><input type="text" id="tonkho'.$i.'" value="'.intval($tonkhochan).'" size="8"  style="text-align:right;border-color:white;border-style:solid;color:red;" readonly></td>';
 					
 			echo	'<!-- So luong, don gia, thanh tien -->
 					<td align="center" width="10%"><b>
 						'.$medicine_pres['sum_number'].'</b>
 					</td>
 					<td align="center" width="10%">
-						<input type="text" size=3 name="receive['.$i.']" value="'.$medicine_pres['sum_number'].'" onFocus="startCalc('.$i.');" onBlur="stopCalc();" '.$readonly.'>	
+						<input type="text" id="receive['.$i.']" size=3 name="receive['.$i.']" value="'.$medicine_pres['sum_number'].'" onFocus="startCalc('.$i.');" onBlur="stopCalc();" '.$readonly.'>
 					</td>
 					<td align="center" width="6%"><b>
 						'.$medicine_pres['note'].'</b>
