@@ -149,7 +149,13 @@ else
     list($t_year,$t_month,$t_day) = explode("-",$todate);
 
 //$smarty->assign('monthreport',$LDMonth.': '.$f_month);
-$smarty->assign('LDMonthReport',$LDMonth.': '.$t_month.'/'.$t_year);
+if($f_month == $t_month){
+    $smarty->assign('LDMonthReport',$LDMonth.': '.$t_month.'/'.$t_year);
+}
+else{
+    $smarty->assign('LDMonthReport',$LDMonth.': '.$f_month.'->'.$t_month.'/'.$t_year);
+}
+//$smarty->assign('LDMonthReport',$LDMonth.': '.$t_month.'/'.$t_year);
 
 //Calendar
 require_once ($root_path.'js/jscalendar/calendar.php');

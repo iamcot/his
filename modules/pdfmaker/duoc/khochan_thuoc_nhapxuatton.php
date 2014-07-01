@@ -92,8 +92,35 @@ $header='<table width="100%">
 				<font size="13"><b>THUỐC'.$titlereport.'</b></font></td><td></td>
 		</tr>
 		</table>';
-$pdf->writeHTML($header);
-$pdf->Ln();
+$header1='<table width="100%">
+		<tr>
+			<td valign="top" width="200">
+				SỞ Y TẾ BÌNH DƯƠNG<br>
+				<b>'.$cell.'</b><br>
+				Khoa Dược - Kho Chẵn
+			</td>
+			<td valign="top" align="center" width="400">
+				<font size="12">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</font><br>
+				<font size="11">Độc lập - Tự do - Hạnh phúc</font>
+			</td>
+			<td valign="top" align="right" width="200"></td>
+		</tr>
+		<tr><td></td><td align="center">
+			<font size="15"><b>BÁO CÁO XUẤT NHẬP TỒN KHO </b></font><br></td><td></td>
+		</tr>
+		<tr><td></td><td align="center">
+				<font size="11"><b>Tháng: '.$f_month.'->'.$t_month.'/'.$t_year.'</b></font><br>
+				<font size="13"><b>THUỐC'.$titlereport.'</b></font></td><td></td>
+		</tr>
+		</table>';
+if($f_month==$t_month){
+    $pdf->writeHTML($header);
+    $pdf->Ln();
+}  else{
+    $pdf->writeHTML($header1);
+    $pdf->Ln();
+}
+
  //$t_month.'/'.$t_year
 //.$month.'/'.$year.
 
