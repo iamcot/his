@@ -80,7 +80,7 @@ ob_start();
         document.listmedform.action = "<?php echo $urlsearch;?>&searchMedicine=" + searchMe;
         if(document.getElementsByName("type"))
         {
-            if(document.)
+//            if(document.)
         }
         document.listmedform.submit();
     }
@@ -93,10 +93,10 @@ ob_start();
 //        {
 //            if(radio[i].checked)
 //            {
-                alert(radio);
+                alert(radio.value);
 //            }
 //        }
-//        document.listmedform.submit();
+        document.listmedform.submit();
     }
     function sortUp() {
         document.getElementById('mode').value = 'sort_up';
