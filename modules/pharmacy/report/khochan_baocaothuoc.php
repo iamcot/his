@@ -153,7 +153,7 @@ if($f_month == $t_month){
     $smarty->assign('LDMonthReport',$LDMonth.': '.$t_month.'/'.$t_year);
 }
 else{
-    $smarty->assign('LDMonthReport',$LDMonth.': '.$f_month.'->'.$t_month.'/'.$t_year);
+    $smarty->assign('LDMonthReport',$LDMonth.': '.$f_month.' '.'Đến'.' '.$t_month.'/'.$t_year);
 }
 //$smarty->assign('LDMonthReport',$LDMonth.': '.$t_month.'/'.$t_year);
 

@@ -109,7 +109,7 @@ $header1='<table width="100%">
 			<font size="15"><b>BÁO CÁO XUẤT NHẬP TỒN KHO </b></font><br></td><td></td>
 		</tr>
 		<tr><td></td><td align="center">
-				<font size="11"><b>Tháng: '.$f_month.'->'.$t_month.'/'.$t_year.'</b></font><br>
+				<font size="11"><b>Tháng: '.$f_month.' '.'Đến'.' '.$t_month.'/'.$t_year.'</b></font><br>
 				<font size="13"><b>THUỐC'.$titlereport.'</b></font></td><td></td>
 		</tr>
 		</table>';
