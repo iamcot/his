@@ -167,7 +167,19 @@ function FinishPres(pres_id)
 		alert('<?php echo $LDPresNotFound; ?>');
 		return false;
 	}
-		
+    var i=1; var n = document.getElementById('countpres').value;
+    var flag = true;
+    for (i=1;i<=n;i++){
+        if(document.getElementById('receive['+i+']').value*1 > document.getElementById('tonkho'+i).value*1){
+            document.getElementById('receive['+i+']').style.backgroundColor="gold";
+            flag=false;
+        }
+        else document.getElementById('receive['+i+']').style.backgroundColor="white";
+    }
+    if(flag==false){
+        alert('<?php echo $LDQuaSoLuongThuocTon; ?>');
+        return false;
+    }
 	var r=confirm("<?php echo $LDGiveMedicine; ?>");
 	if (r==true) {
 		document.form_test_request.action="includes/inc_pres_medipot_statusfinish.php?pres_id="+ pres_id+"&radiovalue=<?php echo $radiovalue; ?>&user_origin=<?php echo $user_origin; ?>";

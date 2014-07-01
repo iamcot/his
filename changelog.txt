@@ -13,6 +13,9 @@ Hiền: Check các xét nghiệm khẩn và sắp xếp các xét nghiệm ưu t
         + /nursing-station-patientdaten-doconsil-duonghuyet.php
         + /nursing-station-patientdaten-doconsil_other.php
         + /nursing-station-patientdaten-doconsil_visinh.php
+ - Thêm vào Mysql:
+   Alter thêm cột "urgent", kiểu (int), và "not null" vào các bảng:
+   care_test_request_visinh, care_test_request_other, care_test_request_duonghuyet
 
 
 2014-06-18
