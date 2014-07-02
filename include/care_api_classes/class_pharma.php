@@ -2943,14 +2943,14 @@ class Pharma extends Core {
 					  FROM ".$view_ton." WHERE DATE(date_time)='$last_date_report'
 					  UNION
 					  SELECT *
-					  FROM view_thuoc_nhap WHERE DATE(view_thuoc_nhap.date_time)<='$date_show' AND DATE(view_thuoc_nhap.date_time)>'$last_date_report'  ".$dongtayy_1."
+					  FROM view_thuoc_nhap WHERE DATE(view_thuoc_nhap.date_time)<='$date_show' AND DATE(view_thuoc_nhap.date_time)>='$last_date_report'  ".$dongtayy_1."
 					  UNION
 					  SELECT *
-					  FROM view_thuoc_xuat WHERE DATE(view_thuoc_xuat.date_time)<='$date_show' AND DATE(view_thuoc_xuat.date_time)>'$last_date_report'  ".$dongtayy_1."
+					  FROM view_thuoc_xuat WHERE DATE(view_thuoc_xuat.date_time)<='$date_show' AND DATE(view_thuoc_xuat.date_time)>='$last_date_report'  ".$dongtayy_1."
 					) AS source
 			LEFT JOIN ".$view_ton." AS T ON source.product_encoder = T.product_encoder AND source.monthreport=T.monthreport AND source.price=T.price AND DATE(T.date_time)='$last_date_report'
-			LEFT JOIN view_thuoc_nhap AS N ON source.product_encoder = N.product_encoder AND source.monthreport = N.monthreport AND source.price=N.price AND DATE(N.date_time)<='$date_show' AND DATE(N.date_time)>'$last_date_report'
-			LEFT JOIN view_thuoc_xuat AS X ON source.product_encoder = X.product_encoder AND source.monthreport = X.monthreport AND source.price=X.price AND DATE(X.date_time)<='$date_show' AND DATE(X.date_time)>'$last_date_report'
+			LEFT JOIN view_thuoc_nhap AS N ON source.product_encoder = N.product_encoder AND source.monthreport = N.monthreport AND source.price=N.price AND DATE(N.date_time)<='$date_show' AND DATE(N.date_time)>='$last_date_report'
+			LEFT JOIN view_thuoc_xuat AS X ON source.product_encoder = X.product_encoder AND source.monthreport = X.monthreport AND source.price=X.price AND DATE(X.date_time)<='$date_show' AND DATE(X.date_time)>='$last_date_report'
 			JOIN care_pharma_products_main AS main ON main.product_encoder = source.product_encoder ".$cond_typeput." ".$dongtayy."
 			JOIN care_pharma_unit_of_medicine AS unit ON unit.unit_of_medicine=main.unit_of_medicine
 			AND (T.number>0 OR N.number>0 OR X.number>0) 
