@@ -7,17 +7,17 @@ require($root_path.'include/core/inc_environment_global.php');
 $search=$_GET["search"];
 $response="";
 switch($mode){
-	case 'auto': 
-				$sql=" SELECT khochan.product_encoder, khochan.product_name, khochan.unit_of_medicine, khole.price, khochan.caution, donvi.unit_name_of_medicine, khole.product_lot_id, khole.exp_date, SUM(khole.available_number) AS allocation_temp   
-						FROM care_med_available_product AS khole, 
-						care_med_products_main AS khochan, care_med_unit_of_medipot AS donvi  
-						WHERE (khochan.product_name LIKE '".$search."%' or khochan.product_name LIKE '% ".$search."%') 	 
-						AND khochan.product_encoder=khole.product_encoder 
-						AND donvi.unit_of_medicine=khochan.unit_of_medicine 
-						AND khochan.pharma_type IN (5,6,7) 
+	case 'auto':
+				$sql=" SELECT khochan.product_encoder, khochan.product_name, khochan.unit_of_medicine, khole.price, khochan.caution, donvi.unit_name_of_medicine, khole.lotid, khole.exp_date, SUM(khole.number) AS allocation_temp
+						FROM care_med_products_main_sub1 AS khole,
+						care_med_products_main AS khochan, care_med_unit_of_medipot AS donvi
+						WHERE (khochan.product_name LIKE '".$search."%' or khochan.product_name LIKE '% ".$search."%')
+						AND khochan.product_encoder=khole.product_encoder
+						AND donvi.unit_of_medicine=khochan.unit_of_medicine
+						AND khochan.pharma_type IN (5,6,7)
 						GROUP BY khole.product_encoder
-						ORDER BY khochan.product_name LIMIT 15 "; 
-				
+						ORDER BY khochan.product_name LIMIT 15 ";
+
 				if($result = $db->Execute($sql)){
 					$n=$result->RecordCount();
 					$item_id=""; $item_value="";
