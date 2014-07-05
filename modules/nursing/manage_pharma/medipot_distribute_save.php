@@ -19,7 +19,9 @@ $listid = explode('_',$itemid);
 
 //name = med['[available_product_id]_[ward_nr]']
 foreach ($med as $key => $value){					//insert or update new value of ward
-	$proid_ward = explode('_',$key);
+    if($value>0)
+    {
+    $proid_ward = explode('_',$key);
 	$result = $Cabinet->getMedAvaiDeptIfExist($proid_ward[0], $dept_nr, $proid_ward[1]);
 	
 	if(is_object($result) && $result->RecordCount()){ 									//if exist-> update		
@@ -37,7 +39,8 @@ foreach ($med as $key => $value){					//insert or update new value of ward
 		else {	
 			$no_redirect = $Cabinet->getLastQuery().' '.$LDDbNoSave;
 			break;
-		}
+        }
+        }
 	}
 }
 

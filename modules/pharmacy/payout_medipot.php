@@ -214,7 +214,8 @@ function searchMedicine(id_number)
 }
 function Medicine_AutoComplete(i){
 			var name_med='medicine'+i;
-			var includeScript = "includes/khochan_payout_autocomplete_medipot.php?mode=auto&k="+i;
+            var loai=document.getElementById("typeput").value;
+			var includeScript = "includes/khochan_payout_autocomplete_medipot.php?mode=auto&k="+i+"&loai="+loai;
 			new Ajax.Autocompleter(name_med,"hint",includeScript, {
 					method: 'get',
 					paramName: 'search',
@@ -424,13 +425,13 @@ if(!isset($target) || ($target=='new') || ($target=='create')){
 		
 	$smarty->assign('sDateInput','<input name="date_payout" type="text" class="input1" value="'.$today = date("d/m/Y G:i:s").'"/>');
 	$smarty->assign('sDeliveryPersonInput','<input type="text" name="payout_person" class="input1" />');
-	$smarty->assign('sPutInPersonInput','<input type="text" name="receiver" class="input1"></input>');
+	$smarty->assign('sPutInPersonInput','<input type="text" name="receiver" class="input1" />');
 	$smarty->assign('sNoteInput','<input type="text" name="generalnote" class="input1"/>');
 	$smarty->assign('sSupplierInput','<input type="text" name="placefrom" value="'.$LDPlaceFrom.'" class="input1"/>');
 	$smarty->assign('sPlaceInput',load_health_station($select, $LDKhoLe));
 	$smarty->assign('sTotalInput','<input type="text" id="total_money" name="total_money" class="input1"/>');
 	$smarty->assign('sPutInIDInput','<input type="text" name="voucher_id" class="input1"/>');
-	$smarty->assign('sTypePut','<select name="typeput" id="typeput" class="input1" ><option value="0">'.$LDBH.'</option><option value="1" selected>'.$LDNoBH.'</option><option value="2">'.$LDCBTC.'</option></select>');
+	$smarty->assign('sTypePut','<select name="typeput" id="typeput" class="input1" ><option value="0" selected>'.$LDBH.'</option><option value="1" >'.$LDNoBH.'</option><option value="2">'.$LDCBTC.'</option></select>');
 		
 }else{	//target=update
 	

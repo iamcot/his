@@ -1523,7 +1523,7 @@ class Product extends Core
 	WHERE x1.issue_paper_id = x1info.issue_paper_id
 	AND DATE_FORMAT(x1info.date_time_create,'%Y-%m-%d') ='".date('Y-m-d')."'
 	AND x1.product_encoder = khochan.product_encoder ) nhanvekhoa
-                FROM care_pharma_available_department AS taikhoa, care_pharma_available_product AS tatcakhoa, care_pharma_products_main AS  khochan, care_pharma_unit_of_medicine AS donvi 
+                FROM care_pharma_available_department AS taikhoa, care_pharma_available_product AS tatcakhoa, care_pharma_products_main AS  khochan, care_pharma_unit_of_medicine AS donvi
                 WHERE taikhoa.available_product_id=tatcakhoa.available_product_id 
 					" . $dept_ward . " 
                     AND khochan.product_encoder=tatcakhoa.product_encoder 
@@ -1968,7 +1968,7 @@ class Product extends Core
         }
     }
 
-    function ShowCatalogMedipotCabinet($dept_nr, $ward_nr, $current_page, $number_items_per_page, $updown)
+    function ShowCatalogMedipotCabinet($dept_nr, $ward_nr,$condition, $current_page, $number_items_per_page, $updown)
     {
         global $db;
         $dept_ward = '';
@@ -1976,19 +1976,45 @@ class Product extends Core
             $dept_ward = " AND taikhoa.department='" . $dept_nr . "' ";
         if ($ward_nr != '')
             $dept_ward .= " AND taikhoa.ward_nr='" . $ward_nr . "' ";
-        if ($current_page != '' && $number_items_per_page != '') {
-            $start_from = ($current_page - 1) * $number_items_per_page;
-            $limit_number = 'LIMIT ' . $start_from . ', ' . $number_items_per_page;
-        }
+//        if ($current_page != '' && $number_items_per_page != '') {
+//            $start_from = ($current_page - 1) * $number_items_per_page;
+//            $limit_number = 'LIMIT ' . $start_from . ', ' . $number_items_per_page;
+//        }
 
-        $this->sql = "SELECT DISTINCT khochan.product_name, khochan.sodangky, donvi.unit_name_of_medicine, khochan.product_encoder, tatcakhoa.product_lot_id, tatcakhoa.exp_date, taikhoa.*    
-                FROM care_med_available_department AS taikhoa, care_med_available_product AS tatcakhoa, care_med_products_main AS  khochan, care_med_unit_of_medipot AS donvi, care_ward 
-                WHERE taikhoa.available_product_id=tatcakhoa.available_product_id 
-					" . $dept_ward . " 
-                    AND khochan.product_encoder=tatcakhoa.product_encoder 
-                    AND donvi.unit_of_medicine=khochan.unit_of_medicine 
-                ORDER BY taikhoa.init_number  " . $updown . " 
-				" . $limit_number;
+//        $this->sql = "SELECT DISTINCT khochan.product_name, khochan.sodangky, donvi.unit_name_of_medicine, khochan.product_encoder, tatcakhoa.product_lot_id, tatcakhoa.exp_date, taikhoa.*
+//                FROM care_med_available_department AS taikhoa, care_med_available_product AS tatcakhoa, care_med_products_main AS  khochan, care_med_unit_of_medipot AS donvi, care_ward
+//                WHERE taikhoa.available_product_id=tatcakhoa.available_product_id
+//					" . $dept_ward . "
+//                    AND khochan.product_encoder=tatcakhoa.product_encoder
+//                    AND donvi.unit_of_medicine=khochan.unit_of_medicine
+//
+//                ORDER BY taikhoa.init_number  " . $updown . "
+//				" . $limit_number;
+        $this->sql = "SELECT
+		    khochan.product_name,
+              donvi.unit_name_of_medicine,
+              khochan.product_encoder,
+              khochan.sodangky,
+              tatcakhoa.lotid,
+              tatcakhoa.exp_date,
+              taikhoa.department,
+            taikhoa.ward_nr,
+            sum(taikhoa.available_number) tonkho,
+            taikhoa.init_number,
+            taikhoa.typeput,
+            (SELECT SUM(x1.number_receive)
+	FROM care_med_issue_paper x1,care_med_issue_paper_info x1info
+	WHERE x1.issue_paper_id = x1info.issue_paper_id
+	AND DATE_FORMAT(x1info.date_time_create,'%Y-%m-%d') ='".date('Y-m-d')."'
+	AND x1.product_encoder = khochan.product_encoder ) nhanvekhoa
+                FROM care_med_available_department AS taikhoa, care_med_products_main_sub1 AS tatcakhoa, care_med_products_main AS  khochan, care_med_unit_of_medipot AS donvi
+                WHERE taikhoa.available_product_id=tatcakhoa.id
+					" . $dept_ward . "
+                    AND khochan.product_encoder=tatcakhoa.product_encoder
+                    AND donvi.unit_of_medicine=khochan.unit_of_medicine
+                      	" . $condition . "
+                      	GROUP BY khochan.product_encoder, taikhoa.ward_nr,taikhoa.typeput
+                ORDER BY ward_nr, khochan.product_name, taikhoa.init_number " . $updown . "";
         if ($this->result = $db->Execute($this->sql)) {
             if ($this->result->RecordCount()) {
                 return $this->result;
@@ -2293,7 +2319,25 @@ class Product extends Core
         }
         return null;
     }
-
+    function getMedLastLotID($encoder, $typeput)
+    {
+        global $db;
+        $this->sql = "SELECT care_med_products_main.product_encoder, lotid, number, care_med_products_main_sub1.price, care_med_products_main_sub1.id
+					FROM care_med_products_main,care_med_products_main_sub1
+					WHERE care_med_products_main.product_encoder='$encoder' AND care_med_products_main.product_encoder= care_med_products_main_sub1.product_encoder
+					AND number > 0 AND typeput='" . $typeput . "'
+					AND lotid IS NOT NULL
+					ORDER BY exp_date
+					LIMIT 1";
+//        echo $this->sql;
+        if ($this->result = $db->Execute($this->sql)) {
+            $n = $this->result->RecordCount();
+            if ($n) {
+                return $lotid = $this->result->FetchRow();
+            }
+        }
+        return null;
+    }
     /*------------------------------------------ Tuyen ---------------------------------------------*/
     /*	cung 1 loai thuoc, co nhieu lo (lot_id), uu tien lay lo nao nhap truoc
 		input: encode, number of medicine 
@@ -2444,6 +2488,16 @@ class Product extends Core
 					WHERE available_product_id='$available_product_id'";
         return $this->Transact($this->sql);
     }
+
+    function updateMedipotAvaiProductByAvailID( $available_product_id, $number, $cal)
+    {
+        global $db;
+        if ($available_product_id == '') return FALSE;
+        $this->sql = "UPDATE care_med_available_product
+					SET available_number=available_number" . $cal . "'$number'
+					WHERE available_product_id='$available_product_id'";
+        return $this->Transact($this->sql);
+    }
     function updateMedicineAvaiProduct($encoder, $lotid, $number, $cal, $typeput)
     {
         global $db;
@@ -2566,17 +2620,17 @@ class Product extends Core
         }
     }
 
-    function UpdateMedipotInMainSub($encoder, $lotid, $number, $cost, $cal, $typeput)
+    function UpdateMedipotInMainSub($available_product_id, $number, $cal)
     {
         global $db;
-        if ($encoder == '') return FALSE;
-        if ($cost == 0 || $cost == '')
-            $condition_cost = '';
-        else $condition_cost = " , price='$cost' ";
-
+        if ($available_product_id == '') return FALSE;
+//        if ($cost == 0 || $cost == '')
+//            $condition_cost = '';
+//        else $condition_cost = " , price='$cost' ";
+//        if ($lotid == '') return FALSE;
         $this->sql = "UPDATE care_med_products_main_sub1
-					SET number=number" . $cal . "'$number' " . $condition_cost . "  
-					WHERE product_encoder='$encoder' AND lotid='$lotid' AND typeput='$typeput'";
+					SET number=number" . $cal . "'$number'
+					WHERE id='$available_product_id'";
         return $this->Transact($this->sql);
     }
 

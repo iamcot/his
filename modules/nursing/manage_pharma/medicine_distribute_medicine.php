@@ -133,11 +133,12 @@ ob_start();
 	<tr bgColor="#EDF1F4">
 		<th align="center"><input type="checkbox" name="checkall" onclick="checkUncheckAll(this);"></th>
 		<th><?php echo $LDSTT; ?></th>
-		<th><?php echo $LDMedicineID1; ?></th>
+<!--		<th>--><?php //echo $LDMedicineID1; ?><!--</th>-->
 		<th><?php echo $LDMedicineName; ?></th>
-		<th><?php echo $LDUnit; ?></th>	
-		<th><?php echo $LDExpDate; ?></th>
-		<th><?php echo $LDImport; ?></th>	
+		<th><?php echo $LDUnit; ?></th>
+        <th><?php echo 'Loại'; ?></th>
+        <th><?php echo $LDExpDate; ?></th>
+		<th><?php echo $LDImport; ?></th>
 	</tr>																																
 	<?php
     if (!isset($typeput)) $typeput = 0;
@@ -197,7 +198,7 @@ ob_start();
 
 								<td>' . $rowItem['product_name'] . '</td>
 								<td align="center">' . $rowItem['unit_name_of_medicine'] . '</td>
-								<td>';
+								<td align="center">';
             switch($rowItem['typeput']){
                 case 0: $sTemp.='BHYT';break;
                 case 1: $sTemp.='Sự nghiệp';break;

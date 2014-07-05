@@ -7,11 +7,12 @@ $lang_tables=array('departments.php');
 define('LANG_FILE','pharma.php');
 define('NO_2LEVEL_CHK',1);
 require_once($root_path.'include/core/inc_front_chain_lang.php');
-
+require_once($root_path.'include/care_api_classes/class_ward.php');
 //Get info of current department, ward
+$Ward = new Ward;
 if ($ward_nr!=''){
-	require_once($root_path.'include/care_api_classes/class_ward.php');
-	$Ward = new Ward;
+//	require_once($root_path.'include/care_api_classes/class_ward.php');
+//	$Ward = new Ward;
 	if($wardinfo = $Ward->getWardInfo($ward_nr)) {
 		$wardname = $wardinfo['name'];
 		$deptname = ($$wardinfo['LD_var']);
@@ -169,40 +170,46 @@ ob_start();
 	<tr bgColor="#EDF1F4">
 		<th align="center"><input type="checkbox" name="checkall" onclick="checkUncheckAll(this);"></th>
 		<th><?php echo $LDSTT; ?></th>
-		<th><?php echo $LDMedicineID1; ?></th>
+<!--		<th>--><?php //echo $LDMedicineID1; ?><!--</th>-->
 		<th><?php echo $LDMedipotName; ?></th>
-		<th><?php echo $LDUnit; ?></th>	
-		<th><?php echo $LDLotID; ?></th>
+		<th><?php echo $LDUnit; ?></th>
+        <th>Loại</th>
+<!--		<th>--><?php //echo $LDLotID; ?><!--</th>-->
 		<th><?php echo $LDExpDate; ?></th>
 		<th><?php echo $LDCabinetMedipotSum; ?>&nbsp;
 			<a href="javascript:sortUp()"><input type="image" <?php echo createComIcon($root_path,$picup,'0','',TRUE) ?> onclick="" title="<?php echo $LDSortUp; ?>"></a>&nbsp;<a href="javascript:sortDown()"><input type="image" <?php echo createComIcon($root_path,$picdown,'0','',TRUE) ?> onclick="" title="<?php echo $LDSortDown; ?>"></a></th>	
-		<th><?php echo $LDInitNumber; ?></th>	
+<!--		<th>--><?php //echo $LDInitNumber; ?><!--</th>	-->
+        <th>Nhận về</th>
 	</tr>																																
-	<?php 
+	<?php
+    if (!isset($typeput)) $typeput = 0;
+    $condition = '';
+    if ($typeput > -1)
+        $condition = " AND taikhoa.typeput = $typeput ";
 	if ($search==''){
 		//current_page, number_items_per_page, total_items, total_pages, location=1,2,3
-		$number_items_per_page=20; 	$condition='';
+//		$number_items_per_page=20; 	$condition='';
 		
-		if ($listItem = $Product->SearchCatalogMedipotCabinet($dept_nr, $ward_nr, $condition, $updown)){		
-			$total_items = $listItem->RecordCount();
-		} else $total_items =0;
+//		if ($listItem = $Product->SearchCatalogMedipotCabinet($dept_nr, $ward_nr, $condition, $updown)){
+//			$total_items = $listItem->RecordCount();
+//		} else $total_items =0;
 		
-		$total_pages=ceil($total_items/$number_items_per_page);
+//		$total_pages=ceil($total_items/$number_items_per_page);
 		
-		include_once('../include/inc_issuepaper_listdepot_splitpage.php');
+//		include_once('../include/inc_issuepaper_listdepot_splitpage.php');
 
-		if ($total_pages>1)
-			$listItem = $Product->ShowCatalogMedipotCabinet($dept_nr, $ward_nr, $current_page, $number_items_per_page, $updown);
+//		if ($total_pages>1)
+			$listItem = $Product->ShowCatalogMedipotCabinet($dept_nr, $ward_nr,$condition, $current_page, $number_items_per_page, $updown);
 		
 	}else{
 		if (strrpos($search,'/') || strrpos($search,'-')){
 			$search = formatDate2STD($search,'dd/mm/yyyy');
-			$condition=" AND exp_date LIKE '".$search."%' ";
+			$condition .=" AND exp_date LIKE '".$search."%' ";
 		}
 		elseif (is_numeric($search))
-			$condition=" AND product_lot_id LIKE '%".$search."%' ";
+			$condition .=" AND product_lot_id LIKE '%".$search."%' ";
 		else
-			$condition=" AND product_name LIKE '%".$search."%' ";
+			$condition .=" AND product_name LIKE '%".$search."%' ";
 			
 
 		$listItem = $Product->SearchCatalogMedipotCabinet($dept_nr, $ward_nr, $condition, $updown);
@@ -210,38 +217,84 @@ ob_start();
 	}
 
 	if(is_object($listItem)){
-		$sTemp='';
-		for ($i=0;$i<$listItem->RecordCount();$i++)
-		{
-			$rowItem = $listItem->FetchRow();
+//		$sTemp='';
+//		for ($i=0;$i<$listItem->RecordCount();$i++)
+//		{
+//			$rowItem = $listItem->FetchRow();
+//
+//			if ($rowItem['available_number']<=0)
+//				$bgc="#D47FFF";
+//			elseif ($rowItem['available_number']-$rowItem['init_number']<0)
+//				$bgc="#AAFFFF";
+//			else
+//				$bgc="#ffffff";
+        $sTemp = '';
+        $recordcount = $listItem->RecordCount();
+        $khu = '';
+        for ($i = 0; $i < $recordcount; $i++) {
+            $rowItem = $listItem->FetchRow();
 
-			if ($rowItem['available_number']<=0)
-				$bgc="#D47FFF";
-			elseif ($rowItem['available_number']-$rowItem['init_number']<0)
-				$bgc="#AAFFFF";
-			else
-				$bgc="#ffffff";	
-				
+            if ($rowItem['tonkho'] <= 0)
+                $bgc = "#D47FFF";
+            elseif ($rowItem['tonkho'] - $rowItem['init_number'] < 0)
+                $bgc = "#AAFFFF"; else
+                $bgc = "#ffffff";
+
+            if ($wardinfo = $Ward->getWardInfo($rowItem['ward_nr']))
+                $rowIssue['ward_nr'] = $wardinfo['name'];
+            else $rowIssue['ward_nr'] = 'Chưa phân về khu phòng';
 			$expdate= formatDate2Local($rowItem['exp_date'],'dd/mm/yyyy');
-			
-			$sTemp=$sTemp.'<tr bgColor="'.$bgc.'" >
-								<td align="center"><input type="checkbox" name="groupcb" value="'.$rowItem['available_product_id'].'"></td>
-								<td align="center">'.($i+1).'</td>
-								<td align="center">'.$rowItem['product_encoder'].'</td>
-								<td>'.$rowItem['product_name'].'</td>
-								<td align="center">'.$rowItem['unit_name_of_medicine'].'</td>
-								<td align="center">'.$rowItem['product_lot_id'].'</td>
-								<td align="center">'.$expdate.'</td>
-								<td align="center">'.$rowItem['available_number'].'</td>
-								<td align="center">'.$rowItem['init_number'].'</td>
-							</tr>';
-		}
-		echo $sTemp;
-			
-	}else{
-		$sTemp='<tr bgColor="#ffffff"><td colspan="10">'.$LDItemNotFound.'</td></tr>';
-		echo $sTemp;
-	}
+            if($khu != $rowIssue['ward_nr'])
+            {
+                $sTemp .= '<tr><td colspan="7"><center><b>'.$rowIssue['ward_nr'].'</b></center></td></tr>';
+                $khu = $rowIssue['ward_nr'];
+            }
+            $sTemp = $sTemp . '<tr bgColor="' . $bgc . '" >
+								<td align="center"><input type="checkbox" name="groupcb" value="' . $rowItem['available_product_id'] . '"></td>
+								<td align="center">' . ($i + 1) . '</td>
+
+								<td>' . $rowItem['product_name'] . '</td>
+								<td align="center">' . $rowItem['unit_name_of_medicine'] . '</td>
+								<td>';
+            switch($rowItem['typeput']){
+                case 0: $sTemp.='BHYT';break;
+                case 1: $sTemp.='Sự nghiệp';break;
+                case 2: $sTemp.='CBTC';break;
+            }
+            $sTemp.='</td>
+
+								<td align="center">' . $expdate . '</td>
+
+								<td align="center">' . $rowItem['tonkho'] . '</td>
+								<td><center>';
+
+            if($rowItem['ward_nr']==0) $sTemp.= $rowItem['nhanvekhoa'];
+            $sTemp.='</center></td></tr>';
+        }
+        echo $sTemp;
+
+    } else {
+        $sTemp = '<tr bgColor="#ffffff"><td colspan="10">' . $LDItemNotFound . '</td></tr>';
+        echo $sTemp;
+    }
+//			$sTemp=$sTemp.'<tr bgColor="'.$bgc.'" >
+//								<td align="center"><input type="checkbox" name="groupcb" value="'.$rowItem['available_product_id'].'"></td>
+//								<td align="center">'.($i+1).'</td>
+//								<td align="center">'.$rowItem['product_encoder'].'</td>
+//								<td>'.$rowItem['product_name'].'</td>
+//								<td align="center">'.$rowItem['unit_name_of_medicine'].'</td>
+//								<td align="center">'.$rowItem['product_lot_id'].'</td>
+//								<td align="center">'.$expdate.'</td>
+//								<td align="center">'.$rowItem['available_number'].'</td>
+//								<td align="center">'.$rowItem['init_number'].'</td>
+//							</tr>';
+//		}
+//		echo $sTemp;
+//
+//	}else{
+//		$sTemp='<tr bgColor="#ffffff"><td colspan="10">'.$LDItemNotFound.'</td></tr>';
+//		echo $sTemp;
+//	}
 	
 	?>
 </table>

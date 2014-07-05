@@ -199,7 +199,7 @@ function searchMedicine(id_number)
 }
 function Medicine_AutoComplete(i){
 			var name_med='medicine'+i;
-			var includeScript = "include/inc_issuepaper_autocomplete_medipot.php?mode=auto&k="+i;
+			var includeScript = "include/inc_issuepaper_autocomplete_medipot.php?mode=auto&k="+i+"&typeput="+document.getElementById("typeput").value;
 			new Ajax.Autocompleter(name_med,"hint",includeScript, {
 					method:'get',
 					paramName:'search',
@@ -326,7 +326,7 @@ $smarty->assign('LDTYPE',$LDTypePutIn1);
 if($target=='depot') 
 {
 	$smarty->assign('depot',true);
-	$smarty->assign('sTypePut','<select name="typeput" class="input1" onChange="alertselected(this)"><option value="0">'.$LDBH.'</option><option value="1" selected>'.$LDNoBH.'</option><option value="2">'.$LDCBTC.'</option></select>');	
+	$smarty->assign('sTypePut','<select id="typeput" name="typeput" class="input1" onChange="alertselected(this)"><option value="0" selected>'.$LDBH.'</option><option value="1" >'.$LDNoBH.'</option><option value="2">'.$LDCBTC.'</option></select>');
 	$smarty->assign('AddRow','<a href="javascript:;" onclick="insertRow();">&nbsp;[+]&nbsp;'.$LDAddRowMedipot.'</a>');
 	$type=0; $style=''; $readonly='';
 	
@@ -410,7 +410,7 @@ if($target=='depot')
 						break;
 			}		
 		}
-		$smarty->assign('sTypePut','<select name="typeput" class="input1" onChange="alertselected(this)"><option value="0" '.$flag1.'>'.$LDBH.'</option><option value="1" '.$flag2.'>'.$LDNoBH.'</option><option value="2" '.$flag3.'>'.$LDCBTC.'</option></select>');
+		$smarty->assign('sTypePut','<select id="typeput" name="typeput" class="input1" onChange="alertselected(this)"><option value="0" '.$flag1.'>'.$LDBH.'</option><option value="1" '.$flag2.'>'.$LDNoBH.'</option><option value="2" '.$flag3.'>'.$LDCBTC.'</option></select>');
 		$smarty->assign('divMedicine',$sTempDiv);
 		$smarty->assign('divSTT',$sTempDivStt);
 		$smarty->assign('pbDelete','<a href="javascript:deleteIssue()" ><img '.createLDImgSrc($root_path,'delete.gif','0','middle').' title="'.$LDDelete.'" align="middle"></a>');
@@ -419,7 +419,7 @@ if($target=='depot')
 
 }elseif($target=='sum') {
 	$smarty->assign('sum',true);
-	$smarty->assign('sTypePut','<select name="typeput" class="input1" onChange="alertselected(this)"><option value="0">'.$LDBH.'</option><option value="1">'.$LDNoBH.'</option></select>');
+	$smarty->assign('sTypePut','<select id="typeput" name="typeput" class="input1" onChange="alertselected(this)"><option value="0">'.$LDBH.'</option><option value="1">'.$LDNoBH.'</option></select>');
 	$smarty->assign('LDPlus',$LDPlus);
 	
 	$type=1;	//Lay info danh sach cac toa thuoc da chon
@@ -549,7 +549,7 @@ GROUP BY product_encoder";
 		$target='sum';$type=1;
 		$smarty->assign('AddRow','');
 		
-		$smarty->assign('sTypePut','<select name="typeput" class="input1" onChange="alertselected(this)"><option value="0" '.$flag1.'>'.$LDBH.'</option><option value="1" '.$flag2.'>'.$LDNoBH.'</option></select>');
+		$smarty->assign('sTypePut','<select id="typeput" name="typeput" class="input1" onChange="alertselected(this)"><option value="0" '.$flag1.'>'.$LDBH.'</option><option value="1" '.$flag2.'>'.$LDNoBH.'</option></select>');
 		$smarty->assign('divMedicine',$sTempDiv);
 		$smarty->assign('divSTT',$sTempDivStt);
 		$smarty->assign('pbDelete','<a href="javascript:deleteIssue()" ><img '.createLDImgSrc($root_path,'delete.gif','0','middle').' title="'.$LDDelete.'" align="middle"></a>');

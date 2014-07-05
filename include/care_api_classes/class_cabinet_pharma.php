@@ -864,8 +864,8 @@ class CabinetPharma extends Core {
 	function insertArchive($dept, $ward, $product_encoder, $available_product_id, $get_use, $number, $cost=0, $issuepaper_id=0, $pres_id=0, $use_id=0, $return_id=0, $destroy_id=0, $user, $typeput){
 		global $db;	
 		
-		$this->sql="INSERT INTO $this->tb_phar_archive(nr,dept_nr,ward_nr,typeput,product_encoder,available_product_id,get_use,number,cost,issuepaper_id,pres_id, use_id,return_id,destroy_id,at_date_time,user)
-                    VALUES (0, '$dept', '$ward', '$typeput', '$product_encoder', '$available_product_id', '$get_use', '$number', '$cost', '$issuepaper_id', '$pres_id', '$use_id', '$return_id', '$destroy_id', CURRENT_TIMESTAMP, '$user')";
+		$this->sql="INSERT INTO $this->tb_phar_archive(nr,dept_nr,ward_nr,typeput,product_encoder,get_use,number,cost,issuepaper_id,pres_id, use_id,return_id,destroy_id,at_date_time,user,,available_product_id)
+                    VALUES (0, '$dept', '$ward', '$typeput', '$product_encoder', '$get_use', '$number', '$cost', '$issuepaper_id', '$pres_id', '$use_id', '$return_id', '$destroy_id', CURRENT_TIMESTAMP, '$user', '$available_product_id')";
 		return $this->Transact($this->sql);	
 	}
 	
@@ -997,7 +997,7 @@ class CabinetPharma extends Core {
 	/** 24/02/2012
 	 * Functions for distribute dept into wards
 	 */
-	function ShowDistributeCabinet($dept_nr,$contidtion="", $current_page=0, $number_items_per_page=0)
+	function ShowDistributeCabinet($dept_nr,$condition="", $current_page=0, $number_items_per_page=0)
     {
 //        global $db;
 //        $dept_ward = "";
@@ -1051,7 +1051,7 @@ class CabinetPharma extends Core {
                     AND khochan.product_encoder=tatcakhoa.product_encoder
                     AND taikhoa.available_number>0
                     AND donvi.unit_of_medicine=khochan.unit_of_medicine
-                     ".$contidtion."
+                     ".$condition."
                 ORDER BY khochan.product_name";
 //        echo $this->sql;
         if ($this->result = $db->Execute($this->sql)) {

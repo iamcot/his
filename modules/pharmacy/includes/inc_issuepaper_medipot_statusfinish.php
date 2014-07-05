@@ -32,42 +32,45 @@ if($res_type = $Issue->getIssuePaperType($issue_id)){
 #Change IssuePaper Status (update status_finish='1')
 
 $receive_med = array_combine($medicine_nr, $receive);
-
+$ix=0;
 foreach ($medicine_nr AS $nr)
 {
-    if($Issue->setReceiveMedicineInIssue($nr,$receive_med[$nr])!=false){
+    $ix++;
+    $dxcost = 'cost'.$ix;
+    $dxavailable_product_id = 'available_product_id'.$ix;
+    if($Issue->setReceiveMedicineInIssue($nr,$receive_med[$nr],$$dxavailable_product_id,$$dxcost)){
 
         if($res_encoder = $Issue->getEncoder($nr))
             $encoder = $res_encoder['product_encoder'];
         //echo $encoder."<br>";
-        unset($list_lotid);
-        $list_lotid = $Product->getListLotIDMedipot_KhoChan($encoder, $receive_med[$nr], $typeput);
-        if($list_lotid!=''){
-            foreach ($list_lotid as $key => $value) {
+//        unset($list_lotid);
+//        $list_lotid = $Product->getListLotIDMedipot_KhoChan($encoder, $receive_med[$nr], $typeput);
+        if($$dxavailable_product_id!=''){
+//            foreach ($list_lotid as $key => $value) {
                 //echo "Lot_id: $key; Number: $value<br />\n";
 
                 #Change number of medicine in care_pharma_available_product (available_number)
-                if($Product->UpdateMedipotInMainSub($encoder,$key,$value,'','-',$typeput)==false){ //avai number
+                if($Product->UpdateMedipotInMainSub($$dxavailable_product_id,$receive_med[$nr],'-')==false){ //avai number
                     $no_redirect = $Product->getLastQuery();
                     break;
                 }
 
                 #Plus/Insert number of medicine in care_pharma_available_department (available_number)
-                if($Cabinet->checkExistMedicineInAvaiDept($dept, $ward, $encoder, $key, $typeput)!=false){
-                    $Cabinet->updateMedicineAvaiDept($encoder, $key, $dept, $ward, $value,'+', $typeput);
+                if($Cabinet->checkExistMedicineInAvaiDept($dept, $ward, $$dxavailable_product_id, $typeput)!=false){
+                    $Cabinet->updateMedicineAvaiDept($encoder,$$dxavailable_product_id, $dept, $ward, $receive_med[$nr],'+', $typeput);
                 } else {
-                    $Cabinet->insertMedicineAvaiDept($encoder, $key, $dept, $ward, $value, $typeput);
+                    $Cabinet->insertMedicineAvaiDept($$dxavailable_product_id, $dept, $ward, $receive_med[$nr], $typeput);
                 }
 
                 $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $Cabinet->getLastQuery(), date('Y-m-d H:i:s'));
 
                 #Insert in care_pharma_department_archive, issue_paper, get_use=1
-                $Cabinet->insertArchive($dept_nr, $ward_nr, $encoder, $key, '1', $value, $issue_id, 0, 0, 0, 0, $receive_user, $typeput);
+                $Cabinet->insertArchive($dept_nr, $ward_nr, $encoder, $$dxavailable_product_id, '1', $receive_med[$nr],$$dxcost, $issue_id, 0, 0, 0, 0, $receive_user, $typeput);
 
-                if($value>0){
+//                if($value>0){
                     $Issue->setMedipotReceiveOfPresInIssue($issue_id, $encoder, $value);
-                }
-            }
+//                }
+//            }
             if($type==1){
                 #Minus number of medicine in care_pharma_available_department (available_number) for list_pres
                 if($result=$Issue->getSumPres($issue_id, $encoder))
@@ -81,7 +84,7 @@ foreach ($medicine_nr AS $nr)
                     foreach ($list_lotid_use as $key => $value) {
 
                         #Insert in care_pharma_department_archive, prescription, get_use=0
-                        $Cabinet->insertArchive($dept, $ward, $encoder, $key, '0', $value, 0, $issue_id, 0, 0, 0, $receive_user, $typeput);
+                        $Cabinet->insertArchive($dept_nr, $ward_nr, $encoder, $$dxavailable_product_id, '1', $receive_med[$nr],$$dxcost, $issue_id, 0, 0, 0, 0, $receive_user, $typeput);
                     }
                 }
                 /*

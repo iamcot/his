@@ -147,7 +147,19 @@ function FinishPres(issue_id)
 		alert('<?php echo $LDIssueNotFound; ?>');
 		return false;
 	}
-
+    var i=1; var n = document.getElementById('countpres').value;
+    var flag = true;
+    for (i=1;i<=n;i++){
+        if(document.getElementById('receive['+i+']').value*1 > document.getElementById('tonkho'+i).value*1){
+            document.getElementById('receive['+i+']').style.backgroundColor="gold";
+            flag=false;
+        }
+        else document.getElementById('receive['+i+']').style.backgroundColor="white";
+    }
+    if(flag==false){
+        alert('<?php echo 'Phát quá số lượng tồn kho!\n Xin kiểm tra lại!! ' ?>');
+        return false;
+    }
 	var r=confirm("<?php echo $LDGiveMedicineIssue; ?>");
 	if (r==true) {
 		document.form_test_request.action="includes/inc_issuepaper_medipot_statusfinish.php?issue_id="+ issue_id+"&radiovalue=<?php echo $radiovalue; ?>&user_origin=<?php echo $user_origin; ?>";
@@ -251,6 +263,7 @@ include('includes/inc_issuepaper_medipot_request_lister_fx.php');
 <input type="hidden" name="dept_nr" value="<?php echo $dept_nr ?>">
 <input type="hidden" name="ward_nr" value="<?php echo $ward_nr ?>">
 <input type="hidden" id="tracker" name="tracker" value="<?php echo $tracker ?>">
+<input type="hidden" id="countpres" name="countpres" value="<?php echo $medicine_count; ?>">
 <input type="hidden" id="radiovalue" value="<?php if ($radiovalue) echo $radiovalue; else echo '1'; ?>">
 <input type="hidden" name="mode" id="mode" value="<?php if($mode=="edit") echo "update"; else echo $mode ?>">		
 			

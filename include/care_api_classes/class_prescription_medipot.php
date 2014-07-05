@@ -379,7 +379,7 @@ class PrescriptionMedipot extends Core {
 	function getPrescriptionInfo($nr){
 	    global $db;
 		$this->sql="SELECT pr.*,t.prescription_type_name AS type_name, t.typeput, dept.name_formal   
-					FROM $this->tb_phar_pres_type AS t, $this->tb_phar_pres_info AS pr
+					FROM care_med_type_of_prescription AS t, care_med_prescription_info AS pr
 					LEFT JOIN care_department AS dept 
 					ON dept.nr=pr.dept_nr 					
 					WHERE pr.prescription_id='".$nr."' 
@@ -390,7 +390,29 @@ class PrescriptionMedipot extends Core {
 			}else{return false;}
 		}else{return false;}
 	}
-	
+    function getLastLotIDMedfromEncodeInDept($encoder,$condition,$number,$typeput){
+        global $db;
+        $this->sql = "SELECT  pro.id
+            FROM   care_med_available_department AS dept, care_med_products_main_sub1 AS pro
+            WHERE  pro.id = dept.available_product_id
+            AND pro.product_encoder = '".$encoder."'
+            AND dept.available_number >= $number
+            AND dept.typeput = $typeput
+            ".$condition."
+            ORDER BY pro.exp_date
+            LIMIT 1";
+        //echo $this->sql;
+        if ($this->result = $db->Execute($this->sql)) {
+            if ($this->result->RecordCount()) {
+                $row = $this->result->FetchRow();
+                return $row['id'];
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 	/** 18/10/2011
 	 * Get all medicine in a prescription, based on the prescription id
 	 * Tuyen
@@ -731,14 +753,14 @@ class PrescriptionMedipot extends Core {
 						WHERE prescription_id='$pres_id'";
 		return $this->Transact($this->sql);	
 	}
-	function IssueMedicineForPatient($enc_nr, $date_issue, $encoder, $number, $pres_id) {
+	function IssueMedicineForPatient($enc_nr, $date_issue, $encoder, $number, $pres_id,$available_product_id) {
 	    global $db;
 		global $_SESSION;
 		if($encoder=='') return FALSE;
 		$this->sql="INSERT INTO care_med_prescription_issue 
-					(enc_nr, date_issue, product_encoder, number, pres_id, create_id)
+					(enc_nr, date_issue, product_encoder, number, pres_id, create_id,available_product_id)
 					VALUES
-					('".$enc_nr."', '".$date_issue."', '".$encoder."', '".$number."', '".$pres_id."', '".$_SESSION['sess_user_name']."');";
+					('".$enc_nr."', '".$date_issue."', '".$encoder."', '".$number."', '".$pres_id."', '".$_SESSION['sess_user_name']."','".$available_product_id."')";
 		return $this->Transact($this->sql);	
 	}
 	function listMedipotIssueByPresId($pres_id){

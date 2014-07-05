@@ -133,29 +133,35 @@ ob_start();
 	<tr bgColor="#EDF1F4">
 		<th align="center"><input type="checkbox" name="checkall" onclick="checkUncheckAll(this);"></th>
 		<th><?php echo $LDSTT; ?></th>
-		<th><?php echo $LDMedipotID; ?></th>
+<!--		<th>--><?php //echo $LDMedipotID; ?><!--</th>-->
 		<th><?php echo $LDMedipotName; ?></th>
 		<th><?php echo $LDUnit; ?></th>	
-		<th><?php echo $LDLotID; ?></th>
+<!--		<th>--><?php //echo $LDLotID; ?><!--</th>-->
+        <th><?php echo 'Loại'; ?></th>
 		<th><?php echo $LDExpDate; ?></th>
-		<th><?php echo $LDImport; ?></th>	
+		<th><?php echo $LDImport; ?></th>
+
 	</tr>																																
-	<?php 
+	<?php
+    if (!isset($typeput)) $typeput = 0;
+    $condition = '';
+    if ($typeput > -1)
+        $condition = " AND taikhoa.typeput = $typeput ";
 	if ($search==''){
 		//current_page, number_items_per_page, total_items, total_pages, location=1,2,3
-		$number_items_per_page=20; 	$condition=""; $ward_nr="0"; $updown="";
-		
-		if ($listItem = $CabinetPharma->SearchDistributeCabinet($dept_nr, $condition)){		
-			$total_items = $listItem->RecordCount();
-		} else $total_items =0;
-		
-		$total_pages=ceil($total_items/$number_items_per_page);
-		
-		include_once('../include/inc_issuepaper_listdepot_splitpage.php');
+//		$number_items_per_page=20; 	$condition=""; $ward_nr="0"; $updown="";
+//
+//		if ($listItem = $CabinetPharma->SearchDistributeCabinet($dept_nr, $condition)){
+//			$total_items = $listItem->RecordCount();
+//		} else $total_items =0;
+//
+//		$total_pages=ceil($total_items/$number_items_per_page);
+//
+//		include_once('../include/inc_issuepaper_listdepot_splitpage.php');
+//
+//		if ($total_pages>1)
+			$listItem = $CabinetPharma->ShowDistributeCabinet($dept_nr, $condition);
 
-		if ($total_pages>1)
-			$listItem = $CabinetPharma->ShowDistributeCabinet($dept_nr, $current_page, $number_items_per_page);
-		
 	}else{
 		if (strrpos($search,'/') || strrpos($search,'-')){
 			$search = formatDate2STD($search,'dd/mm/yyyy');
@@ -178,13 +184,29 @@ ob_start();
 			$rowItem = $listItem->FetchRow();	
 			$expdate= formatDate2Local($rowItem['exp_date'],'dd/mm/yyyy');
 			
-			$sTemp=$sTemp.'<tr bgColor="#ffffff" >
-								<td align="center"><input type="checkbox" name="groupcb" value="'.$rowItem['ID'].'"></td>
+//			$sTemp=$sTemp.'<tr bgColor="#ffffff" >
+//								<td align="center"><input type="checkbox" name="groupcb" value="'.$rowItem['ID'].'"></td>
+//								<td align="center">'.($i+1).'</td>
+//								<td align="center">'.$rowItem['product_encoder'].'</td>
+//								<td>'.$rowItem['product_name'].'</td>
+//								<td align="center">'.$rowItem['unit_name_of_medicine'].'</td>
+//								<td align="center">'.$rowItem['product_lot_id'].'</td>
+//								<td align="center">'.$expdate.'</td>
+//								<td align="center">'.$rowItem['available_number'].'</td>
+//							</tr>';
+            $sTemp=$sTemp.'<tr bgColor="#ffffff" >
+								<td align="center"><input type="checkbox" name="groupcb" value="'.$rowItem['id'].'"></td>
 								<td align="center">'.($i+1).'</td>
-								<td align="center">'.$rowItem['product_encoder'].'</td>
-								<td>'.$rowItem['product_name'].'</td>
+
+                                <td>' . $rowItem['product_name'] . '</td>
 								<td align="center">'.$rowItem['unit_name_of_medicine'].'</td>
-								<td align="center">'.$rowItem['product_lot_id'].'</td>
+								<td align="center">';
+            switch($rowItem['typeput']){
+                case 0: $sTemp.='BHYT';break;
+                case 1: $sTemp.='Sự nghiệp';break;
+                case 2: $sTemp.='CBTC';break;
+            }
+            $sTemp.='</td>
 								<td align="center">'.$expdate.'</td>
 								<td align="center">'.$rowItem['available_number'].'</td>
 							</tr>';

@@ -246,12 +246,14 @@ class IssueMedipot extends Core {
 						WHERE issue_paper_id=$issuepaperId";
 		return $this->Transact($this->sql);	
 	}
-	function setReceiveMedicineInIssue($medicine_nr,$receive_number) {
+	function setReceiveMedicineInIssue($medicine_nr,$receive_number,$dxavailable_product_id,$cost) {
 	    global $db;
 		if(!$medicine_nr) return FALSE;
 
 		$this->sql="UPDATE $this->tb_med_issue
-						SET number_receive='".$receive_number."' 
+						SET number_receive='".$receive_number."',
+                        Cost = '$cost',
+                        available_product_id = '$dxavailable_product_id'
 						WHERE nr='".$medicine_nr."' ";
 
 		return $this->Transact($this->sql);	
