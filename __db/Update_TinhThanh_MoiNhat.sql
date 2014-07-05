@@ -2,7 +2,8 @@
 SQLyog Enterprise - MySQL GUI v8.18 
 MySQL - 5.5.16 : Database - his
 *********************************************************************
-*/
+MỌI NGƯỜI UPDATE TÊN DATABASE CHO ĐÚNG NHA    */
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -12,6 +13,7 @@ MySQL - 5.5.16 : Database - his
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
 CREATE DATABASE /*!32312 IF NOT EXISTS*/`his` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
 USE `his`;
@@ -102,3 +104,4 @@ insert  into `care_address_quanhuyen`(`nr`,`name`,`quanhuyen_id`,`Quan_Huyen`,`l
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
