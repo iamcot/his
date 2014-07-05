@@ -1,3 +1,31 @@
+2014-07-04:
+H.Phương: Chỉnh sửa VTYT cho logic giống với thuốc:
+- ../include/care_api_classes
+    + class_cabinet_medipot.php
+    + class_cabinet_pharma.php
+    + class_issuepaper_medipot.php
+    + class_prescription_medipot.php
+    + class_product.php
+- ../language/vi
+    + lang_vi_aufnahme.php
+- ../modules/nursing/include
+    + inc_use_patient_med_save.php
+- ../modules/nursing/manage_pharma
+    + medicine_distribute_medicine.php
+    + medipot_distribute.php
+    + medipot_distribute_medicine.php
+    + medipot_distribute_save.php
+    + medipot_list_catalogue.php
+- ../modules/nursing/
+    + nursing-issuapaper-medipot-depot.php
+- ../pharmacy/includes
+    + inc_issuepaper_medipot_in_issue.php
+    + inc_issuepaper_statusfinish.php
+    + khochan_payout_autocomplete_medipot.php
+- ../pharmacy/
+    + payout_medipot.php
+    + pharma_request_medipot_ward.php
+
 2014-06-28:
 CoT: sửa file aufname_daten_such để khi nếu chỉ tìm kiếm thấy 1 kết quả thì sẽ dẫn thẳng tới trang bệnh nhân.
 
