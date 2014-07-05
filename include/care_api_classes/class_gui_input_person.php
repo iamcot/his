@@ -200,7 +200,7 @@ class GuiInputPerson {
                             echo "<script type='text/javascript'>";
                             echo "alert('Trẻ dưới 6 tuổi thì nên check vào mục trẻ sơ sinh. Cập nhật lại ngày sinh');";
                             echo "</script>";
-                           // echo '<input type="checkbox" ...', ( empty($_POST['value']) ? '' : ' checked="checked"' ), ' />';
+                            // echo '<input type="checkbox" ...', ( empty($_POST['value']) ? '' : ' checked="checked"' ), ' />';
                             echo '<input type="checkbox" id="tresosinh" name="tresosinh" checked="checked" value="tresosinh"  />';
                         }
                         else{
@@ -329,97 +329,97 @@ class GuiInputPerson {
                         }
                         else
                         {
-                        $from='entry';
-                        $_POST['date_birth']=@formatDate2STD($date_birth,$date_format);
-                        $_POST['date_reg']=@formatDate2STD($_POST['dat_reg'],$date_format)." ".$_POST['time_reg'];
+                            $from='entry';
+                            $_POST['date_birth']=@formatDate2STD($date_birth,$date_format);
+                            $_POST['date_reg']=@formatDate2STD($_POST['dat_reg'],$date_format)." ".$_POST['time_reg'];
 
-                        $_POST['date_input']=date('Y-m-d H:i:s');
-                        $_POST['blood_group']=trim($_POST['blood_group']);
-                        $_POST['status']='normal';
-                        $_POST['insurance_start']=@formatDate2STD($_POST['insurance_start'],$date_format);
-                        $_POST['insurance_exp']=@formatDate2STD($_POST['insurance_exp'],$date_format);
-                        $_POST['history']="Init.reg. ".date('Y-m-d H:i:s')." ".$_SESSION['sess_user_name']."\n";
-                        //$_POST['modify_id']=$_SESSION['sess_user_name'];
-                        $_POST['create_id']=$_SESSION['sess_user_name'];
-                        $_POST['create_time']=date('YmdHis');
+                            $_POST['date_input']=date('Y-m-d H:i:s');
+                            $_POST['blood_group']=trim($_POST['blood_group']);
+                            $_POST['status']='normal';
+                            $_POST['insurance_start']=@formatDate2STD($_POST['insurance_start'],$date_format);
+                            $_POST['insurance_exp']=@formatDate2STD($_POST['insurance_exp'],$date_format);
+                            $_POST['history']="Init.reg. ".date('Y-m-d H:i:s')." ".$_SESSION['sess_user_name']."\n";
+                            //$_POST['modify_id']=$_SESSION['sess_user_name'];
+                            $_POST['create_id']=$_SESSION['sess_user_name'];
+                            $_POST['create_time']=date('YmdHis');
 
-                        if(!$person_obj->InitPIDExists($GLOBAL_CONFIG['person_id_nr_init'])){
-                            # If db is mysql, insert the initial pid value  from global config
-                            # else let the dbms make an initial value via the sequence generator e.g. postgres
-                            # However, the sequence generator must be configured during db creation to start at
-                            # the initial value set in the global config
-                            if($dbtype=='mysql'){
-                                $_POST['pid']=$GLOBAL_CONFIG['person_id_nr_init'];
-                            }
-                        }else{
-                            # Persons are existing. Check if duplicate might exist
-                            if(is_object($duperson=$person_obj->PIDbyData($_POST))){
-                                $error_person_exists=TRUE;
-                            }
-                        }
-                        //echo $person_obj->getLastQuery();
-
-                        if(!$error_person_exists||$mode=='forcesave'){
-                            if($person_obj->insertDataFromInternalArray()){
-                                $logs->writeline_his($_SESSION['sess_login_userid'], 'class_gui_input_person.php',$person_obj->getLastQuery(), date('Y-m-d H:i:s'));
-                                # If data was newly inserted, get the insert id if mysql,
-                                # else get the pid number from the latest primary key
-
-                                if(!$update){
-                                    $oid = $db->Insert_ID();
-                                    if (empty($oid)) $oid = $_POST['pid'];
-                                    $pid=$person_obj->LastInsertPK('pid',$oid);
-                                    //EL: set the new pid
-                                    $person_obj->setPID($pid);
+                            if(!$person_obj->InitPIDExists($GLOBAL_CONFIG['person_id_nr_init'])){
+                                # If db is mysql, insert the initial pid value  from global config
+                                # else let the dbms make an initial value via the sequence generator e.g. postgres
+                                # However, the sequence generator must be configured during db creation to start at
+                                # the initial value set in the global config
+                                if($dbtype=='mysql'){
+                                    $_POST['pid']=$GLOBAL_CONFIG['person_id_nr_init'];
                                 }
-
-                                // KB: save other_his_no
-                                if( isset($_POST['other_his_org']) && !empty($_POST['other_his_org'])){
-                                    $person_obj->OtherHospNrSet($_POST['other_his_org'], $_POST['other_his_no'], $_SESSION['sess_user_name'] );
+                            }else{
+                                # Persons are existing. Check if duplicate might exist
+                                if(is_object($duperson=$person_obj->PIDbyData($_POST))){
+                                    $error_person_exists=TRUE;
                                 }
+                            }
+                            //echo $person_obj->getLastQuery();
 
-                                # Save the valid uploaded photo
-                                if($valid_image){
-                                    # Compose the new filename by joining the pid number and the file extension with "."
-                                    $photo_filename=$pid.'.'.$picext;
-                                    # Save the file
-                                    if($img_obj->saveUploadedImage($_FILES['photo_filename'],$root_path.$photo_path.'/',$photo_filename)){
-                                        # Update the filename to the databank
-                                        $person_obj->setPhotoFilename($pid,$photo_filename);
+                            if(!$error_person_exists||$mode=='forcesave'){
+                                if($person_obj->insertDataFromInternalArray()){
+                                    $logs->writeline_his($_SESSION['sess_login_userid'], 'class_gui_input_person.php',$person_obj->getLastQuery(), date('Y-m-d H:i:s'));
+                                    # If data was newly inserted, get the insert id if mysql,
+                                    # else get the pid number from the latest primary key
+
+                                    if(!$update){
+                                        $oid = $db->Insert_ID();
+                                        if (empty($oid)) $oid = $_POST['pid'];
+                                        $pid=$person_obj->LastInsertPK('pid',$oid);
+                                        //EL: set the new pid
+                                        $person_obj->setPID($pid);
                                     }
-                                }
 
-                                //echo $pid;
-                                # Update the insurance data
-                                # Lets detect if the data is already existing
-                                /*if($insurance_show) {
-                                      if($insurance_item_nr) {
-                                        if(!empty($insurance_nr) && !empty($insurance_firm_name) && $insurance_firm_id) {
-                                            $insure_data=array('insurance_nr'=>$insurance_nr,
-                                                        'firm_id'=>$insurance_firm_id,
-                                                        'class_nr'=>$insurance_class_nr);
-                                            $pinsure_obj->updateDataFromArray($insure_data,$insurance_item_nr);
+                                    // KB: save other_his_no
+                                    if( isset($_POST['other_his_org']) && !empty($_POST['other_his_org'])){
+                                        $person_obj->OtherHospNrSet($_POST['other_his_org'], $_POST['other_his_no'], $_SESSION['sess_user_name'] );
+                                    }
+
+                                    # Save the valid uploaded photo
+                                    if($valid_image){
+                                        # Compose the new filename by joining the pid number and the file extension with "."
+                                        $photo_filename=$pid.'.'.$picext;
+                                        # Save the file
+                                        if($img_obj->saveUploadedImage($_FILES['photo_filename'],$root_path.$photo_path.'/',$photo_filename)){
+                                            # Update the filename to the databank
+                                            $person_obj->setPhotoFilename($pid,$photo_filename);
                                         }
-                                    } elseif ($insurance_nr && $insurance_firm_name  && $insurance_class_nr) {
-                                        $insure_data=array('insurance_nr'=>$insurance_nr,
-                                                        'firm_id'=>$insurance_firm_id,
-                                                        'pid'=>$pid,
-                                                        'class_nr'=>$insurance_class_nr);
-                                        $pinsure_obj->insertDataFromArray($insure_data);
                                     }
-                                }*/
-                                $newdata=1;
-                                if(file_exists($this->displayfile)){
-                                    header("Location: $this->displayfile".URL_REDIRECT_APPEND."&pid=$pid&from=$from&newdata=1&target=entry");
-                                    exit;
-                                }else{
-                                    echo "Error! Target display file not defined!!";
+
+                                    //echo $pid;
+                                    # Update the insurance data
+                                    # Lets detect if the data is already existing
+                                    /*if($insurance_show) {
+                                          if($insurance_item_nr) {
+                                            if(!empty($insurance_nr) && !empty($insurance_firm_name) && $insurance_firm_id) {
+                                                $insure_data=array('insurance_nr'=>$insurance_nr,
+                                                            'firm_id'=>$insurance_firm_id,
+                                                            'class_nr'=>$insurance_class_nr);
+                                                $pinsure_obj->updateDataFromArray($insure_data,$insurance_item_nr);
+                                            }
+                                        } elseif ($insurance_nr && $insurance_firm_name  && $insurance_class_nr) {
+                                            $insure_data=array('insurance_nr'=>$insurance_nr,
+                                                            'firm_id'=>$insurance_firm_id,
+                                                            'pid'=>$pid,
+                                                            'class_nr'=>$insurance_class_nr);
+                                            $pinsure_obj->insertDataFromArray($insure_data);
+                                        }
+                                    }*/
+                                    $newdata=1;
+                                    if(file_exists($this->displayfile)){
+                                        header("Location: $this->displayfile".URL_REDIRECT_APPEND."&pid=$pid&from=$from&newdata=1&target=entry");
+                                        exit;
+                                    }else{
+                                        echo "Error! Target display file not defined!!";
+                                    }
+                                }else {
+                                    echo "<p>$db->ErrorMsg()<p>$LDDbNoSave";
                                 }
-                            }else {
-                                echo "<p>$db->ErrorMsg()<p>$LDDbNoSave";
                             }
                         }
-                    }
                     }
                 }
             } // end of if(!$error)
