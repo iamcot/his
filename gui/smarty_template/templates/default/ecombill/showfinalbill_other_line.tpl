@@ -1,4 +1,9 @@
-							<tr>
+                                {{if $flag_g}}
+                                <tr bgcolor="eeeeee">
+                                    <td colspan="8">{{$GroupName}}</td>
+                                </tr>
+                                {{/if}}
+                                    <tr>
 								<td>{{$LDItemContent}}</td>
 								<td align="center">{{$LDItemDate}}</td>
 								<td align="center">{{$LDItemNumberOf}}</td>

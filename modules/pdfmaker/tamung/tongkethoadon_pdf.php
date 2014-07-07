@@ -120,7 +120,7 @@ $header_2='<table border="0" width="100%" cellpadding="0">
 
         </table>';
 $header_3='<table><tr>
-			<td width="25%"><b><br><br><br>
+			<td width="25%"><b><br>
              Mã hiện tại: '.$patientno.'</b></td>
              </tr>
         </table>';
@@ -135,8 +135,8 @@ $pdf->SetFont('dejavusans', '', 10);
 $html_thuoc='';
 $html='<table border="1" cellpadding="2">
 				<tr>
-					<td rowspan="2" width="15%" align="center"><b>NỘI DUNG</b></td>
-					<td rowspan="2" align="center" width="20%"><b>Ngày</b></td>
+					<td rowspan="2" width="25%" align="center"><b>NỘI DUNG</b></td>
+					<td rowspan="2" align="center" width="10%"><b>Ngày</b></td>
 					<td rowspan="2" width="10%" align="center"><b>Số lượng</b></td>
 					<td rowspan="2" width="15%" align="center"><b>Đơn giá</b></td>
 					<td rowspan="2" width="15%" align="center"><b>Thành tiền</b></td>
@@ -308,33 +308,23 @@ $tongtienvtyt += $tongtienHC;
 $tongtienvtytTBHYT += $tongtienHCBHYT;
 $tongtienVTYTTra   +=$tongtienHCTra;
 
-
+/*
 $tongtienxndv=0;
 $tongtienxndvBHYT=0;
 $tongtienxndvTra=0;
-$itemresult = $eComBill->listServiceItemsOfEncounter($patientno);
+//$itemresult = $eComBill->listServiceItemsOfEncounter($patientno);
+$itemresult = $eComBill->listServiceItemsOfEncounter_in($patientno);
+
 $countItem=0;
 if(is_object($itemresult))
 {
     $countSur=0; $countItem = $itemresult->RecordCount();
     for ($i=0;$i<$countItem;$i++)
-    {
+    {   $d=0;
         $item=$itemresult->FetchRow();
         $groupnr = $item['item_group_nr'];
-       /* if($groupnr==22){
-            $row_item='<tr>
-						<td colspan="1" align="center">'.$item['item_description'].'</td>
-						<td colspan="1" align="center">'.formatDate2Local($item['bill_item_date'],'dd/mm',false,false,$sepChars).'</td>
-						<td align="center">'.$item['bill_item_units'].'</td>
-						<td align="center">'.number_format($item['bill_item_unit_cost']).'</td>
-						<td align="center">'.number_format($item['bill_item_units']*$item['bill_item_unit_cost']).'</td>
-                        <td align="center">'.number_format($item['bill_item_units']*$item['bill_item_unit_cost']*0).'</td>
-                        <td align="center">0</td>
-                        <td align="center">'.number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*0).'</td>
-					  </tr>';
-        }   else{ */
         $row_item='<tr>
-						<td colspan="1" align="center">'.$item['item_description'].'</td>
+						<td colspan="1" align="center">'.$item['group_name'].'<br>'.'+ '.$item['item_description'].'</td>
 						<td colspan="1" align="center">'.formatDate2Local($item['bill_item_date'],'dd/mm',false,false,$sepChars).'</td>
 						<td align="center">'.$item['bill_item_units'].'</td>
 						<td align="center">'.number_format($item['bill_item_unit_cost']).'</td>
@@ -343,14 +333,68 @@ if(is_object($itemresult))
                         <td align="center">0</td>
                         <td align="center">'.number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*$mh).'</td>
 					  </tr>';
-    //}
-
         //$tongtienxndv += $tongtienxndv+ $item['bill_item_units']*$item['bill_item_unit_cost'];
         $tongtienxndv +=  $item['bill_item_units']*$item['bill_item_unit_cost'];
+        /* if($groupnr==22){  //xet không cho giảm BHYT của xét nghiệm máu
+             $tongtienxndvBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*0;   //nang
+         }   else{     */
+    /*    $tongtienxndvBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*$mh;  //nang
+        // }
+        // $tongtienxndvTra +=$item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*$mh;
+        $tongtienxndvTra = $tongtienxndv - $tongtienxndvBHYT;    */
+
+ /*
+        if ($groupnr<=25){								//Xet nghiem 1->25
+            $sTempLabor .= $row_item;
+        } elseif ($groupnr==26 || $groupnr==28 || $groupnr==39){ 	//XQuang 26
+            $sTempRadio .= $row_item;
+        } elseif ($groupnr==27 || $groupnr==29){		//Sieu am 27, Noi soi 29
+            $sTempUltra .= $row_item;
+        } elseif ($groupnr==38){						//ECG 28
+            $sTempECG .= $row_item;
+        } elseif ($groupnr==33 || $groupnr==34){		//Thu thuat 33, Phau thuat 34
+            $sTempSur .= $row_item;
+            $countSur++;
+        } elseif ($groupnr>=30 && $groupnr<=32){		//Mau 30, dam 31, dich 32
+            $sTempBlood .= $row_item;
+        } elseif ($groupnr==35 || $groupnr==36){		//Giuong 35,36
+            $sTempBed .= $row_item;
+        }else{											//Khac
+            $sTempKhac .= $row_item;
+        }
+    }
+}
+*/
+$tongtienxndv=0;
+$tongtienxndvBHYT=0;
+$tongtienxndvTra=0;
+//$itemresult = $eComBill->listServiceItemsOfEncounter($patientno);
+$itemresult = $eComBill->listServiceItemsOfEncounter_in($patientno);
+
+$countItem=0;
+if(is_object($itemresult))
+{
+    $countSur=0; $countItem = $itemresult->RecordCount();
+    for ($i=0;$i<$countItem;$i++)
+    {   $d=0;
+        $item=$itemresult->FetchRow();
+        $groupnr = $item['item_group_nr'];
+        $row_item='<tr>
+						<td colspan="1" align="center">'.$item['group_name'].'</td>
+						<td colspan="1" align="center">'.formatDate2Local($item['bill_item_date'],'dd/mm',false,false,$sepChars).'</td>
+						<td align="center">'.$item['bill_item_units'].'</td>
+						<td align="center">'.number_format($item['s']).'</td>
+						<td align="center">'.number_format($item['s']).'</td>
+                        <td align="center">'.number_format($item['s']*$mh).'</td>
+                        <td align="center">0</td>
+                        <td align="center">'.number_format($item['s'] - $item['s']*$mh).'</td>
+					  </tr>';
+        //$tongtienxndv += $tongtienxndv+ $item['bill_item_units']*$item['bill_item_unit_cost'];
+        $tongtienxndv +=  $item['s'];
        /* if($groupnr==22){  //xet không cho giảm BHYT của xét nghiệm máu
             $tongtienxndvBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*0;   //nang
         }   else{     */
-            $tongtienxndvBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*$mh;  //nang
+            $tongtienxndvBHYT +=  $item['s']*$mh;  //nang
        // }
        // $tongtienxndvTra +=$item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*$mh;
         $tongtienxndvTra = $tongtienxndv - $tongtienxndvBHYT;
@@ -376,6 +420,7 @@ if(is_object($itemresult))
         }
     }
 }
+
 //tính số tiền hóa đơn đã thanh toán
 $thanhtoan = $cntbill['total_outstanding'];
 //tính số tiền mà bệnh nhân tạm ứng

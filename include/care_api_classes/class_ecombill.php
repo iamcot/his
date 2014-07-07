@@ -345,10 +345,11 @@ class eComBill extends Core {
 					WHERE bill.bill_item_encounter_nr='$patientno' 
 					AND bill.bill_item_code = serv.item_code ";  */
         //nang lấy dịch vụ xét nghiệm trừ toa thuốc, VTYT, hóa chất
-        $this->sql="SELECT bill.*, serv.*
-					FROM $this->billItem AS bill, $this->billableItem AS serv
+        $this->sql="SELECT g.group_name,bill.*, serv.*
+					FROM $this->billItem AS bill, $this->billableItem AS serv,care_billing_item_group AS g
 					WHERE bill.bill_item_encounter_nr='$patientno'
 					AND bill.bill_item_code = serv.item_code
+					AND serv.item_group_nr=g.nr
 					AND serv.item_group_nr != 37
 					AND serv.item_group_nr != 42
 					AND serv.item_group_nr != 43";
@@ -359,6 +360,32 @@ class eComBill extends Core {
 			}else{return false;}
 		}else{return false;}
 	}
+    // phieu in tong ket hoa don
+    //Lay tat ca cac items trong tat ca cac hoa don cua benh nhan
+    function listServiceItemsOfEncounter_in($patientno)
+    {
+        global $db;
+        /*$this->sql="SELECT bill.*, serv.*
+                    FROM $this->billItem AS bill, $this->billableItem AS serv
+                    WHERE bill.bill_item_encounter_nr='$patientno'
+                    AND bill.bill_item_code = serv.item_code ";  */
+        //nang lấy dịch vụ xét nghiệm trừ toa thuốc, VTYT, hóa chất
+        $this->sql="SELECT g.group_name,bill.*, serv.*,SUM(bill.bill_item_unit_cost* bill.bill_item_units) AS s, COUNT(bill.bill_item_units) AS soluong
+					FROM $this->billItem AS bill, $this->billableItem AS serv,care_billing_item_group AS g
+					WHERE bill.bill_item_encounter_nr='$patientno'
+					AND bill.bill_item_code = serv.item_code
+					AND serv.item_group_nr=g.nr
+					AND serv.item_group_nr != 37
+					AND serv.item_group_nr != 42
+					AND serv.item_group_nr != 43
+					GROUP BY g.group_name ";
+
+        if ($this->result=$db->Execute($this->sql)) {
+            if ($this->result->RecordCount()) {
+                return $this->result;
+            }else{return false;}
+        }else{return false;}
+    }
 	
 	/* 8/11/11 -vy
 	lay so tien tam ung

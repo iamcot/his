@@ -558,6 +558,7 @@ $itemresult = $eComBill->listServiceItemsOfEncounter($patientno);
 $tongtienDichVu=0;
 $tongtienDichVuBHYT =0;
 $tongtienDichVuTra=0;
+$group_id=0;
 if(is_object($itemresult))
 {
    for ($i=0;$i<$itemresult->RecordCount();$i++)
@@ -565,7 +566,7 @@ if(is_object($itemresult))
     {
         $item=$itemresult->FetchRow();
         $groupnr = $item['item_group_nr'];
-        $smarty->assign('LDItemContent',$item['item_description']);
+        $smarty->assign('LDItemContent','+ '.$item['item_description']);
         $smarty->assign('LDItemDate',formatDate2Local($item['bill_item_date'],$date_format));
         $smarty->assign('LDItemNumberOf',$item['bill_item_units']);
         $smarty->assign('LDItemUnitCost',number_format($item['bill_item_unit_cost']));
@@ -586,7 +587,14 @@ if(is_object($itemresult))
             $tongtienDichVuBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*$mh;   //nang
        // }
         $tongtienDichVuTra += $tongtienDichVu - $tongtienDichVuBHYT; //nang
-
+        $flag_g = false;
+        if ($group_id!=$item['item_group_nr'])
+        {
+            $flag_g =true;
+            $smarty->assign('GroupName',$item['group_name']);
+            $group_id = $item['item_group_nr'];
+        }
+        $smarty->assign('flag_g', $flag_g);
         if ($groupnr<=25){								//Xet nghiem 1->25
             ob_start();
             $smarty->display('ecombill/showfinalbill_other_line.tpl');
