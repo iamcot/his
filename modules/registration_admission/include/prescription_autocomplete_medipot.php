@@ -37,8 +37,8 @@ switch($mode){
 			
 	case 'filldata': 
 				$encoder=$_GET['encoder'];
-				$sql="	SELECT khochan.product_encoder, khochan.product_name, khochan.unit_of_medicine, khochan.price, khochan.caution, donvi.unit_name_of_medicine, khole.product_lot_id, khole.exp_date, SUM(khole.available_number) AS allocation_temp   
-						FROM care_med_available_product AS khole, 
+				$sql="	SELECT khochan.product_encoder, khochan.product_name, khochan.unit_of_medicine, khochan.price, khochan.caution, donvi.unit_name_of_medicine, khole.lotid, khole.exp_date, SUM(khole.number) AS allocation_temp
+						FROM care_med_products_main_sub1 AS khole,
 						care_med_products_main AS khochan, care_med_unit_of_medipot AS donvi  				 
 						WHERE khochan.product_encoder='".$encoder."' 
 						AND khochan.product_encoder=khole.product_encoder 
