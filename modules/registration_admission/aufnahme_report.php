@@ -40,6 +40,8 @@ require($root_path.'include/core/inc_front_chain_lang.php');
  $smarty->assign('aBCTKSAN','<a href="javascript:opendiv4(\'bctks\')">Báo cáo tháng Khoa Sản</a>');
  $smarty->assign('aBM07KSAN','<a href="javascript:opendiv4(\'bm07ks\')">Thống kê khám chữa phụ khoa và nạo phá thai</a>');
 
+$smarty->assign('aThongKeThuoc','<a href="javascript:opendiv3(\'tkttn\')">Thống kê thuốc trong ngày</a>');
+
  ob_start();
  ?>
  <link type="text/css" rel="stylesheet" href="<?php echo  $root_path;?>js/cssjquery/jquery-ui-1.7.2.custom.css" />
@@ -92,7 +94,7 @@ require($root_path.'include/core/inc_front_chain_lang.php');
     testprintout<?php echo $sid ?>=window.open(urlholder,"testprintout<?php echo $sid ?>","width=800,height=600,menubar=no,resizable=yes,scrollbars=yes");
  }
  function viewreportk(id){
-	if($('#datefrom').val() =="" || $('#dateto').val()=="") {
+	if($('#datefrom').val() == "" || $('#dateto').val()=="") {
             alert("Vui lòng nhập đủ ngày bắt đầu và kết thúc"); 
             return;
  	}
@@ -107,6 +109,8 @@ require($root_path.'include/core/inc_front_chain_lang.php');
  		url='admission/report_b031dt.php';
  	else if(id == 'tkksk')
  		url = 'admission/report_tkksk.php';
+    else if(id == 'tkttn')
+        url = 'admission/report_tkttn.php';
  	else if(id=='tkyhct')
  		{
  			url = 'admitreport_yhct.php';

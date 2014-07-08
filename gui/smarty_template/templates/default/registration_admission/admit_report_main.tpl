@@ -46,6 +46,7 @@
 		<tr><td class="item"><img width="4" height="7" border="0" align="absmiddle" src="../../gui/img/common/default/redpfeil.gif"> {{$aChuyenVien}}</td></tr>
 		<tr class="title"><td>Báo cáo thống kê</td></tr>
 		<tr><td class="item"><img width="4" height="7" border="0" align="absmiddle" src="../../gui/img/common/default/redpfeil.gif"> {{$aKhamsuckhoe}}</td></tr>
+		<tr><td class="item"><img width="4" height="7" border="0" align="absmiddle" src="../../gui/img/common/default/redpfeil.gif"> {{$aThongKeThuoc}}</td></tr>
 		<tr><td class="item"><img width="4" height="7" border="0" align="absmiddle" src="../../gui/img/common/default/redpfeil.gif"> {{$aDieutrinoitru}}</td></tr>
 		<tr><td class="item"><img width="4" height="7" border="0" align="absmiddle" src="../../gui/img/common/default/redpfeil.gif"> {{$ab031dt}}</td></tr>
 	<!--	<tr><td class="item"><img width="4" height="7" border="0" align="absmiddle" src="../../gui/img/common/default/redpfeil.gif"> {{$ab05skss}}</td></tr>

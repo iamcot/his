@@ -6,6 +6,7 @@ $local_user='aufnahme_user';
 $lang_tables[]='departments.php';
 require($root_path.'include/core/inc_front_chain_lang.php');
 switch ($id) {
+    case 'tkttn': $khoa = 'Thống kê thuốc trong ngày'; break;
 	case 'dieutrinoitru': $khoa = 'Thống kê Điều trị nội trú'; break;
 	case 'b031dt': $khoa='Hoạt động điều trị - Biểu 03.1-ĐT'; break;
 	case 'tkksk': $khoa = 'Thống kê khám sức khỏe'; break;
