@@ -25,8 +25,16 @@ $Pres = new Prescription;
 $breakfile='patientbill.php'.URL_APPEND.'&patientno='.$patientno.'&full_en='.$patientno.'&target='.$target;
 $returnfile='patientbill.php'.URL_APPEND.'&patientno='.$patientno.'&full_en='.$patientno.'&target='.$target;
 
+$patqry="SELECT e.*,p.* FROM care_encounter AS e, care_person AS p WHERE e.encounter_nr=$patientno AND e.pid=p.pid";
+$resultpatqry=$db->Execute($patqry);
+if(is_object($resultpatqry)) $patient=$resultpatqry->FetchRow();
+else $patient=array();
+// xem dạng điều trị
+$in_out = $patient['encounter_class_nr'];//noi tru hay ngoai tru
+if($in_out==1) $in_out_patient= 'Nội trú';
+else $in_out_patient='Ngoại trú';
 # Load totalbill,totalpayment,due
-//total bill (paid)
+//total bill (paid) khi đã thanh toán
 $totalbill=0;
 $billqry="SELECT SUM(bill_amount) AS sum, SUM(bill_discount) AS sumdis, create_id FROM care_billing_bill WHERE bill_encounter_nr='$patientno'";
 $resultbillqry=$db->Execute($billqry);
@@ -37,20 +45,34 @@ $resultbillqry=$db->Execute($billqry);
 		$totaldis=$buffer['sumdis'];
 	}
 	
-//items still not paid	
-$listitemnotpaid = $eComBill->listAllTotalCostNotPaid($patientno);	
-if(is_object($listitemnotpaid)){
-	while ($itemnotpaid =$listitemnotpaid->FetchRow()) { 
-		$totalbill += $itemnotpaid['total'];    //tổng số tiền chi phí khám bệnh
-	}
+//items still not paid	 chưa thanh toán
+//kiểm tra xem bệnh nhân là nội trú hay ngoại trú, nếu nội trú thì lấy thuốc theo số lượng cấp phát  ==>n
+if($in_out == 1){
+    $listitemnotpaid = $eComBill->listAllTotalCostNotPaid_noitru($patientno);
+    if(is_object($listitemnotpaid)){
+        while ($itemnotpaid =$listitemnotpaid->FetchRow()) {
+            $totalbill += $itemnotpaid['total'];    //tổng số tiền chi phí khám bệnh
+        }
+    }
+}  else{
+    // ngoại trú thì lấy nguyên toa thuốc ==>n
+    $listitemnotpaid = $eComBill->listAllTotalCostNotPaid($patientno);
+    if(is_object($listitemnotpaid)){
+        while ($itemnotpaid =$listitemnotpaid->FetchRow()) {
+            $totalbill += $itemnotpaid['total'];    //tổng số tiền chi phí khám bệnh
+        }
+    }
 }
+
 // số tiền giảm BHYT
+/*
 $patqry="SELECT e.*,p.* FROM care_encounter AS e, care_person AS p WHERE e.encounter_nr=$patientno AND e.pid=p.pid";
 $resultpatqry=$db->Execute($patqry);
 if(is_object($resultpatqry)) $patient=$resultpatqry->FetchRow();
-else $patient=array();
+else $patient=array();  */
 $mh = $patient['muchuong'];
 $giamBHYT = $totalbill*$mh; // tính số tiền giảm BHYT
+
 //payment
 $totalpayment=0;
 $paymentqry="SELECT SUM(payment_amount_total) AS sum, create_id FROM care_billing_payment WHERE payment_encounter_nr='$patientno'";
@@ -143,12 +165,58 @@ if(is_object($billqueryresult)) {
 		ob_end_clean(); 
 	}
 }
+if($in_out==1){
+    //List all Item of this Encounter not paid (bill_item_status=0)
+    $chkfinalresult = $eComBill->listBillsByEncounter($patientno);
+    $chkpres = $Pres->getAllPresOfEncounterByBillId($patientno,'0');
 
+
+    $finaldate = '';
+    $finalno = '';
+    if(is_object($chkfinalresult) || is_object($chkpres)) {
+        if(is_object($chkfinalresult))
+            $chkexists = $chkfinalresult->RecordCount();
+        if(is_object($chkpres))
+            $chkpresexists = $chkpres->RecordCount();
+        $check = $chkexists + $chkpresexists;
+
+        if($check==0) {	//if not have currentbill, show finalbill
+            $result=$chkfinalresult->FetchRow();
+            $finaldate=$result['final_date'];
+            $finalno=$result['final_bill_no'];
+
+            $smarty->assign('itemNr', '<a href=javascript:showfinalbill()>'. $LDFinalBill .'</a>');
+            $smarty->assign('date', formatDate2Local($result['final_date'],$date_format));
+
+            $username = $eComBill->GetUserName($result['create_id']);
+            $smarty->assign('create_name', $username);
+
+        } else {	//Show currentbill
+            $smarty->assign('itemNr', '<a href=javascript:showbill(\'currentbill\')>'.$LDCurrentBill.'</a>');
+            $smarty->assign('date', formatDate2Local(date("Y-m-d"),$date_format));
+            $smarty->assign('create_name', $_SESSION['sess_user_name']);
+        }
+
+        ob_start();
+        $smarty->display('ecombill/bill_payment_line.tpl');
+        $sListRows = $sListRows.ob_get_contents();
+        ob_end_clean();
+    }
+
+    $smarty->assign('ItemLine',$sListRows);
+    $smarty->assign('LDTotalBillAmount',$LDTotalBillAmount);
+    $smarty->assign('LDTotalBillAmountValue',"<b>".number_format($totalbill)."</b>");
+    $smarty->assign('LDOutstandingAmount',$LDOutstandingAmount1);
+    $smarty->assign('LDOutstandingAmountValue',number_format($totalpayment+$totaldis));
+//$smarty->assign('LDOutstandingAmountValue',number_format($totalpayment+$giamBHYT));//---nang
+    $smarty->assign('LDAmountDue',$LDAmountDue);
+    $smarty->assign('LDAmountDueValue',number_format($due));
+}else{
 //List all Item of this Encounter not paid (bill_item_status=0)
 $chkfinalresult = $eComBill->listBillsByEncounter($patientno);
 $chkpres = $Pres->getAllPresOfEncounterByBillId($patientno,'0');
 
-	
+
 $finaldate = '';   
 $finalno = '';
 if(is_object($chkfinalresult) || is_object($chkpres)) {
@@ -180,7 +248,7 @@ if(is_object($chkfinalresult) || is_object($chkpres)) {
 	$sListRows = $sListRows.ob_get_contents();
 	ob_end_clean(); 
 }
- 
+
 $smarty->assign('ItemLine',$sListRows);
 
 
@@ -193,7 +261,7 @@ $smarty->assign('LDOutstandingAmountValue',number_format($totalpayment+$totaldis
 //$smarty->assign('LDOutstandingAmountValue',number_format($totalpayment+$giamBHYT));//---nang
 $smarty->assign('LDAmountDue',$LDAmountDue);
 $smarty->assign('LDAmountDueValue',number_format($due));
-
+}
 $smarty->assign('sFormTag','<form name="billlinks" method="POST">');
 $smarty->assign('sHiddenInputs','<input type="hidden" name="patientno" value="'. $patientno .'">
 								<input type="hidden" name="finalbilldate" value="'. $finaldate .'">

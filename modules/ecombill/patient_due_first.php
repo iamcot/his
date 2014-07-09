@@ -144,7 +144,7 @@ $smarty->assign('LDPatientAddress',$LDPatientAddress);
 $smarty->assign('LDPatientAddressData',$Encounter->encounter['phuongxa_name'].' '.$Encounter->encounter['quanhuyen_name'].'<br>'.$Encounter->encounter['citytown_name']);
 
 $smarty->assign('LDPaymentDate', $LDBillDate);
-
+ //xét là hóa đơn hiện tại hay đã thanh toán rồi
 if($billid == "currentbill") {
 	$billDate = formatDate2Local($presdatetime,$date_format,1);
 	
@@ -242,6 +242,7 @@ $count=0;
 //else $readonly='';	
 
 //current bill listing	----------------------------------------------------------------------------
+//hiện thông tin hóa đơn
 if($billid == "currentbill") {
 	$total_for_insur=0;
 	$BHtungay_x = strtotime($insurance_start);
@@ -321,7 +322,58 @@ if($billid == "currentbill") {
 //			$Pres->updateCostPres($pres['prescription_id']);
 //		}
 //	}
-	
+    //hiện các toa thuốc chưa thanh toán, kiểm tra xem bệnh nhân là nội trú hay ngoại trú
+    //nếu nội trú thì hiện thuốc theo cấp phát     ==>n
+   // $tongthuoc=0;
+    if($in_out == 1){
+        $pres_noitru = "SELECT iss.*, sum(iss.number) AS sum, prs.product_name, prs.note AS unit, prs.cost
+					FROM care_pharma_prescription_issue AS iss, care_pharma_prescription AS prs
+					WHERE iss.enc_nr='".$patientno."' AND prs.prescription_id=iss.pres_id AND prs.product_encoder=iss.product_encoder
+					GROUP BY iss.product_encoder, iss.date_issue
+					ORDER BY iss.product_encoder, iss.date_issue";
+
+        $list_item = array();
+        $list_date = array();
+        $k=0;
+        $list_name = array();
+        $list_info = array();
+        if($pres_item_noitru=$db->Execute($pres_noitru)){
+            for($i=0;$i<$pres_item_noitru->RecordCount();$i++){
+                $item = $pres_item_noitru->FetchRow();
+                $list_item[$item['product_encoder']][$item['date_issue']]= $item['sum'];   //==>n đổi $item['number'] thành  $item['sum']
+                if(!in_array($item['date_issue'], $list_date)){
+                    $k++;
+                    $list_date[$k]=$item['date_issue'];
+                }
+                if(!in_array($item['product_encoder'],$list_name)){
+                    $list_info[$item['product_encoder']]['name']=$item['product_name'];
+                    $list_info[$item['product_encoder']]['unit']=$item['unit'];
+                    $list_info[$item['product_encoder']]['cost']=$item['cost'];
+                }
+            }
+        }
+        $stt=1;
+        foreach ($list_item as $x => $v) {
+            $tongthuoc=0;
+            foreach ($list_date as $v1) {
+                $tongthuoc += $v[$v1];
+            }
+            $Pres_total=0;
+            $Pres_total=$Pres_total+$tongthuoc*$list_info[$x]['cost'];
+            $smarty->assign('DescriptionData','THUỐC'.'<br>'.'+ '.$list_info[$x]['name']);
+            $smarty->assign('CostPerUnitData', number_format($tongthuoc*$list_info[$x]['cost']));
+            $smarty->assign('UnitsData', $tongthuoc);
+            $smarty->assign('TotalCostData',number_format($tongthuoc*$list_info[$x]['cost']));
+            $smarty->assign('ItemTypeData',$pres['type_name']);
+            ob_start();
+            $smarty->display('ecombill/bill_payment_header_line_hoadon.tpl');
+            $sListRows = $sListRows.ob_get_contents();
+            ob_end_clean();
+            $stt++;
+        }
+    }
+    //nếu ngoại trú thì hiện thuốc lấy nguyên toa ==>n
+    else{
 	$presresult = $Pres->getAllPresOfEncounterByBillId($patientno,'0');	  //list lai cac toa chua thanh toan, da duoc cap nhat gia
 	if(is_object($presresult))
 	{
@@ -356,7 +408,7 @@ if($billid == "currentbill") {
 			ob_end_clean(); 
 		}
 	}
-	
+    }
 	//FOR MEDIPOT
     //2014-03-25: CoT, khong can phai tinh lai gia hien tai vi BHYT da chinh sua trong toa
 //	$medresult = $PresMed->getAllPresOfEncounterByBillId($patientno,'0');		//list cac toa chua thanh toan
@@ -451,8 +503,57 @@ if($billid == "currentbill") {
 	$totaldue =  $total - $outstanding;
 
 //bill payed, so print it	----------------------------------------------------------------------------
+//toa đã được lưu thanh toán, xét nội trú và ngoại trú =>n
 } else {
+      if($in_out==1){
+          $group_id =0;
 
+          $oldbdqueryresult=$eComBill->checkBillByBillId($billid);
+          if(is_object($oldbdqueryresult)) $billitemcount=$oldbdqueryresult->RecordCount();
+
+          for ($obc=0;$obc<$billitemcount;$obc++) {
+              //oldbd: row in billing_bill_item table
+              //it: row in billing_item table
+              $oldbd=$oldbdqueryresult->FetchRow();
+
+              $itemdescresult = $eComBill->listServiceItemsByCode($oldbd['bill_item_code']);
+              if(is_object($itemdescresult)) $it=$itemdescresult->FetchRow();
+
+
+              $smarty->assign('DescriptionData', '+ '.$it['item_description']);
+              $smarty->assign('CostPerUnitData', number_format($oldbd['bill_item_unit_cost']));
+              $smarty->assign('UnitsData', $oldbd['bill_item_units']);
+              $smarty->assign('TotalCostData', number_format($oldbd['bill_item_amount']));
+
+              if($it['item_type']=="HS") {
+                  $smarty->assign('ItemTypeData', $LDMedicalServices);
+              } else if($it['item_type']=="LT") {
+                  $smarty->assign('ItemTypeData', $LDLaboratoryTests);
+              }
+              //itemdate
+              $smarty->assign('ItemDateData', formatDate2Local($oldbd['bill_item_date'],$date_format));
+
+              if($lb1['item_type']=="HS") { $HStotal=$HStotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units']); }
+              if($lb1['item_type']=="LT") { $LTtotal=$LTtotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units']); }
+
+              //groupname
+              $flag_g = false;
+              if ($group_id!=$it['item_group_nr'])
+              {
+                  $flag_g =true;
+                  $smarty->assign('GroupName',$it['group_name']);
+                  $group_id = $it['item_group_nr'];
+              }
+              $smarty->assign('flag_g', $flag_g);
+
+
+              ob_start();
+              $smarty->display('ecombill/bill_payment_header_line.tpl');
+              $sListRows = $sListRows.ob_get_contents();
+              ob_end_clean();
+          }
+          }
+     else{
 	//$oldbilltotal=0;
 	$group_id =0;
 
@@ -502,7 +603,7 @@ if($billid == "currentbill") {
 		
 		//$oldbilltotal=$oldbilltotal+$oldbd['bill_item_amount'];
 	}
-	
+}
 	$smarty->assign('ItemLine',$sListRows);
 	
 	//old bill
