@@ -18,6 +18,15 @@ $core= new Core;
 $Pres = new Prescription;
 $PresMed = new PrescriptionMedipot;
 
+//xét nội trú hay ngoại trú
+$patqry="SELECT e.*,p.* FROM care_encounter AS e, care_person AS p WHERE e.encounter_nr=$patientno AND e.pid=p.pid";
+$resultpatqry=$db->Execute($patqry);
+if(is_object($resultpatqry)) $patient=$resultpatqry->FetchRow();
+else $patient=array();
+// xem dạng điều trị
+$in_out = $patient['encounter_class_nr'];//noi tru hay ngoai tru
+if($in_out==1) $in_out_patient= 'Nội trú';
+else $in_out_patient='Ngoại trú';
 
 $logs = new AccessLog();
 $thisfile=basename(__FILE__);
@@ -46,7 +55,21 @@ if($cntergebnis !=0) {
 $savebillquery="UPDATE care_billing_bill_item SET bill_item_status='1',bill_item_bill_no='$billno' where bill_item_encounter_nr='$patientno' and bill_item_status='0'";
 
 $core->Transact($savebillquery);
+if($in_out ==1){  // lưu hóa đơn hiện tại của nội trú với số lượng tiền thuốc = số thuốc cấp phát*đon giá
+    $presresult = $Pres->getAllPresOfEncounterByBillId_noitru($patientno,'0');
+    if(is_object($presresult))
+    {
+        for($i=0;$i<$presresult->RecordCount();$i++)
+        {
+            $pres = $presresult->FetchRow();
+            //info of service
+            $eComBill->createBillItem($patientno,$pres['prescription_type'],$pres['total'],'1',$pres['total'],$presdatetime,'1',$billno);
 
+            $Pres->setPresStatusBill($pres['prescription_id'],$billno);
+        }
+    }
+
+}   else{
 //Save prescription + update bill status
 $presresult = $Pres->getAllPresOfEncounterByBillId($patientno,'0');
 if(is_object($presresult))
@@ -59,6 +82,7 @@ if(is_object($presresult))
 			
 		$Pres->setPresStatusBill($pres['prescription_id'],$billno);
 	}
+}
 }
 //Save medipot + update bill status
 $medresult = $PresMed->getAllPresOfEncounterByBillId($patientno,'0');

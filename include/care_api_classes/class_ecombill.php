@@ -525,18 +525,19 @@ class eComBill extends Core {
 	}
     function listAllTotalCostNotPaid_noitru($encounter_nr){
         global $db;
-        $this->sql="SELECT  SUM(iss.number*prs.cost) AS total
-					FROM care_pharma_prescription_issue AS iss, care_pharma_prescription AS prs, care_pharma_prescription_info AS inf
-					WHERE status_bill='0' AND iss.enc_nr='$encounter_nr' AND prs.prescription_id=iss.pres_id AND prs.product_encoder=iss.product_encoder AND iss.enc_nr = inf.encounter_nr
+        $this->sql="SELECT SUM(iss.number*prs.cost) AS total
+					FROM care_pharma_prescription_issue AS iss, care_pharma_prescription AS prs
+					WHERE iss.enc_nr='2014000167' AND prs.prescription_id=iss.pres_id AND prs.product_encoder=iss.product_encoder
+					GROUP BY iss.product_encoder, iss.date_issue
 					UNION ALL
 					SELECT SUM(total_cost) AS total FROM care_med_prescription_info
-					WHERE status_bill='0' AND encounter_nr='$encounter_nr'
+					WHERE status_bill='0' AND encounter_nr='2014000167'
 					UNION ALL
 					SELECT SUM(total_cost) AS total FROM care_chemical_prescription_info
-					WHERE status_bill='0' AND encounter_nr='$encounter_nr'
+					WHERE status_bill='0' AND encounter_nr='2014000167'
 					UNION ALL
 					SELECT SUM(bill_item_amount) AS total FROM care_billing_bill_item
-					WHERE bill_item_encounter_nr='$encounter_nr' AND bill_item_status IN ('0','') ";
+					WHERE bill_item_encounter_nr='2014000167' AND bill_item_status IN ('0','') ";
         if ($this->result=$db->Execute($this->sql)) {
             if ($this->result->RecordCount()) {
                 return $this->result;

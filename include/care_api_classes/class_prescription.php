@@ -635,6 +635,23 @@ class Prescription extends Core {
      * @return table result or boolean
      */
     //edit vy add p.product_name
+    function getAllPresOfEncounterByBillId_noitru($encounterId, $status_bill){
+        global $db;
+        $this->sql="SELECT  SUM(iss.number*pre.cost) AS total,prs.*, t.prescription_type_name AS type_name, iss.*
+                    FROM care_pharma_prescription_info AS prs, care_pharma_type_of_prescription AS t , care_pharma_prescription_issue AS iss, care_pharma_prescription  AS pre
+                    WHERE prs.encounter_nr='".$encounterId."'
+                    AND prs.status_bill='".$status_bill."'
+                    AND prs.total_cost>0
+                    AND prs.prescription_type=t.prescription_type
+                    AND iss.enc_nr = prs.encounter_nr
+                    AND pre.prescription_id=iss.pres_id";
+        //echo $sql;
+        if ($this->result=$db->Execute($this->sql)) {
+            if ($this->result->RecordCount()) {
+                return $this->result;
+            }else{return false;}
+        }else{return false;}
+    }
     function getAllPresOfEncounterByBillId($encounterId, $status_bill){
         global $db;
         $this->sql="SELECT prs.*, t.prescription_type_name AS type_name

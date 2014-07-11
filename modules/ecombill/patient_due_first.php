@@ -331,7 +331,8 @@ if($billid == "currentbill") {
 					WHERE iss.enc_nr='".$patientno."' AND prs.prescription_id=iss.pres_id AND prs.product_encoder=iss.product_encoder
 					GROUP BY iss.product_encoder, iss.date_issue
 					ORDER BY iss.product_encoder, iss.date_issue";
-
+        $stt=1;
+        $Pres_total=0;
         $list_item = array();
         $list_date = array();
         $k=0;
@@ -352,13 +353,11 @@ if($billid == "currentbill") {
                 }
             }
         }
-        $stt=1;
         foreach ($list_item as $x => $v) {
             $tongthuoc=0;
             foreach ($list_date as $v1) {
                 $tongthuoc += $v[$v1];
             }
-            $Pres_total=0;
             $Pres_total=$Pres_total+$tongthuoc*$list_info[$x]['cost'];
             $smarty->assign('DescriptionData','THUỐC'.'<br>'.'+ '.$list_info[$x]['name']);
             $smarty->assign('CostPerUnitData', number_format($tongthuoc*$list_info[$x]['cost']));

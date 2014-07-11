@@ -1,3 +1,14 @@
+2014-07-07: update sửa thanh toán (XN khi thể hiện trong hóa đơn chỉ thể hiện tên chứ không liệt kê chi tiết hóa chất)
+- gui\smarty_template\templates\default\ecombill
+    + showfinalbill_other_line.tpl
+- include\care_api_classes
+    + class_ecombill.php
+- modules\ecombill
+    + cong_khai_thuoc_tong_hop_vp.php
+    + showfinalbill.php
+    + showfinalbill1.php
+- modules\pdfmaker\tamung
+   + tongkethoadon_pdf.php
 2014-07-04:
 H.Phương: Chỉnh sửa VTYT cho logic giống với thuốc:
 - ../include/care_api_classes
