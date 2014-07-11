@@ -27,7 +27,7 @@ $file_autocomplete= 'include/prescription_autocomplete_medipot.php';
 $sepChars=array('-','.','/',':',',');
 
 //sheettype='sheet','pres'
-
+$haveissur=$encounter_obj->isCorrectIssurent($pid);
 
 if ($mode=='update'){
 	//general info of prescription
@@ -89,7 +89,7 @@ if($mode=='create' || $mode=='new')
 }
 //So BHYT
 $insurance_nr = $encounter['insurance_nr'];
-$insurance_exp = $encounter['insurance_nr'];
+$insurance_exp = $encounter['insurance_exp'];
 
 ?>
 <style type="text/css">
@@ -150,6 +150,18 @@ li.selected {
 <script language="javascript">
 <!-- Script Begin
 $.noConflict();
+function checkbhyt(select){//add 0810 cot
+    var haveissur = <? echo $haveissur;?>;
+    //alert(haveissur);
+    if(haveissur==-2 && (select.value=='0489_0'||select.value=='0495_0')){
+        alert("BHYT của BN đã hết hạn, vui lòng cập nhật lại");
+        select.value=0;
+    }
+    else if(haveissur == -1 && (select.value=='0489_0'||select.value=='0495_0')){
+        alert("BN này không có BHYT");
+        select.value=0;
+    }
+}
 
 function chkform(d) {
 	if(d.totalday.value==""){
@@ -390,27 +402,51 @@ function CheckDuplicateMedicine(){
 		<td width="17%"><FONT color="#000066"><?php echo $LDWard; ?></td>
 		<td width="40%"><?php  echo $wardname; ?></td>
 		<td width="17%"><FONT color="#000066"><?php echo $LDPrescriptionMedipot; ?></td>
-		<td width="26%"><select name="prescription_type_nr" id="prescription_type_nr" >
+		<td width="26%"><select onblur="checkbhyt(this)" name="prescription_type_nr" id="prescription_type_nr" >
+                <option value="0">Chon loại toa</option>
 			<?php
-			if(is_object($pres_all_types)){
-				$temp1=0;
-				while($rowtype=$pres_all_types->FetchRow())
-				{
-					//if(($type=='sheet' && $rowtype['group_pres']=='1') || ($type=='pres' && $rowtype['group_pres']=='0')){
-						if ($mode=='create' && $temp1=='0')
-							$styleselect='SELECTED';
-						elseif ($mode=='update' && $rowtype['prescription_type']==$prescription_type)
-							$styleselect='SELECTED';
-						else
-							$styleselect=' ';
-						
-						echo '<option value="'.$rowtype['prescription_type'].'_'.$rowtype['typeput'].'" '.$styleselect.'>';
-						echo $rowtype['prescription_type_name'];
-						echo '</option>';
-						$temp1++;
-					//}					
-				}
-			}
+//			if(is_object($pres_all_types)){
+//				$temp1=0;
+//				while($rowtype=$pres_all_types->FetchRow())
+//				{
+//					//if(($type=='sheet' && $rowtype['group_pres']=='1') || ($type=='pres' && $rowtype['group_pres']=='0')){
+//						if ($mode=='create' && $temp1=='0')
+//							$styleselect='SELECTED';
+//						elseif ($mode=='update' && $rowtype['prescription_type']==$prescription_type)
+//							$styleselect='SELECTED';
+//						else
+//							$styleselect=' ';
+//
+//						echo '<option value="'.$rowtype['prescription_type'].'_'.$rowtype['typeput'].'" '.$styleselect.'>';
+//						echo $rowtype['prescription_type_name'];
+//						echo '</option>';
+//						$temp1++;
+//					//}
+//				}
+//			}
+            if(is_object($pres_all_types)){
+                $temp1=0;
+                while($rowtype=$pres_all_types->FetchRow())
+                {
+                    if(($type=='pres' && $rowtype['group_pres']=='1') ||($type=='sheet' && $rowtype['group_pres']=='0')){
+                        if ($mode=='new' || $mode=='create'){//edit 0810 cot
+                            if($haveissur==1 && $rowtype['typeput']==0)
+                                $styleselect=' SELECTED ';
+                            else $styleselect=' ';
+                        }
+                        //$styleselect='SELECTED';
+                        elseif ($mode=='update' && $rowtype['prescription_type']==$prescription_type)
+                            $styleselect=' SELECTED ';
+                        else
+                            $styleselect=' ';
+
+                        echo '<option value="'.$rowtype['prescription_type'].'_'.$rowtype['typeput'].'" '.$styleselect.'>';
+                        echo $rowtype['prescription_type_name'];
+                        echo '</option>';
+                        $temp1++;
+                    }
+                }
+            }
 			?>
 			</select>
          </td>

@@ -674,7 +674,7 @@ function CheckNumberRequest(i){
 						echo $rowtype['prescription_type_name'];
 						echo '</option>';
 						$temp1++;
-					}					
+					}
 				}
 			}
 			?>
