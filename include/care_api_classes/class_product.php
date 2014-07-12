@@ -2166,7 +2166,7 @@ class Product extends Core
 					FROM care_med_products_main_sub1 AS sub, care_med_products_main AS khochan, care_med_unit_of_medipot AS donvi
 					WHERE khochan.product_encoder=sub.product_encoder 
 						AND donvi.unit_of_medicine=khochan.unit_of_medicine 
-					ORDER BY sub.number " . $updown . " 
+					ORDER BY khochan.product_name, sub.number " . $updown . "
 					" . $limit_number;
 
         if ($this->result = $db->Execute($this->sql)) {
