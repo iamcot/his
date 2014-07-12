@@ -24,20 +24,13 @@ if ($ward_nr != '') {
         $wardname = $LDAllWard;
     }
 }
-//require_once($root_path . 'include/care_api_classes/class_listgroup.php');
-//$ListGroup =new ListGroup;
-//if ($pharma_group_id != '') {
-//    if ($typeinfo = $ListGroup->listPharmaGroupMedicine($pharma_group_id)) {
-//        $typeid = $typeinfo['pharma_group_id'];
-//    }
-//}
+
 
 $thisfile = basename(__FILE__);
 $breakfile = '../nursing-manage-medicine.php' . URL_APPEND . '&dept_nr=' . $dept_nr . '&ward_nr=' . $ward_nr;
 $fileissue = '../nursing-issuepaper-depot.php' . URL_APPEND . '&dept_nr=' . $dept_nr . '&ward_nr=' . $ward_nr;
 $filereturn = 'medicine_return_medicine.php' . URL_APPEND . '&dept_nr=' . $dept_nr . '&ward_nr=' . $ward_nr;
 $urlsearch = $thisfile . URL_APPEND . '&dept_nr=' . $dept_nr . '&ward_nr=' . $ward_nr;
-//$urlsearchMedicine= $thisfile . URL_APPEND . '&dept_nr=' . $dept_nr . '&ward_nr=' . $ward_nr . '&pharma_group_id=' . $pharma_group_id;
 
 # Start Smarty templating here
 /**
@@ -75,27 +68,9 @@ ob_start();
         document.listmedform.action = "<?php echo $urlsearch;?>&search=" + search;
         document.listmedform.submit();
     }
-    function searchMedicine() {
-        var searchMe = document.getElementById('searchMedicine').value;
-        document.listmedform.action = "<?php echo $urlsearch;?>&searchMedicine=" + searchMe;
-        if(document.getElementsByName("type"))
-        {
-//            if(document.)
-        }
-        document.listmedform.submit();
-    }
+
     function checkM(radio)
     {
-//        var radioGroup = document.listmedform.typeMedicine;
-//        var radioGroup=document.getElementsByName("typeMedicine");
-//        var len= radio.length;
-//        for(i=0;i<len;i++)
-//        {
-//            if(radio[i].checked)
-//            {
-                alert(radio.value);
-//            }
-//        }
         document.listmedform.submit();
     }
     function sortUp() {
@@ -182,15 +157,13 @@ ob_start();
                 <table>
                     <tr>
                         <td> Thuốc:     <br>
-                            <input type="radio" name="typeMedicine" onclick="checkM(this)"   value="tatca">Tất cả
-                            <!--                            --><?php //echo $LDTatCaMedicine ;  ?><!--    -->
+                            <input type="radio" name="typeMedicine" onclick="checkM(this)"   value="tatca" <?php if($typeMedicine == 'tatca' ) echo "checked"?> id="typemdetatcat"> <label for="typemdetatcat">Tất cả</label>
 
-                            <input type="radio" name="typeMedicine" onclick="checkM(this)"      value="tamthan">Hướng Tâm Thần
-                            <!--                            --><?php //echo $LDTamThanMedicine ;  ?>   <br>
+
+                            <input type="radio" name="typeMedicine" onclick="checkM(this)"      value="tamthan"  <?php if($typeMedicine == 'tamthan' ) echo "checked"?>  id="typemedtamthan"><label for="typemedtamthan">Hướng Tâm Thần</label>
+                             <br>
                         </td>
-                        <td><a href="javascript:searchMedicine()"><input
-                                    type="image" <?php echo createComIcon($root_path, 'Search.png', '0', '', TRUE) ?>
-                                    onclick=""></a></td>
+
                     </tr>
                 </table>
 
@@ -269,7 +242,8 @@ ob_start();
                 //include_once('kiemke_splitpage.php');
 
                 // if ($total_pages > 1)
-                $listItem = $Product->ShowCatalogCabinet($dept_nr, $ward_nr, $condition, $current_page, $number_items_per_page, $updown);
+//                echo $typeMedicine;
+                $listItem = $Product->ShowCatalogCabinet($dept_nr, $ward_nr, $condition, $current_page, $number_items_per_page, $updown,$typeMedicine);
 
             } else {
                 if (strrpos($search, '/') || strrpos($search, '-')) {
