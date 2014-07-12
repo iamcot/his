@@ -254,7 +254,23 @@ class GuiSearchPerson {
 				if($linecount==1){
 					if(( $this->auto_show_bynumeric ) || $this->auto_show_byalphanumeric  ){
 						$zeile=$ergebnis->FetchRow();
-						header("location:".$this->targetfile."?sid=".$sid."&lang=".$lang."&pid=".$zeile['pid']."&edit=1&status=".$status."&user_origin=".$user_origin."&noresize=1&mode=");
+
+                        //tim lan kham benh cuoi cung
+                        $sql = "SELECT * FROM care_encounter WHERE pid = ".$zeile['pid']." ORDER BY encounter_date DESC LIMIT 1";
+                        $query = $db->Execute($sql);
+                        $row = $query->FetchRow();
+                        if($row != null){
+                             if($row['is_discharged'] == 0) header("Location: aufnahme_daten_zeigen.php?ntid=false&lang=vi&encounter_nr=".$row['encounter_nr']."&origin=patreg_reg");
+                            else
+                                header("Location: show_encounter_list.php?ntid=false&lang=vi&pid=".$row['pid']."&target=");
+
+                        }
+
+
+                        //neu chua xuat  vien, thi nhay sang trang thong tin benh an do
+
+                        else
+						    header("location:".$this->targetfile."?sid=".$sid."&lang=".$lang."&pid=".$zeile['pid']."&edit=1&status=".$status."&user_origin=".$user_origin."&noresize=1&mode=");
 						exit;
 					}
 				}

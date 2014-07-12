@@ -25,7 +25,7 @@
 							<input type="text" name="searchkey" size=40 maxlength=80>
 							<p>
 							{{$sCheckBoxFirstName}} {{$LDIncludeFirstName}}
-							
+
 							{{* Do not move the sHiddenInputs outside the <form> block *}}
 							{{$sHiddenInputs}}
 						</form>

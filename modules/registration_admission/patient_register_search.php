@@ -124,7 +124,13 @@ if(isset($origin) && $origin=='pass')
 
 $sTemp = ob_get_contents();
 ob_end_clean();
-
+?>
+     <script>
+         window.onload = function() {
+             var input = document.searchform.searchkey.focus();
+         }
+     </script>
+<?php
 # Assign the appending post search text
 $psearch->posttext = $sTemp;
 
