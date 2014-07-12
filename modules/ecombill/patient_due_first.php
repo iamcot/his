@@ -323,7 +323,7 @@ if($billid == "currentbill") {
 //		}
 //	}
     //hiện các toa thuốc chưa thanh toán, kiểm tra xem bệnh nhân là nội trú hay ngoại trú
-    //nếu nội trú thì hiện thuốc theo cấp phát     ==>n
+    //nếu nội trú thì hiện thuốc theo cấp phát     =>n
    // $tongthuoc=0;
     if($in_out == 1){
         $pres_noitru = "SELECT iss.*, sum(iss.number) AS sum, prs.product_name, prs.note AS unit, prs.cost

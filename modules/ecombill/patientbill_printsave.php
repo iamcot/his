@@ -55,7 +55,7 @@ if($cntergebnis !=0) {
 $savebillquery="UPDATE care_billing_bill_item SET bill_item_status='1',bill_item_bill_no='$billno' where bill_item_encounter_nr='$patientno' and bill_item_status='0'";
 
 $core->Transact($savebillquery);
-if($in_out ==1){  // lưu hóa đơn hiện tại của nội trú với số lượng tiền thuốc = số thuốc cấp phát*đon giá
+if($in_out ==1){  // lưu hóa đơn hiện tại của nội trú với số lượng tiền thuốc = số thuốc cấp phát*đon giá  ==>n
     $presresult = $Pres->getAllPresOfEncounterByBillId_noitru($patientno,'0');
     if(is_object($presresult))
     {

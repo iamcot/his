@@ -635,6 +635,7 @@ class Prescription extends Core {
      * @return table result or boolean
      */
     //edit vy add p.product_name
+    //lưu hóa đơn nội trú theo cấp phát
     function getAllPresOfEncounterByBillId_noitru($encounterId, $status_bill){
         global $db;
         $this->sql="SELECT  SUM(iss.number*pre.cost) AS total,prs.*, t.prescription_type_name AS type_name, iss.*

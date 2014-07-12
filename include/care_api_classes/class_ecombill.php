@@ -523,6 +523,7 @@ class eComBill extends Core {
 			}else{return false;}
 		}else{return false;}	
 	}
+    // danh sách tiền thuốc nội trú khi chưa thanh toán
     function listAllTotalCostNotPaid_noitru($encounter_nr){
         global $db;
         $this->sql="SELECT SUM(iss.number*prs.cost) AS total
