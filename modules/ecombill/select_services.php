@@ -137,7 +137,7 @@ if($cntLT){
 		$smarty->assign('itemCode',$item['item_code']);
 		$smarty->assign('itemPrice',number_format($item['item_unit_cost']));
 //		$smarty->assign('quantity','<select size="1" name="nounits' .$cnt .'" id="nounits' .$cnt .'">'.$cbx.'</select>');
-        $smarty->assign('quantity','<input type="number" size="1" name="nounits' .$cnt .'" id="nounits' .$cnt .'">'.$txt.' </input>');
+        $smarty->assign('quantity','<input type="number" size="1" name="nounits' .$cnt .'" value="1" id="nounits' .$cnt .'">'.$txt.' </input>');
 
 //        if(!preg_match('/([0-9]+)/i',$_REQUEST['vidu1']))
 //        if(preg_match('/([0-9]+)/i',$txt))

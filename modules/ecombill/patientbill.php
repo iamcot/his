@@ -47,7 +47,7 @@ $in_out = $patient['encounter_class_nr']; // xet noi tru hay ngoai tru -->nang
 // Check if final bill is available, if yes hide new entry of bills and make payment menu items
 
 $chkexists = 0;
-$chkfinalresult = $eComBill->checkFinalBillExist($patient_no);
+$chkfinalresult = $eComBill->checkFinalBillExist($patient_no);     //MP
 
 if(is_object($chkfinalresult)) $chkexists = $chkfinalresult->RecordCount();
 
