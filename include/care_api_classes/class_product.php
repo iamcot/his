@@ -1493,7 +1493,7 @@ class Product extends Core
         }
     }
 
-    function ShowCatalogCabinet($dept_nr, $ward_nr, $condition, $current_page, $number_items_per_page, $updown)
+    function ShowCatalogCabinet($dept_nr, $ward_nr, $condition, $current_page, $number_items_per_page, $updown,$typeMedicine)
     {
         global $db;
         $dept_ward = '';
@@ -1506,6 +1506,11 @@ class Product extends Core
 //            $limit_number = 'LIMIT ' . $start_from . ', ' . $number_items_per_page;
 //        }
         //tong hop thuoc de xem tong so luong nen group theo ten thuoc
+        if ($typeMedicine == 'tamthan')
+            $typeMedicine = " AND khochan.product_name LIKE 'Diazepam%' ";
+        else
+            $typeMedicine = " AND khochan.product_name NOT LIKE 'Diazepam%' ";
+
         $this->sql = "SELECT
 		    khochan.product_name,
               donvi.unit_name_of_medicine,
@@ -1530,6 +1535,7 @@ class Product extends Core
                     AND donvi.unit_of_medicine=khochan.unit_of_medicine
                       	" . $condition . "
 
+                        $typeMedicine
                       	GROUP BY khochan.product_encoder, taikhoa.ward_nr,taikhoa.typeput
                 ORDER BY ward_nr, khochan.product_name, taikhoa.init_number " . $updown . "
 				";
