@@ -464,9 +464,11 @@ function ChangeAtTime(x){
 	document.getElementById('vaoluc'+x).innerHTML = texthtml;
 }
 function Medicine_AutoComplete(i){
-			
+			var typeput=document.getElementById("prescription_type_nr").value;
+//            var arr= str.split('_');
+//            var typeput=arr[1];
 			var name_med='medicinea'+i;
-			var includeScript = "<?php echo $file_autocomplete; ?>?mode=auto&k="+i;
+			var includeScript = "<?php echo $file_autocomplete; ?>?mode=auto&k="+i+"&typeput="+typeput;
 			new Ajax.Autocompleter(name_med,"hint",includeScript, {
 					method: 'get',
 					paramName: 'search',
@@ -670,7 +672,7 @@ function CheckNumberRequest(i){
 						else
 							$styleselect=' ';
 						
-						echo '<option value="'.$rowtype['prescription_type'].'_'.$rowtype['typeput'].'" '.$styleselect.'>';
+						echo '<option value="'.$rowtype['typeput'].'" '.$styleselect.'>';
 						echo $rowtype['prescription_type_name'];
 						echo '</option>';
 						$temp1++;
