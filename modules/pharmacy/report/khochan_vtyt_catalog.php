@@ -145,7 +145,8 @@ ob_start();
 			<a href="javascript:sortDown()">
 				<input type="image" <?php echo createComIcon($root_path,$picdown,'0','',TRUE) ?> onclick="" title="<?php echo $LDSortDown; ?>"></a>
 		</th>	
-		<th><?php echo $LDNote; ?></th>	
+		<th><?php echo $LDNote; ?></th>
+        <th><?php echo 'Dành cho'; ?></th>
 	</tr>
 	<?php 
 	if ($search==''){
@@ -195,7 +196,10 @@ ob_start();
 			if (round($rowItem['price'],3)==round($rowItem['price']))
 				$show_price = number_format($rowItem['price']);
 			else $show_price = number_format($rowItem['price'],3);
-			
+            if($rowItem['typeput']==0)
+                $usefor=$LDBHYT;
+            else
+                $usefor=$LDSuNghiep;
 			$sTemp=$sTemp.'<tr bgColor="'.$bgc.'" >
 								<td align="center"><input type="checkbox" name="groupcb" value="'.$rowItem['product_encoder'].'"></td>
 								<td align="center">'.($i+1).'</td>
@@ -207,6 +211,7 @@ ob_start();
 								<td align="center">'.$expdate.'</td>
 								<td align="right">'.number_format($rowItem['number']).'</td>
 								<td align="center"></td>
+								<td align="center">'.$usefor.'</td>
 							</tr>';
 		}
 		echo $sTemp;

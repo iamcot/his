@@ -300,7 +300,10 @@ function CalDay(x){
 }
 function Medicine_AutoComplete(i){
 			var name_med='medicinea'+i;
-			var includeScript = "<?php echo $file_autocomplete; ?>?mode=auto&k="+i;
+            var str=document.getElementById("prescription_type_nr").value;
+            var arr= str.split('_');
+            var typeput=arr[1];
+			var includeScript = "<?php echo $file_autocomplete; ?>?mode=auto&k="+i+"&typeput="+typeput;
 			new Ajax.Autocompleter(name_med,"hint",includeScript, {
 					method: 'get',
 					paramName: 'search',
@@ -428,7 +431,7 @@ function CheckDuplicateMedicine(){
                 $temp1=0;
                 while($rowtype=$pres_all_types->FetchRow())
                 {
-                    if(($type=='pres' && $rowtype['group_pres']=='1') ||($type=='sheet' && $rowtype['group_pres']=='0')){
+                    if(($type=='pres' && $rowtype['group_pres']=='1') ||($type=='pres' && $rowtype['group_pres']=='0')|| $type==''){
                         if ($mode=='new' || $mode=='create'){//edit 0810 cot
                             if($haveissur==1 && $rowtype['typeput']==0)
                                 $styleselect=' SELECTED ';

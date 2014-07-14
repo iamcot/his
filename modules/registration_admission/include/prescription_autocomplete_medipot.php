@@ -4,6 +4,7 @@ $root_path='../../../';
 require($root_path.'include/core/inc_environment_global.php');
 //require_once($root_path.'include/care_api_classes/class_product.php');
 
+$typeput=$_GET["typeput"];
 $search=$_GET["search"];
 $response="";
 switch($mode){
@@ -15,6 +16,7 @@ switch($mode){
 						AND khochan.product_encoder=khole.product_encoder
 						AND donvi.unit_of_medicine=khochan.unit_of_medicine
 						AND khochan.pharma_type IN (5,6,7)
+						AND khole.typeput=$typeput
 						GROUP BY khole.product_encoder
 						ORDER BY khochan.product_name LIMIT 15 ";
 
@@ -35,12 +37,12 @@ switch($mode){
 				}
 				break;
 			
-	case 'filldata': 
-				$encoder=$_GET['encoder'];
+	case 'filldata':
+                $avai_id =$_GET["avai_id"];
 				$sql="	SELECT khochan.product_encoder, khochan.product_name, khochan.unit_of_medicine, khochan.price, khochan.caution, donvi.unit_name_of_medicine, khole.lotid, khole.exp_date, SUM(khole.number) AS allocation_temp
 						FROM care_med_products_main_sub1 AS khole,
 						care_med_products_main AS khochan, care_med_unit_of_medipot AS donvi  				 
-						WHERE khochan.product_encoder='".$encoder."' 
+						WHERE khole.id='".$avai_id."'
 						AND khochan.product_encoder=khole.product_encoder 
 						AND donvi.unit_of_medicine=khochan.unit_of_medicine
 						GROUP BY khole.product_encoder"; 
