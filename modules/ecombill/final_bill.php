@@ -18,7 +18,7 @@ require($root_path.'include/care_api_classes/class_encounter.php');
 require_once($root_path.'include/care_api_classes/class_prescription.php');
 require_once($root_path.'include/core/inc_date_format_functions.php');
 require_once($root_path.'classes/money/convertMoney.php');
-
+//$date_format='dd-mm-yyyy';
 $eComBill = new eComBill;
 $Encounter = new Encounter;
 if(!isset($Pres)) $Pres = new Prescription;
@@ -31,6 +31,27 @@ $returnfile='patientbill.php'.URL_APPEND.'&patientno='.$patientno.'&full_en='.$f
 $presdate=date("Y-m-d");
 
 
+//xét nội trú hay ngoại trú
+$patqry="SELECT e.*,p.* FROM care_encounter AS e, care_person AS p WHERE e.encounter_nr=$patientno AND e.pid=p.pid";
+$resultpatqry=$db->Execute($patqry);
+if(is_object($resultpatqry)) $patient=$resultpatqry->FetchRow();
+else $patient=array();
+// xem dạng điều trị
+$in_out = $patient['encounter_class_nr'];//noi tru hay ngoai tru
+if($in_out==1) $in_out_patient= 'Nội trú';
+else $in_out_patient='Ngoại trú';
+
+if($in_out==1){
+//Kiem tra xem co hoa don nao con chua thanh toan ko. Neu co quay ra thanh toan roi moi tong ket sau cung.
+$chkpendbillres = $eComBill->listBillsByEncounter($patientno);
+if(is_object($chkpendbillres))
+    $chkcnt=$chkpendbillres->RecordCount();
+
+$presresult = $Pres->getAllPresOfEncounterByBillId_noitru($patientno,'0');
+if(is_object($presresult))
+    $countpres=$presresult->RecordCount();
+
+}else{
 //-----------------------------------------------------------
 //Kiem tra xem co hoa don nao con chua thanh toan ko. Neu co quay ra thanh toan roi moi tong ket sau cung.
 $chkpendbillres = $eComBill->listBillsByEncounter($patientno);
@@ -40,7 +61,7 @@ if(is_object($chkpendbillres))
 $presresult = $Pres->getAllPresOfEncounterByBillId($patientno,'0');
 if(is_object($presresult))
     $countpres=$presresult->RecordCount();
-
+}
 if($chkcnt+$countpres>0)    {
     html_rtl($lang);
     echo setCharSet ();
@@ -191,6 +212,74 @@ for ($k=0; $k<count($list_enc); $k++){
 					<tr><td colspan="5">
 							<table width="100%" bgcolor="#FCDFFF" border="0">';
                 //items in bill
+
+                if($in_out==1){
+                    $temp_item='';
+                    //thuốc cấp phát nội trú
+                    $pres_noitru = "SELECT iss.*, sum(iss.number) AS sum, prs.product_name, prs.note AS unit, prs.cost
+					FROM care_pharma_prescription_issue AS iss, care_pharma_prescription AS prs
+					WHERE iss.enc_nr='".$patientno."' AND prs.prescription_id=iss.pres_id
+					AND prs.product_encoder=iss.product_encoder
+					AND iss.status_bill='1'
+					GROUP BY iss.product_encoder, iss.date_issue
+					ORDER BY iss.product_encoder, iss.date_issue";
+                    $stt=1;
+                    $list_item = array();
+                    $list_date = array();
+                    $k=0;
+                    $list_name = array();
+                    $list_info = array();
+                    if($pres_item_noitru=$db->Execute($pres_noitru)){
+                        for($i=0;$i<$pres_item_noitru->RecordCount();$i++){
+                            $item = $pres_item_noitru->FetchRow();
+                            $list_item[$item['product_encoder']][$item['date_issue']]= $item['sum'];   //==>n đổi $item['number'] thành  $item['sum']
+                            if(!in_array($item['date_issue'], $list_date)){
+                                $k++;
+                                $list_date[$k]=$item['date_issue'];
+                            }
+                            if(!in_array($item['product_encoder'],$list_name)){
+                                $list_info[$item['product_encoder']]['name']=$item['product_name'];
+                                $list_info[$item['product_encoder']]['unit']=$item['unit'];
+                                $list_info[$item['product_encoder']]['cost']=$item['cost'];
+                            }
+                        }
+                    }
+                    foreach ($list_item as $x => $v) {
+                        $tongthuoc=0;
+                        foreach ($list_date as $v1) {
+                            $tongthuoc += $v[$v1];
+                        }
+                        $temp_item=$temp_item.'<tr>
+															<td width="30%">'.$list_info[$x]['name'].'</td>
+															<td align="right" width="10%">'.$list_info[$x]['cost'].'</td>
+															<td align="right" width="5%">'.$tongthuoc.'</td>
+															<td align="right" >'.$tongthuoc*$list_info[$x]['cost'].'</td>
+															<td align="center">Thuốc</td>
+															<td>'.formatDate2Local($item['date_issue'],$date_format).'</td>
+														</tr>';
+
+                        $stt++;
+                    }
+
+                    $billitem_query = $eComBill->listItemsByBillId($oldenc_eachbill['bill_bill_no']);
+                    if(is_object($billitem_query)) {
+                        while ($billitem_result=$billitem_query->FetchRow()){
+                            $billitem_result['bill_item_date']= formatDate2Local($billitem_result['bill_item_date'],$date_format);
+                            if ($billitem_result['item_type']=='HS') $item_type=$LDMedicalServices;
+                            else if ($billitem_result['item_type']=='LT') $item_type=$LDLaboratoryTests;
+
+                            $temp_item=$temp_item.'<tr>
+															<td width="30%">'.$billitem_result['item_description'].'</td>
+															<td align="right" width="10%">'.$billitem_result['bill_item_unit_cost'].'</td>
+															<td align="right" width="5%">'.$billitem_result['bill_item_units'].'</td>
+															<td align="right" >'.$billitem_result['bill_item_amount'].'</td>
+															<td align="center">'.$item_type.'</td>
+															<td>'.$billitem_result['bill_item_date'].'</td>
+														</tr>';
+                        }
+                    }
+                }
+                else{
                 $temp_item='';
                 $billitem_query = $eComBill->listItemsByBillId($oldenc_eachbill['bill_bill_no']);
                 if(is_object($billitem_query)) {
@@ -208,6 +297,7 @@ for ($k=0; $k<count($list_enc); $k++){
 															<td>'.$billitem_result['bill_item_date'].'</td>
 														</tr>';
                     }
+                }
                 }
                 $oldbill_temp .=	$temp_item;
                 $oldbill_temp .='
@@ -296,6 +386,87 @@ if(is_object($bill_query)) {
         $smarty->assign('LDOutstanding', $LDOutstanding);
 
         //items in bill
+        if($in_out==1){
+            $temp_item='';
+            //thuốc cấp phát nội trú
+            $pres_noitru = "SELECT iss.*, sum(iss.number) AS sum, prs.product_name, prs.note AS unit, prs.cost
+					FROM care_pharma_prescription_issue AS iss, care_pharma_prescription AS prs
+					WHERE iss.enc_nr='".$patientno."' AND prs.prescription_id=iss.pres_id
+					AND prs.product_encoder=iss.product_encoder
+					AND iss.status_bill='1'
+					GROUP BY iss.product_encoder, iss.date_issue
+					ORDER BY iss.product_encoder, iss.date_issue";
+            $stt=1;
+            $list_item = array();
+            $list_date = array();
+            $k=0;
+            $list_name = array();
+            $list_info = array();
+            if($pres_item_noitru=$db->Execute($pres_noitru)){
+                for($i=0;$i<$pres_item_noitru->RecordCount();$i++){
+                    $item = $pres_item_noitru->FetchRow();
+                    $list_item[$item['product_encoder']][$item['date_issue']]= $item['sum'];   //==>n đổi $item['number'] thành  $item['sum']
+                    if(!in_array($item['date_issue'], $list_date)){
+                        $k++;
+                        $list_date[$k]=$item['date_issue'];
+                    }
+                    if(!in_array($item['product_encoder'],$list_name)){
+                        $list_info[$item['product_encoder']]['name']=$item['product_name'];
+                        $list_info[$item['product_encoder']]['unit']=$item['unit'];
+                        $list_info[$item['product_encoder']]['cost']=$item['cost'];
+                    }
+                }
+            }
+            foreach ($list_item as $x => $v) {
+                $tongthuoc=0;
+                foreach ($list_date as $v1) {
+                    $tongthuoc += $v[$v1];
+                }
+                $temp_item=$temp_item.'<tr>
+															<td width="30%">'.$list_info[$x]['name'].'</td>
+															<td align="right" width="10%">'.$list_info[$x]['cost'].'</td>
+															<td align="right" width="5%">'.$tongthuoc.'</td>
+															<td align="right" >'.$tongthuoc*$list_info[$x]['cost'].'</td>
+															<td align="center">Thuốc</td>
+															<td>'.formatDate2Local($item['date_issue'],$date_format).'</td>
+														</tr>';
+
+                $stt++;
+            }
+
+            $billitem_query = $eComBill->listItemsByBillId($billno);
+            if(is_object($billitem_query)) {
+                while ($billitem_result=$billitem_query->FetchRow()){
+
+                    $billitem_result['bill_item_date']= formatDate2Local($billitem_result['bill_item_date'],$date_format);
+                    if ($billitem_result['item_type']=='HS')
+                        $item_type=$LDMedicalServices;
+                    else if ($billitem_result['item_type']=='LT')
+                        $item_type=$LDLaboratoryTests;
+
+                    $temp_item=$temp_item.'<tr bgcolor="ffffff">
+										<td width="30%">'.$billitem_result['item_description'].'</td>
+										<td align="right" width="10%">'.number_format($billitem_result['bill_item_unit_cost']).'</td>
+										<td align="right" width="5%">'.$billitem_result['bill_item_units'].'</td>
+										<td align="right" >'.number_format($billitem_result['bill_item_amount']).'</td>
+										<td align="center">'.$item_type.'</td>
+										<td>'.$billitem_result['bill_item_date'].'</td>
+									</tr>';
+                }
+                $smarty->assign('results', $temp_item);
+                $smarty->assign('LDMedicalServices', $LDMedicalServices);
+                $smarty->assign('LDLaboratoryTests', $LDLaboratoryTests);
+
+            }
+
+            ob_start();
+            $smarty->display('ecombill/each_bill_table.tpl');
+            $sListBillRow = $sListBillRow.ob_get_contents();
+            ob_end_clean();
+
+            $smarty->assign('LDItemAllBill', $sListBillRow);
+
+        } else{
         $temp_item='';
         $billitem_query = $eComBill->listItemsByBillId($billno);
         if(is_object($billitem_query)) {
@@ -328,7 +499,7 @@ if(is_object($bill_query)) {
         ob_end_clean();
 
         $smarty->assign('LDItemAllBill', $sListBillRow);
-    }
+    }  }
 } else {
     $temp_item='';
     $temp_item=$temp_item.'<tr>

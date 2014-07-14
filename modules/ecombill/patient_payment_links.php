@@ -20,7 +20,15 @@ $eComBill = new eComBill;
 
 $breakfile='patientbill.php'.URL_APPEND.'&patientno='.$patientno.'&full_en='.$full_en.'&target='.$target;
 $returnfile='patientbill.php'.URL_APPEND.'&patientno='.$patientno.'&full_en='.$full_en.'&target='.$target;
-
+//xét nội trú hay ngoại trú
+$patqry="SELECT e.*,p.* FROM care_encounter AS e, care_person AS p WHERE e.encounter_nr=$patientno AND e.pid=p.pid";
+$resultpatqry=$db->Execute($patqry);
+if(is_object($resultpatqry)) $patient=$resultpatqry->FetchRow();
+else $patient=array();
+// xem dạng điều trị
+$in_out = $patient['encounter_class_nr'];//noi tru hay ngoai tru
+if($in_out==1) $in_out_patient= 'Nội trú';
+else $in_out_patient='Ngoại trú';
 # Check if final bill is available, if yes hide new  payment menu item
 $chkfinalresult = $eComBill->checkFinalBillExist($full_en);
 if(is_object($chkfinalresult)) $chkexists=$chkfinalresult->RecordCount();
@@ -36,13 +44,31 @@ $resultbillqry=$db->Execute($billqry);
 		$totalbill=$buffer['sum'];
 		$totaldis=$buffer['sumdis'];
 	}
-//items still not paid	
+//items still not paid
+/*
 $listitemnotpaid = $eComBill->listAllTotalCostNotPaid($patientno);	
 if(is_object($listitemnotpaid)){
 	while ($itemnotpaid =$listitemnotpaid->FetchRow()) { 
 		$totalbill += $itemnotpaid['total'];
 	}
-}	
+}*/
+if($in_out == 1){
+    $listitemnotpaid = $eComBill->listAllTotalCostNotPaid_noitru($patientno);
+    if(is_object($listitemnotpaid)){
+        while ($itemnotpaid =$listitemnotpaid->FetchRow()) {
+            $totalbill += $itemnotpaid['total'];    //tổng số tiền chi phí khám bệnh
+        }
+    }
+}  else{
+    // ngoại trú thì lấy nguyên toa thuốc ==>n
+    $listitemnotpaid = $eComBill->listAllTotalCostNotPaid($patientno);
+    if(is_object($listitemnotpaid)){
+        while ($itemnotpaid =$listitemnotpaid->FetchRow()) {
+            $totalbill += $itemnotpaid['total'];    //tổng số tiền chi phí khám bệnh
+        }
+    }
+}
+
 //payment
 $totalpayment=0;
 $paymentqry="SELECT SUM(payment_amount_total) AS sum FROM care_billing_payment WHERE payment_encounter_nr=$patientno";

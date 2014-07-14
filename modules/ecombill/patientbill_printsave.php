@@ -55,7 +55,11 @@ if($cntergebnis !=0) {
 $savebillquery="UPDATE care_billing_bill_item SET bill_item_status='1',bill_item_bill_no='$billno' where bill_item_encounter_nr='$patientno' and bill_item_status='0'";
 
 $core->Transact($savebillquery);
+/**
+ngoại trú thì dùng lại hàm dưới, nếu nội trú thì lấy care_pharma_prescription_issue  và cập nhật vào
+ */
 if($in_out ==1){  // lưu hóa đơn hiện tại của nội trú với số lượng tiền thuốc = số thuốc cấp phát*đon giá  ==>n
+
     $presresult = $Pres->getAllPresOfEncounterByBillId_noitru($patientno,'0');
     if(is_object($presresult))
     {
@@ -63,13 +67,13 @@ if($in_out ==1){  // lưu hóa đơn hiện tại của nội trú với số l�
         {
             $pres = $presresult->FetchRow();
             //info of service
-            $eComBill->createBillItem($patientno,$pres['prescription_type'],$pres['total'],'1',$pres['total'],$presdatetime,'1',$billno);
+          //  $eComBill->createBillItem_noitru($patientno,$pres['date_issue'],$pres['product_encoder'],$pres['sum'],$pres['pres_id'],$pres['create_id'],$presdatetime,$pres['available_product_id'],'1');
 
-            $Pres->setPresStatusBill($pres['prescription_id'],$billno);
+           $Pres->setPresStatusBill_noitru($pres['pres_id'],'1'); //update trang thái đã lưu những thuốc cấp phát của bệnh nhân nội trú là 1 (1: đã lưu)
         }
     }
-
 }   else{
+
 //Save prescription + update bill status
 $presresult = $Pres->getAllPresOfEncounterByBillId($patientno,'0');
 if(is_object($presresult))
@@ -77,9 +81,9 @@ if(is_object($presresult))
 	for($i=0;$i<$presresult->RecordCount();$i++)
 	{
 		$pres = $presresult->FetchRow();
-		//info of service
+		//info of service  lưu vào table
 		$eComBill->createBillItem($patientno,$pres['prescription_type'],$pres['total_cost'],'1',$pres['total_cost'],$presdatetime,'1',$billno);
-			
+
 		$Pres->setPresStatusBill($pres['prescription_id'],$billno);
 	}
 }

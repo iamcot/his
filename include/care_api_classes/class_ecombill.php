@@ -188,7 +188,7 @@ class eComBill extends Core {
 			}else{return false;}
 		}else{return false;}			
 	}
-	
+
 	function createBillItem($patientno, $labcode, $unitcost, $no_units, $totalamt, $presdatetime,$billstatus='0',$bill_bill_no='0'){
 		$this->sql = "INSERT INTO $this->billItem 	(bill_item_encounter_nr,bill_item_code,bill_item_unit_cost,bill_item_units,bill_item_amount,bill_item_date,bill_item_status,bill_item_bill_no) 
 					VALUES($patientno,'$labcode',$unitcost,$no_units,$totalamt,'$presdatetime','$billstatus',$bill_bill_no)";
@@ -528,17 +528,19 @@ class eComBill extends Core {
         global $db;
         $this->sql="SELECT SUM(iss.number*prs.cost) AS total
 					FROM care_pharma_prescription_issue AS iss, care_pharma_prescription AS prs
-					WHERE iss.enc_nr='2014000167' AND prs.prescription_id=iss.pres_id AND prs.product_encoder=iss.product_encoder
+					WHERE iss.enc_nr='$encounter_nr' AND prs.prescription_id=iss.pres_id
+					AND prs.product_encoder=iss.product_encoder
+					AND iss.status_bill='0'
 					GROUP BY iss.product_encoder, iss.date_issue
 					UNION ALL
 					SELECT SUM(total_cost) AS total FROM care_med_prescription_info
-					WHERE status_bill='0' AND encounter_nr='2014000167'
+					WHERE status_bill='0' AND encounter_nr='$encounter_nr'
 					UNION ALL
 					SELECT SUM(total_cost) AS total FROM care_chemical_prescription_info
-					WHERE status_bill='0' AND encounter_nr='2014000167'
+					WHERE status_bill='0' AND encounter_nr='$encounter_nr'
 					UNION ALL
 					SELECT SUM(bill_item_amount) AS total FROM care_billing_bill_item
-					WHERE bill_item_encounter_nr='2014000167' AND bill_item_status IN ('0','') ";
+					WHERE bill_item_encounter_nr='$encounter_nr' AND bill_item_status IN ('0','') ";
         if ($this->result=$db->Execute($this->sql)) {
             if ($this->result->RecordCount()) {
                 return $this->result;

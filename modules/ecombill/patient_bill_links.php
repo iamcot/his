@@ -166,9 +166,10 @@ if(is_object($billqueryresult)) {
 	}
 }
 if($in_out==1){
+
     //List all Item of this Encounter not paid (bill_item_status=0)
     $chkfinalresult = $eComBill->listBillsByEncounter($patientno);
-    $chkpres = $Pres->getAllPresOfEncounterByBillId($patientno,'0');
+    $chkpres = $Pres->getAllPresOfEncounterByBillId_noitru($patientno,'0');
 
 
     $finaldate = '';
@@ -191,7 +192,7 @@ if($in_out==1){
             $username = $eComBill->GetUserName($result['create_id']);
             $smarty->assign('create_name', $username);
 
-        } else {	//Show currentbill
+        }  else {	//Show currentbill
             $smarty->assign('itemNr', '<a href=javascript:showbill(\'currentbill\')>'.$LDCurrentBill.'</a>');
             $smarty->assign('date', formatDate2Local(date("Y-m-d"),$date_format));
             $smarty->assign('create_name', $_SESSION['sess_user_name']);

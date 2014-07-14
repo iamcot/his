@@ -51,6 +51,7 @@ class Prescription extends Core {
     var $tb_phar_pres_type='care_pharma_type_of_prescription';
 
     var $tb_phar_pres_unit='care_pharma_unit_of_medicine';
+    var $tb_phar_pres_iss ='care_pharma_prescription_issue'  ;
 
 
 
@@ -578,6 +579,16 @@ class Prescription extends Core {
      * @param string new status
      * @return boolean
      */
+    function setPresStatusBill_noitru($prescriptionId,$status) {
+        global $db;
+        if(!$prescriptionId) return FALSE;
+        //prescriprion_info
+        $this->sql="UPDATE $this->tb_phar_pres_iss
+						SET status_bill='$status'
+						WHERE pres_id=$prescriptionId";
+        return $this->Transact($this->sql);
+    }
+
     function setPresStatusBill($prescriptionId,$status) {
         global $db;
         if(!$prescriptionId) return FALSE;
@@ -638,15 +649,15 @@ class Prescription extends Core {
     //lưu hóa đơn nội trú theo cấp phát
     function getAllPresOfEncounterByBillId_noitru($encounterId, $status_bill){
         global $db;
-        $this->sql="SELECT  SUM(iss.number*pre.cost) AS total,prs.*, t.prescription_type_name AS type_name, iss.*
-                    FROM care_pharma_prescription_info AS prs, care_pharma_type_of_prescription AS t , care_pharma_prescription_issue AS iss, care_pharma_prescription  AS pre
-                    WHERE prs.encounter_nr='".$encounterId."'
-                    AND prs.status_bill='".$status_bill."'
-                    AND prs.total_cost>0
-                    AND prs.prescription_type=t.prescription_type
-                    AND iss.enc_nr = prs.encounter_nr
-                    AND pre.prescription_id=iss.pres_id";
-        //echo $sql;
+        $this->sql="SELECT iss.*, SUM(iss.number*prs.cost) AS total, prs.product_name, prs.note AS unit, prs.cost
+                    FROM care_pharma_prescription_issue AS iss, care_pharma_prescription AS prs
+                    WHERE iss.enc_nr='$encounterId'
+                    AND prs.prescription_id=iss.pres_id
+                    AND prs.product_encoder=iss.product_encoder
+                    AND iss.status_bill='$status_bill'
+                    GROUP BY iss.product_encoder, iss.date_issue
+                    ORDER BY iss.product_encoder, iss.date_issue";
+                            //echo $sql;
         if ($this->result=$db->Execute($this->sql)) {
             if ($this->result->RecordCount()) {
                 return $this->result;
