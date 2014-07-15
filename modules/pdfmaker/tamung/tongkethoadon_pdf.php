@@ -82,10 +82,11 @@ $pdf->AddPage();
 // set font
 $pdf->SetFont('dejavusans', '', 10);
 $header_1='<table><tr>
-			<td width="25%"><b><br><br><br>
+			<td width="30%"><b>
+			 TRUNG TÂM Y TẾ HUYỆN TÂN UYÊN <br>
              Khoa phòng: '.$wardname.'</b>
 			</td>
-			<td align="center" width="50%"><b><font size="14">PHIẾU CÔNG KHAI THUỐC VÀ TỔNG HỢP VIỆN PHÍ</font></b><br><br><font size="10">Mức hưởng:'.$mh*100 .'%</font></td>
+			<td align="center" width="50%"><b><font size="14"><br><br>PHIẾU CÔNG KHAI THUỐC VÀ TỔNG HỢP VIỆN PHÍ</font></b><br><br><font size="10">Mức hưởng:'.$mh*100 .'%</font></td>
 		    </tr>
 
 		</table>';
@@ -483,9 +484,45 @@ $html.= ' <tr>
                             <td  colspan="8"><i><b>Còn lại: &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;'.number_format($tongtienthuocTra+$tongtienVTYTTra+$tongtienxndvTra - ($thanhtoan + $tamung)).' vnd</b></i></td>
 				           </tr>
 			</table>';
+$html1='<table width="100%">
+		<tr>
+			<td></td><td></td>
+			<td align="center"><i>Ngày ....... tháng ....... năm '.date('Y').'</i></td>
+		</tr>
+		<tr>
+			<td align="center"><b>NGƯỜI LẬP BẢNG KÊ</b><br>(Ký,ghi rõ họ tên)</td>
+			<td></td>
+			<td align="center"><b>KẾ TOÁN VIỆN PHÍ</b><br>(Ký,ghi rõ họ tên)</td>
+		</tr>
+		<tr><td colspan="3"><br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;</td></tr>
+		<tr>
+			<td align="center"></td>
+			<td></td>
+			<td align="center"></td>
+		</tr>
+		</table>';
+$html2='<table width="100%">
+		<tr>
+			<td></td><td></td>
+			<td align="center"><i>Ngày ....... tháng ....... năm '.date('Y').'</i></td>
+		</tr>
+		<tr>
+			<td align="center"><b>XÁC NHẬN CỦA NGƯỜI BỆNH</b><br>(Ký,ghi rõ họ tên)</td>
+			<td></td>
+			<td align="center"><b>GIÁM ĐỊNH BHYT</b><br>(Ký,ghi rõ họ tên)</td>
+		</tr>
+		<tr><td colspan="3"><br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;</td></tr>
+		<tr>
+			<td align="center"></td>
+			<td></td>
+			<td align="center"></td>
+		</tr>
+		</table>';
 $html = $html.ob_get_contents();
 ob_clean();
 $pdf->writeHTML($html);
+$pdf->writeHTML($html1);
+$pdf->writeHTML($html2);
 
 //$pdf->writeHTML($htmlcol1);
 $pdf->selectColumn(1);

@@ -610,7 +610,7 @@ $group_id=0;
 	$smarty->assign('ItemBed',$noItem);
 //Cac dich vu khac
 $smarty->assign('LDKhac','10. '.$LDKhac);
-if($sTempBed)
+if( $sTempKhac)
     $smarty->assign('ItemKhac',$sTempKhac);
 else
     $smarty->assign('ItemKhac',$noItem);

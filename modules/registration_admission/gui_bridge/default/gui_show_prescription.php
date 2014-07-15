@@ -56,7 +56,7 @@ if ($type=='pres')
 							$temp=$LDFinish; $temp1='check-r.gif';}
 						else{
 							$temp=$LDNotYet; $temp1='warn.gif';}?>
-				<img <?php echo createComIcon($root_path,$temp1,'0','',TRUE); ?>>	
+				<img <?php echo createComIcon($root_path,$temp1,'0','',TRUE); ?>>
 				<?php 	echo $LDPaid.": ".$temp; ?>
 			</td>
 			<td colspan=2><FONT SIZE=-1  FACE="Arial">
@@ -175,14 +175,16 @@ if ($type=='pres')
 	<?php if ($row_2['total_cost']) {  ?>
 		<tr bgcolor="<?php echo $bgc; ?>" valign="top">
 			<td align="right"><FONT SIZE=-1  FACE="Arial"><?php echo $LDPrice.": ".number_format($row_2['total_cost']); ?></td>
-			<td align="right"><FONT SIZE=-1  FACE="Arial">
-				<?php  	if($row_2['status_bill']){
-							$temp=$LDFinish; $temp1='check-r.gif';}
-						else{
-							$temp=$LDNotYet; $temp1='warn.gif';}?>
-				<img <?php echo createComIcon($root_path,$temp1,'0','',TRUE); ?>>	
-				<?php 	echo $LDPaid.": ".$temp; ?>
-			</td>
+            <!--    cờ thanh toán y lệnh-- bỏ
+            <td align="right"><FONT SIZE=-1  FACE="Arial">
+				<?php // 	if($row_2['status_bill']){
+						//	$temp=$LDFinish; $temp1='check-r.gif';}
+					//	else{
+						//	$temp=$LDNotYet; $temp1='warn.gif';}?>
+				<img <?php// echo createComIcon($root_path,$temp1,'0','',TRUE); ?>>
+				<?php //	echo $LDPaid.": ".$temp; ?>
+			</td> -->
+            <td></td>
 			<td colspan=2 align="right"><FONT SIZE=-1  FACE="Arial">
 				<?php  	if($row_2['status_finish']){
 							$temp=$LDFinish; $temp1='check-r.gif';}
