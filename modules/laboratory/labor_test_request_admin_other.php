@@ -410,7 +410,7 @@ require('includes/inc_test_request_lister_fx.php');
       <td bgcolor="<?php echo $bgc1 ?>"  class=fva2_ml10><div   class=fva2_ml10><font size=5 color="#0000ff"><b><?php echo $formtitle ?></b></font>
 		 <br>
               <br><br><?php echo $global_address[$subtarget].'<br>'.$LDTel.'&nbsp;'.$global_phone[$subtarget]; ?>
-              <br> <?php echo "Khẩn cấp: "?> <input type="checkbox" <?php if($urgent==1){?> checked="checked"<?php } ?>>
+              <br> <?php echo "Khẩn cấp: "?> <input type="checkbox" <?php if($urgent==1){?> checked="checked"<?php } ?> disabled>
 		 </td>
 		 </tr>
 	 <tr>

@@ -479,7 +479,7 @@ function CheckDuplicateMedicine(){
 		<td><FONT color="#000066"><?php echo $LDTotalDay; ?></td>
 		<td><input type="text" name="totalday" size=11 value="<?php if($mode=='update') echo $sumdate; else echo '1'; ?>"></td>
 		<td><FONT color="#000066"><?php echo $LDInsuranceExp; ?></td>
-		<td><input type="text" id="expdate" size=11 value="<?php echo formatDate2Local($encounter['insurance_exp'],"DD/MM/YYYY",false,false,$sepChars); ?>" style="border:none;" readonly></td>
+		<td><input type="text" id="expdate" size=11 value="<?php echo formatDate2Local($encounter['pinsurance_exp'],"DD/MM/YYYY",false,false,$sepChars); ?>" style="border:none;" readonly></td>
 	</tr>   
    <tr>
 		<td><FONT color="#000066"><?php if ($mode=='update') echo $LDPaid;?></td>
