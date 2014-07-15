@@ -4,7 +4,7 @@ include_once($root_path.'include/care_api_classes/class_encounter.php');
 include_once($root_path.'include/care_api_classes/class_ward.php');
 require_once($root_path.'include/core/inc_date_format_functions.php');
 if(!isset($pres_obj)) $pres_obj=new Prescription;
-if(!isset($encounter_obj)) $encounter_obj=new Encounter;
+if(!isset($encounter_obj)) $encounter_obj=new Encounter;  $encounter_cbtc=new Encounter;
 if(!isset($ward_obj)) $ward_obj=new Ward;
 
 //Get info of prescription
@@ -19,6 +19,7 @@ $sepChars=array('-','.','/',':',',');
 $en_nr = $_SESSION['sess_en'];
 //sheettype='sheet' (to dieu tri), 'pres' (toa ngoai tru)
 $haveissur=$encounter_obj->isCorrectIssurent($pid);
+$cbtc= $encounter_cbtc->isCorrectCBTC($pid);
 //echo $haveissur;
 
 if ($mode=='update'){
@@ -262,6 +263,15 @@ function checkbhyt(select){//add 0810 cot
 		alert("BN này không có BHYT");
 		select.value=0;
 	}
+}
+function checkCBTC(select){
+    var cbtc = <? echo $cbtc;?>;
+    //alert(haveissur);
+    if(cbtc==-1 && (select.value=='0490_2'||select.value=='0491_2')){
+        alert("BN không thuộc CBTC, vui lòng chọn lại");
+        select.value=0;
+    }
+
 }
 function chkform(d) {
 	var todo = '<?php echo $todo; ?>';
@@ -653,7 +663,7 @@ function CheckNumberRequest(i){
 		else {	
 	?>
 		<td width="17%"><FONT color="#000066"><?php echo $LDPrescription; ?></td>
-		<td width="26%"><select onblur="checkbhyt(this)" name="prescription_type_nr" id="prescription_type_nr" >
+		<td width="26%"><select onblur="checkbhyt(this);checkCBTC(this)"  name="prescription_type_nr" id="prescription_type_nr" >
 		<option value="0">Chon loai toa</option> <!-- add 03102012 - cot -->
 			<?php
 			if(is_object($pres_all_types)){

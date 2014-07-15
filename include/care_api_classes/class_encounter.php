@@ -4641,6 +4641,19 @@ class Encounter extends Notes {
         	}
         	else return 0;
         }
+    function isCorrectCBTC($pid){
+        global $db;
+        $sql="SELECT cbtcinsur FROM care_encounter WHERE pid = '$pid'";
+        //echo $sql;
+        if($this->result = $db->Execute($sql)){
+            $row = $this->result->FetchRow();
+            if($row['cbtcinsur']==''||$row['cbtcinsur']==null ) return -1;
+            else 1;
+
+
+        }
+        else return 0;
+    }
         //add 10/10 -cot
         
         function insertEncounterTransfer($trans = null){

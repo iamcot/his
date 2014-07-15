@@ -29,7 +29,7 @@ switch($mode){
 						AND khochan.pharma_generic_drug_id=thuocgoc.pharma_generic_drug_id
 						AND donvi.unit_of_medicine=khochan.unit_of_medicine
 						AND khochan.pharma_type IN (1,3,4) AND khole.available_number>0
-                        AND khole.typeput=$typeput
+
 						GROUP BY khole.product_encoder, khole.price
 						ORDER BY khochan.product_name ASC, khochan.price DESC,  khole.exp_date ASC
 						LIMIT 20";

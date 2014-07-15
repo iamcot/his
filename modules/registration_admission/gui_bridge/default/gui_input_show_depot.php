@@ -9,7 +9,7 @@ if(!isset($pres_obj)) $pres_obj=new PrescriptionMedipot;
 $en_nr = $_SESSION['sess_en'];
 
 if(!isset($encounter_obj)) 
-	$encounter_obj =& new Encounter($en_nr);
+	$encounter_obj =& new Encounter($en_nr); $encounter_cbtc=new Encounter;
 if($encounter_obj->loadEncounterData()){
 	$encounter = $encounter_obj->getLoadedEncounterData();
 } else $encounter= array();
@@ -28,7 +28,7 @@ $sepChars=array('-','.','/',':',',');
 
 //sheettype='sheet','pres'
 $haveissur=$encounter_obj->isCorrectIssurent($pid);
-
+$cbtc= $encounter_cbtc->isCorrectCBTC($pid);
 if ($mode=='update'){
 	//general info of prescription
 	$detail_pres = $pres_obj->getPrescriptionInfo($pres_id);
@@ -153,7 +153,7 @@ $.noConflict();
 function checkbhyt(select){//add 0810 cot
     var haveissur = <? echo $haveissur;?>;
     //alert(haveissur);
-    if(haveissur==-2 && (select.value=='0489_0'||select.value=='0495_0')){
+    if(haveissur==-2 && (select.value=='0490_2'||select.value=='0491_2')){
         alert("BHYT của BN đã hết hạn, vui lòng cập nhật lại");
         select.value=0;
     }
@@ -162,7 +162,15 @@ function checkbhyt(select){//add 0810 cot
         select.value=0;
     }
 }
+function checkCBTC(select){
+    var cbtc = <? echo $cbtc;?>;
+    //alert(haveissur);
+    if(cbtc==-1 && (select.value=='0492_2'||select.value=='0496_2')){
+        alert("BN không thuộc CBTC, vui lòng chọn lại");
+        select.value=0;
+    }
 
+}
 function chkform(d) {
 	if(d.totalday.value==""){
 		alert("<?php echo $LDPlsEnterTotalDay; ?>");
@@ -405,7 +413,7 @@ function CheckDuplicateMedicine(){
 		<td width="17%"><FONT color="#000066"><?php echo $LDWard; ?></td>
 		<td width="40%"><?php  echo $wardname; ?></td>
 		<td width="17%"><FONT color="#000066"><?php echo $LDPrescriptionMedipot; ?></td>
-		<td width="26%"><select onblur="checkbhyt(this)" name="prescription_type_nr" id="prescription_type_nr" >
+		<td width="26%"><select onblur="checkbhyt(this);checkCBTC(this)" name="prescription_type_nr" id="prescription_type_nr" >
                 <option value="0">Chon loại toa</option>
 			<?php
 //			if(is_object($pres_all_types)){

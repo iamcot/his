@@ -16,7 +16,7 @@ switch($mode){
 						AND khochan.product_encoder=khole.product_encoder
 						AND donvi.unit_of_medicine=khochan.unit_of_medicine
 						AND khochan.pharma_type IN (5,6,7)
-						AND khole.typeput=$typeput
+
 						GROUP BY khole.product_encoder
 						ORDER BY khochan.product_name LIMIT 15 ";
 
