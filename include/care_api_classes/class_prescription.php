@@ -436,7 +436,7 @@ class Prescription extends Core {
             FROM   care_pharma_available_department AS dept, care_pharma_available_product AS pro
             WHERE  pro.available_product_id = dept.available_product_id
             AND pro.product_encoder = '".$encoder."'
-            AND dept.`available_number` > $number
+            AND dept.available_number >= $number
             AND dept.typeput = $typeput
             ".$condition."
             ORDER BY pro.exp_date
