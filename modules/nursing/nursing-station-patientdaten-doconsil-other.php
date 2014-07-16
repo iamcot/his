@@ -57,7 +57,8 @@ $bgc1='#ffffff';  // entry form's background color
 
 $abtname=get_meta_tags($root_path."global_conf/$lang/konsil_tag_dept.pid");
 
-$formtitle='Khoa xÃ©t nghiá»‡m';
+//$formtitle='Khoa xÃ©t nghiá»‡m';
+$formtitle='Khoa xét nghiệm';
 
 $target='other';
 $db_request_table=$target;
