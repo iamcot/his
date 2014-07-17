@@ -1,3 +1,19 @@
+2014-07-15
+Hiền Update sự ưu tiên phường xã.
+            Disable checkbox trong trả kết quả xét nghiệm
+            Sửa hiển thị hạn BHTY trong toa VTYT
+- _db
+    + \care_test_request_duonghuyet.sql
+    + \care_test_request_other.sql
+    + \care_test_request_visinh.sql
+    + \Uu Tien QuanHuyenXa BinhDuong.sql
+- modules\laboratory
+    + \labor_test_request_admin_duonghuyet.php
+    + \labor_test_request_admin_other.php
+    + \labor_test_request_admin_visinh.php
+- modules\registration_admission\gui_bridge\default
+    + \gui_input_show_depot.php
+
 2014-07-07: update sửa thanh toán (XN khi thể hiện trong hóa đơn chỉ thể hiện tên chứ không liệt kê chi tiết hóa chất)
 - gui\smarty_template\templates\default\ecombill
     + showfinalbill_other_line.tpl
