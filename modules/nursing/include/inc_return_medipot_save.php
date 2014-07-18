@@ -66,11 +66,12 @@ switch($target){
 							'cost'=> $_POST['cost'.$j],
 							'number' =>$_POST['number'.$j],
 							'units' =>$_POST['unit'.$j],
-							'note'=> $_POST['note'.$j]
+							'note'=> $_POST['note'.$j],
+                            'available_product_id'=> $_POST['available_product_id'.$j]
 						);
 						$Cabinet->insertDataFromArray($pharma_return);
-					}				
-				}	
+					}
+				}
 				if(!$no_redirect){
 					header("Location:".$patmenu);
 					exit;
@@ -78,10 +79,10 @@ switch($target){
 				else{
 					echo $Cabinet->getLastQuery().' '.$LDDbNoSave;
 					$error=TRUE;
-				} 
+				}
 			break;
-			
-		case 'update': 
+
+		case 'update':
 				$id = $_POST['return_id'];
 				$datetime = 'Update '.date("Y-m-d G:i:s");
 				$pharma_return_info = array('return_id'=> $id,
@@ -97,16 +98,16 @@ switch($target){
 							'user_accept'=>''
 				);
 				$Cabinet->where=' return_id='.$id;
-				$Cabinet->useCabinetReturn('re_info');				
+				$Cabinet->useCabinetReturn('re_info');
 				if($Cabinet->updateDataFromArray($pharma_return_info,$id)) {
-				
+
 					$Cabinet->useCabinetReturn('re');
 					$Cabinet->deleteAllMedipotInReturn($id);
 					$n = $_POST['maxid'];
 					for ($j=1; $j<=$n; $j++)
 					{
 						if($_POST['medicine'.$j]!=""){
-							$pk = 0;							
+							$pk = 0;
 							$pharma_return = array(
 								'nr' => $Cabinet->LastInsertPK('nr',$pk),
 								'return_id'=> $id,
@@ -115,7 +116,8 @@ switch($target){
 								'cost'=> $_POST['cost'.$j],
 								'number' =>$_POST['number'.$j],
 								'units' =>$_POST['unit'.$j],
-								'note'=> $_POST['note'.$j]
+								'note'=> $_POST['note'.$j],
+                                'available_product_id'=> $_POST['available_product_id'.$j]
 							);							
 							$Cabinet->insertDataFromArray($pharma_return);
 						}				

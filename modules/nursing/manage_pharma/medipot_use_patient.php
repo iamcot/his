@@ -154,7 +154,7 @@ $smarty->assign('calendar',$LDDateIssue.': '.$calendar->show_calendar($calendar,
 				AND(prs.prescription_type='0410' OR prs.prescription_type='0489') AND prs.total_cost>0 AND prs.dongphatthuoc='0' 
 				AND per.pid=enc.pid 
 				ORDER BY enc.current_room_nr, prs.prescription_id ";
-					
+//		echo $sql;
 	if($listpres=$db->Execute($sql))
 	{
 		$count = $listpres->RecordCount();

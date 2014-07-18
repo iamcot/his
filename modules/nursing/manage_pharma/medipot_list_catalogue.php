@@ -2,7 +2,7 @@
 error_reporting(E_COMPILE_ERROR|E_ERROR|E_CORE_ERROR);
 require('./roots.php');
 require($root_path.'include/core/inc_environment_global.php');
- 
+
 $lang_tables=array('departments.php');
 define('LANG_FILE','pharma.php');
 define('NO_2LEVEL_CHK',1);
@@ -26,7 +26,7 @@ if ($ward_nr!=''){
 		$wardname = $LDAllWard;
 	}
 }
-	
+
 
 $thisfile= basename(__FILE__);
 $breakfile='../nursing-manage-medicine.php'.URL_APPEND.'&dept_nr='.$dept_nr.'&ward_nr='.$ward_nr;
@@ -58,7 +58,7 @@ $urlsearch=$thisfile.URL_APPEND.'&dept_nr='.$dept_nr.'&ward_nr='.$ward_nr;
 
  # Hide the return button
  $smarty->assign('pbBack',FALSE);
- 
+
   ob_start();
 ?>
 <style type="text/css">
@@ -84,7 +84,7 @@ function sortDown()
 	document.listmedform.submit();
 }
 
-function chkform(d) {	
+function chkform(d) {
 	document.listmedform.action="";
 	document.listmedform.submit();
 }
@@ -95,7 +95,7 @@ function issueItem(){
 	for(i=0; i <n.length ; i++){
 		var obj = document.getElementsByName('groupcb').item(i);
 		if(obj.checked){
-			itemid = itemid +'_'+ obj.value;	
+			itemid = itemid +'_'+ obj.value;
 			total++;
 		}
 	}
@@ -107,9 +107,9 @@ function returnItem(){
 	var itemid='';
 	var n= document.getElementsByName('groupcb');
 	for(i=0; i <n.length ; i++){
-		var obj = document.getElementsByName('groupcb').item(i)
+		var obj = document.getElementsByName('groupcb').item(i);
 		if(obj.checked){
-			itemid = itemid +'_'+ obj.value;	
+			itemid = itemid +'_'+ obj.value;
 			total++;
 		}
 	}
@@ -127,7 +127,7 @@ function checkUncheckAll(checkAllState)
 <?php
 $sTemp = ob_get_contents();
 ob_end_clean();
-$smarty->append('JavaScript',$sTemp); 
+$smarty->append('JavaScript',$sTemp);
 
 include_once($root_path.'include/core/inc_date_format_functions.php');
 require_once($root_path.'include/care_api_classes/class_product.php');
@@ -137,7 +137,7 @@ $datetime=date("Y-m-d G:i:s");
 
 if(!isset($mode))
 	$mode='sort_up';
-	
+
 if ($mode=='sort_up'){
 	$picup='arrow_up_blue.gif';
 	$picdown='arrow_down_gray.gif';
@@ -177,10 +177,10 @@ ob_start();
 <!--		<th>--><?php //echo $LDLotID; ?><!--</th>-->
 		<th><?php echo $LDExpDate; ?></th>
 		<th><?php echo $LDCabinetMedipotSum; ?>&nbsp;
-			<a href="javascript:sortUp()"><input type="image" <?php echo createComIcon($root_path,$picup,'0','',TRUE) ?> onclick="" title="<?php echo $LDSortUp; ?>"></a>&nbsp;<a href="javascript:sortDown()"><input type="image" <?php echo createComIcon($root_path,$picdown,'0','',TRUE) ?> onclick="" title="<?php echo $LDSortDown; ?>"></a></th>	
+			<a href="javascript:sortUp()"><input type="image" <?php echo createComIcon($root_path,$picup,'0','',TRUE) ?> onclick="" title="<?php echo $LDSortUp; ?>"></a>&nbsp;<a href="javascript:sortDown()"><input type="image" <?php echo createComIcon($root_path,$picdown,'0','',TRUE) ?> onclick="" title="<?php echo $LDSortDown; ?>"></a></th>
 <!--		<th>--><?php //echo $LDInitNumber; ?><!--</th>	-->
         <th>Nhận về</th>
-	</tr>																																
+	</tr>
 	<?php
     if (!isset($typeput)) $typeput = 0;
     $condition = '';
@@ -189,18 +189,18 @@ ob_start();
 	if ($search==''){
 		//current_page, number_items_per_page, total_items, total_pages, location=1,2,3
 //		$number_items_per_page=20; 	$condition='';
-		
+
 //		if ($listItem = $Product->SearchCatalogMedipotCabinet($dept_nr, $ward_nr, $condition, $updown)){
 //			$total_items = $listItem->RecordCount();
 //		} else $total_items =0;
-		
+
 //		$total_pages=ceil($total_items/$number_items_per_page);
-		
+
 //		include_once('../include/inc_issuepaper_listdepot_splitpage.php');
 
 //		if ($total_pages>1)
 			$listItem = $Product->ShowCatalogMedipotCabinet($dept_nr, $ward_nr,$condition, $current_page, $number_items_per_page, $updown);
-		
+
 	}else{
 		if (strrpos($search,'/') || strrpos($search,'-')){
 			$search = formatDate2STD($search,'dd/mm/yyyy');
@@ -210,7 +210,7 @@ ob_start();
 			$condition .=" AND product_lot_id LIKE '%".$search."%' ";
 		else
 			$condition .=" AND product_name LIKE '%".$search."%' ";
-			
+
 
 		$listItem = $Product->SearchCatalogMedipotCabinet($dept_nr, $ward_nr, $condition, $updown);
 		$breakfile = $thisfile.URL_APPEND.'&dept_nr='.$dept_nr.'&ward_nr='.$ward_nr;
@@ -250,7 +250,7 @@ ob_start();
                 $khu = $rowIssue['ward_nr'];
             }
             $sTemp = $sTemp . '<tr bgColor="' . $bgc . '" >
-								<td align="center"><input type="checkbox" name="groupcb" value="' . $rowItem['available_product_id'] . '"></td>
+								<td align="center"><input type="checkbox" name="groupcb" value="' . $rowItem['id'] . '"></td>
 								<td align="center">' . ($i + 1) . '</td>
 
 								<td>' . $rowItem['product_name'] . '</td>
@@ -295,7 +295,7 @@ ob_start();
 //		$sTemp='<tr bgColor="#ffffff"><td colspan="10">'.$LDItemNotFound.'</td></tr>';
 //		echo $sTemp;
 //	}
-	
+
 	?>
 </table>
 

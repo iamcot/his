@@ -68,7 +68,8 @@ switch($target){
 							'cost'=> $_POST['cost'.$j],
 							'number' =>$_POST['number'.$j],
 							'units' =>$_POST['unit'.$j],
-							'note'=> $_POST['note'.$j]
+							'note'=> $_POST['note'.$j],
+                            'available_product_id'=> $_POST['available_product_id'.$j]
 						);
 						$Cabinet->insertDataFromArray($pharma_return);
 					}				
@@ -119,7 +120,8 @@ switch($target){
 								'cost'=> $_POST['cost'.$j],
 								'number' =>$_POST['number'.$j],
 								'units' =>$_POST['unit'.$j],
-								'note'=> $_POST['note'.$j]
+								'note'=> $_POST['note'.$j] ,
+                                'available_product_id'=> $_POST['available_product_id'.$j]
 							);							
 							$Cabinet->insertDataFromArray($pharma_return);
 						}				

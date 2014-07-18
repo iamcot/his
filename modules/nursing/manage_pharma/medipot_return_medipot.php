@@ -321,14 +321,14 @@ if(!isset($target) || ($target=='new') || ($target=='create')){
 		$create_id = $_SESSION['sess_user_name'];		
 		for ($i=1;$i<=$maxid;$i++){
 			if($flag) {
-				$condition = " AND tatcakhoa.available_product_id='".$listid[$i]."' ";
+				$condition = " AND tatcakhoa.id='".$listid[$i]."' ";
 				if($listReport = $Product->SearchExpMedipotCabinet($dept_nr, $ward_nr, $condition)){
 					$rowReport = $listReport->FetchRow();
 					$totalcost = $rowReport['cost']*$rowReport['number'];
 				}
 			}
 			ob_start();
-				require('../include/inc_returnmed_addmedicine.php');
+				require('../include/inc_returnmed_addmedipot.php');
 				$sTempDiv = $sTempDiv.ob_get_contents();
 			ob_end_clean();
 
@@ -337,7 +337,7 @@ if(!isset($target) || ($target=='new') || ($target=='create')){
 							<td align="center"><input name="stt'.$i.'" type="text" size=1 value="'.$i.'" style="text-align:center;border-color:white;border-style:solid;" readonly></td>
 						</tr>';
 		}		
-		$smarty->assign('sTypePut','<select name="typeput" class="input1" onChange="alertselected(this)"><option value="0">'.$LDBH.'</option><option value="1" selected>'.$LDNoBH.'</option><option value="2">'.$LDCBTC.'</option></select>');	
+		$smarty->assign('sTypePut','<select name="typeput" class="input1" onChange="alertselected(this)"><option value="0" selected>'.$LDBH.'</option><option value="1">'.$LDNoBH.'</option><option value="2">'.$LDCBTC.'</option></select>');
 		$smarty->assign('divMedicine',$sTempDiv);
 		$smarty->assign('divSTT',$sTempDivStt);
 		

@@ -146,7 +146,7 @@ if ($ward_nr!='' && $ward_nr!='0'){
 								
 				echo '<tr bgColor="#ffffff" >
 						<td align="center" bgColor="#ffffff">'.$i.'.</td>
-						<td bgColor="#ffffff">'.$rowIssue['sodangky'].'</td>
+						<td bgColor="#ffffff">'.$rowIssue['product_encoder'].'</td>
 						<td bgColor="#ffffff">'.$rowIssue['product_name'].'</td>
 						<td align="center" bgColor="#ffffff">'.$rowIssue['unit_name_of_medicine'].'</td>
 						<td align="center" bgColor="#ffffff">'.$rowIssue['product_lot_id'].'</td>

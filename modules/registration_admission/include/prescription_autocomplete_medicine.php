@@ -7,8 +7,11 @@ require($root_path.'include/core/inc_environment_global.php');
 $search=$_GET["search"];
 $response="";
 $typeput=$_GET["typeput"];
+if($typeput==0)
+    $finding="AND khole.typeput=$typeput";
+else $finding="";
 switch($mode){
-	case 'auto': 
+	case 'auto':
 				/*$sql=" SELECT khole.product_encoder, khochan.product_name, khochan.unit_of_medicine, khole.price, khochan.caution, khochan.content, khochan.component, donvi.unit_name_of_medicine, khole.available_product_id, khole.product_lot_id, khole.exp_date, sum(khole.available_number) AS allocation_temp, thuocgoc.generic_drug, thuocgoc.using_type
 						FROM care_pharma_available_product AS khole, care_pharma_generic_drug AS thuocgoc,
 						care_pharma_products_main AS khochan, care_pharma_unit_of_medicine AS donvi  
@@ -29,7 +32,7 @@ switch($mode){
 						AND khochan.pharma_generic_drug_id=thuocgoc.pharma_generic_drug_id
 						AND donvi.unit_of_medicine=khochan.unit_of_medicine
 						AND khochan.pharma_type IN (1,3,4) AND khole.available_number>0
-
+                        ".$finding."
 						GROUP BY khole.product_encoder, khole.price
 						ORDER BY khochan.product_name ASC, khochan.price DESC,  khole.exp_date ASC
 						LIMIT 20";
