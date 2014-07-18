@@ -480,23 +480,24 @@ if(is_object($depotresult))
     for ($i=0;$i<$depotresult->RecordCount();$i++)
     {
         $depot=$depotresult->FetchRow();
+        $ma = $depot['product_encoder'];
         $smarty->assign('LDItemContent',$depot['product_name']);
         $smarty->assign('LDItemDate',formatDate2Local($depot['date_time_create'],$date_format));
         $smarty->assign('LDItemNumberOf',$depot['sum_number']);
         $smarty->assign('LDItemUnitCost',$depot['cost']);
        $smarty->assign('LDItemSumCost',number_format($depot['cost']*$depot['sum_number']));
-        if($muchuong!=0){
-            $smarty->assign('LDItemSumCostBHYT',number_format($depot['cost']*$depot['sum_number']*$muchuong)); //nang
+        if($ma==51 || $ma==52 || $ma ==53 || $ma==65 || $ma=123){ // 51- Dây oxy số 8 10, 52- Dây oxy 2 nhánh(L), 53- Dây oxy 2 nhánh nhi, 65- Dây oxy hai nhánh size (S), 123- lọ đựng nước tiểu
+            $smarty->assign('LDItemSumCostBHYT',number_format($depot['cost']*$depot['sum_number']*0)); //nang
             $smarty->assign('LDItemSumCostKhac','');//nang
-            $smarty->assign('LDItemSumCostTra',number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$muchuong)); //nang
+            $smarty->assign('LDItemSumCostTra',number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*0)); //nang
         }   else{
             $smarty->assign('LDItemSumCostBHYT',number_format($depot['cost']*$depot['sum_number']*$mh));   //nang
             $smarty->assign('LDItemSumCostKhac','');//nang
             $smarty->assign('LDItemSumCostTra',number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh)); //nang
         }
         $tongtienVTYT += $depot['cost']*$depot['sum_number'];
-        if($muchuong!=0){
-            $tongtienVTYTBHYT += $depot['cost']*$depot['sum_number']*$muchuong;  //nang
+        if($ma==51 || $ma==52 || $ma ==53 || $ma==65 || $ma =123){
+            $tongtienVTYTBHYT += $depot['cost']*$depot['sum_number']*0;  //nang
         }   else{
             $tongtienVTYTBHYT += $depot['cost']*$depot['sum_number']*$mh;  //nang
         }
@@ -565,27 +566,37 @@ if(is_object($itemresult))
   // for ($i=1;$i<$itemresult->RecordCount();$i++) //nang
     {
         $item=$itemresult->FetchRow();
+        $item_code =  $item['item_code'] ;
         $groupnr = $item['item_group_nr'];
         $smarty->assign('LDItemContent','+ '.$item['item_description']);
         $smarty->assign('LDItemDate',formatDate2Local($item['bill_item_date'],$date_format));
         $smarty->assign('LDItemNumberOf',$item['bill_item_units']);
         $smarty->assign('LDItemUnitCost',number_format($item['bill_item_unit_cost']));
         $smarty->assign('LDItemSumCost',number_format($item['bill_item_units']*$item['bill_item_unit_cost']));
-       /* if($groupnr==22){ // không cho giảm BHYT của xét nghiệm máu
+       if($groupnr == 41){ // không cho giảm BHYT của chuyển viện
             $smarty->assign('LDItemSumCostBHYT',number_format($item['bill_item_units']*$item['bill_item_unit_cost']*0));   //nang
             $smarty->assign('LDItemSumCostKhac','');//nang
             $smarty->assign('LDItemSumCostTra',number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*0)); //nang
-        }   else{  */
+
+       }elseif($item_code =='XNK07' || $item_code =='XNK02' || $item_code=='0407'){    //xét nghiệm HbsAg, xét nghiệm serodia, hồ sơ
+           $smarty->assign('LDItemSumCostBHYT',number_format($item['bill_item_units']*$item['bill_item_unit_cost']*0));   //nang
+           $smarty->assign('LDItemSumCostKhac','');//nang
+           $smarty->assign('LDItemSumCostTra',number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*0)); //nang
+
+
+       }else{
             $smarty->assign('LDItemSumCostBHYT',number_format($item['bill_item_units']*$item['bill_item_unit_cost']*$mh));   //nang
             $smarty->assign('LDItemSumCostKhac','');//nang
             $smarty->assign('LDItemSumCostTra',number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*$mh)); //nang
-        //}
+        }
         $tongtienDichVu += $item['bill_item_units']*$item['bill_item_unit_cost'];
-      /*  if($groupnr==22){  //xet không cho giảm BHYT của xét nghiệm máu
+        if($groupnr == 41){  //xet không cho giảm BHYT chuyển viện
             $tongtienDichVuBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*0;   //nang
-        }   else{ */
+        }elseif($item_code =='XNK07'  || $item_code =='XNK02' || $item_code=='0407'){  //xét nghiệm HbsAg, xét nghiệm serodia, hồ sơ
+            $tongtienDichVuBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*0;   //nang
+        }   else{
             $tongtienDichVuBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*$mh;   //nang
-       // }
+        }
         $tongtienDichVuTra += $tongtienDichVu - $tongtienDichVuBHYT; //nang
         $flag_g = false;
         if ($group_id!=$item['item_group_nr'])

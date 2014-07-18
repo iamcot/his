@@ -186,7 +186,7 @@ if($item['img_path']!=''){
 $pdf->lastPage();
 
 // -----------------------------------------------------------------------------
-
+ob_clean();
 //Close and output PDF document
 $pdf->Output('Ketquasieuam.pdf', 'I');
 

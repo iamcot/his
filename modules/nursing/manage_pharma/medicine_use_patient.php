@@ -152,7 +152,7 @@ $sql=	"SELECT prs.prescription_id, prs.encounter_nr, prs.date_time_create, enc.c
 				".$condition."
 				AND(prs.prescription_type='0397' OR prs.prescription_type='0398') AND prs.total_cost>0 AND prs.dongphatthuoc='0'
 				AND per.pid=enc.pid
-				ORDER BY enc.current_room_nr, prs.prescription_id ";     */
+				ORDER BY enc.current_room_nr, prs.prescription_id ";       */
 	if($listpres=$db->Execute($sql))
 	{
 		$count = $listpres->RecordCount();

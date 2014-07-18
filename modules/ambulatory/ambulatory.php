@@ -66,7 +66,7 @@ $dept_obj= new Department;
 
  $sTemp='
 <script language="javascript">
-<!-- Script Begin
+//<!-- Script Begin  -->
 function goDept(t) {
 	d=document.dept_select;
 	if(d.dept_nr.value!=""){

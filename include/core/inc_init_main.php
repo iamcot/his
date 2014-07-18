@@ -1,7 +1,7 @@
 <?php
 # This is the database name
 #$dbname='histudb';
-$dbname='histudb';
+$dbname='his1';
 
 # Database user name, default is root or httpd for mysql, or postgres for postgresql
 $dbusername='root';

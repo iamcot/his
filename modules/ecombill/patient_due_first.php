@@ -243,6 +243,7 @@ $count=0;
 
 //current bill listing	----------------------------------------------------------------------------
 //hiện thông tin hóa đơn
+$kgiam =0;
 if($billid == "currentbill") {
 	$total_for_insur=0;
 	$BHtungay_x = strtotime($insurance_start);
@@ -294,7 +295,15 @@ if($billid == "currentbill") {
 			//Check thanh toan
 			$smarty->assign('ItemCheck', '<input type="checkbox" name="cbx'.$count.'" checked onclick="ChangeSum(this,'.$totcost.')" '.$readonly.'> <input type="hidden" name="item'.$count.'" value="billitem_id_'.$labres['bill_item_id'].'">');
 			$count++;
-			
+            // trừ cho hồ sơ và chuyển viện và xét nghiệm HbsAg và xét nghiệm serodia
+            if( $lb1['item_group_nr']==41) {
+                $kgiam = $kgiam + ($labres['bill_item_unit_cost'])*($labres['bill_item_units'])*$mh;
+            //    echo $kgiam;
+            }
+            if($lb1['item_code']=='XNK07' || $lb1['item_code']=='XNK02' || $lb1['item_code']=='0407'){
+            $kgiam = $kgiam + ($labres['bill_item_unit_cost'])*($labres['bill_item_units'])*$mh;
+            //echo $kgiam;
+            }
 			//groupname
 			$flag_g = false;
 			if ($group_id!=$lb1['item_group_nr'])
@@ -444,6 +453,7 @@ if($billid == "currentbill") {
 			$smarty->assign('ItemTypeData',$pres['type_name']);
 			$smarty->assign('ItemCheck', '<input type="checkbox" name="cbx'.$count.'" checked onclick="ChangeSum(this,'.$pres['total_cost'].')" '.$readonly.'> <input type="hidden" name="item'.$count.'" value="med_id_'.$pres['prescription_id'].'">');
 			$count++;
+
 			if($i>0)
 				$smarty->assign('flag_g', false);
 			
@@ -636,7 +646,6 @@ if($billid == "currentbill") {
 		
 		if($lb1['item_type']=="HS") { $HStotal=$HStotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units']); }  
 		if($lb1['item_type']=="LT") { $LTtotal=$LTtotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units']); }
-		
 		//groupname
 		$flag_g = false;
 		if ($group_id!=$it['item_group_nr'])
@@ -739,21 +748,16 @@ if($billid == "currentbill" && $target!='nursing') {
 }
 
 $smarty->assign('pbCancel','<a href="'.$breakfile.'" ><img '.createLDImgSrc($root_path,'close2.gif','0','middle').' title="'.$LDCancel.'" align="middle"></a>');
- /*
-// trừ cho xet nghiệm máu
-$xetnghiemmau =0;
-if($lb1['item_type']=="LT" && $lb1['item_code']=='CTM') {
-    $xetnghiemmau=($labres['bill_item_unit_cost'])*($labres['bill_item_units'])*$mh;
-//echo $xetnghiemmau;
-}    */
+
+
 //Tong
 $smarty->assign('LDTotal',$LDTotal);
 if($billid=="currentbill") { 
 	$LDTotalBillAmountData = $total; 
 	include($root_path.'classes/money/baohiem.php');
 	//$discount = TienBaoHiem($insurance_nr, $insurance_start, $insurance_exp,$total_for_insur, $insurance_start, $is_traituyen);
-    $discount = $mh*$LDTotalBillAmountData ;
-   // $discount = $mh*$LDTotalBillAmountData - $xetnghiemmau; //------>n sửa số tiền giảm bảo hiểm y tế dựa trên mức hưởng
+   // $discount = $mh*$LDTotalBillAmountData ;
+    $discount = $mh*$LDTotalBillAmountData - $kgiam; //------>n sửa số tiền giảm bảo hiểm y tế dựa trên mức hưởng
 	//echo $total_for_insur;
 	if($target=='nursing')
 		$smarty->assign('discount', number_format($discount));

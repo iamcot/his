@@ -426,12 +426,29 @@ else
 		$smarty->assign('LDItemNumberOf',$depot['sum_number']); 
 		$smarty->assign('LDItemUnitCost',$depot['cost']); 
 		$smarty->assign('LDItemSumCost',number_format($depot['cost']*$depot['sum_number']));
+        if($ma==51 || $ma==52 || $ma ==53 || $ma==65 || $ma=123){ // 51- Dây oxy số 8 10, 52- Dây oxy 2 nhánh(L), 53- Dây oxy 2 nhánh nhi, 65- Dây oxy hai nhánh size (S), 123- lọ đựng nước tiểu
+            $smarty->assign('LDItemSumCostBHYT',number_format($depot['cost']*$depot['sum_number']*0)); //nang
+            $smarty->assign('LDItemSumCostKhac','');//nang
+            $smarty->assign('LDItemSumCostTra',number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*0)); //nang
+        }   else{
+            $smarty->assign('LDItemSumCostBHYT',number_format($depot['cost']*$depot['sum_number']*$mh));   //nang
+            $smarty->assign('LDItemSumCostKhac','');//nang
+            $smarty->assign('LDItemSumCostTra',number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh)); //nang
+        }
+        $tongtienVTYT += $depot['cost']*$depot['sum_number'];
+        if($ma==51 || $ma==52 || $ma ==53 || $ma==65 || $ma =123){
+            $tongtienVTYTBHYT += $depot['cost']*$depot['sum_number']*0;  //nang
+        }   else{
+            $tongtienVTYTBHYT += $depot['cost']*$depot['sum_number']*$mh;  //nang
+        }
+        $tongtienVTYTTra += $tongtienVTYT - $tongtienVTYTBHYT;               //nang
+        /*
         $smarty->assign('LDItemSumCostBHYT',number_format($depot['cost']*$depot['sum_number']*$mh));
         $smarty->assign('LDItemSumCostKhac','');//nang
         $smarty->assign('LDItemSumCostTra',number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh)); //nang
         $tongtienVTYT += $depot['cost']*$depot['sum_number'];
         $tongtienVTYTBHYT += $depot['cost']*$depot['sum_number']*$mh;  //nang
-        $tongtienVTYTTra += $tongtienVTYT - $tongtienVTYTBHYT;               //nang
+        $tongtienVTYTTra += $tongtienVTYT - $tongtienVTYTBHYT;               //nang    */
         ob_start();
 		$smarty->display('ecombill/showfinalbill_other_line.tpl');
 		$sTempMed = $sTempMed.ob_get_contents();
@@ -483,29 +500,38 @@ $group_id=0;
 		$smarty->assign('LDItemNumberOf',$item['bill_item_units']); 
 		$smarty->assign('LDItemUnitCost',number_format($item['bill_item_unit_cost'])); 
 		$smarty->assign('LDItemSumCost',number_format($item['bill_item_units']*$item['bill_item_unit_cost']));
-
+        /*
         $smarty->assign('LDItemSumCostBHYT',number_format($item['bill_item_units']*$item['bill_item_unit_cost']*$mh));   //nang
         $smarty->assign('LDItemSumCostKhac','');//nang
         $smarty->assign('LDItemSumCostTra',number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*$mh)); //nang
         $tongtienDichVu += $item['bill_item_units']*$item['bill_item_unit_cost'];
         $tongtienDichVuBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*$mh;   //nang
-        $tongtienDichVuTra += $tongtienDichVu - $tongtienDichVuBHYT; //nang
-      /*  if($groupnr==22){ // không cho giảm BHYT của xét nghiệm máu
+        $tongtienDichVuTra += $tongtienDichVu - $tongtienDichVuBHYT; //nang   */
+        if($groupnr == 41){ // không cho giảm BHYT của hồ sơ và chuyển viện
             $smarty->assign('LDItemSumCostBHYT',number_format($item['bill_item_units']*$item['bill_item_unit_cost']*0));   //nang
             $smarty->assign('LDItemSumCostKhac','');//nang
             $smarty->assign('LDItemSumCostTra',number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*0)); //nang
-        }   else{
+
+        }elseif($item_code =='XNK07' || $item_code =='XNK02' || $item_code=='0407'){
+            $smarty->assign('LDItemSumCostBHYT',number_format($item['bill_item_units']*$item['bill_item_unit_cost']*0));   //nang
+            $smarty->assign('LDItemSumCostKhac','');//nang
+            $smarty->assign('LDItemSumCostTra',number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*0)); //nang
+
+
+        }else{
             $smarty->assign('LDItemSumCostBHYT',number_format($item['bill_item_units']*$item['bill_item_unit_cost']*$mh));   //nang
             $smarty->assign('LDItemSumCostKhac','');//nang
             $smarty->assign('LDItemSumCostTra',number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*$mh)); //nang
         }
         $tongtienDichVu += $item['bill_item_units']*$item['bill_item_unit_cost'];
-        if($groupnr==22){  //xet không cho giảm BHYT của xét nghiệm máu
+        if($groupnr == 41){  //xet không cho giảm BHYT của hồ sơ và chuyển viện
+            $tongtienDichVuBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*0;   //nang
+        }elseif($item_code =='XNK07'  || $item_code =='XNK02' || $item_code=='0407'){
             $tongtienDichVuBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*0;   //nang
         }   else{
             $tongtienDichVuBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*$mh;   //nang
         }
-        $tongtienDichVuTra += $tongtienDichVu - $tongtienDichVuBHYT; //nang   */
+        $tongtienDichVuTra += $tongtienDichVu - $tongtienDichVuBHYT; //nang
         $flag_g = false;
         if ($group_id!=$item['item_group_nr'])
         {

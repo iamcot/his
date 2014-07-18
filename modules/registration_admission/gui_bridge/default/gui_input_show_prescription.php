@@ -41,7 +41,7 @@ if ($mode=='update'){
 		$text_CLS=$detail_pres['cls'];
 		$text_SinhHieu=$detail_pres['sinhhieu'];
 	}
-	
+
 	if($status_bill){
 		$tempbill=$LDFinish; $tempbill1='check-r.gif';}
 	else{
@@ -51,7 +51,7 @@ if ($mode=='update'){
 	else{
 		$tempfinish=$LDNotYet; $tempfinish1='warn.gif';}
 	
-	
+
 	//medicine in prescription
 	$medicine_result = $pres_obj->getAllMedicineInPres($pres_id);
 	if(is_object($medicine_result)){
