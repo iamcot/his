@@ -1447,7 +1447,7 @@ class Product extends Core
         if ($ward_nr != '')
             $dept_ward .= " AND taikhoa.ward_nr='" . $ward_nr . "' ";
 
-        $this->sql = "SELECT DISTINCT khochan.product_name, donvi.unit_name_of_medicine, khochan.product_encoder, khochan.sodangky, khochan.hangsx, khochan.nuocsx, khochan.price AS cost, tatcakhoa.product_lot_id, tatcakhoa.exp_date, DAY(tatcakhoa.exp_date) AS dayexp, MONTH(tatcakhoa.exp_date) AS monthexp, YEAR(tatcakhoa.exp_date) AS yearexp, taikhoa.*, tatcakhoa.available_number AS number     
+        $this->sql = "SELECT DISTINCT khochan.product_name, donvi.unit_name_of_medicine, khochan.product_encoder, khochan.sodangky, khochan.hangsx, khochan.nuocsx, khochan.price AS cost, tatcakhoa.product_lot_id, tatcakhoa.exp_date, DAY(tatcakhoa.exp_date) AS dayexp, MONTH(tatcakhoa.exp_date) AS monthexp, YEAR(tatcakhoa.exp_date) AS yearexp, taikhoa.*, taikhoa.available_number AS number
                 FROM care_pharma_available_department AS taikhoa, care_pharma_available_product AS tatcakhoa, care_pharma_products_main AS  khochan, care_pharma_unit_of_medicine AS donvi 
                 WHERE taikhoa.available_product_id=tatcakhoa.available_product_id 
 					" . $dept_ward . " 
@@ -1455,7 +1455,7 @@ class Product extends Core
                     AND donvi.unit_of_medicine=khochan.unit_of_medicine 
 					" . $condition . "
                 ORDER BY exp_date";
-        //echo $this->sql;	
+//        echo $this->sql;
         if ($this->result = $db->Execute($this->sql)) {
             if ($this->result->RecordCount()) {
                 return $this->result;
@@ -1517,6 +1517,7 @@ class Product extends Core
               khochan.product_encoder,
               khochan.sodangky,
               tatcakhoa.product_lot_id,
+              tatcakhoa.available_product_id,
               tatcakhoa.exp_date,
               taikhoa.department,
             taikhoa.ward_nr,
@@ -1539,7 +1540,7 @@ class Product extends Core
                       	GROUP BY khochan.product_encoder, taikhoa.ward_nr,taikhoa.typeput
                 ORDER BY ward_nr, khochan.product_name, taikhoa.init_number " . $updown . "
 				";
-        //echo $this->sql;
+//        echo $this->sql;
         if ($this->result = $db->Execute($this->sql)) {
             if ($this->result->RecordCount()) {
                 return $this->result;
@@ -1954,15 +1955,15 @@ class Product extends Core
         if ($ward_nr != '')
             $dept_ward .= " AND taikhoa.ward_nr='" . $ward_nr . "' ";
 
-        $this->sql = "SELECT DISTINCT khochan.product_name, khochan.sodangky, donvi.unit_name_of_medicine, khochan.product_encoder, khochan.price AS cost, tatcakhoa.product_lot_id, tatcakhoa.exp_date, DAY(tatcakhoa.exp_date) AS dayexp, MONTH(tatcakhoa.exp_date) AS monthexp, YEAR(tatcakhoa.exp_date) AS yearexp, taikhoa.*,taikhoa.available_number AS number     
-                FROM care_med_available_department AS taikhoa, care_med_available_product AS tatcakhoa, care_med_products_main AS  khochan, care_med_unit_of_medipot AS donvi, care_ward 
-                WHERE taikhoa.available_product_id=tatcakhoa.available_product_id 
-					" . $dept_ward . " 
-                    AND khochan.product_encoder=tatcakhoa.product_encoder 
-                    AND donvi.unit_of_medicine=khochan.unit_of_medicine 
+        $this->sql = "SELECT DISTINCT khochan.product_name, khochan.sodangky, donvi.unit_name_of_medicine, khochan.product_encoder, khochan.price AS cost, tatcakhoa.lotid, tatcakhoa.exp_date, DAY(tatcakhoa.exp_date) AS dayexp, MONTH(tatcakhoa.exp_date) AS monthexp, YEAR(tatcakhoa.exp_date) AS yearexp, taikhoa.*,taikhoa.available_number AS number
+                FROM care_med_available_department AS taikhoa, care_med_products_main_sub1 AS tatcakhoa, care_med_products_main AS  khochan, care_med_unit_of_medipot AS donvi, care_ward
+                WHERE taikhoa.available_product_id=tatcakhoa.id
+					" . $dept_ward . "
+                    AND khochan.product_encoder=tatcakhoa.product_encoder
+                    AND donvi.unit_of_medicine=khochan.unit_of_medicine
 					" . $condition . "
-                ORDER BY exp_date";
-        //echo $this->sql;	
+                ORDER BY number DESC";
+//        echo $this->sql;
         if ($this->result = $db->Execute($this->sql)) {
             if ($this->result->RecordCount()) {
                 return $this->result;
@@ -2002,6 +2003,7 @@ class Product extends Core
               khochan.product_encoder,
               khochan.sodangky,
               tatcakhoa.lotid,
+              tatcakhoa.id,
               tatcakhoa.exp_date,
               taikhoa.department,
             taikhoa.ward_nr,
@@ -2550,13 +2552,13 @@ class Product extends Core
         }
     }
 
-    function updateMedipotAvaiProduct($encoder, $lotid, $number, $cal, $typeput)
+    function updateMedipotAvaiProduct($encoder, $available_product_id, $number, $cal, $typeput)
     {
         global $db;
-        if ($encoder == '') return FALSE;
-        $this->sql = "UPDATE care_med_available_product
-					SET available_number=available_number" . $cal . "'$number' 
-					WHERE product_encoder='$encoder' AND product_lot_id='$lotid' AND typeput='" . $typeput . "'";
+        if ($available_product_id == '') return FALSE;
+        $this->sql = "UPDATE care_med_products_main_sub1
+					SET number=number" . $cal . "'$number'
+					WHERE id='$available_product_id' ";
         return $this->Transact($this->sql);
     }
 

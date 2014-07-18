@@ -345,7 +345,7 @@ if($target=='depot')
 		$create_id = $_SESSION['sess_user_name'];
 		for ($i=1;$i<=$maxid;$i++){
 			if($flag) {
-				$condition = " AND tatcakhoa.available_product_id='".$listid[$i]."' ";
+				$condition = " AND tatcakhoa.id='".$listid[$i]."' ";
 				if($listIssue = $Product->SearchExpMedipotCabinet($dept_nr, $ward_nr, $condition)){
 					$rowIssue = $listIssue->FetchRow();
 					$rowIssue['units'] = $rowIssue['unit_name_of_medicine'];

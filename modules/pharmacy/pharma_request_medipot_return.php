@@ -215,8 +215,8 @@ include('includes/inc_return_medipot_request_lister_fx.php');
 	</tr>
 	</table>
 <p>
-		
-			<a href="javascript: FinishPres(<?php echo $report_id; ?>)"><input type="image" <?php echo createLDImgSrc($root_path,'abschic.gif','0') ?>  title="<?php echo $LDFinishEntry; ?>"> </a>
+
+    <a href="#"><input type="image" <?php echo createLDImgSrc($root_path,'abschic.gif','0') ?>  title="<?php echo $LDFinishEntry; ?>" onclick="FinishPres(<?php echo $report_id; ?>)"> </a>
 			<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> title="<?php echo $LDPrintOut; ?>"></a>
 
 <!--   ***************     HIDDEN  INPUT   ***************    -->

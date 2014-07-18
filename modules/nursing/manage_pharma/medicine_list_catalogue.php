@@ -102,7 +102,7 @@ ob_start();
         document.listmedform.submit();
     }
     function returnItem() {
-        var i, total = 0;
+        var i, total = 0,number='';
         var itemid = '';
         for (i = 0; i < document.listmedform.groupcb.length; i++) {
             if (document.listmedform.groupcb[i].checked) {
@@ -201,7 +201,7 @@ ob_start();
             </tr>
         </table>
         <p>
-        <table border="0" cellSpacing="1" cellPadding="3" width="95%" bgColor="#C3C3C3">
+        <table border="0" cellSpacing="1" cellPadding="3" width="95%" bgColor="#C3C3C3" id="mytable">
             <tr bgColor="#EDF1F4">
                 <th align="center"><input type="checkbox" name="checkall" onclick="checkUncheckAll(this);"></th>
                 <th><?php echo $LDSTT; ?></th>

@@ -7,6 +7,9 @@ require($root_path.'include/core/inc_environment_global.php');
 $typeput=$_GET["typeput"];
 $search=$_GET["search"];
 $response="";
+if($typeput==0)
+    $finding="AND khole.typeput=$typeput";
+else $finding="";
 switch($mode){
 	case 'auto':
 				$sql=" SELECT khochan.product_encoder, khochan.product_name, khochan.unit_of_medicine, khole.price, khochan.caution, donvi.unit_name_of_medicine, khole.lotid, khole.exp_date, SUM(khole.number) AS allocation_temp
@@ -16,7 +19,7 @@ switch($mode){
 						AND khochan.product_encoder=khole.product_encoder
 						AND donvi.unit_of_medicine=khochan.unit_of_medicine
 						AND khochan.pharma_type IN (5,6,7)
-
+                        ".$finding."
 						GROUP BY khole.product_encoder
 						ORDER BY khochan.product_name LIMIT 15 ";
 

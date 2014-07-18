@@ -105,7 +105,8 @@ switch($mode){
 							'plus' => $plus,
 							'number_request' => $_POST['sum'.$j], 
 							'number_receive' => '',
-							'note' => $_POST['note'.$j]
+							'note' => $_POST['note'.$j],
+                            'available_product_id'=> $_POST['available_product_id'.$j]
 						);
 						$issue_obj->insertDataFromArray($pharma_issue_paper);
 					}				
@@ -163,7 +164,8 @@ switch($mode){
 							'plus' => $plus,
 							'number_request' => $_POST['sum'.$j], //ngay uong 3 lan
 							'number_receive' => '',
-							'note' => $_POST['note'.$j]
+							'note' => $_POST['note'.$j],
+                                'available_product_id'=> $_POST['available_product_id'.$j]
 							);
 							//$issue_obj->setDataArray(&$pharma_issue_paper);
 							$issue_obj->insertDataFromArray($pharma_issue_paper);

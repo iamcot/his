@@ -21,20 +21,21 @@ foreach ($medicine_nr AS $nr)
 	if($medicine = $Cabinet->getMedicineInReturn($nr)){
 		$encoder = $medicine['product_encoder'];
 		$lotid = $medicine['product_lot_id'];
+        $available_product_id=$medicine['available_product_id'];
 		$number = $receive_med[$nr];
 
 		#Minus number of medicine in care_pharma_available_department (available_number)
-		$Cabinet->updateMedicineAvaiDept($encoder, $lotid, $dept_nr, $ward_nr, $number,'-', $typeput);
+		$Cabinet->updateMedicineAvaiDept($encoder, $available_product_id, $dept_nr, $ward_nr, $number,'-', $typeput);
 		
 		$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $Cabinet->getLastQuery(), date('Y-m-d H:i:s'));
 		
 		#Change number of medicine in care_pharma_available_product (available_number)
-		$Product->updateMedicineAvaiProduct($encoder, $lotid, $number,'+', $typeput);
+		$Product->updateMedicineAvaiProduct($encoder, $available_product_id, $number,'+', $typeput);
 		
 		$logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $Product->getLastQuery(), date('Y-m-d H:i:s'));
 			
 		#Insert in care_pharma_department_archive, return, get_use=0
-		$Cabinet->insertArchive($dept_nr, $ward_nr, $encoder, $lotid, '0', $number, $$dxcost, 0, 0, 0, $report_id, 0, $user_accept, $typeput);
+		$Cabinet->insertArchive($dept_nr, $ward_nr, $encoder, $available_product_id, '0', $number, $$dxcost, 0, 0, 0, $report_id, 0, $user_accept, $typeput);
 		
 		
 	} else {

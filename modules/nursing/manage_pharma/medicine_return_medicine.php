@@ -338,7 +338,7 @@ if(!isset($target) || ($target=='new') || ($target=='create')){
 							<td align="center"><input name="stt'.$i.'" type="text" size=1 value="'.$i.'" style="text-align:center;border-color:white;border-style:solid;" readonly></td>
 						</tr>';
 		}		
-		$smarty->assign('sTypePut','<select name="typeput" class="input1" onChange="alertselected(this)"><option value="0">'.$LDBH.'</option><option value="1" selected>'.$LDNoBH.'</option><option value="2">'.$LDCBTC.'</option></select>');		
+		$smarty->assign('sTypePut','<select name="typeput" class="input1" onChange="alertselected(this)"><option value="0" selected>'.$LDBH.'</option><option value="1" >'.$LDNoBH.'</option><option value="2">'.$LDCBTC.'</option></select>');
 		$smarty->assign('divMedicine',$sTempDiv);
 		$smarty->assign('divSTT',$sTempDivStt);
 		
@@ -381,7 +381,7 @@ if(!isset($target) || ($target=='new') || ($target=='create')){
 						break;	
 						
 					default:
-						$flag2='selected="selected"';
+						$flag1='selected="selected"';
 						break;
 			}		
 		}
@@ -403,7 +403,8 @@ $sTempHidden = '<input type="hidden" name="sid" value="'.$sid.'">
 		<input type="hidden" name="return_id" value="'.$return_id.'">
 		<input type="hidden" name="create_id" value="'.$create_id.'">
 		<input type="hidden" name="ward_nr" value="'.$ward_nr.'">
-		<input type="hidden" name="dept_nr" value="'.$dept_nr.'">';
+		<input type="hidden" name="dept_nr" value="'.$dept_nr.'">
+		';
 
 $smarty->assign('sHiddenInputs',$sTempHidden);
 

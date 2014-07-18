@@ -129,8 +129,8 @@ if ($ward_nr!='' && $ward_nr!='0'){
 				<table bgcolor="#EEEEEE" width="100%" cellpadding="3">
 					<tr bgColor="#E1E1E1" >
 						<td width="4%" align="center"><u><?php echo $LDSTT ?></u></td>
-						<td width="12%" align="center"><u><?php echo $LDMedicineID ?></u></td>
-						<td width="30%" align="center"><u><?php echo $LDMedicineName ?></u></td>
+						<td width="12%" align="center"><u><?php echo "Mã VTYT" ?></u></td>
+						<td width="30%" align="center"><u><?php echo "Tên VTYT" ?></u></td>
 						<td width="10%" align="center"><u><?php echo $LDUnit ?></u></td>
 						<td width="9%" align="center"><u><?php echo $LDLotID1 ?></u></td>
 						<td width="9%" align="center"><u><?php echo $LDNumberOf ?></u></td>
@@ -145,7 +145,7 @@ if ($ward_nr!='' && $ward_nr!='0'){
 								
 				echo '<tr bgColor="#ffffff" >
 						<td align="center" bgColor="#ffffff">'.$i.'.</td>
-						<td bgColor="#ffffff">'.$rowIssue['sodangky'].'</td>
+						<td align="center" bgColor="#ffffff">'.$rowIssue['product_encoder'].'</td>
 						<td bgColor="#ffffff">'.$rowIssue['product_name'].'</td>
 						<td align="center" bgColor="#ffffff">'.$rowIssue['unit_name_of_medicine'].'</td>
 						<td align="center" bgColor="#ffffff">'.$rowIssue['product_lot_id'].'</td>

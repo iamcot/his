@@ -876,7 +876,7 @@ class CabinetMedipot extends Core {
         global $db;
         if($available_product_id=='') return FALSE;
         $this->sql= "UPDATE $this->tb_med_avai_dept AS dept
-					SET dept.available_number=dept.available_number'".$cal."'$number,
+					SET dept.available_number=dept.available_number".$cal."$number,
 					 init_number = '$number'
 					WHERE dept.available_product_id = '$available_product_id'
 					AND dept.department='$dept' AND dept.ward_nr='$ward' AND dept.typeput='$typeput' LIMIT 1";
