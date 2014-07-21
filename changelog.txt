@@ -1,3 +1,5 @@
+2014-07-21 Cẩm Nang
+- sửa phiếu in Bảng kê chi phí khám chữa bệnh ngoại trú, nội trú
 2014-07-15
 Hiền Update sự ưu tiên phường xã.
             Disable checkbox trong trả kết quả xét nghiệm
