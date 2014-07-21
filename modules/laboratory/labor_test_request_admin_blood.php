@@ -327,8 +327,9 @@ function printOut()
 	testprintout<?php
 	echo $sid?>=window.open(urlholder,"testprintout<?php
 	echo $sid?>","width=800,height=600,menubar=no,resizable=yes,scrollbars=yes");
-    //testprintout<?php
-				echo $sid?>.print();
+    //testprintout
+<!--    --><?php
+//				echo $sid?><!--.print();-->
 }
 
 <?php
