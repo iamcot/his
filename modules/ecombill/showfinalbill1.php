@@ -495,6 +495,7 @@ if(is_object($itemresult))
     {
         $item=$itemresult->FetchRow();
         $groupnr = $item['item_group_nr'];
+        $item_code =  $item['item_code'] ;
         $smarty->assign('LDItemContent','+ '.$item['item_description']);
         $smarty->assign('LDItemDate',formatDate2Local($item['bill_item_date'],$date_format));
         $smarty->assign('LDItemNumberOf',$item['bill_item_units']);
@@ -512,13 +513,10 @@ if(is_object($itemresult))
             $smarty->assign('LDItemSumCostBHYT',number_format($item['bill_item_units']*$item['bill_item_unit_cost']*0));   //nang
             $smarty->assign('LDItemSumCostKhac','');//nang
             $smarty->assign('LDItemSumCostTra',number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*0)); //nang
-
-        }elseif($item_code =='XNK07' || $item_code =='XNK02' || $item_code=='0407'){
+        }elseif($item_code =='XNK07' || $item_code =='XNK02' || $item_code =='0407'){
             $smarty->assign('LDItemSumCostBHYT',number_format($item['bill_item_units']*$item['bill_item_unit_cost']*0));   //nang
             $smarty->assign('LDItemSumCostKhac','');//nang
             $smarty->assign('LDItemSumCostTra',number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*0)); //nang
-
-
         }else{
             $smarty->assign('LDItemSumCostBHYT',number_format($item['bill_item_units']*$item['bill_item_unit_cost']*$mh));   //nang
             $smarty->assign('LDItemSumCostKhac','');//nang

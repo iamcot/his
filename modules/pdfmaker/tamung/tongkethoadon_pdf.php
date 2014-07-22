@@ -93,7 +93,15 @@ $header_1='<table><tr>
 			<td width="60%"><font size="12">
 			 TRUNG TÂM Y TẾ HUYỆN TÂN UYÊN <br>
              Khoa: '.$wardname.'</font></td>
-             <td align="left" width="35%"> Mã số người bệnh: '.$patientno.'</td>
+            <td align="center" width="35%"> Mẫu số: 02/BV <br> Số khám bệnh<br> Mã số người bệnh: '.$patientno.'</td>
+
+             </tr>
+		</table>';
+$header_1_1='<table><tr>
+			<td width="60%"><font size="12">
+			 TRUNG TÂM Y TẾ HUYỆN TÂN UYÊN <br>
+             Khoa: '.$wardname.'</font></td>
+             <td align="center" width="35%"> Mẫu số: 01/BV <br> Số khám bệnh<br> Mã số người bệnh: '.$patientno.'</td>
              </tr>
 		</table>';
 $header_11='<table><tr>
@@ -107,67 +115,109 @@ $header_12='<table><tr>
 			<td align="center" width="100%"><b><font size="13">BẢNG KÊ CHI PHÍ KHÁM BỆNH, CHỮA BỆNH NGOẠI TRÚ</font></b><br><font size="10">Mức hưởng:'.$mh*100 .'%</font></td>
 		    </tr>
 		</table>';
+$x=$pdf->GetX();
+$y=$pdf->GetY();
+$pdf->DrawRect(($x+169),($y+40),5,4.5,1); //nam
+$pdf->DrawRect(($x+185),($y+40),5,4.5,1); //nữ
+$pdf->DrawRect(($x+23),($y+48),5,4.5,1); //BHYT
+$pdf->DrawRect(($x+35),($y+53),5,4.5,1); //không BHYT
+$pdf->DrawRect(($x+53),($y+48),6,4.5,1); //số thẻ bhyt
+$pdf->DrawRect(($x+59),($y+48),4,4.5,1); //số thẻ bhyt
+$pdf->DrawRect(($x+63),($y+48),6,4.5,1); //số thẻ bhyt
+$pdf->DrawRect(($x+69),($y+48),5,4.5,1); //số thẻ bhyt
+$pdf->DrawRect(($x+74),($y+48),8,4.5,1); //số thẻ bhyt
+$pdf->DrawRect(($x+82),($y+48),13,4.5,1); //số thẻ bhyt
+$pdf->DrawRect(($x+85),($y+61),15,4.5,1); //số thẻ bhyt
+$pdf->DrawRect(($x+22),($y+70),5,4.5,1); //đúng tuyến
+$pdf->DrawRect(($x+50),($y+70),5,4.5,1); //nơi chuyển đến
+$pdf->DrawRect(($x+162),($y+70),5,4.5,1); //trái tuyến  j
+$pdf->DrawRect(($x+173),($y+75),8,4.5,1); //mã bênh
+
 
 $header_2='<table border="0" width="100%" cellpadding="0">
             <tr>
              <b><td> I. Hành chính</td></b><br>
                 <td>(1) Họ và tên người bệnh: </td>
                 <td>'.$patient['name_last'].' '.$patient['name_first'].' </td>
-                <td>Ngày sinh: '.formatDate2Local($patient['date_birth'],$date_format).'</td>
-                <td>Giới tính: '.$sex_patient.'</td>
-            </tr>
+                <td>Ngày sinh: '.formatDate2Local($patient['date_birth'],$date_format).'</td>';
+                if($patient['sex']=='m'){
+                    $header_2.='<td width="30%">Giới tính: Nam&nbsp;&nbsp;X&nbsp;&nbsp;&nbsp; Nữ</td>';
+                }else{
+                    $header_2.='<td width="30%">Giới tính: Nam&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nữ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X</td>';
+                }
+$header_2.= '</tr>
             <tr bgcolor=#eeeeee>
                 <td width="50%">(2) Địa chỉ: '.$Encounter->encounter['phuongxa_name'].'-'.$Encounter->encounter['quanhuyen_name'].'-'.$Encounter->encounter['citytown_name'].'</td>
             </tr>
-            <tr>
-              <td>(3) Mã thẻ BHYT: '.$patient['insurance_nr'].' </td>
+            <tr>';
+            if($patient['insurance_nr']!=''){
+                $header_2.='<td width="15%">(3)Có BHYT:&nbsp;&nbsp; X</td>';
+            }else{
+                $header_2.='<td width="15%">(3)Có BHYT: </td>';
+            }
+$header_2.='<td width="45%">Mã thẻ BHYT: '.$patient['insurance_nr'].' </td>
               <td>Giá trị từ: '.formatDate2Local($patient['insurance_start'],$date_format).'</td>
               <td>đến: '.formatDate2Local($patient['insurance_exp'],$date_format).'</td>
-            </tr>
-            <tr bgcolor=#eeeeee>
-                <td  width="50%">(4) Cơ sở đăng ký KCB BHYT ban đầu: '.$patient['insurance_local'].'</td>
+            </tr>';
+            if($patient['insurance_nr']==''){
+                $header_2.='<tr><td width="30%">(4)Không có BHYT:&nbsp;&nbsp;&nbsp;X</td></tr>';
+            }else{
+                $header_2.='<tr><td width="30%">(4)Không có BHYT:</td></tr>';
+            }
+$header_2.=' <tr bgcolor=#eeeeee>
+                <td  width="50%">(5) Cơ sở đăng ký KCB BHYT ban đầu: '.$patient['insurance_local'].'</td>
 
             </tr>
             <tr>
-                <td width="60%">(5) Mã số của cơ sở đăng ký KCB BHYT ban đầu: '.$patient['madkbd'].' </td>
+                <td width="60%">(6) Mã số của cơ sở đăng ký KCB BHYT ban đầu: '.$patient['madkbd'].' </td>
 
             </tr>
             <tr>
-                <td width="35%">(6) Vào viện vào lúc: '.formatDate2Local($patient['encounter_date'],$date_format).'</td>
-                <td width="35%">(7) Ra viện lúc: '.$datestranfer.'</td>
+                <td width="35%">(7) Vào viện vào lúc: '.formatDate2Local($patient['encounter_date'],$date_format).'</td>
+                <td width="35%">(8) Ra viện lúc: '.$datestranfer.'</td>
                 <td>Tổng số ngày điều trị: '.$tongngaydieutri.' </td>
-            </tr>
-             <tr>
-                <td width="70%">(9) Tình trạng: '.$tt.'</td>
+            </tr>'  ;
+              if($patient['is_traituyen']==1){
+                $header_2.='<tr><td width="70%">(9)Cấp cứu:&nbsp;&nbsp;X&nbsp;&nbsp;Đúng tuyến&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nơi chuyển đến</td>
+                <td>(10) Trái tuyến&nbsp;&nbsp;</td>
+                </tr>';
+            }elseif($patient['is_traituyen']==2){
+                  $header_2.='<tr><td width="70%">(9)Cấp cứu:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Đúng tuyến&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nơi chuyển đến</td>
+                                  <td>(10) Trái tuyến&nbsp;&nbsp;&nbsp;&nbsp;X</td>
+                  </tr>';
 
-            </tr>
-            <tr>
-                <td width="70%">(10) Chuẩn đoán khi ra viện: '.$patient['referrer_diagnosis'].'</td>
-                <td >(11) Mã bệnh(ICD-10): '.$patient['referrer_diagnosis_code'].'</td>
+              }else{
+                  $header_2.='<tr><td width="70%">(9)Cấp cứu:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Đúng tuyến&nbsp;&nbsp;X&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nơi chuyển đến</td>
+                                  <td>(10) Trái tuyến&nbsp;&nbsp;</td>
+
+                  </tr>';
+
+              }
+$header_2.='<tr>
+                <td width="70%">(11) Chuẩn đoán khi ra viện: '.$patient['referrer_diagnosis'].'</td>
+                <td >(12) Mã bệnh(ICD-10): '.$patient['referrer_diagnosis_code'].'</td>
             </tr>
 
         </table>';
-/*$header_3='<table><tr>
-			<td width="25%"><b><br>
-             Mã hiện tại: '.$patientno.'</b></td>
-             </tr>
-        </table>';  */
 
 $header_3='<table><tr>
 			<td width="40%"><b>
              II. Chi phí khám, chữa bệnh</b></td>
              </tr>
         </table>';
-$pdf->writeHTML($header_1);
+//$pdf->writeHTML($header_1);
 if($in_out==1){
+    $pdf->writeHTML($header_1);
     $pdf->writeHTML($header_11);}
 else{
+    $pdf->writeHTML($header_1_1);
     $pdf->writeHTML($header_12);
 }
 $pdf->writeHTML($header_2);
 $pdf->writeHTML($header_3);
 $pdf->Ln();
 $pdf->SetFont('dejavusans', '', 10);
+
 
 #---------------------------------- Show info of Prescription, Show info of Depot, Surgery, Laborator ---------------------------------------------
 //$pdf->Ln();
@@ -238,11 +288,11 @@ foreach ($list_item as $x => $v) {
 							<td colspan="1" align="left">- '.$list_info[$x]['name'].'</td>
 							<td colspan="1" align="center">'.$list_info[$x]['unit'].'</td>
 							<td align="center">'.$tongthuoc.'</td>
-							<td align="center">'.$list_info[$x]['cost'].'</td>
-							<td align="center">'.number_format($tongthuoc*$list_info[$x]['cost']).'</td>
-							<td align="center">'.number_format($tongthuoc*$list_info[$x]['cost']*$mh).'</td>
-                            <td align="center">0</td>
-                            <td align="center">'.number_format($tongthuoc*$list_info[$x]['cost'] - $tongthuoc*$list_info[$x]['cost']*$mh).'</td>
+							<td align="right">'.$list_info[$x]['cost'].'</td>
+							<td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']).'</td>
+							<td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']*$mh).'</td>
+                            <td align="right">0</td>
+                            <td align="right">'.number_format($tongthuoc*$list_info[$x]['cost'] - $tongthuoc*$list_info[$x]['cost']*$mh).'</td>
 						</tr>';
         $tongtienthuoc += $tongthuoc*$list_info[$x]['cost'];
         $tongtienthuocBHYT += $tongthuoc*$list_info[$x]['cost']*$mh;
@@ -273,11 +323,11 @@ if(is_object($presresult))
 							<td colspan="1" align="left">- '.$pres['product_name'].'</td>
 							<td colspan="1" align="center">'.$pres['number_of_unit'].'</td>
 							<td align="center">'.$pres['sum_number'].'</td>
-							<td align="center">'.number_format($pres['cost']).'</td>
-							<td align="center">'.number_format($pres['cost']*$pres['sum_number']).'</td>
-							<td align="center">'.number_format($pres['cost']*$pres['sum_number']*$mh).'</td>
-                            <td align="center">0</td>
-                            <td align="center">'.number_format($pres['cost']*$pres['sum_number'] - $pres['cost']*$pres['sum_number']*$mh).'</td>
+							<td align="right">'.number_format($pres['cost']).'</td>
+							<td align="right">'.number_format($pres['cost']*$pres['sum_number']).'</td>
+							<td align="right">'.number_format($pres['cost']*$pres['sum_number']*$mh).'</td>
+                            <td align="right">0</td>
+                            <td align="right">'.number_format($pres['cost']*$pres['sum_number'] - $pres['cost']*$pres['sum_number']*$mh).'</td>
 						    </tr>';
             $tongtienthuoc += $pres['cost']*$pres['sum_number'];
             $tongtienthuocBHYT += $pres['cost']*$pres['sum_number']*$mh;
@@ -307,11 +357,11 @@ if(is_object($depotresult))
 					    	<td colspan="1" align="left">- '.$depot['product_name'].'</td>
 							<td colspan="1" align="center">'.formatDate2Local($depot['date_time_create'],'dd/mm',false,false,$sepChars).'</td>
 							<td align="center">'.$depot['sum_number'].'</td>
-							<td align="center">'.number_format($depot['cost']).'</td>
-							<td align="center">'.number_format($depot['cost']*$depot['sum_number']).'</td>
-							<td align="center">'.number_format($depot['cost']*$depot['sum_number']*$mh).'</td>
-                            <td align="center">0</td>
-                            <td align="center">'.number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh).'</td>
+							<td align="right">'.number_format($depot['cost']).'</td>
+							<td align="right">'.number_format($depot['cost']*$depot['sum_number']).'</td>
+							<td align="right">'.number_format($depot['cost']*$depot['sum_number']*$mh).'</td>
+                            <td align="right">0</td>
+                            <td align="right">'.number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh).'</td>
 					</tr>';
        // $tongtienvtyt+= $tongtienvtyt+ $depot['cost']*$depot['sum_number'];
         $tongtienvtyt +=  $depot['cost']*$depot['sum_number'];
@@ -337,11 +387,11 @@ if(is_object($depotresult1))
 							<td colspan="1" align="left">- '.$depot['product_name'].'</td>
 							<td colspan="1" align="center">'.formatDate2Local($depot['date_time_create'],'dd/mm',false,false,$sepChars).'</td>
 							<td align="center">'.$depot['sum_number'].'</td>
-							<td align="center">'.number_format($depot['cost']).'</td>
-							<td align="center">'.number_format($depot['cost']*$depot['sum_number']).'</td>
-							<td align="center">'.number_format($depot['cost']*$depot['sum_number']*$mh).'</td>
-                            <td align="center">0</td>
-                            <td align="center">'.number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh).'</td>
+							<td align="right">'.number_format($depot['cost']).'</td>
+							<td align="right">'.number_format($depot['cost']*$depot['sum_number']).'</td>
+							<td align="right">'.number_format($depot['cost']*$depot['sum_number']*$mh).'</td>
+                            <td align="right">0</td>
+                            <td align="right">'.number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh).'</td>
 						</tr>';
        // $tongtienHC += $tongtienHC+ $depot['cost']*$depot['sum_number'];
         $tongtienHC +=  $depot['cost']*$depot['sum_number'];
@@ -365,6 +415,12 @@ $tongtienxndvTra=0;
 $itemresult = $eComBill->listServiceItemsOfEncounter_in($patientno);
 
 $countItem=0;
+$cong1=0;
+$cong1BHYT=0;
+$cong1NB=0;
+$cong2 =0;
+$cong2BHYT =0;
+$cong2NB =0;
 if(is_object($itemresult))
 {
     $countSur=0; $countItem = $itemresult->RecordCount();
@@ -372,24 +428,81 @@ if(is_object($itemresult))
     {   $d=0;
         $item=$itemresult->FetchRow();
         $groupnr = $item['item_group_nr'];
+        $item_code =  $item['item_code'] ;
+        //tinh tiền cộng 1
+
+        if($groupnr==35 || $groupnr==36){
+            $cong1 +=$item['s'];
+            $cong1BHYT += $item['s']*$mh;
+            $cong1NB = $cong1 - $cong1BHYT;
+        }elseif($groupnr==40){
+            $cong1 +=$item['s'];
+            $cong1BHYT += $item['s']*0;
+            $cong1NB = $cong1 - $cong1BHYT;
+        }
+        else{
+            $cong2 +=$item['s'];
+            $cong2BHYT += $item['s']*$mh;
+            $cong2NB = $cong2 - $cong2BHYT;
+        }
+
+        if($groupnr==41){  //không cho giảm BHYT của chuyển viện
+            $row_item='<tr>
+						<td colspan="1" align="left">- '.$item['group_name'].'</td>
+						<td colspan="1" align="center">'.formatDate2Local($item['bill_item_date'],'dd/mm',false,false,$sepChars).'</td>
+						<td align="center">'.$item['bill_item_units'].'</td>
+						<td align="right">'.number_format($item['s']).'</td>
+						<td align="right">'.number_format($item['s']).'</td>
+                        <td align="right">'.number_format($item['s']*0).'</td>
+                        <td align="right">0</td>
+                        <td align="right">'.number_format($item['s'] - $item['s']*0).'</td>
+					  </tr>';
+        }
+        elseif($item_code =='XNK07' || $item_code =='XNK02' || $item_code=='0407'){   //xét nghiệm HbsAg, xét nghiệm serodia, hồ sơ
+            $row_item='<tr>
+						<td colspan="1" align="left">- '.$item['group_name'].'</td>
+						<td colspan="1" align="center">'.formatDate2Local($item['bill_item_date'],'dd/mm',false,false,$sepChars).'</td>
+						<td align="center">'.$item['bill_item_units'].'</td>
+						<td align="right">'.number_format($item['s']).'</td>
+						<td align="right">'.number_format($item['s']).'</td>
+                        <td align="right">'.number_format($item['s']*0).'</td>
+                        <td align="right">0</td>
+                        <td align="right">'.number_format($item['s'] - $item['s']*0).'</td>
+					  </tr>';
+        }
+        else{
+            $row_item='<tr>
+						<td colspan="1" align="left">- '.$item['group_name'].'</td>
+						<td colspan="1" align="center">'.formatDate2Local($item['bill_item_date'],'dd/mm',false,false,$sepChars).'</td>
+						<td align="center">'.$item['bill_item_units'].'</td>
+						<td align="right">'.number_format($item['s']).'</td>
+						<td align="right">'.number_format($item['s']).'</td>
+                        <td align="right">'.number_format($item['s']*$mh).'</td>
+                        <td align="right">0</td>
+                        <td align="right">'.number_format($item['s'] - $item['s']*$mh).'</td>
+					  </tr>';
+        }
+        /*
         $row_item='<tr>
 						<td colspan="1" align="left">- '.$item['group_name'].'</td>
 						<td colspan="1" align="center">'.formatDate2Local($item['bill_item_date'],'dd/mm',false,false,$sepChars).'</td>
 						<td align="center">'.$item['bill_item_units'].'</td>
-						<td align="center">'.number_format($item['s']).'</td>
-						<td align="center">'.number_format($item['s']).'</td>
-                        <td align="center">'.number_format($item['s']*$mh).'</td>
-                        <td align="center">0</td>
-                        <td align="center">'.number_format($item['s'] - $item['s']*$mh).'</td>
-					  </tr>';
-        //$tongtienxndv += $tongtienxndv+ $item['bill_item_units']*$item['bill_item_unit_cost'];
+						<td align="right">'.number_format($item['s']).'</td>
+						<td align="right">'.number_format($item['s']).'</td>
+                        <td align="right">'.number_format($item['s']*$mh).'</td>
+                        <td align="right">0</td>
+                        <td align="right">'.number_format($item['s'] - $item['s']*$mh).'</td>
+					  </tr>'; */
         $tongtienxndv +=  $item['s'];
-       /* if($groupnr==22){  //xet không cho giảm BHYT của xét nghiệm máu
+       if($groupnr==41){  //không cho giảm BHYT của chuyển viện
             $tongtienxndvBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*0;   //nang
-        }   else{     */
+        }
+       elseif($item_code =='XNK07' || $item_code =='XNK02' || $item_code=='0407'){   //xét nghiệm HbsAg, xét nghiệm serodia, hồ sơ
+           $tongtienxndvBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*0;   //nang
+           }
+      else{
             $tongtienxndvBHYT +=  $item['s']*$mh;  //nang
-       // }
-       // $tongtienxndvTra +=$item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*$mh;
+        }
         $tongtienxndvTra = $tongtienxndv - $tongtienxndvBHYT;
 
 
@@ -424,28 +537,34 @@ $tienBHYT =  $tongtienxndvBHYT+ $tongtienvtytTBHYT + $tongtienthuocBHYT;
 					<td colspan="1"><b>1. Ngày giường chuyên khoa </b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
 				</tr>
 				'.$sTempKhac.'  '.$sTempBed.'
-
+                 <tr>
+                <td  align="right" colspan="1"><b>Cộng: 1</b></td><td></td><td></td><td></td><td align="right"><b>'.$cong1.'</b></td><td align="right"><b>'.$cong1BHYT.'</b></td><td></td><td align="right"><b>'.$cong1NB.'</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                 </tr>
                 <tr>
                     <td colspan="1"><b>2. Xét nghiệm</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                 </tr>
                 '.$sTempSur.' '.$sTempLabor.' '.$sTempRadio.' '.$sTempUltra.'  '.$sTempECG.' '.$sTempBlood.'
-
+                   <tr>
+                <td  align="right" colspan="1"><b>Cộng: 2</b></td><td></td><td></td><td></td><td align="right"><b>'.$cong2.'</b></td><td align="right"><b>'.$cong2BHYT.'</b></td><td></td><td align="right"><b>'.$cong2NB.'</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                 </tr>
 				<tr>
 					<td colspan="1"><b>3. Thuốc, dịch truyền</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
 				</tr> 3.1 Thuốc<br>'.$html_thuoc.'3.2 Y cụ và hóa chất<br>'.$html_vtyt_hc.'
-				';
+				<tr>
+                <td  align="right" colspan="1"><b>Cộng: 3</b></td><td></td><td></td><td></td><td align="right"><b>'.$cong3.'</b></td><td align="right"><b>'.$cong3BHYT.'</b></td><td></td><td align="right"><b>'.$cong3NB.'</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                 </tr>';
 
 
     // $finalbilldate = explode('/',formatDate2Local($final['final_date'],$date_format,false,false,$sepChars));
     $html.= '<tr>
-                <td colspan="1"><i><b>Tổng cộng: </b></i></td>
+                <td colspan="1" align="right"><i><b>Tổng cộng: </b></i></td>
                <td></td>
                <td></td>
                <td></td>
-               <td><b>'.number_format($tongtienthuoc+$tongtienvtyt+$tongtienxndv).'</b></td>
-               <td><b>'.number_format($tienBHYT).'</b></td>
+               <td align="right"><b>'.number_format($tongtienthuoc+$tongtienvtyt+$tongtienxndv).'</b></td>
+               <td align="right"><b>'.number_format($tienBHYT).'</b></td>
                <td></td>
-               <td><b>'.number_format($tongtienthuocTra+$tongtienVTYTTra+$tongtienxndvTra).'</b></td>
+               <td align="right"><b>'.number_format($tongtienthuocTra+$tongtienVTYTTra+$tongtienxndvTra).'</b></td>
               </tr>
 			</table>';
     $html1='<table width="100%">
@@ -566,11 +685,11 @@ $html3='<table width="100%">
 							<td colspan="1" align="center">- '.$list_info[$x]['name'].'</td>
 							<td colspan="1" align="center">'.$list_info[$x]['unit'].'</td>
 							<td align="center">'.$tongthuoc.'</td>
-							<td align="center">'.$list_info[$x]['cost'].'</td>
-							<td align="center">'.number_format($tongthuoc*$list_info[$x]['cost']).'</td>
-							<td align="center">'.number_format($tongthuoc*$list_info[$x]['cost']*$mh).'</td>
-                            <td align="center">0</td>
-                            <td align="center">'.number_format($tongthuoc*$list_info[$x]['cost'] - $tongthuoc*$list_info[$x]['cost']*$mh).'</td>
+							<td align="right">'.$list_info[$x]['cost'].'</td>
+							<td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']).'</td>
+							<td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']*$mh).'</td>
+                            <td align="right">0</td>
+                            <td align="right">'.number_format($tongthuoc*$list_info[$x]['cost'] - $tongthuoc*$list_info[$x]['cost']*$mh).'</td>
 						</tr>';
         $tongtienthuoc += $tongthuoc*$list_info[$x]['cost'];
         $tongtienthuocBHYT += $tongthuoc*$list_info[$x]['cost']*$mh;
@@ -601,11 +720,11 @@ $html3='<table width="100%">
 							<td colspan="1" align="left">- '.$pres['product_name'].'</td>
 							<td colspan="1" align="center">'.$pres['note'].'</td>
 							<td align="center">'.$pres['sum_number'].'</td>
-							<td align="center">'.number_format($pres['cost']).'</td>
-							<td align="center">'.number_format($pres['cost']*$pres['sum_number']).'</td>
-							<td align="center">'.number_format($pres['cost']*$pres['sum_number']*$mh).'</td>
-                            <td align="center">0</td>
-                            <td align="center">'.number_format($pres['cost']*$pres['sum_number'] - $pres['cost']*$pres['sum_number']*$mh).'</td>
+							<td align="right">'.number_format($pres['cost']).'</td>
+							<td align="right">'.number_format($pres['cost']*$pres['sum_number']).'</td>
+							<td align="right">'.number_format($pres['cost']*$pres['sum_number']*$mh).'</td>
+                            <td align="right">0</td>
+                            <td align="right">'.number_format($pres['cost']*$pres['sum_number'] - $pres['cost']*$pres['sum_number']*$mh).'</td>
 						    </tr>';
                 $tongtienthuoc += $pres['cost']*$pres['sum_number'];
                 $tongtienthuocBHYT += $pres['cost']*$pres['sum_number']*$mh;
@@ -635,11 +754,11 @@ $html3='<table width="100%">
 					    	<td colspan="1" align="left">- '.$depot['product_name'].'</td>
 							<td colspan="1" align="center">'.formatDate2Local($depot['date_time_create'],'dd/mm',false,false,$sepChars).'</td>
 							<td align="center">'.$depot['sum_number'].'</td>
-							<td align="center">'.number_format($depot['cost']).'</td>
-							<td align="center">'.number_format($depot['cost']*$depot['sum_number']).'</td>
-							<td align="center">'.number_format($depot['cost']*$depot['sum_number']*$mh).'</td>
-                            <td align="center">0</td>
-                            <td align="center">'.number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh).'</td>
+							<td align="right">'.number_format($depot['cost']).'</td>
+							<td align="right">'.number_format($depot['cost']*$depot['sum_number']).'</td>
+							<td align="right">'.number_format($depot['cost']*$depot['sum_number']*$mh).'</td>
+                            <td align="right">0</td>
+                            <td align="right">'.number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh).'</td>
 					</tr>';
             // $tongtienvtyt+= $tongtienvtyt+ $depot['cost']*$depot['sum_number'];
             $tongtienvtyt +=  $depot['cost']*$depot['sum_number'];
@@ -665,11 +784,11 @@ $html3='<table width="100%">
 							<td colspan="1" align="left">- '.$depot['product_name'].'</td>
 							<td colspan="1" align="center">'.formatDate2Local($depot['date_time_create'],'dd/mm',false,false,$sepChars).'</td>
 							<td align="center">'.$depot['sum_number'].'</td>
-							<td align="center">'.number_format($depot['cost']).'</td>
-							<td align="center">'.number_format($depot['cost']*$depot['sum_number']).'</td>
-							<td align="center">'.number_format($depot['cost']*$depot['sum_number']*$mh).'</td>
-                            <td align="center">0</td>
-                            <td align="center">'.number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh).'</td>
+							<td align="right">'.number_format($depot['cost']).'</td>
+							<td align="right">'.number_format($depot['cost']*$depot['sum_number']).'</td>
+							<td align="right">'.number_format($depot['cost']*$depot['sum_number']*$mh).'</td>
+                            <td align="right">0</td>
+                            <td align="right">'.number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh).'</td>
 						</tr>';
             // $tongtienHC += $tongtienHC+ $depot['cost']*$depot['sum_number'];
             $tongtienHC +=  $depot['cost']*$depot['sum_number'];
@@ -683,13 +802,23 @@ $html3='<table width="100%">
     $tongtienvtyt += $tongtienHC;
     $tongtienvtytTBHYT += $tongtienHCBHYT;
     $tongtienVTYTTra   +=$tongtienHCTra;
-    ///
+    //tính cộng 3
+    $cong3 = $tongtienthuoc + $tongtienvtyt;
+    $cong3BHYT = $tongtienthuocBHYT+ $tongtienvtytTBHYT;
+    $cong3NB = $cong3 - $cong3BHYT;
+   //dịch vụ y tế và xét nghiệm
     $tongtienxndv=0;
     $tongtienxndvBHYT=0;
     $tongtienxndvTra=0;
     $itemresult = $eComBill->listServiceItemsOfEncounter_in($patientno);
 
     $countItem=0;
+    $cong1=0;
+    $cong1BHYT=0;
+    $cong1NB=0;
+    $cong2 =0;
+    $cong2BHYT =0;
+    $cong2NB =0;
     if(is_object($itemresult))
     {
         $countSur=0; $countItem = $itemresult->RecordCount();
@@ -697,24 +826,39 @@ $html3='<table width="100%">
         {   $d=0;
             $item=$itemresult->FetchRow();
             $groupnr = $item['item_group_nr'];
+            $item_code =  $item['item_code'] ;
+            //tinh tiền cộng 1 ,cộng 2
+
+            if($groupnr==35 || $groupnr==36 || $groupnr==40){
+                $cong1 +=$item['s'];
+                $cong1BHYT += $item['s']*$mh;
+                $cong1NB = $cong1 - $cong1BHYT;
+            } else{
+                $cong2 +=$item['s'];
+                $cong2BHYT += $item['s']*$mh;
+                $cong2NB = $cong2 - $cong2BHYT;
+            }
             $row_item='<tr>
-						<td colspan="1" align="center">- '.$item['group_name'].'</td>
+						<td colspan="1" align="left">- '.$item['group_name'].'</td>
 						<td colspan="1" align="center">'.formatDate2Local($item['bill_item_date'],'dd/mm',false,false,$sepChars).'</td>
 						<td align="center">'.$item['bill_item_units'].'</td>
-						<td align="center">'.number_format($item['s']).'</td>
-						<td align="center">'.number_format($item['s']).'</td>
-                        <td align="center">'.number_format($item['s']*$mh).'</td>
-                        <td align="center">0</td>
-                        <td align="center">'.number_format($item['s'] - $item['s']*$mh).'</td>
+						<td align="right">'.number_format($item['s']).'</td>
+						<td align="right">'.number_format($item['s']).'</td>
+                        <td align="right">'.number_format($item['s']*$mh).'</td>
+                        <td align="right">0</td>
+                        <td align="right">'.number_format($item['s'] - $item['s']*$mh).'</td>
 					  </tr>';
             //$tongtienxndv += $tongtienxndv+ $item['bill_item_units']*$item['bill_item_unit_cost'];
             $tongtienxndv +=  $item['s'];
-            /* if($groupnr==22){  //xet không cho giảm BHYT của xét nghiệm máu
-                 $tongtienxndvBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*0;   //nang
-             }   else{     */
-            $tongtienxndvBHYT +=  $item['s']*$mh;  //nang
-            // }
-            // $tongtienxndvTra +=$item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*$mh;
+            if($groupnr==41){  //không cho giảm BHYT của chuyển viện
+                $tongtienxndvBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*0;   //nang
+            }
+            elseif($item_code =='XNK07' || $item_code =='XNK02' || $item_code=='0407'){   //xét nghiệm HbsAg, xét nghiệm serodia, hồ sơ
+                $tongtienxndvBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*0;   //nang
+            }
+            else{
+                $tongtienxndvBHYT +=  $item['s']*$mh;  //nang
+            }
             $tongtienxndvTra = $tongtienxndv - $tongtienxndvBHYT;
 
 
@@ -749,25 +893,33 @@ $html3='<table width="100%">
 					<td colspan="1"><b>1.Khám bệnh </b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
 				</tr>
 				'.$sTempKhac.'
-
+                    <tr>
+                <td  align="right" colspan="1"><b>Cộng: 1</b></td><td></td><td></td><td></td><td align="right"><b>'.$cong1.'</b></td><td align="right"><b>'.$cong1BHYT.'</b></td><td></td><td align="right"><b>'.$cong1NB.'</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                 </tr>
                 <tr>
                     <td colspan="1"><b>2. Chuẩn đoán hình ảnh, thăm dò chức năng</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                 </tr>
                 '.$sTempSur.' '.$sTempLabor.' '.$sTempRadio.' '.$sTempUltra.'  '.$sTempECG.' '.$sTempBlood.'
+				    <tr>
+                <td  align="right" colspan="1"><b>Cộng: 2</b></td><td></td><td></td><td></td><td align="right"><b>'.$cong2.'</b></td><td align="right"><b>'.$cong2BHYT.'</b></td><td></td><td align="right"><b>'.$cong2NB.'</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                 </tr>
 				<tr>
 					<td colspan="1"><b>3. Thuốc, dịch truyền</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-				</tr> 3.1 Thuốc<br>'.$html_thuoc.'3.2 Y cụ và hóa chất<br>'.$html_vtyt_hc;
+				</tr> 3.1 Thuốc<br>'.$html_thuoc.'3.2 Y cụ và hóa chất<br>'.$html_vtyt_hc.'
+					<tr>
+                <td  align="right" colspan="1"><b>Cộng: 3</b></td><td></td><td></td><td></td><td align="right"><b>'.$cong3.'</b></td><td align="right"><b>'.$cong3BHYT.'</b></td><td></td><td align="right"><b>'.$cong3NB.'</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                 </tr>';
 
     // $finalbilldate = explode('/',formatDate2Local($final['final_date'],$date_format,false,false,$sepChars));
     $html.= '<tr>
-                <td colspan="1"><i><b>Tổng cộng: </b></i></td>
+                <td colspan="1" align="right" ><i><b>Tổng cộng: </b></i></td>
                <td></td>
                <td></td>
                <td></td>
-               <td><b>'.number_format($tongtienthuoc+$tongtienvtyt+$tongtienxndv).'</b></td>
-               <td><b>'.number_format($tienBHYT).'</b></td>
+               <td align="right"><b>'.number_format($tongtienthuoc+$tongtienvtyt+$tongtienxndv).'</b></td>
+               <td align="right"><b>'.number_format($tienBHYT).'</b></td>
                <td></td>
-               <td><b>'.number_format($tongtienthuocTra+$tongtienVTYTTra+$tongtienxndvTra).'</b></td>
+               <td align="right"><b>'.number_format($tongtienthuocTra+$tongtienVTYTTra+$tongtienxndvTra).'</b></td>
               </tr>
 			</table>';
     $html1='<table width="100%">
