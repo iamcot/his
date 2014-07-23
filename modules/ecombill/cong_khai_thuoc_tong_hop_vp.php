@@ -344,13 +344,11 @@ foreach ($list_item as $x => $v) {
     //</tr></table></td>
     //  echo '<td align="right">'.$tongthuoc.'</td><td align="right">'.number_format($list_info[$x]['cost']).'</td><td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']).'</td></tr>';
     //nang
-    if($muchuong!=0){
-        $tongtienBHYT = $tongthuoc*$list_info[$x]['cost']*$muchuong;
-    }else{
-        $tongtienBHYT = $tongthuoc*$list_info[$x]['cost']*$mh ;
-    }
+
+     $tongtienBHYT += $tongthuoc*$list_info[$x]['cost']*$mh ;
+
     $tongtienkhac = '';
-    $tongtienthanhtoan = $tongtienthuoc - $tongtienBHYT; // tính so tien benh nhan can tra
+    $tongtienthanhtoan += $tongtienthuoc - $tongtienBHYT; // tính so tien benh nhan can tra
     echo '<td align="center">'.$tongthuoc.'</td><td align="right">'.number_format($list_info[$x]['cost']).'</td><td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']).'<td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']*$mh).'<td align="right">'.$tongtienkhac.'<td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']-$tongthuoc*$list_info[$x]['cost']*$mh).'</td></tr>';
  //   echo '<td align="center">'.$tongthuoc.'</td><td align="right">'.number_format($list_info[$x]['cost']).'</td><td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']).'<td align="right">'.$tongtienBHYT.'<td align="right">'.$tongtienkhac.'<td align="right">'.$tongtienthanhtoan.'</td></tr>';
     /////////////////

@@ -431,14 +431,18 @@ if(is_object($itemresult))
         $item_code =  $item['item_code'] ;
         //tinh tiền cộng 1
 
-        if($groupnr==35 || $groupnr==36){
+        if($groupnr==35 || $groupnr==36){   //giường
             $cong1 +=$item['s'];
             $cong1BHYT += $item['s']*$mh;
             $cong1NB = $cong1 - $cong1BHYT;
-        }elseif($groupnr==40){
+        }elseif($groupnr==41 || $groupnr==40){   //chuyen vien 41, hồ sơ cong kham 40
             $cong1 +=$item['s'];
             $cong1BHYT += $item['s']*0;
             $cong1NB = $cong1 - $cong1BHYT;
+        } elseif($item_code =='XNK07' || $item_code =='XNK02'){      //xet nghiệm HBsAg, serodia
+            $cong2 +=$item['s'];
+            $cong2BHYT += $item['s']*0;
+            $cong2NB = $cong2 - $cong2BHYT;
         }
         else{
             $cong2 +=$item['s'];
@@ -503,7 +507,7 @@ if(is_object($itemresult))
       else{
             $tongtienxndvBHYT +=  $item['s']*$mh;  //nang
         }
-        $tongtienxndvTra = $tongtienxndv - $tongtienxndvBHYT;
+        $tongtienxndvTra += $tongtienxndv - $tongtienxndvBHYT;
 
 
         if ($groupnr<=25){								//Xet nghiem 1->25
@@ -538,20 +542,20 @@ $tienBHYT =  $tongtienxndvBHYT+ $tongtienvtytTBHYT + $tongtienthuocBHYT;
 				</tr>
 				'.$sTempKhac.'  '.$sTempBed.'
                  <tr>
-                <td  align="right" colspan="1"><b>Cộng: 1</b></td><td></td><td></td><td></td><td align="right"><b>'.$cong1.'</b></td><td align="right"><b>'.$cong1BHYT.'</b></td><td></td><td align="right"><b>'.$cong1NB.'</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                <td  align="right" colspan="1"><b>Cộng: 1</b></td><td></td><td></td><td></td><td align="right"><b>'.number_format($cong1).'</b></td><td align="right"><b>'.number_format($cong1BHYT).'</b></td><td></td><td align="right"><b>'.number_format($cong1NB).'</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                  </tr>
                 <tr>
                     <td colspan="1"><b>2. Xét nghiệm</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                 </tr>
                 '.$sTempSur.' '.$sTempLabor.' '.$sTempRadio.' '.$sTempUltra.'  '.$sTempECG.' '.$sTempBlood.'
                    <tr>
-                <td  align="right" colspan="1"><b>Cộng: 2</b></td><td></td><td></td><td></td><td align="right"><b>'.$cong2.'</b></td><td align="right"><b>'.$cong2BHYT.'</b></td><td></td><td align="right"><b>'.$cong2NB.'</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                <td  align="right" colspan="1"><b>Cộng: 2</b></td><td></td><td></td><td></td><td align="right"><b>'.number_format($cong2).'</b></td><td align="right"><b>'.number_format($cong2BHYT).'</b></td><td></td><td align="right"><b>'.number_format($cong2NB).'</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                  </tr>
 				<tr>
 					<td colspan="1"><b>3. Thuốc, dịch truyền</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
 				</tr> 3.1 Thuốc<br>'.$html_thuoc.'3.2 Y cụ và hóa chất<br>'.$html_vtyt_hc.'
 				<tr>
-                <td  align="right" colspan="1"><b>Cộng: 3</b></td><td></td><td></td><td></td><td align="right"><b>'.$cong3.'</b></td><td align="right"><b>'.$cong3BHYT.'</b></td><td></td><td align="right"><b>'.$cong3NB.'</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                <td  align="right" colspan="1"><b>Cộng: 3</b></td><td></td><td></td><td></td><td align="right"><b>'.number_format($cong3).'</b></td><td align="right"><b>'.number_format($cong3BHYT).'</b></td><td></td><td align="right"><b>'.number_format($cong3NB).'</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                  </tr>';
 
 
@@ -829,11 +833,22 @@ $html3='<table width="100%">
             $item_code =  $item['item_code'] ;
             //tinh tiền cộng 1 ,cộng 2
 
-            if($groupnr==35 || $groupnr==36 || $groupnr==40){
+            if($groupnr==35 || $groupnr==36 || $groupnr==40 ){  //giường, công khám
                 $cong1 +=$item['s'];
                 $cong1BHYT += $item['s']*$mh;
                 $cong1NB = $cong1 - $cong1BHYT;
-            } else{
+
+            }
+            elseif( $groupnr==41){ //chuyển viện
+                $cong1 +=$item['s'];
+                $cong1BHYT += $item['s']*0;
+                $cong1NB = $cong1 - $cong1BHYT;
+            } elseif($item_code =='XNK07' || $item_code =='XNK02'){
+                $cong2 +=$item['s'];
+                $cong2BHYT += $item['s']*0;
+                $cong2NB = $cong2 - $cong2BHYT;
+            }
+            else{
                 $cong2 +=$item['s'];
                 $cong2BHYT += $item['s']*$mh;
                 $cong2NB = $cong2 - $cong2BHYT;
@@ -859,7 +874,7 @@ $html3='<table width="100%">
             else{
                 $tongtienxndvBHYT +=  $item['s']*$mh;  //nang
             }
-            $tongtienxndvTra = $tongtienxndv - $tongtienxndvBHYT;
+            $tongtienxndvTra += $tongtienxndv - $tongtienxndvBHYT;
 
 
             if ($groupnr<=25){								//Xet nghiem 1->25
@@ -894,20 +909,20 @@ $html3='<table width="100%">
 				</tr>
 				'.$sTempKhac.'
                     <tr>
-                <td  align="right" colspan="1"><b>Cộng: 1</b></td><td></td><td></td><td></td><td align="right"><b>'.$cong1.'</b></td><td align="right"><b>'.$cong1BHYT.'</b></td><td></td><td align="right"><b>'.$cong1NB.'</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                <td  align="right" colspan="1"><b>Cộng: 1</b></td><td></td><td></td><td></td><td align="right"><b>'.number_format($cong1).'</b></td><td align="right"><b>'.number_format($cong1BHYT).'</b></td><td></td><td align="right"><b>'.number_format($cong1NB).'</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                  </tr>
                 <tr>
                     <td colspan="1"><b>2. Chuẩn đoán hình ảnh, thăm dò chức năng</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                 </tr>
                 '.$sTempSur.' '.$sTempLabor.' '.$sTempRadio.' '.$sTempUltra.'  '.$sTempECG.' '.$sTempBlood.'
 				    <tr>
-                <td  align="right" colspan="1"><b>Cộng: 2</b></td><td></td><td></td><td></td><td align="right"><b>'.$cong2.'</b></td><td align="right"><b>'.$cong2BHYT.'</b></td><td></td><td align="right"><b>'.$cong2NB.'</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                <td  align="right" colspan="1"><b>Cộng: 2</b></td><td></td><td></td><td></td><td align="right"><b>'.number_format($cong2).'</b></td><td align="right"><b>'.number_format($cong2BHYT).'</b></td><td></td><td align="right"><b>'.number_format($cong2NB).'</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                  </tr>
 				<tr>
 					<td colspan="1"><b>3. Thuốc, dịch truyền</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
 				</tr> 3.1 Thuốc<br>'.$html_thuoc.'3.2 Y cụ và hóa chất<br>'.$html_vtyt_hc.'
 					<tr>
-                <td  align="right" colspan="1"><b>Cộng: 3</b></td><td></td><td></td><td></td><td align="right"><b>'.$cong3.'</b></td><td align="right"><b>'.$cong3BHYT.'</b></td><td></td><td align="right"><b>'.$cong3NB.'</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                <td  align="right" colspan="1"><b>Cộng: 3</b></td><td></td><td></td><td></td><td align="right"><b>'.number_format($cong3).'</b></td><td align="right"><b>'.number_format($cong3BHYT).'</b></td><td></td><td align="right"><b>'.number_format($cong3NB).'</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                  </tr>';
 
     // $finalbilldate = explode('/',formatDate2Local($final['final_date'],$date_format,false,false,$sepChars));
