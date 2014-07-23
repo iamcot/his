@@ -483,6 +483,7 @@ echo '
 		//end gjergji
 
 
+
  		echo $LDRequestingDoc ?>:
 <!-- g?c		<input type="text" name="send_doctor" size=40 maxlength=40 value="--><?php //echo $_SESSION['sess_user_name']; ?><!--"></div><br>-->
         <input type="text" name="send_doctor" size=37 maxlength=40 value="<?php if($edit_form || $read_form) echo $stored_request['send_doctor'];else echo $pers_name;?>">

@@ -344,13 +344,11 @@ foreach ($list_item as $x => $v) {
     //</tr></table></td>
     //  echo '<td align="right">'.$tongthuoc.'</td><td align="right">'.number_format($list_info[$x]['cost']).'</td><td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']).'</td></tr>';
     //nang
-    if($muchuong!=0){
-        $tongtienBHYT = $tongthuoc*$list_info[$x]['cost']*$muchuong;
-    }else{
-        $tongtienBHYT = $tongthuoc*$list_info[$x]['cost']*$mh ;
-    }
+
+     $tongtienBHYT += $tongthuoc*$list_info[$x]['cost']*$mh ;
+
     $tongtienkhac = '';
-    $tongtienthanhtoan = $tongtienthuoc - $tongtienBHYT; // tính so tien benh nhan can tra
+    $tongtienthanhtoan += $tongtienthuoc - $tongtienBHYT; // tính so tien benh nhan can tra
     echo '<td align="center">'.$tongthuoc.'</td><td align="right">'.number_format($list_info[$x]['cost']).'</td><td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']).'<td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']*$mh).'<td align="right">'.$tongtienkhac.'<td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']-$tongthuoc*$list_info[$x]['cost']*$mh).'</td></tr>';
  //   echo '<td align="center">'.$tongthuoc.'</td><td align="right">'.number_format($list_info[$x]['cost']).'</td><td align="right">'.number_format($tongthuoc*$list_info[$x]['cost']).'<td align="right">'.$tongtienBHYT.'<td align="right">'.$tongtienkhac.'<td align="right">'.$tongtienthanhtoan.'</td></tr>';
     /////////////////
@@ -414,7 +412,7 @@ $presqry="SELECT prs.*,prsinfo.date_time_create,prsinfo.sum_date
 			FROM care_pharma_prescription AS prs, care_pharma_prescription_info AS prsinfo, care_pharma_type_of_prescription AS tp
 			WHERE prsinfo.encounter_nr='$patientno' AND prsinfo.prescription_id=prs.prescription_id
 			AND prsinfo.prescription_type=tp.prescription_type
-			AND prsinfo.status_finish=1 AND tp.group_pres=0
+			AND prsinfo.status_finish=0 AND tp.group_pres=0
 			ORDER BY prs.prescription_id";
 $presresult=$db->Execute($presqry);
 if(is_object($presresult))
@@ -480,27 +478,36 @@ if(is_object($depotresult))
     for ($i=0;$i<$depotresult->RecordCount();$i++)
     {
         $depot=$depotresult->FetchRow();
+        $ma = $depot['product_encoder'];
         $smarty->assign('LDItemContent',$depot['product_name']);
         $smarty->assign('LDItemDate',formatDate2Local($depot['date_time_create'],$date_format));
         $smarty->assign('LDItemNumberOf',$depot['sum_number']);
         $smarty->assign('LDItemUnitCost',$depot['cost']);
-       $smarty->assign('LDItemSumCost',number_format($depot['cost']*$depot['sum_number']));
-        if($muchuong!=0){
-            $smarty->assign('LDItemSumCostBHYT',number_format($depot['cost']*$depot['sum_number']*$muchuong)); //nang
+        $smarty->assign('LDItemSumCost',number_format($depot['cost']*$depot['sum_number']));
+        /*
+        if($ma==51 || $ma==52 || $ma ==53 || $ma==65 || $ma=123){ // 51- Dây oxy số 8 10, 52- Dây oxy 2 nhánh(L), 53- Dây oxy 2 nhánh nhi, 65- Dây oxy hai nhánh size (S), 123- lọ đựng nước tiểu
+            $smarty->assign('LDItemSumCostBHYT',number_format($depot['cost']*$depot['sum_number']*0)); //nang
             $smarty->assign('LDItemSumCostKhac','');//nang
-            $smarty->assign('LDItemSumCostTra',number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$muchuong)); //nang
+            $smarty->assign('LDItemSumCostTra',number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*0)); //nang
         }   else{
             $smarty->assign('LDItemSumCostBHYT',number_format($depot['cost']*$depot['sum_number']*$mh));   //nang
             $smarty->assign('LDItemSumCostKhac','');//nang
             $smarty->assign('LDItemSumCostTra',number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh)); //nang
         }
         $tongtienVTYT += $depot['cost']*$depot['sum_number'];
-        if($muchuong!=0){
-            $tongtienVTYTBHYT += $depot['cost']*$depot['sum_number']*$muchuong;  //nang
+        if($ma==51 || $ma==52 || $ma ==53 || $ma==65 || $ma =123){
+            $tongtienVTYTBHYT += $depot['cost']*$depot['sum_number']*0;  //nang
         }   else{
             $tongtienVTYTBHYT += $depot['cost']*$depot['sum_number']*$mh;  //nang
         }
-        $tongtienVTYTTra += $tongtienVTYT - $tongtienVTYTBHYT;               //nang
+        $tongtienVTYTTra += $tongtienVTYT - $tongtienVTYTBHYT;               //nang     */
+
+       $smarty->assign('LDItemSumCostBHYT',number_format($depot['cost']*$depot['sum_number']*$mh));
+       $smarty->assign('LDItemSumCostKhac','');//nang
+       $smarty->assign('LDItemSumCostTra',number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh)); //nang
+       $tongtienVTYT += $depot['cost']*$depot['sum_number'];
+       $tongtienVTYTBHYT += $depot['cost']*$depot['sum_number']*$mh;  //nang
+       $tongtienVTYTTra += $tongtienVTYT - $tongtienVTYTBHYT;               //nang
         ob_start();
         $smarty->display('ecombill/showfinalbill_other_line.tpl');
         $sTempMed = $sTempMed.ob_get_contents();
@@ -565,27 +572,35 @@ if(is_object($itemresult))
   // for ($i=1;$i<$itemresult->RecordCount();$i++) //nang
     {
         $item=$itemresult->FetchRow();
+        $item_code =  $item['item_code'] ;
         $groupnr = $item['item_group_nr'];
         $smarty->assign('LDItemContent','+ '.$item['item_description']);
         $smarty->assign('LDItemDate',formatDate2Local($item['bill_item_date'],$date_format));
         $smarty->assign('LDItemNumberOf',$item['bill_item_units']);
         $smarty->assign('LDItemUnitCost',number_format($item['bill_item_unit_cost']));
         $smarty->assign('LDItemSumCost',number_format($item['bill_item_units']*$item['bill_item_unit_cost']));
-       /* if($groupnr==22){ // không cho giảm BHYT của xét nghiệm máu
+       if($groupnr == 41){ // không cho giảm BHYT của chuyển viện
             $smarty->assign('LDItemSumCostBHYT',number_format($item['bill_item_units']*$item['bill_item_unit_cost']*0));   //nang
             $smarty->assign('LDItemSumCostKhac','');//nang
             $smarty->assign('LDItemSumCostTra',number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*0)); //nang
-        }   else{  */
+
+       }elseif($item_code =='XNK07' || $item_code =='XNK02' || $item_code=='0407'){    //xét nghiệm HbsAg, xét nghiệm serodia, hồ sơ
+           $smarty->assign('LDItemSumCostBHYT',number_format($item['bill_item_units']*$item['bill_item_unit_cost']*0));   //nang
+           $smarty->assign('LDItemSumCostKhac','');//nang
+           $smarty->assign('LDItemSumCostTra',number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*0)); //nang
+       }else{
             $smarty->assign('LDItemSumCostBHYT',number_format($item['bill_item_units']*$item['bill_item_unit_cost']*$mh));   //nang
             $smarty->assign('LDItemSumCostKhac','');//nang
             $smarty->assign('LDItemSumCostTra',number_format($item['bill_item_units']*$item['bill_item_unit_cost'] - $item['bill_item_units']*$item['bill_item_unit_cost']*$mh)); //nang
-        //}
+        }
         $tongtienDichVu += $item['bill_item_units']*$item['bill_item_unit_cost'];
-      /*  if($groupnr==22){  //xet không cho giảm BHYT của xét nghiệm máu
+        if($groupnr == 41){  //xet không cho giảm BHYT chuyển viện
             $tongtienDichVuBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*0;   //nang
-        }   else{ */
+        }elseif($item_code =='XNK07'  || $item_code =='XNK02' || $item_code=='0407'){  //xét nghiệm HbsAg, xét nghiệm serodia, hồ sơ
+            $tongtienDichVuBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*0;   //nang
+        }   else{
             $tongtienDichVuBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*$mh;   //nang
-       // }
+        }
         $tongtienDichVuTra += $tongtienDichVu - $tongtienDichVuBHYT; //nang
         $flag_g = false;
         if ($group_id!=$item['item_group_nr'])

@@ -84,6 +84,17 @@ if(($mode=='search'||$mode=='paginate')&&!empty($searchkey)){
 	$orderby = " ORDER BY $oprep.$oitem $odir";
     //	AND enc.is_discharged NOT IN (1)
 
+    if(strlen($_SESSION['sess_searchkey']) == 8)
+    {
+        $query = "SELECT encounter_nr FROM care_encounter WHERE pid='".$_SESSION['sess_searchkey']."' ORDER BY encounter_date DESC";
+        $exc = $db->Execute($query);
+        $rs = $exc->FetchRow();
+        if($rs != null)
+        {
+            $suchwort = $rs[0];
+        }
+
+    }
 	if(is_numeric($suchwort)){
 		$suchwort=(int) $suchwort;
 		$numeric=1;

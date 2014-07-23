@@ -74,7 +74,7 @@ $TP_date_confirm= $calendar->show_calendar($calendar,$date_format,'date_confirm'
 $TP_diagnosis='<textarea name="diagnosis" cols=40 rows=5 wrap="physical"></textarea>';
 
 # Signature stamp of the department
-$TP_dept_sigstamp=nl2br($dept['sig_stamp']); 
+$TP_dept_sigstamp=nl2br($dept['sig_stamp']);
 
 # Logo of the department
 $logobuff=$root_path.'uploads/logos_dept/dept_'.$dept_nr.'.'.$dept['logo_mime_type'];

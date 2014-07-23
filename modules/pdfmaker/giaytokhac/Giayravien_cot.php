@@ -274,6 +274,7 @@
                     </td>
                 </tr>
             </table>';
+    ob_clean();
     $pdf->writeHTML($tbl1, true, false, false, false, '');
     $pdf->Output('Giay_ra_vien.pdf', 'I');
 ?>
