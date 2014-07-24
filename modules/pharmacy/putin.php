@@ -445,7 +445,24 @@ if(!isset($target) || ($target=='new') || ($target=='create')){
 				$sTempDiv = $sTempDiv.ob_get_contents();
 			ob_end_clean();
 
-		}		
+		}
+
+        //voucher_id
+//    $type_voucher='nhap';
+//    global $db;
+//    $sql_voucher = 'CALL GetCustomerLevel(:type,@code_voucher)';
+////    $stmt = $conn->prepare($sql_voucher);
+//    $rs=$db->Execute($sql_voucher);
+////    $stmt->bindParam(':type', $type_voucher, PDO::PARAM_INT);
+////    $stmt->execute();
+////    $stmt->closeCursor();
+//    // execute the second query to get customer's level
+//    $r = $conn->query("SELECT @level AS level")->fetch(PDO::FETCH_ASSOC);
+//    if ($r) {
+//        echo sprintf('Customer #%d is %s', $customerNumber, $r['level']);
+//    }
+
+
 		$smarty->assign('divMedicine',$sTempDiv);
 		
 	$smarty->assign('sDateInput','<input name="date_putin" type="text" class="input1" value="'.$today = date("d/m/Y G:i:s").'"/>');
@@ -455,7 +472,7 @@ if(!isset($target) || ($target=='new') || ($target=='create')){
 	$smarty->assign('sSupplierInput','<input type="text" name="supplier_input" id="supplier_input" class="input1"  onFocus="Supplier_AutoComplete();" /><div id="hint"></div>');
 	$smarty->assign('sPlaceInput','<input type="text" name="place" value="'.$PlaceInput.'" class="input1"/>');
 	$smarty->assign('sTotalInput','<input type="text" id="total_money" name="total_money" class="input1"/>');
-	$smarty->assign('sPutInIDInput','<input type="text" name="voucher_id" class="input1"/>');
+	$smarty->assign('sPutInIDInput','<input type="text" name="voucher_id" class="input1"/>');       //x
 	$smarty->assign('sTypePut','<select name="typeput" class="input1" ><option value="0" selected>'.$LDBH.'</option><option value="1" >'.$LDNoBH.'</option><option value="2">'.$LDCBTC.'</option></select>');
     $smarty->assign('sPutInVATInput','<input type="text" name="vat" class="input4" /> % ');
     $smarty->assign('sType',$LDTypeInt);
