@@ -1,3 +1,18 @@
+<script  language="javascript">
+    function checkTonTu(textbox)
+    {
+        var ton='<?php echo $rowReport['number'];?>';
+        if(textbox.value>ton)
+
+        {
+            alert('Số lượng thuốc trả quá số lượng tồn tủ');
+//        alert('Số lượng thuốc trả quá số lượng tồn tủ');
+            textbox.focus();
+        }
+    }
+
+</script>
+
 <?php
 if(!isset($i))
     $i=$_GET['i'];
@@ -19,7 +34,7 @@ echo	'
 			<td align="center" bgColor="#ffffff"><input name="lotid'.$i.'" id="lotid'.$i.'" type="text" value="'.$rowReport['lotid'].'" size=7 '.$readonly.' '.$style.' readonly ></td>';
 //So luong
 echo
-    '<td align="center" bgColor="#ffffff"><input id="number'.$i.'" name="number'.$i.'" type="text" value="'.$rowReport['number'].'" size=5 '.$readonly.' '.$style.' onBlur="CalCost('.$i.')" ></td>';
+    '<td align="center" bgColor="#ffffff"><input onchange="checkTonTu(this)" id="number'.$i.'" name="number'.$i.'" type="text" value="'.$rowReport['number'].'" size=5 '.$readonly.' '.$style.' onBlur="CalCost('.$i.')" ></td>';
 //Don gia
 echo	'
 			<td bgColor="#ffffff"><input id="cost'.$i.'" name="cost'.$i.'" type="text" value="'.$rowReport['cost'].'" style="text-align:center;border-color:white;border-style:solid;" readonly size="8"></td>';
