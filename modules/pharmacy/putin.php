@@ -448,19 +448,19 @@ if(!isset($target) || ($target=='new') || ($target=='create')){
 		}
 
         //voucher_id
-//    $type_voucher='nhap';
-//    global $db;
-//    $sql_voucher = 'CALL GetCustomerLevel(:type,@code_voucher)';
-////    $stmt = $conn->prepare($sql_voucher);
-//    $rs=$db->Execute($sql_voucher);
-////    $stmt->bindParam(':type', $type_voucher, PDO::PARAM_INT);
-////    $stmt->execute();
-////    $stmt->closeCursor();
-//    // execute the second query to get customer's level
-//    $r = $conn->query("SELECT @level AS level")->fetch(PDO::FETCH_ASSOC);
-//    if ($r) {
-//        echo sprintf('Customer #%d is %s', $customerNumber, $r['level']);
-//    }
+    $type_voucher='nhap';
+    global $db;
+    $sql_voucher = 'CALL GetCustomerLevel(:type,@code_voucher)';
+//    $stmt = $conn->prepare($sql_voucher);
+    $rs=$db->Execute($sql_voucher);
+//    $stmt->bindParam(':type', $type_voucher, PDO::PARAM_INT);
+//    $stmt->execute();
+//    $stmt->closeCursor();
+    // execute the second query to get customer's level
+    $r = $conn->query("SELECT @level AS level")->fetch(PDO::FETCH_ASSOC);
+    if ($r) {
+        echo sprintf('Customer #%d is %s', $customerNumber, $r['level']);
+    }
 
 
 		$smarty->assign('divMedicine',$sTempDiv);
