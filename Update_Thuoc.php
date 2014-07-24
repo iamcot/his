@@ -88,7 +88,7 @@ function importthuoc($arrthuoc, $type = 'khochan')
     if (mysqli_connect_errno()) {
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
     }
-    $sql = "SELECT product_encoder FROM map_thuoc WHERE product_name = '" . trim($arrthuoc[1]) . "' ";
+    $sql = "SELECT product_encoder FROM dfck_map_thuoc WHERE product_name = '" . trim($arrthuoc[1]) . "' ";
     if ($result = mysqli_query($con, $sql)) {
         $row = mysqli_fetch_row($result);
         // echo $row[0]."\t".$arrthuoc[5]."\t".$arrthuoc[13]."\t".$arrthuoc[16]."\n\r<br>";
@@ -103,11 +103,12 @@ function importthuoc($arrthuoc, $type = 'khochan')
         $sql3 = "INSERT INTO care_pharma_available_product(product_encoder,product_lot_id,available_number,price) VALUES('$mathuoc','$solo','$soluong','$dongia') ";
         if ($type == 'khochan') {
             if (mysqli_query($con, $sql2)) {
-
                 echo "Thêm thành công thuốc : \t";
                 echo $row[0] . "\t" . $solo . "\t" . $soluong . "\t" . $dongia . "\n\r<br>";
             }
-        } else {
+            else echo $sql2;
+        }
+        else {
             if (mysqli_query($con, $sql3)) {
                 echo "Thêm thành công thuốc : \t";
                 echo $row[0] . "\t" . $solo . "\t" . $soluong . "\t" . $dongia . "\n\r<br>";
@@ -116,6 +117,7 @@ function importthuoc($arrthuoc, $type = 'khochan')
         }
 
     }
+    else  echo $sql;
 
 }
 
