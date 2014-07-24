@@ -1,3 +1,4 @@
+2014-07-24: Thêm Form nhập import thuốc cho khoa dược (kho chẵn và lẻ)
 2014-07-21 Cẩm Nang
 - sửa phiếu in Bảng kê chi phí khám chữa bệnh ngoại trú, nội trú
 2014-07-15
