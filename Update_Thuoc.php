@@ -6,7 +6,7 @@
 <body>
 <h3>NHẬP THUỐC VÀO KHO CHẴN/LẺ </h3>
 
-<form action="upload_thuoc.php" method="post" enctype="multipart/form-data" >
+<form action="Update_Thuoc.php" method="post" enctype="multipart/form-data" >
 Select file :<input type="file" name="uploadedfile" size="20"/> <br/>
 <input type="submit" name="khole" value="Import Kho lẻ"/>
 <input type="submit" name="khochan" value="Import Kho chẵn"/>
@@ -108,8 +108,6 @@ function importthuoc($arrthuoc, $type = 'khochan')
                 echo $row[0] . "\t" . $solo . "\t" . $soluong . "\t" . $dongia . "\n\r<br>";
             }
         } else {
-
-
             if (mysqli_query($con, $sql3)) {
                 echo "Thêm thành công thuốc : \t";
                 echo $row[0] . "\t" . $solo . "\t" . $soluong . "\t" . $dongia . "\n\r<br>";
