@@ -254,20 +254,22 @@ $.noConflict();
 
 function checkbhyt(select){//add 0810 cot
 	var haveissur = <? echo $haveissur;?>;
+    var cbtc=<?echo $cbtc?>;
 	//alert(haveissur);
 	if(haveissur==-2 && (select.value=='0398_0'||select.value=='0400_0')){
 		alert("BHYT của BN đã hết hạn, vui lòng cập nhật lại");
 		select.value=0;
 	}
-	else if(haveissur == -1 && (select.value=='0398_0'||select.value=='0400_0')){
+	else if(haveissur == -1 && (select.value=='0398_0'||select.value=='0400_0')&& cbtc==1){
 		alert("BN này không có BHYT");
 		select.value=0;
 	}
 }
 function checkCBTC(select){
     var cbtc = <? echo $cbtc;?>;
+    var haveissur = <? echo $haveissur;?>;
     //alert(haveissur);
-    if(cbtc==-1 && (select.value=='0490_2'||select.value=='0491_2')){
+    if(cbtc==-1 && (select.value=='0490_2'||select.value=='0491_2')&& haveissur==1){
         alert("BN không thuộc CBTC, vui lòng chọn lại");
         select.value=0;
     }
@@ -304,6 +306,14 @@ function chkform(d) {
 	
 }
 
+function checkPhat(i)
+{
+    var slPhat=document.getElementById('sum'+i).value;
+    var slTon= document.getElementById('inventory'+i).value;
+    if(slPhat>slTon)
+    alert("Kê thuốc quá lượng tồn kho!");
+    document.getElementById('sum'+i).focus();
+}
 function deletePres()
 {
 	var r=confirm("<?php echo $LDWouldDeletePres; ?>");
@@ -663,8 +673,8 @@ function CheckNumberRequest(i){
 		else {	
 	?>
 		<td width="17%"><FONT color="#000066"><?php echo $LDPrescription; ?></td>
-		<td width="26%"><select onblur="checkbhyt(this);checkCBTC(this)"  name="prescription_type_nr" id="prescription_type_nr" >
-		<option value="0">Chon loai toa</option> <!-- add 03102012 - cot -->
+		<td width="26%"><select onblur="checkbhyt(this);checkCBTC(this);"  name="prescription_type_nr" id="prescription_type_nr" >
+<!--		<option value="0">Chon loai toa</option> <!-- add 03102012 - cot -->-->
 			<?php
 			if(is_object($pres_all_types)){
 				$temp1=0;
@@ -674,7 +684,9 @@ function CheckNumberRequest(i){
 						if ($mode=='new'|| $mode=='create'){//edit 0810 cot
 							if($haveissur==1 && $rowtype['typeput']==0)
 								$styleselect=' SELECTED ';
-							else $styleselect=' ';
+							else if($cbtc==1&& $rowtype['typeput']==2)
+                                $styleselect=' SELECTED ';
+                                else $styleselect=' ';
 						}
 							//$styleselect='SELECTED';
 						elseif ($mode=='update' && $rowtype['prescription_type']==$prescription_type)

@@ -109,7 +109,7 @@ if(!isset($type))
 							<td bgcolor="#ffffff">
 								<input id="inventory'.$i.'" name="inventory'.$i.'" type="text" value="'.$inventory.'" size=5 style="text-align:center;border-color:white;border-style:solid;" readonly></td>
 							<td align="center" bgcolor="#ffffff">
-								<input name="sum'.$i.'" id="sum'.$i.'" type="text" size="1" value="'.$medicine_pres['sum_number'].'" onBlur="calcost('.$i.');CheckNumberRequest('.$i.');" >
+								<input name="sum'.$i.'" id="sum'.$i.'" type="text" size="1" value="'.$medicine_pres['sum_number'].'" onBlur="calcost('.$i.');CheckNumberRequest('.$i.');checkPhat('.$i.');" >
 								<input id="units'.$i.'" name="units'.$i.'" type="text" size=1 value="'.$medicine_pres['note'].'"></td>
 							<td align="right" bgcolor="#ffffff">
 								<input id="cost'.$i.'"  name="cost'.$i.'" type="text" style="width:70px;text-align:right;border:0px;" value="'.$medicine_pres['cost'].'" ></td>
