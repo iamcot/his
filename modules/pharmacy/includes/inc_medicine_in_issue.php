@@ -99,33 +99,59 @@ switch ($issue_show['typeput']) {
                 <?php for ($i = 1; $i <= $medicine_count; $i++) {
                     $rowIssue = $medicine_in_pres->FetchRow();
 //                    $tonkhole = $IssuePaper->searchMedicineInAvaiProduct($rowIssue['product_encoder'], $issue_show['typeput']);
-                    $tonkhole = 0;
-                    $giatien = 0;
-                    $lotid = '';
-
+                  //  $tonkhole = 0;
+                   // $giatien = 0;
+                  //  $lotid = '';
+                    $cbx_price='';
                     $lastlot = $Product->getLastLotID($rowIssue['product_encoder'],$issue_show['typeput']);
+                   /*
                     if($lastlot != null){
                         $tonkhole = $lastlot['available_number'];
                         $giatien = $lastlot['price'];
                         $available_product_id = $lastlot['available_product_id'];
+                    }   */
+                    $cbx_price = '<select name="cost'.$i.'" id="cost'.$i.'" onFocus="startCalc('.$i.');" onBlur="stopCalc();">';
+                    if (is_object($lastlot)){
+                        $giamacdinh =0; $text_tonkhole_hidden='';
+                        for ($i1=1;$i1<=$lastlot->RecordCount();$i1++){
+                            $temp_price = $lastlot->FetchRow();
+                            if (abs($temp_price['price']- $rowIssue['c'])<=0.1){
+                                $cbx_price .='<option value="'.$temp_price['price'].'" selected>'.$temp_price['price'].'</option>';
+                                $giamacdinh = $temp_price['price'];
+                                $tonkhole = $temp_price['available_number'];
+                                $available_product_id = $temp_price['available_product_id'];
+                            }
+                            else {
+                                $cbx_price .='<option value="'.$temp_price['price'].'">'.$temp_price['price'].'</option>';
+                                if($giamacdinh==0){
+                                    $giamacdinh = $temp_price['price'];
+                                    $tonkhole = $temp_price['available_number'];
+                                    $available_product_id = $temp_price['available_product_id'];
+                                }
+                            }
+                            $text_tonkhole_hidden .= '@'.$temp_price['available_number'];
+                        }
+                    }else {
+                        $cbx_price .='<option value="0">0</option>';
+                        $giamacdinh =0; $tonkhole =0;
                     }
 
-
+                    $cbx_price .= '</select>';
                     echo '<tr bgColor="#ffffff" >
 					<td align="center" bgColor="#ffffff">' . $i . '.<input type="hidden" name="medicine_nr[' . $i . ']" value="' . $rowIssue['nr'] . '"></td>
 					<td bgColor="#ffffff"><b>' . $rowIssue['product_name'] . '</b></td>
-					<td align="center" bgColor="#ffffff"><b>' . $rowIssue['units'] . '</b></td>
-					<td align="right" bgColor="#ffffff">' . number_format($rowIssue['sumpres']) . '</td>
+					<td align="center" bgColor="#ffffff"><b>' . $rowIssue['note'] . '</b></td>
+					<td align="right" bgColor="#ffffff">' . number_format($rowIssue['sum_number']) . '</td>
 					<td align="right" bgColor="#ffffff">' . number_format($rowIssue['plus']) . '</td>
 					<td bgColor="#ffffff"><input type="text" id="tonkho' . $i . '" value="' . intval($tonkhole) . '" size="8"  style="text-align:right;border-color:white;border-style:solid;color:red;" readonly></td>
-					<td>
-					    <input readonly type="text" name="cost' . $i . '" value="' . $giatien . '" size="8"  style="text-align:right;border-color:white;border-style:solid;color:red;">
-					    <input type="hidden" name="available_product_id' . $i . '" value="' . $available_product_id . '">
-					</td>
-					<td align="right" bgColor="#ffffff"><b>' . number_format($rowIssue['number_request']) . '</b></td>
-					<td align="right" bgColor="#ffffff">
-					<input id="receive[' . $i . ']" name="receive[' . $i . ']" type="text" size=3 value="' . $rowIssue['number_request'] . '">
+					<td align="right" width="12%">
+						'.$cbx_price.' <input type="hidden" id="hidden_tonkho'.$i.'" value="'.$text_tonkhole_hidden.'">
+                          <input type="hidden" name="available_product_id' . $i . '" value="' . $available_product_id . '">
 
+					</td>
+					<td align="right" bgColor="#ffffff"><b>' . number_format($rowIssue['sum_number']) . '</b></td>
+					<td align="right" bgColor="#ffffff">
+					<input id="receive[' . $i . ']" name="receive[' . $i . ']" type="text" size=3 value="' . $rowIssue['sum_number'] . '">
 					</td>
 					<td align="center" bgColor="#ffffff">' . $rowIssue['note'] . '</td>
 				</tr>';

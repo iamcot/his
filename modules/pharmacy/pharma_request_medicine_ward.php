@@ -10,10 +10,12 @@ $user_origin=='ck_prod_order_user';
 require_once($root_path.'include/core/inc_front_chain_lang.php');
 require_once($root_path.'include/core/inc_date_format_functions.php');
 include_once($root_path.'include/care_api_classes/class_issuepaper.php');
+include_once($root_path.'include/care_api_classes/class_prescription.php');
 
 
 if(!isset($IssuePaper)) $IssuePaper = new IssuePaper;
-		
+if(!isset($Pres)) $Pres = new Prescription;
+
 $thisfile= basename(__FILE__);
 $breakfile=$root_path.'modules/pharmacy/allocation.php'.URL_APPEND;
 
@@ -25,6 +27,8 @@ $edit=0; /* Set script mode to no edit*/
 if(!isset($mode)) $mode='';
 if(!isset($typeSumDepot)) $typeSumDepot='';
 
+//$nr = $presc['prenr'];
+//echo $pre_id;
 
 switch($mode){
 	case 'update':	//update status_finish
@@ -41,8 +45,6 @@ switch($mode){
 	}
 	default: $mode='';
 }
-
-
 /* Get pending prescription */
 if(!$mode) {	//$mode='' : load all issuepaper	
 	if (!$typeSumDepot || $typeSumDepot=='all')
@@ -61,7 +63,7 @@ if(!$mode) {	//$mode='' : load all issuepaper
 		 	//$pn = $IssuePaper_show['encounter_nr'];
 			$issue_id = $issue_show['issue_paper_id'];
 		}
-		
+
 	}else{
         ?>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -137,8 +139,21 @@ div.fa2_ml3 {font-family: arial; font-size: 12; margin-left: 3; }
 </style>
 
 <script language="javascript">
-<!-- 
+<!--
+function mysubmit(type,pres_id){
+    console.log(type);
+    if(type=='send'){
+        FinishPres(pres_id);
 
+    }
+    else if(type=='edit'){
+        document.form_test_request.action="includes/inc_iss_edit.php?pres_id="+ pres_id+"&radiovalue=<?php echo $radiovalue; ?>&user_origin=<?php echo $user_origin; ?>";
+        document.form_test_request.submit();
+    }
+    else   {
+        return false;
+    }
+}
 function FinishPres(issue_id)
 { 
 	if(issue_id=='')
@@ -186,12 +201,28 @@ function RefreshList(radio)
 function startCalc(x){
   interval = setInterval("calc("+x+")",1);
 }
+/*
 function calc(x){
   //sum1 * cost1 = totalcost1;
   a = document.form_test_request['receive'+x].value;
   b = document.form_test_request['cost'+x].value; 
   document.form_test_request['sumcost'+x].value = a*b;
   
+} */
+function calc(x){
+    //sum1 * cost1 = totalcost1;
+    var a = document.getElementById('receive['+x+']').value;
+    var idx=document.getElementById("cost"+x).selectedIndex;
+    var opt=document.getElementById("cost"+x).options;
+    var b = opt[idx].text*1;
+    //change inventory
+
+    var text = document.getElementById("hidden_tonkho"+x).value;
+    var index = opt[idx].index+1;
+    var n = text.split("@");
+    document.getElementById("tonkho"+x).value=n[index];
+
+    document.form_test_request['sumcost'+x].value = a*b;
 }
 function stopCalc(){
   clearInterval(interval);
@@ -226,7 +257,8 @@ require('includes/inc_issuepaper_request_lister_fx.php');
 
     <td>
 
-	<form name="form_test_request" method="post" onSubmit="return FinishPres(<?php echo $issue_id; ?>)">
+	<!--<form name="form_test_request" method="post" onSubmit="return FinishPres(<?php echo $issue_id; ?>)">-->
+        <form name="form_test_request" method="post")">
 		<input type="image" <?php echo createLDImgSrc($root_path,'abschic.gif','0') ?>  title="<?php echo $LDFinishEntry; ?>"> 
 		<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut; ?>"></a>
         <p>
@@ -250,10 +282,15 @@ require('includes/inc_issuepaper_request_lister_fx.php');
 	</tr>
 	</table>
 <p>
-		
-			<input type="image" <?php echo createLDImgSrc($root_path,'abschic.gif','0') ?>  title="<?php echo $LDFinishEntry; ?>"> 
-			<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut; ?>"></a>
+		    <!--
+			<input type="image" <?php echo createLDImgSrc($root_path,'abschic.gif','0') ?>  title="<?php echo $LDFinishEntry; ?>">
+			<a href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut; ?>"></a> -->
 
+        <div style="line-height: 28px;vertical-align: top;overflow: hidden">
+            <input style="float:left;" onclick="mysubmit('send',<?php echo $issue_id; ?>)" type="image" <?php echo createLDImgSrc($root_path,'abschic.gif','0') ?>  title="<?php echo $LDFinishEntry; ?>">
+            <a style="float:left;padding: 0 5px" href="javascript:printOut()"><img <?php echo createLDImgSrc($root_path,'printout.gif','0') ?> alt="<?php echo $LDPrintOut; ?>"></a>
+            <input style="float:left;" type="button" onclick="mysubmit('edit',<?php echo $issue_id; ?>)" value="Cập nhật giá">
+        </div>
 <!--   ***************     HIDDEN  INPUT   ***************    -->
 <input type="hidden" name="sid" value="<?php echo $sid ?>">
 <input type="hidden" name="lang" value="<?php echo $lang ?>">

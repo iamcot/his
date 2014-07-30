@@ -1,5 +1,7 @@
 <?php
-error_reporting(E_COMPILE_ERROR|E_ERROR|E_CORE_ERROR);
+ob_start();
+//error_reporting(E_ERROR);
+//error_reporting(E_COMPILE_ERROR|E_ERROR|E_CORE_ERROR);
 require('./roots.php');
 require_once($root_path.'include/core/inc_environment_global.php');
 //define('LANG_FILE','billing.php');
@@ -507,7 +509,7 @@ if(is_object($itemresult))
       else{
             $tongtienxndvBHYT +=  $item['s']*$mh;  //nang
         }
-        $tongtienxndvTra += $tongtienxndv - $tongtienxndvBHYT;
+        $tongtienxndvTra = $tongtienxndv - $tongtienxndvBHYT;
 
 
         if ($groupnr<=25){								//Xet nghiem 1->25
@@ -874,7 +876,7 @@ $html3='<table width="100%">
             else{
                 $tongtienxndvBHYT +=  $item['s']*$mh;  //nang
             }
-            $tongtienxndvTra += $tongtienxndv - $tongtienxndvBHYT;
+            $tongtienxndvTra = $tongtienxndv - $tongtienxndvBHYT;
 
 
             if ($groupnr<=25){								//Xet nghiem 1->25
@@ -998,12 +1000,8 @@ $pdf->writeHTML($html3);
 
 //$pdf->writeHTML($htmlcol1);
 $pdf->selectColumn(1);
-
 // -----------------------------------------------------------------------------
-
 $pdf->lastPage();//thêm trang
 //Close and output PDF document
 $pdf->Output('PhieuTongKetHoaDon.pdf', 'I');
-
-
 ?>

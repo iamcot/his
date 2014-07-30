@@ -217,6 +217,7 @@ class Issuepaper extends Core {
 	 * @param int issuepaper number
 	 * @return table result or boolean
 	 */
+      /*
 	function getAllMedicineInIssuePaper($nr){
 	    global $db;
 		$this->sql="SELECT * 
@@ -228,6 +229,22 @@ class Issuepaper extends Core {
 			}else{return false;}
 		}else{return false;}
 	}
+
+       */
+    function getAllMedicineInIssuePaper($nr){
+        global $db;
+        $this->sql="SELECT DISTINCT pre.nr AS nr, pre.*,pre.cost AS c,iss.plus, iss.sumpres
+                    FROM care_pharma_issue_paper AS iss, care_pharma_prescription AS pre,care_pharma_prescription_info AS inf
+                    WHERE  iss.issue_paper_id = inf.in_issuepaper
+                    AND pre.prescription_id = inf.prescription_id
+                    AND  iss.issue_paper_id ='".$nr."'
+                     GROUP BY pre.avai_pro_id ";
+        if ($this->result=$db->Execute($this->sql)) {
+            if ($this->result->RecordCount()) {
+                return $this->result;
+            }else{return false;}
+        }else{return false;}
+    }
 	/** 18/10/2011
 	 * Get ID of last issuepaper
 	 * Tuyen

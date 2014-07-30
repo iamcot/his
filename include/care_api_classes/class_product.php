@@ -2308,7 +2308,7 @@ class Product extends Core
 	 * Lay 1 lot_id tuong ung voi product_encoder, so luong yeu cau va loai thuoc
 	 * Tra ve lot_id, ton kho cua lot_id va gia tien
 	 */
-    function getLastLotID($encoder, $typeput)
+    /* function getLastLotID($encoder, $typeput)
     {
         global $db;
         $this->sql = "SELECT product_encoder, product_lot_id, available_number, price,available_product_id
@@ -2326,6 +2326,22 @@ class Product extends Core
             }
         }
         return null;
+    } */
+    function getLastLotID($encoder, $typeput)
+    {
+        global $db;
+        $this->sql = "SELECT product_encoder, product_lot_id, available_number, price,available_product_id
+					FROM care_pharma_available_product
+					WHERE product_encoder='$encoder'
+					AND available_number > 0 AND typeput='" . $typeput . "'
+					AND product_lot_id IS NOT NULL
+					ORDER BY exp_date,available_product_id
+					LIMIT 10";
+        if ($this->result=$db->Execute($this->sql)) {
+            if ($this->result->RecordCount()) {
+                return $lotid = $this->result;
+            }else{return 0;}
+        }else{return 0;}
     }
     function getMedLastLotID($encoder, $typeput)
     {
