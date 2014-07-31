@@ -36,8 +36,16 @@ $ix=0;
 
 if(!$no_redirect){
     $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $Pres->getLastQuery(), date('Y-m-d H:i:s'));
-    $totalcost = preg_replace('/,/','',$totalcost);
-    $Pres->setCostPres($pres_id,$totalcost);
+    $sql = " SELECT prescription_id FROM care_pharma_prescription_info WHERE in_issuepaper='".$pres_id."'";
+    $pre_id = $db->Execute($sql);
+    for ($i=0;$i<$pre_id->RecordCount();$i++)
+    {
+        $preid=$pre_id->FetchRow();
+        $pr = $preid['prescription_id'] ;
+        $Pres->setCostPres1($pr);
+    }
+   // $totalcost = preg_replace('/,/','',$totalcost);
+  //  $Pres->setCostPres($pres_id,$totalcost); }
     //$no_redirect=$Pres->getLastQuery();
 }
 #Go back to previous page

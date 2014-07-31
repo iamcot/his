@@ -863,6 +863,14 @@ class Prescription extends Core {
                         WHERE nr = $medicine_nr";
         return $this->Transact($this->sql);
     }
+
+    function updateCostOneMedicine1($pres_id,$cost,$recv){
+        global $db;
+        $this->sql="UPDATE ".$this->tb_phar_pres."
+                        SET cost = '$cost', number_receive = '$recv'
+                        WHERE prescription_id = $pres_id";
+        return $this->Transact($this->sql);
+    }
     /** 5/12/2011
      * Updates the cost all medicine in prescription, based on the prescription_id and product_name
      * @param int prescription id
@@ -924,6 +932,15 @@ class Prescription extends Core {
      * @param string issue_user, issue_note, receive_user
      * @return boolean
      */
+    function setCostPres1($pres_id) {
+        global $db;
+        if(!$pres_id) return FALSE;
+        //prescriprion_info
+        $this->sql=" UPDATE care_pharma_prescription_info
+                     SET total_cost = (SELECT SUM(number_receive*cost) AS t FROM care_pharma_prescription WHERE prescription_id='$pres_id')
+                     WHERE prescription_id='$pres_id'";
+        return $this->Transact($this->sql);
+    }
     function setCostPres($pres_id, $totalpres) {
         global $db;
         if(!$pres_id) return FALSE;
