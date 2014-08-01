@@ -114,7 +114,7 @@ $smarty->assign('ward',$LDWard.': '.$wardname);
 include_once($root_path.'include/core/inc_date_format_functions.php');
 $smarty->assign('LDPatient',$LDPatient);	
 $smarty->assign('LDMedicine',$LDMedicine);	
-$smarty->assign('LDNhanVeTuThuoc',$LDNhanVeTuThuoc);	
+$smarty->assign('LDNhanVeTuThuoc','Số lượng kê toa');
 $smarty->assign('LDDaPhat',$LDDaPhat);	
 $smarty->assign('LDIssue',$LDIssue);
 $smarty->assign('LDKetThuc',$LDKetThuc);	
@@ -137,7 +137,7 @@ $smarty->assign('calendar',$LDDateIssue.': '.$calendar->show_calendar($calendar,
 	$sql=	"SELECT prs.prescription_id, prs.encounter_nr, prs.date_time_create, enc.current_room_nr, 
 				per.name_first, per.name_last, per.sex, per.tuoi  
 			FROM care_pharma_prescription_info AS prs, care_encounter AS enc, care_person AS per 
-			WHERE prs.in_issuepaper<>'0' AND prs.status_finish='1'
+			WHERE prs.in_issuepaper<>'0'
 				AND prs.encounter_nr=enc.encounter_nr 
 				".$condition." 
 				AND(prs.prescription_type='0397' OR prs.prescription_type='0398') AND prs.total_cost>0 AND prs.dongphatthuoc='0' 
@@ -195,7 +195,7 @@ $sql=	"SELECT prs.prescription_id, prs.encounter_nr, prs.date_time_create, enc.c
 							else $tongthuocdaphat=0;
 							echo '<tr><td width="50%"><b>'.$items_in_sheet['product_name'].'</b><br>';
 							echo $items_in_sheet['desciption'].'/'.$LDUseTimes.' x '.$items_in_sheet['number_of_unit'].' '.$LDUseTimes.': '.$items_in_sheet['time_use'].'</td>';
-							echo '<td align="center" width="16%">'.$items_in_sheet['number_receive'].' '.$items_in_sheet['note'].'</td>';
+							echo '<td align="center" width="16%">'.$items_in_sheet['sum_number'].' '.$items_in_sheet['note'].'</td>';
 							echo '<td align="center" width="16%">'.$tongthuocdaphat.'</td>';
 							echo '<td align="center" width="16%"><input type="text" name="number'.$total_items.'" size="7" value="0">
 							<input type="hidden" name="enc_nr'.$total_items.'" value="'.$item['encounter_nr'].'">

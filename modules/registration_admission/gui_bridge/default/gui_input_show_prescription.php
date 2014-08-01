@@ -674,7 +674,7 @@ function CheckNumberRequest(i){
 	?>
 		<td width="17%"><FONT color="#000066"><?php echo $LDPrescription; ?></td>
 		<td width="26%"><select onblur="checkbhyt(this);checkCBTC(this);"  name="prescription_type_nr" id="prescription_type_nr" >
-<!--		<option value="0">Chon loai toa</option> <!-- add 03102012 - cot -->-->
+		<option value="0">Chon loại toa</option> <!-- add 03102012 - cot -->
 			<?php
 			if(is_object($pres_all_types)){
 				$temp1=0;
