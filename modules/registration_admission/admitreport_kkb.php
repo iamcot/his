@@ -60,45 +60,45 @@ require($root_path.'include/core/inc_front_chain_lang.php');
 // 			and DATE_FORMAT(datein,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(datein,'%Y-%m-%d') <='$dateto' and dept_to = -2) sumchuyenvien
 // 		from dual";
  		//echo $sql;
+// $_REQUEST['datefrom'];
+//$_REQUEST['dateto'];
       $sql="SELECT
- 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = (SELECT nr FROM care_department WHERE id=2)
- 			AND DATE_FORMAT(datein,'%Y-%m-%d') >='2013-10-01' AND DATE_FORMAT(datein,'%Y-%m-%d') <='2013-10-30' AND dept_to>0  ) sumkb,
- 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = (SELECT nr FROM care_department WHERE id=2)
- 			AND DATE_FORMAT(datein,'%Y-%m-%d') >='2013-10-01' AND DATE_FORMAT(datein,'%Y-%m-%d') <='2013-10-30' AND insurance_nr != ''
-			AND DATE_FORMAT(insurance_exp,'%Y-%m-%d') > '$dateto' AND dept_to>0 ) sumbh,
- 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = (SELECT nr FROM care_department WHERE id=2)
- 			AND DATE_FORMAT(datein,'%Y-%m-%d') >='2013-10-01' AND DATE_FORMAT(datein,'%Y-%m-%d') <='2013-10-30' AND loai_kham=1 AND dept_to>0  ) sumknoi,
- 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = (SELECT nr FROM care_department WHERE id=2)
- 			AND DATE_FORMAT(datein,'%Y-%m-%d') >='2013-10-01' AND DATE_FORMAT(datein,'%Y-%m-%d') <='2013-10-30' AND loai_kham=1 AND insurance_nr != ''
-			AND DATE_FORMAT(insurance_exp,'%Y-%m-%d') > '2013-10-01' AND dept_to>0  ) sumknoibh,
- 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = (SELECT nr FROM care_department WHERE id=2)
- 			AND DATE_FORMAT(datein,'%Y-%m-%d') >='2013-10-01' AND DATE_FORMAT(datein,'%Y-%m-%d') <='2013-10-30' AND loai_kham=2 AND dept_to>0  ) sumkng,
- 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = (SELECT nr FROM care_department WHERE id=2)
- 			AND DATE_FORMAT(datein,'%Y-%m-%d') >='2013-10-01' AND DATE_FORMAT(datein,'%Y-%m-%d') <='2013-10-30' AND loai_kham=2 AND insurance_nr != ''
-			AND DATE_FORMAT(insurance_exp,'%Y-%m-%d') > '2013-10-01' AND dept_to>0    ) sumkngbh,
- 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = (SELECT nr FROM care_department WHERE id=2)
- 			AND DATE_FORMAT(datein,'%Y-%m-%d') >='$datefrom' AND DATE_FORMAT(datein,'%Y-%m-%d') <='2013-10-30' AND (DATE_FORMAT(NOW(),'%Y') - yearbirth)<=6 AND dept_to>0  ) sum6t,
- 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = (SELECT nr FROM care_department WHERE id=2)
- 			AND DATE_FORMAT(datein,'%Y-%m-%d') >='2013-10-01' AND DATE_FORMAT(datein,'%Y-%m-%d') <='2013-10-30' AND (DATE_FORMAT(NOW(),'%Y') - yearbirth)<=15 AND dept_to>0  ) sum15t,
- 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = (SELECT nr FROM care_department WHERE id=2)
- 			AND DATE_FORMAT(datein,'%Y-%m-%d') >='2013-10-01' AND DATE_FORMAT(datein,'%Y-%m-%d') <='2013-10-30' AND (DATE_FORMAT(NOW(),'%Y') - yearbirth)>=60 AND dept_to>0  ) sum60t,
- 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = (SELECT nr FROM care_department WHERE id=2)
- 			AND DATE_FORMAT(datein,'%Y-%m-%d') >='2013-10-01' AND DATE_FORMAT(datein,'%Y-%m-%d') <='2013-10-30' AND type_encounter=1 AND dept_to != dept_from AND dept_to>0  ) sumnv,
- 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = (SELECT nr FROM care_department WHERE id=2)
- 			AND DATE_FORMAT(datein,'%Y-%m-%d') >='2013-10-01' AND DATE_FORMAT(datein,'%Y-%m-%d') <='2013-10-30' AND (referrer_diagnosis_code LIKE '%A09%' OR referrer_diagnosis LIKE '%A09%')  AND dept_to>0  ) suma09,
- 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = (SELECT nr FROM care_department WHERE id=2)
- 			AND DATE_FORMAT(datein,'%Y-%m-%d') >='2013-10-01' AND DATE_FORMAT(datein,'%Y-%m-%d') <='2013-10-30' AND (referrer_diagnosis_code LIKE 'J10' OR referrer_diagnosis LIKE 'J10%' OR referrer_diagnosis_code LIKE 'J11' OR referrer_diagnosis LIKE 'J11%') AND dept_to>0  ) sumj10,
-		(SELECT COUNT(DISTINCT t.encounter_nr) FROM dfck_admit_inout_dept t,care_encounter e WHERE t.dept_from = (SELECT nr FROM care_department WHERE id=2)
- 			AND DATE_FORMAT(t.datein,'%Y-%m-%d') >='$2013-10-01' AND DATE_FORMAT(t.datein,'%Y-%m-%d') <='2013-10-30' AND t.dept_to>0 AND t.encounter_nr = e.encounter_nr AND e.cbtcinsur != '' ) sumcbtc,
-		(SELECT COUNT(DISTINCT t.encounter_nr) FROM dfck_admit_inout_dept t,care_encounter e WHERE t.dept_from = (SELECT nr FROM care_department WHERE id=2)
- 			AND DATE_FORMAT(t.datein,'%Y-%m-%d') >='2013-10-01' AND DATE_FORMAT(t.datein,'%Y-%m-%d') <='2013-10-30' AND t.dept_to>0 AND t.encounter_nr = e.encounter_nr AND (e.insurance_nr LIKE 'HN%' OR e.insurance_nr LIKE 'CN%') ) sumhongheo,
-		(SELECT COUNT(nr) FROM care_kham_suc_khoe WHERE date_kham >='2013-10-01' AND date_kham <='2013-10-30' AND mucdichkham !='khac' ) sumksk,
-		(SELECT COUNT(nr) FROM care_kham_suc_khoe WHERE date_kham >='2013-10-01' AND date_kham <='2013-10-30' AND mucdichkham='tuyendung') sumksktd,
-		(SELECT COUNT(nr) FROM care_kham_suc_khoe WHERE date_kham >='2013-10-01' AND date_kham <='2013-10-30' AND mucdichkham='laixe') sumksklx,
-		(SELECT COUNT(nr) FROM care_kham_suc_khoe WHERE date_kham >='2013-10-01' AND date_kham <='2013-10-30' AND mucdichkham='hocsinh') sumkskhs,
-		(SELECT COUNT(nr) FROM care_kham_suc_khoe WHERE date_kham >='2013-10-01' AND date_kham <='2013-10-30' AND mucdichkham='khac') sumkskkhac,
-		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = (SELECT nr FROM care_department WHERE id=2)
- 			AND DATE_FORMAT(datein,'%Y-%m-%d') >='2013-10-01' AND DATE_FORMAT(datein,'%Y-%m-%d') <='2013-10-30' AND dept_to = -2) sumchuyenvien"     ;
+ 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = 2
+ 			AND DATE_FORMAT(datein,'%Y-%m-%d') >= $_REQUEST[datefrom] AND DATE_FORMAT(datein,'%Y-%m-%d') <=$_REQUEST[dateto] AND dept_to>0  ) sumkb,
+ 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = 2
+ 			AND DATE_FORMAT(datein,'%Y-%m-%d') >=$_REQUEST[datefrom] AND DATE_FORMAT(datein,'%Y-%m-%d') <=$_REQUEST[dateto] AND insurance_nr != ''
+			AND dept_to>0 ) sumbh,
+ 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = 2
+ 			AND DATE_FORMAT(datein,'%Y-%m-%d') >=$_REQUEST[datefrom] AND DATE_FORMAT(datein,'%Y-%m-%d') <=$_REQUEST[dateto] AND loai_kham=1 AND dept_to>0  ) sumknoi,
+ 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = 2
+ 			AND DATE_FORMAT(datein,'%Y-%m-%d') >=$_REQUEST[datefrom] AND DATE_FORMAT(datein,'%Y-%m-%d') <=$_REQUEST[dateto] AND loai_kham=1 AND insurance_nr != '' AND dept_to>0  ) sumknoibh,
+ 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = 2
+ 			AND DATE_FORMAT(datein,'%Y-%m-%d') >=$_REQUEST[datefrom] AND DATE_FORMAT(datein,'%Y-%m-%d') <=$_REQUEST[dateto] AND loai_kham=2 AND dept_to>0  ) sumkng,
+ 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = 2
+ 			AND DATE_FORMAT(datein,'%Y-%m-%d') >=$_REQUEST[datefrom] AND DATE_FORMAT(datein,'%Y-%m-%d') <=$_REQUEST[dateto] AND loai_kham=2 AND insurance_nr != '' AND dept_to>0    ) sumkngbh,
+ 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = 2
+ 			AND DATE_FORMAT(datein,'%Y-%m-%d') >=$_REQUEST[datefrom] AND DATE_FORMAT(datein,'%Y-%m-%d') <=$_REQUEST[dateto] AND (DATE_FORMAT(NOW(),'%Y') - yearbirth)<=6 AND dept_to>0  ) sum6t,
+ 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = 2
+ 			AND DATE_FORMAT(datein,'%Y-%m-%d') >=$_REQUEST[datefrom] AND DATE_FORMAT(datein,'%Y-%m-%d') <=$_REQUEST[dateto] AND (DATE_FORMAT(NOW(),'%Y') - yearbirth)<=15 AND dept_to>0  ) sum15t,
+ 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = 2
+ 			AND DATE_FORMAT(datein,'%Y-%m-%d') >=$_REQUEST[datefrom] AND DATE_FORMAT(datein,'%Y-%m-%d') <=$_REQUEST[dateto] AND (DATE_FORMAT(NOW(),'%Y') - yearbirth)>=60 AND dept_to>0  ) sum60t,
+ 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = 2
+ 			AND DATE_FORMAT(datein,'%Y-%m-%d') >=$_REQUEST[datefrom] AND DATE_FORMAT(datein,'%Y-%m-%d') <=$_REQUEST[dateto] AND type_encounter=1 AND dept_to != dept_from AND dept_to>0  ) sumnv,
+ 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = 2
+ 			AND DATE_FORMAT(datein,'%Y-%m-%d') >=$_REQUEST[datefrom] AND DATE_FORMAT(datein,'%Y-%m-%d') <=$_REQUEST[dateto] AND (referrer_diagnosis_code LIKE '%A09%' OR referrer_diagnosis LIKE '%A09%')  AND dept_to>0  ) suma09,
+ 		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = 2
+ 			AND DATE_FORMAT(datein,'%Y-%m-%d') >=$_REQUEST[datefrom] AND DATE_FORMAT(datein,'%Y-%m-%d') <=$_REQUEST[dateto] AND (referrer_diagnosis_code LIKE 'J10' OR referrer_diagnosis LIKE 'J10%' OR referrer_diagnosis_code LIKE 'J11' OR referrer_diagnosis LIKE 'J11%') AND dept_to>0  ) sumj10,
+		(SELECT COUNT(DISTINCT t.encounter_nr) FROM dfck_admit_inout_dept t,care_encounter e WHERE t.dept_from = 2
+ 			AND DATE_FORMAT(t.datein,'%Y-%m-%d') >=$_REQUEST[datefrom] AND DATE_FORMAT(t.datein,'%Y-%m-%d') <=$_REQUEST[dateto] AND t.dept_to>0 AND t.encounter_nr = e.encounter_nr AND e.cbtcinsur != '' ) sumcbtc,
+		(SELECT COUNT(DISTINCT t.encounter_nr) FROM dfck_admit_inout_dept t,care_encounter e WHERE t.dept_from = 2
+ 			AND DATE_FORMAT(t.datein,'%Y-%m-%d') >=$_REQUEST[datefrom] AND DATE_FORMAT(t.datein,'%Y-%m-%d') <=$_REQUEST[dateto] AND t.dept_to>0 AND t.encounter_nr = e.encounter_nr AND (e.insurance_nr LIKE 'HN%' OR e.insurance_nr LIKE 'CN%') ) sumhongheo,
+		(SELECT COUNT(nr) FROM care_kham_suc_khoe WHERE date_kham >=$_REQUEST[datefrom] AND date_kham <=$_REQUEST[dateto] AND mucdichkham !='khac' ) sumksk,
+		(SELECT COUNT(nr) FROM care_kham_suc_khoe WHERE date_kham >=$_REQUEST[datefrom] AND date_kham <=$_REQUEST[dateto] AND mucdichkham='tuyendung') sumksktd,
+		(SELECT COUNT(nr) FROM care_kham_suc_khoe WHERE date_kham >=$_REQUEST[datefrom] AND date_kham <=$_REQUEST[dateto] AND mucdichkham='laixe') sumksklx,
+		(SELECT COUNT(nr) FROM care_kham_suc_khoe WHERE date_kham >=$_REQUEST[datefrom] AND date_kham <=$_REQUEST[dateto] AND mucdichkham='hocsinh') sumkskhs,
+		(SELECT COUNT(nr) FROM care_kham_suc_khoe WHERE date_kham >=$_REQUEST[datefrom] AND date_kham <=$_REQUEST[dateto] AND mucdichkham='khac') sumkskkhac,
+		(SELECT COUNT(DISTINCT encounter_nr) FROM dfck_admit_inout_dept WHERE dept_from = 2
+ 			AND DATE_FORMAT(datein,'%Y-%m-%d') >=$_REQUEST[datefrom] AND DATE_FORMAT(datein,'%Y-%m-%d') <=$_REQUEST[dateto] AND dept_to = 2) sumchuyenvien"     ;
  global $db;
  if($rs = $db->Execute($sql)){
      $row=null;
@@ -125,7 +125,7 @@ require($root_path.'include/core/inc_front_chain_lang.php');
  			<li>Nhập viện: <b>'.$row['sumnv'].'</b>
  				<ul>';
  			if($row['sumnv'] > 0){
- 				$sql="SELECT 
+ 				$sql="SELECT
  					d.name_formal, d.LD_var,(select count(distinct e.encounter_nr) from dfck_admit_inout_dept e where e.dept_from = (select nr from care_department where id=$deptid) and e.dept_to = d.nr and e.type_encounter=1 and DATE_FORMAT(e.datein,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(e.datein,'%Y-%m-%d') <='$dateto') sumnv
  				FROM care_department d where d.type=1 and d.id!=5";
  				if($rs2 = $db->Execute($sql)){
