@@ -1,3 +1,17 @@
+2014-08-12 Hiền
+- Sửa lại mã ĐKBN đúng tuyến, trái tuyến
+- Cập nhật lại form mới của Giấy chuyển tuyến
+- Cho phép BN Ngoại trú chuyển viện
+     +\modules\registration_admission\admitreport_hscc.php
+     +\modules\registration_admission\admitreport_kkb.php
+     +\modules\pdfmaker\chuyenvien\GiayChuyenVien.php
+     +\modules\registration_admission\gui_bridge\default\gui_patient_encounter_showdata_notes.php
+     +\include\core\inc_environment_global.php
+     +\include\core\inc_front_chain_lang.php
+     +\modules\nursing\nursing-station-patient-release.php
+     +\__db\UpDateMaKCB.sql
+
+
 2014-07-24: +Thêm Form nhập import thuốc cho khoa dược (kho chẵn và lẻ)
                 -   Update_Thuoc
                 -   _db\dfck_map_thuoc.sql

@@ -26,6 +26,7 @@ $thisfile=basename(__FILE__);
 require_once($root_path.'include/core/inc_date_format_functions.php');
 require_once($root_path.'include/care_api_classes/class_encounter.php');
 $enc_obj=new Encounter;
+if(empty($pn)) $pn= $enc_nr;
 if( $enc_obj->loadEncounterData($pn)) {
 	if(($mode=='release')&&!(isset($lock)||$lock)){
 		$date=(empty($x_date))?date('Y-m-d'):formatDate2STD($x_date,$date_format);

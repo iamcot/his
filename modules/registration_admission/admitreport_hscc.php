@@ -20,35 +20,35 @@ require($root_path.'include/core/inc_front_chain_lang.php');
  //ma noi bo cua Khoa kham benh la id = 5
  $deptid = 6;
  $sql="SELECT 
- 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = (select nr from care_department where id=$deptid)
+ 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = 6
  			and DATE_FORMAT(datein,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(datein,'%Y-%m-%d') <='$dateto' and dept_to>0  and type_encounter = 2) sumkb,
- 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = (select nr from care_department where id=$deptid)
+ 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = 6
  			and DATE_FORMAT(datein,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(datein,'%Y-%m-%d') <='$dateto' AND insurance_nr != ''
 			AND DATE_FORMAT(insurance_exp,'%Y-%m-%d') > '$dateto' and dept_to>0  and type_encounter = 2) sumbh,
- 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = (select nr from care_department where id=$deptid)
+ 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = 6
  			and DATE_FORMAT(datein,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(datein,'%Y-%m-%d') <='$dateto' and loai_kham=1 and dept_to>0   and type_encounter = 2) sumknoi,
- 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = (select nr from care_department where id=$deptid)
+ 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = 6
  			and DATE_FORMAT(datein,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(datein,'%Y-%m-%d') <='$dateto' and loai_kham=1 AND insurance_nr != ''
 			AND DATE_FORMAT(insurance_exp,'%Y-%m-%d') > '$dateto' and dept_to>0  and type_encounter = 2 ) sumknoibh,
- 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = (select nr from care_department where id=$deptid)
+ 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = 6
  			and DATE_FORMAT(datein,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(datein,'%Y-%m-%d') <='$dateto' and loai_kham=2 and dept_to>0  and type_encounter = 2 ) sumkng,
- 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = (select nr from care_department where id=$deptid)
+ 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = 6
  			and DATE_FORMAT(datein,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(datein,'%Y-%m-%d') <='$dateto' and loai_kham=2 AND insurance_nr != ''
 			AND DATE_FORMAT(insurance_exp,'%Y-%m-%d') > '$dateto' and dept_to>0   and type_encounter = 2  ) sumkngbh,
- 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = (select nr from care_department where id=$deptid)
+ 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = 6
  			and DATE_FORMAT(datein,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(datein,'%Y-%m-%d') <='$dateto' and (DATE_FORMAT(now(),'%Y') - yearbirth)<=6 and dept_to>0  and type_encounter = 2 ) sum6t,
- 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = (select nr from care_department where id=$deptid)
+ 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = 6
  			and DATE_FORMAT(datein,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(datein,'%Y-%m-%d') <='$dateto' and (DATE_FORMAT(now(),'%Y') - yearbirth)<=15 and dept_to>0  and type_encounter = 2 ) sum15t,
- 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = (select nr from care_department where id=$deptid)
+ 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = 6
  			and DATE_FORMAT(datein,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(datein,'%Y-%m-%d') <='$dateto' and (DATE_FORMAT(now(),'%Y') - yearbirth)>=60 and dept_to>0  and type_encounter = 2 ) sum60t,
- 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = (select nr from care_department where id=$deptid)
+ 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = 6
  			and DATE_FORMAT(datein,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(datein,'%Y-%m-%d') <='$dateto' and type_encounter=1 and dept_to != dept_from and dept_to>0 ) sumnv,
- 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = (select nr from care_department where id=$deptid)
+ 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = 6
  			and DATE_FORMAT(datein,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(datein,'%Y-%m-%d') <='$dateto' and (referrer_diagnosis_code like '%A09%' OR referrer_diagnosis like '%A09%')  and dept_to>0  and type_encounter = 2 ) suma09,
- 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = (select nr from care_department where id=$deptid)
+ 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = 6
  			and DATE_FORMAT(datein,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(datein,'%Y-%m-%d') <='$dateto' and (referrer_diagnosis_code like '%J10%' OR referrer_diagnosis like '%J10%') and dept_to>0  and type_encounter = 2 ) sumj10,
 		
-		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = (select nr from care_department where id=$deptid)
+		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = 6
  			and DATE_FORMAT(datein,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(datein,'%Y-%m-%d') <='$dateto' and dept_to = -2) sumchuyenvien
  		from dual";
  		//echo $sql;
@@ -76,7 +76,7 @@ require($root_path.'include/core/inc_front_chain_lang.php');
  			<li>Nhập viện: <b>'.$row['sumnv'].'</b>
  				<ul>';
  			if($row['sumnv'] > 0){
- 				$sql="SELECT 
+ 				$sql="SELECT
  					d.name_formal, d.LD_var,(select count(distinct e.encounter_nr) from dfck_admit_inout_dept e where e.dept_from = (select nr from care_department where id=$deptid) and e.dept_to = d.nr and e.type_encounter=1 and DATE_FORMAT(e.datein,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(e.datein,'%Y-%m-%d') <='$dateto') sumnv
  				FROM care_department d where d.type=1 and d.id!=$deptid";
  				if($rs2 = $db->Execute($sql)){
@@ -87,13 +87,14 @@ require($root_path.'include/core/inc_front_chain_lang.php');
  			}
  			$str.='</ul>
  			</li>
- 			
+
  		</ul>
  		<br>
  		<table width="100%">
  		<tr><td><b>Trưởng khoa</b></td><td>'.'Ngày '.date('d').' tháng '.date('m').' năm '.date('Y').'<br><b>Người báo cáo</b></td></tr>
  		</table>';
  	}
+     echo $str;
  }
  ?>
 <meta charset="utf-8">
@@ -109,6 +110,3 @@ thead tr{
 }
 </style>
 
-<?
-echo  $str;
-?>
