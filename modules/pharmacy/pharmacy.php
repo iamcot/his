@@ -205,7 +205,9 @@ ob_end_clean();
  $smarty->assign('LDPharmaReportKhoChan', '<a href="report_khochan.php'.URL_APPEND.'" title="'.$LDPharmaReportKhoChanTxt.'" >'.$LDKhoChan.'</a>');
  //Bao cao su dung
  $smarty->assign('LDPharmaReportKhoLe', '<a href="report_khole.php'.URL_APPEND.'" title="'.$LDPharmaReportKhoLeTxt.'" >'.$LDKhoLe.'</a>');
- 
+  // báo cáo viện phí LDBaocaovienphi
+$smarty->assign('LDBaocaovienphi', '<a href="../../form_baocaovp.php'.URL_APPEND.'" title="Báo cáo viện phí" >'.$LDVienphi.'</a>');
+
  //Danh muc thuoc Tay Y
  $smarty->assign('LDMedicineCatalogue', '<a href="catalogue_chemical.php'.URL_APPEND."&catalogue=medicine".'" title="'.$LDMedicineCatalogueTxt.'" >'.$LDMedicineCatalogue.'</a>');
  $smarty->assign('LDMedicineCatalogueImg', $img_catalogue);

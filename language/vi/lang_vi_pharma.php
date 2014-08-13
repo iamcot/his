@@ -92,6 +92,7 @@ $LDGenericDrugCatalogue = "Danh mục Thuốc gốc";
 $LDSupplierCatalogue = "Danh mục Nhà cung cấp";
 $LDKhoChan='Kho chẵn';
 $LDKhoLe='Kho lẻ';
+$LDVienphi ='Viện phí';
 $LDPharmaReportImportExport = "Báo cáo nhập - xuất - tồn";
 $LDReportImportExport_Medicine='Báo cáo nhập - xuất - tồn kho chẵn';
 $LDReportImportExport_Medipot='Báo cáo nhập - xuất - tồn kho chẵn';

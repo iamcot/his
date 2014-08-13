@@ -1,3 +1,18 @@
+Cẩm Nang- Xuất file Excel Viện phí
+- Tạo view
+    + view_dv.sql
+    + view_vienphi.sql
+    + view_tongket.sql
+- File
+ + Tạo Mới
+    * form_baocaovp.php
+    * xuatbaocao_Ex.php
+    * roots.php
+    * baocao_vp.tpl
+ + Thay đổi
+    * pharmacy.tpl
+    * lang_vi_pharma.php
+    * pharmacy.php
 2014-08-12 Hiền
 - Sửa lại mã ĐKBN đúng tuyến, trái tuyến
 - Cập nhật lại form mới của Giấy chuyển tuyến
