@@ -68,7 +68,7 @@ if($select_type==1){
         LEFT JOIN care_address_phuongxa AS px ON p.addr_phuongxa_nr=px.nr
         LEFT JOIN care_type_ethnic_orig AS dt ON p.ethnic_orig=dt.id
         LEFT JOIN care_encounter_location q ON q.type_nr = 5  AND  q.status=''
-        WHERE  e.pid=p.pid AND p.madkbd != '' AND MONTH(e.encounter_date)= MONTH('$fromdate')
+        WHERE  e.pid=p.pid AND p.madkbd != '' AND MONTH(e.encounter_date)= MONTH('$fromdate') AND YEAR(e.encounter_date)= YEAR('$fromdate')
         AND ".$cond_typeput." AND vp.bill_item_encounter_nr = e.encounter_nr AND vp.bill_item_encounter_nr = tk.bill_encounter_nr
         AND e.encounter_nr = tk.bill_encounter_nr AND tnt.enc_nr= vp.bill_item_encounter_nr AND tnt.enc_nr= tk.bill_encounter_nr
         AND tnt.enc_nr= e.encounter_nr
@@ -206,7 +206,7 @@ $sql = "SELECT  p.name_last, p.name_first, p.sex,p.insurance_nr AS pinsurance_nr
         LEFT JOIN care_address_phuongxa AS px ON p.addr_phuongxa_nr=px.nr
         LEFT JOIN care_type_ethnic_orig AS dt ON p.ethnic_orig=dt.id
         LEFT JOIN care_encounter_location q ON q.type_nr = 5  AND  q.status=''
-        WHERE  e.pid=p.pid AND p.madkbd != '' AND MONTH(e.encounter_date)= MONTH('$fromdate')
+        WHERE  e.pid=p.pid AND p.madkbd != '' AND MONTH(e.encounter_date)= MONTH('$fromdate') AND YEAR(e.encounter_date)= YEAR('$fromdate')
         AND ".$cond_typeput." AND vp.bill_item_encounter_nr = e.encounter_nr AND vp.bill_item_encounter_nr = tk.bill_encounter_nr
         AND e.encounter_nr = tk.bill_encounter_nr
         GROUP BY bill_item_encounter_nr";
