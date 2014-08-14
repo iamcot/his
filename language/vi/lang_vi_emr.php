@@ -159,5 +159,5 @@
     $LDAlertTimeTv='Bạn chưa nhập thời gian bệnh nhân tử vong';
     $LDAlertNguoixinve='Bạn chưa nhập đủ thông tin người xin đưa xác bệnh nhân về';
     $LDAlertBenhsu='Bạn chưa nhập thông tin bệnh sử';
-    $LDLydoChuyenVien = 'Lý do chuyển viện';
+    $LDLydoChuyenVien = 'Lý do chuyển tuyến';
 ?>
