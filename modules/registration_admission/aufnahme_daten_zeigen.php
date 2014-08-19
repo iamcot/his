@@ -242,14 +242,12 @@ if(file_exists($root_path.'cache/barcodes/en_'.$encounter_nr.'.png')) {
 $smarty->assign('img_source',"<img $img_source>");
 
 $smarty->assign('LDAdmitDate',$LDAdmitDate);
-$smarty->assign('sAdmitDate',@formatDate2Local($encounter_in_date,$date_format)." ".@convertTimeToLocal(formatDate2Local($encounter_in_date,$date_format,0,1)));
-
+$smarty->assign('sAdmitDate',@formatDate2Local($encounter_date,$date_format)." ".@convertTimeToLocal(formatDate2Local($encounter_date,$date_format,0,1)));
 $smarty->assign('LDAdmitTime',$LDAdmitTime);
 //$smarty->assign('sAdmitTime',@formatDate2Local($encounter_date,$date_format,1,1));
-
-$smarty->assign('LDInDate','Ngày chỉnh sửa gần nhất');
-$smarty->assign('sInDate', @formatDate2Local($encounter_date,$date_format));
-$smarty -> assign('sInTime', @convertTimeToLocal(formatDate2Local($encounter_date, $date_format, 1,1)));
+$smarty->assign('LDInDate',$LDEditDate);
+$smarty->assign('sInDate', @formatDate2Local($encounter_in_date,$date_format));
+$smarty -> assign('sInTime', @convertTimeToLocal(formatDate2Local($encounter_in_date, $date_format, 1,1)));
 
 //$smarty->assign('sInDate',@formatDate2Local($encounter_in_date,$date_format)." ".@convertTimeToLocal(formatDate2Local($encounter_in_date,$date_format,0,1)));
 
