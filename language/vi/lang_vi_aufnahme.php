@@ -47,8 +47,10 @@ $LDNoNrNoDelete = 'Để trống mã số nếu muốn xóa'; //'no number = del
 
 /* Thông tin tiếp nhận khám bệnh và nhập viện */
 $LDAdmission='Nhận bệnh'; //'Admission';
-$LDAdmitDate='Ngày nhận bệnh'; //'Admission date';
-$LDAdmitTime='Giờ nhận'; //'Admission time';
+$LDAdmitDate='Ngày nhận bệnh';
+$LDEditDate='Ngày chỉnh sửa gần nhất';//
+$LDAdmitTime='Giờ nhận';
+$LDEditTime='Giờ chỉnh sửa';//'Admission time';
 $LDCaseNr='Mã bệnh án'; //'Admission number';
 $LDTitle='Danh xưng'; //'Title';
 $LDLastName='Họ và tên đệm'; //'Family name';
