@@ -362,10 +362,12 @@ if($patient_ok){
 		$info5=$enc_obj->_getNotes("encounter_nr=$pn AND type_nr=47");
         if($info5){
             $info_encounter2=$info5->FetchRow();
-        }   
-        $smarty->assign('LDLydoChuyenVien',$LDLydoChuyenVien);
-        $smarty->assign('LydoChuyenVien_note',$info_encounter2['notes']);
-		$smarty->assign('sLyDoChuyenVien','<input type="text" name="lydochuyenvien" id="lydochuyenvien" size=82 maxlength=250 value="Từ cấp cứu" />');
+        }
+    $smarty->assign('LDLydoChuyenVien',$LDLydoChuyenVien);
+    $str_LiDoChuyenTuyen='<option value="lidochuyentuyen1" > Đủ điều kiện chuyển tuyến (đúng tuyến) </option>
+                               <option value="lidochuyentuyen1" > Không đủ điều kiện chuyển tuyến/chuyển tuyến theo yêu cầu của người bệnh hoặc người đại diện hợp pháp của người bệnh (vượt tuyến) </option>';
+    $smarty->assign('LydoChuyenVien_note','<select name="lidochuyentuyen" disabled="true">'.$str_LiDoChuyenTuyen.'</select>');
+    $smarty->assign('sLyDoChuyenVien', '<select name="lidochuyentuyen">'.$str_LiDoChuyenTuyen.'</select>');
 
 		$smarty->assign('LDNotes',$LDChucdanh);
         $info5=$enc_obj->_getNotes("encounter_nr=$pn AND type_nr=28");

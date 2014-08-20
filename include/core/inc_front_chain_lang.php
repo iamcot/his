@@ -102,10 +102,12 @@ if(!defined('NO_CHAIN')||NO_CHAIN!=1){
 	  # Decrypt the second level cookie sid and compare to sid
        $dec_2level = new Crypt_HCEMD5($key_2level, '');
        $clear_2sid = $dec_2level->DecodeMimeSelfRand($_COOKIE[('ck_2level_sid'.$sid)]);
-   
-       if(!$sid||($sid!=$clear_ck_sid)||($sid!=$clear_2sid)||!isset($_COOKIE[$local_user.$sid])||empty($_COOKIE[$local_user.$sid])) $no_valid=1;
+    //$local_user.$sid aufnahme_user
+       //        ck_pflege_user
+//       if(!$sid||($sid!=$clear_ck_sid)||($sid!=$clear_2sid)||!isset($_COOKIE[$local_user.$sid])||empty($_COOKIE[$local_user.$sid])) $no_valid=1;
       
-   }elseif (!$sid||($sid!=$clear_ck_sid)){
+   }
+   elseif (!$sid||($sid!=$clear_ck_sid)){
    		$no_valid=1;
 	}else{
 		# Reset the time-out start time

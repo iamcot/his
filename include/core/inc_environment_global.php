@@ -40,6 +40,7 @@ define('ADMISSION_EXT_TABS',TRUE);
 
 define('PDF_HOSNAME','TTYT TÂN UYÊN');
 $cell='TRUNG TÂM Y TẾ TÂN UYÊN';
+$cell1='Trung tâm Y tế Thị xã Tân Uyên';
 $cell_address='TT Uyên Hưng';
 
 define('ITEM_CODE_NT','NT');

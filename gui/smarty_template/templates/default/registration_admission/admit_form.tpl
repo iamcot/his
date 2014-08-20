@@ -72,7 +72,6 @@
 
                    {{*
                     <td  class="adm_item" >
-
                     {{$LDInputDate}}
                     </td>
                     <td class="adm_input">

@@ -264,10 +264,32 @@ if($billid == "currentbill") {
 			$resultlbqry1=$eComBill->listServiceItemsByCode($labres['bill_item_code']);
 			if(is_object($resultlbqry1)) $lb1=$resultlbqry1->FetchRow();
 			$nounits=$labres['bill_item_units'];
-			$cpu=$labres['bill_item_unit_cost'];		
-			$totcost=$cpu*$nounits;
+			$cpu=$labres['bill_item_unit_cost'];
+
+            //Tính tiền Oxy
+            $temp_cost= $cpu*$nounits;
+            switch($lb1['item_code'])
+            {
+                case 'HSCC01':
+                    $totcost=$temp_cost*1;
+                    break;
+                case 'HSCC02':
+                    $totcost=$temp_cost*2;
+                    break;
+                case 'HSCC03':
+                    $totcost=$temp_cost*3;
+                    break;
+                case 'HSCC04':
+                    $totcost=$temp_cost*4;
+                    break;
+                case 'HSCC05':
+                    $totcost=$temp_cost*5;
+                    break;
+                default:
+                    $totcost=$cpu*$nounits;
+            }
+
 			$type=$lb1['item_type'];
-			
 			$itemdate_x = strtotime($labres['bill_item_date']);	//xet bao hiem
 			if(($itemdate_x>=$BHtungay_x) && ($itemdate_x<=$BHdenngay_x))
 				$total_for_insur += ($labres['bill_item_unit_cost'])*($labres['bill_item_units']);
@@ -304,6 +326,7 @@ if($billid == "currentbill") {
             $kgiam = $kgiam + ($labres['bill_item_unit_cost'])*($labres['bill_item_units'])*$mh;
             //echo $kgiam;
             }
+
 			//groupname
 			$flag_g = false;
 			if ($group_id!=$lb1['item_group_nr'])

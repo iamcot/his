@@ -162,7 +162,19 @@
 															</TD>
 															<TD width=8%>
 															</TD>
-														</TR>															
+														</TR>
+                                                        <TR height=25px>
+                                                            <TD width=8%>
+                                                            </TD>
+                                                            <TD width=8% align="center">
+                                                                <img {{$LDPharmaReportImg}} />
+                                                            </TD>
+                                                            <TD style="font-size:12px; font-family:Tahoma; font-weight:bold;">
+                                                                {{$LDBaocaovienphi}}
+                                                            </TD>
+                                                            <TD width=8%>
+                                                            </TD>
+                                                        </TR>
 														<TR height=2px>
 															<TD>
 															</TD>															
