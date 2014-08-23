@@ -76,9 +76,13 @@ if( $enc_obj->loadEncounterData($pn)) {
                                 $data_array['notes']=$_POST['nguoiduadi_notes'];
                                 $enc_obj->saveDischargeNotesFromArray1($data_array,28);
                             }                            
-                            if($_POST['lydochuyenvien']){
-                                $data_array['notes']=$_POST['lydochuyenvien'];
+                            if($_POST['lidochuyentuyen']){
+                                $data_array['notes']=$_POST['lidochuyentuyen'];
                                 $enc_obj->saveDischargeNotesFromArray1($data_array,47);
+                            }
+                            if($_POST['huongdieutri_notes']){
+                                $data_array['notes']=$_POST['huongdieutri_notes'];
+                                $enc_obj->saveDischargeNotesFromArray1($data_array, 91);
                             }
                             if($_POST['noichuyenden']){
                                 $data_array['notes']=$_POST['noichuyenden'];
@@ -350,6 +354,14 @@ if($patient_ok){
         $smarty->assign('phuongtien_notes',nl2br($info_encounter3['notes']));
         $smarty->assign('phuongtien_Input','<input type="text" name="phuongtien_notes" id="phuongtien_notes" size=82 maxlength=250 value="'.nl2br($info_encounter3['phuongtien_notes']).'" />');
 
+        $info7=$enc_obj->_getNotes("encounter_nr=$pn AND type_nr=91");
+        if($info7){
+            $info_encounter7=$info7->FetchRow();
+        }
+        $smarty->assign('LDHuongdieutri', 'Hướng điều trị: ');
+        $smarty->assign('huongdieutri_notes',nl2br($info_encounter7['notes']));
+        $smarty->assign('huongdieutri_Input', '<input type="text" name="huongdieutri_notes" id="huongdieutri_notes" size= 82 maxlength= 250 value="'.nl2br($info_encounter7['huongdieutri_notes']).'" />');
+
 		$info6=$enc_obj->_getNotes("encounter_nr=$pn AND type_nr=68");
         if($info6){
             $info_encounter6=$info6->FetchRow();
@@ -367,7 +379,7 @@ if($patient_ok){
         }
         $smarty->assign('LDLydoChuyenVien',$LDLydoChuyenVien);
         $str_LiDoChuyenTuyen='<option value="lidochuyentuyen1" > Đủ điều kiện chuyển tuyến (đúng tuyến) </option>
-                               <option value="lidochuyentuyen1" > Không đủ điều kiện chuyển tuyến/chuyển tuyến theo yêu cầu của người bệnh hoặc người đại diện hợp pháp của người bệnh (vượt tuyến) </option>';
+                               <option value="lidochuyentuyen2" > Không đủ điều kiện chuyển tuyến/chuyển tuyến theo yêu cầu của người bệnh hoặc người đại diện hợp pháp của người bệnh (vượt tuyến) </option>';
         $smarty->assign('LydoChuyenVien_note','<select name="lidochuyentuyen" disabled="true">'.$str_LiDoChuyenTuyen.'</select>');
         $smarty->assign('sLyDoChuyenVien', '<select name="lidochuyentuyen">'.$str_LiDoChuyenTuyen.'</select>');
 //		$smarty->assign('sLyDoChuyenVien','<input type="text" name="lydochuyenvien" id="lydochuyenvien" size=82 maxlength=250 value="Từ cấp cứu" />');
