@@ -161,15 +161,18 @@ if($select_type==1){
         else
             $datestranfer=date('d/m/Y');
         $tongngaydieutri = round(abs(strtotime(formatDate2STD($datestranfer,'dd/mm/yyyy',$sepChars))-strtotime($resultsql['encounter_date']))/86400);
-
+        //ma the
+        $mathe =str_replace('-','',$resultsql['pinsurance_nr']);
+        // ma the BHYT đang ký
+        $madk =  str_replace('-','',$resultsql['madkbd']);
         $objPHPExcel->getActiveSheet()->setCellValue('A'.($i+2), ($i+1))
             ->setCellValue('B'.($i+2),$resultsql['name_last'].' '.$resultsql['name_first'] )
             ->setCellValue('C'.($i+2),$resultsql['date_birth'] )
             ->setCellValue('D'.($i+2),$gioitinh)
-            ->setCellValue('E'.($i+2),$resultsql['pinsurance_nr'] )
-            ->setCellValue('F'.($i+2),$resultsql['madkbd'] )
+            ->setCellValue('E'.($i+2),$mathe )
+            ->setCellValue('F'.($i+2),$madk )
             ->setCellValue('G'.($i+2),$resultsql['referrer_diagnosis_code'] )
-            ->setCellValue('H'.($i+2),formatDate2Local($resultsql['encounter_date'],$date_format) )
+            ->setCellValue('H'.($i+2),formatDate2Local($resultsql['encounter_date'],$date_format))
             ->setCellValue('I'.($i+2),$datestranfer )
             ->setCellValue('J'.($i+2), $tongngaydieutri )
             ->setCellValue('K'.($i+2),($resultsql['tongchi']) )
@@ -189,7 +192,7 @@ if($select_type==1){
             ->setCellValue('Y'.($i+2),$resultsql[''] )
             ->setCellValue('Z'.($i+2),$resultsql['lidovaovien'] )
             ->setCellValue('AA'.($i+2),$resultsql['benhphu'] )
-            ->setCellValue('AB'.($i+2),$resultsql[''] )
+            ->setCellValue('AB'.($i+2),'74066' )
             ->setCellValue('AC'.($i+2),$namedept['name_formal'] )
             ->setCellValue('AD'.($i+2),$f_month)
             ->setCellValue('AE'.($i+2),$f_year)
@@ -312,13 +315,16 @@ for ($i = 0; $i< $result->RecordCount(); $i++) {
     else
         $datestranfer=date('d/m/Y');
     $tongngaydieutri = round(abs(strtotime(formatDate2STD($datestranfer,'dd/mm/yyyy',$sepChars))-strtotime($resultsql['encounter_date']))/86400);
-
+    //ma the
+    $mathe =str_replace('-','',$resultsql['pinsurance_nr']);
+    // ma the BHYT đang ký
+    $madk =  str_replace('-','',$resultsql['madkbd']);
     $objPHPExcel->getActiveSheet()->setCellValue('A'.($i+2), ($i+1))
         ->setCellValue('B'.($i+2),$resultsql['name_last'].' '.$resultsql['name_first'] )
         ->setCellValue('C'.($i+2),$resultsql['date_birth'] )
         ->setCellValue('D'.($i+2),$gioitinh )
-        ->setCellValue('E'.($i+2),$resultsql['pinsurance_nr'] )
-        ->setCellValue('F'.($i+2),$resultsql['madkbd'] )
+        ->setCellValue('E'.($i+2),$mathe )
+        ->setCellValue('F'.($i+2),$madk )
         ->setCellValue('G'.($i+2),$resultsql['referrer_diagnosis_code'] )
         ->setCellValue('H'.($i+2),formatDate2Local($resultsql['encounter_date'],$date_format) )
         ->setCellValue('I'.($i+2),$datestranfer )
@@ -340,7 +346,7 @@ for ($i = 0; $i< $result->RecordCount(); $i++) {
         ->setCellValue('Y'.($i+2),$resultsql[''] )
         ->setCellValue('Z'.($i+2),$resultsql['lidovaovien'] )
         ->setCellValue('AA'.($i+2),$resultsql['benhphu'] )
-        ->setCellValue('AB'.($i+2),$resultsql[''] )
+        ->setCellValue('AB'.($i+2),'74066' )
         ->setCellValue('AC'.($i+2),$namedept['name_formal'] )
         ->setCellValue('AD'.($i+2),$f_month)
         ->setCellValue('AE'.($i+2),$f_year)
@@ -361,26 +367,31 @@ for ($i = 0; $i< $result->RecordCount(); $i++) {
     }
 }
 // Rename worksheet
-$objPHPExcel->getActiveSheet()->setTitle('Sheet1');
+$objPHPExcel->getActiveSheet()->setTitle('sheet');
 // Set active sheet index to the first sheet, so Excel opens this as the first sheet
 $objPHPExcel->setActiveSheetIndex(0);
 
 // Save Excel 2007 file
 // Redirect output to a client’s web browser (Excel2007)
-header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment;filename="Xuatbaocao_Ex.xlsx"');
+//header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header('Content-Type: application/vnd.ms-excel');
+header('Content-Disposition: attachment;filename="Xuatbaocao_Ex'.date('Y-m-d-H-i').'.xls"');
 header('Cache-Control: max-age=0');
-// If you're serving to IE 9, then the following may be needed
+//// If you're serving to IE 9, then the following may be needed
 header('Cache-Control: max-age=1');
+//
+//// If you're serving to IE over SSL, then the following may be needed
+//header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+//header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+//header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+//header ('Pragma: public'); // HTTP/1.0
 
-// If you're serving to IE over SSL, then the following may be needed
-header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-header ('Pragma: public'); // HTTP/1.0
-
-$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+//$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+//$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'CSV')->setDelimiter(',')
+//    ->setEnclosure('"')
+//    ->setLineEnding("\r\n")
+//    ->setSheetIndex(0)
+//    ->save('php://output');
+$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 ob_clean();
 $objWriter->save('php://output');
-exit;
-?>
