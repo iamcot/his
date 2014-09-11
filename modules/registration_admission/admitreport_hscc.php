@@ -34,7 +34,7 @@ $str = "<p>" . PDF_HOSNAME . "</p>
 //ma noi bo cua Khoa kham benh la id = 5
 $deptid = 6;
 // $sql="SELECT
-// 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = 6
+// 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where (dept_from = 6 or dept_to=6)
 // 			and DATE_FORMAT(datein,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(datein,'%Y-%m-%d') <='$dateto' and dept_to>0  and type_encounter = 2) sumkb,
 // 		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = 6
 // 			and DATE_FORMAT(datein,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(datein,'%Y-%m-%d') <='$dateto' AND insurance_nr != ''
@@ -65,22 +65,34 @@ $deptid = 6;
 //		(select count(distinct encounter_nr) from dfck_admit_inout_dept where dept_from = 6
 // 			and DATE_FORMAT(datein,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(datein,'%Y-%m-%d') <='$dateto' and dept_to = -2) sumchuyenvien
 // 		from dual";
-$sqlsumkb = "SELECT count(t.nr) sumkb FROM `dfck_encounter_transfer` `t`
-            WHERE  `t`.`dept_from` = " . $deptid . "
-                    AND t.dept_to > 0
- 			        and DATE_FORMAT(`t`.`datein`,'%Y-%m-%d') >='$datefrom'
- 			        and DATE_FORMAT(`t`.`datein`,'%Y-%m-%d') <='$dateto'  ";
+
+$sqlsumhscc="SELECT COUNT(DISTINCT t.encounter_nr) sumhscc
+FROM (dfck_encounter_transfer AS t   JOIN care_person AS p)   JOIN care_encounter AS e
+WHERE (t.pid = p.pid)  AND (e.encounter_nr=t.encounter_nr)
+		AND t.dept_from IN(SELECT care_department.nr  AS nr FROM care_department)
+		AND DATE_FORMAT(t.datein,'%Y-%m-%d') >= '$datefrom' AND DATE_FORMAT(t.datein,'%Y-%m-%d') <='$dateto' AND t.dept_to>0
+		AND t.dept_from =".$deptid." ";
+$sumhscc=array();
+if($rs=$db->Execute($sqlsumhscc)){
+    while($row=$rs->FetchRow())
+        $sumhscc=$row['sumhscc'];
+}
+
+$sqlsumbh="SELECT COUNT(DISTINCT t.encounter_nr) sumhscc
+FROM (dfck_encounter_transfer AS t   JOIN care_person AS p)   JOIN care_encounter AS e
+WHERE (t.pid = p.pid)  AND (e.encounter_nr=t.encounter_nr)
+		AND t.dept_from IN(SELECT care_department.nr  AS nr FROM care_department)
+		AND DATE_FORMAT(t.datein,'%Y-%m-%d') >= '$datefrom' AND DATE_FORMAT(t.datein,'%Y-%m-%d') <='$dateto' AND DATE_FORMAT(insurance_exp,'%Y-%m-%d') > '$dateto'
+		 AND t.dept_to>0 AND t.dept_from =".$deptid." AND  p.insurance_nr != '' ";
+$sqlsumkn="";
+$sqlsumknbh="";
+$sqlsumkng="";
+$sqlsumkngbh="";
+$sqlsum6t="";
+$sqlsum15t="";
+$sqlsum60t="";
+$sqlsumnv="";
 global $db;
-$sumkb = 0;
-$sumbh = 0;
-$sumkn = 0;
-$sumknbh = 0;
-$sumkng = 0;
-$sumkngbh = 0;
-$sum6 = 0;
-$sum15 = 0;
-$sum60 = 0;
-$sumnv = 0;
 if ($rs = $db->Execute($sqlsumkb)) {
     if ($row = $rs->FetchRow()) {
         $sumkb = $row['sumkb'];
@@ -89,7 +101,7 @@ if ($rs = $db->Execute($sqlsumkb)) {
 
 $str .= '<br>
  		<ul>
- 			<li>Tổng: <b>' . $sumkb . '</b>
+ 			<li>Tổng: <b>' . $sumhscc . '</b>
  			<ul>
  					<li>BHYT: <b>' . $sumbh . '</b></li>
  					<li>Không BHYT: <b>' . ($sumkb - $sumbh) . '</b></li>

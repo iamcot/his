@@ -159,29 +159,6 @@ $header3 = '<tr>
 //content
 $content = '';
 global $db;
-//				(SELECT COUNT(v4.encounter_nr) FROM dfck_bttv_view v4
-//					WHERE v4.vncode = v.vncode AND v4.current_dept_nr = (SELECT nr FROM care_department WHERE id=5)
-//					AND DATE_FORMAT(v4.death_date,'%Y-%m-%d')>= '".date('Y-m-d',strtotime($datefrom))."'
-//					AND DATE_FORMAT(v4.death_date,'%Y-%m-%d')<= '".date('Y-m-d',strtotime($dateto))."'
-//					 AND v4.encounter_class_nr = 2) sumdead,
-//
-//
-//				(SELECT COUNT(v8.encounter_nr) FROM dfck_bttv_view v8 WHERE v8.vncode = v.vncode AND v8.encounter_class_nr = 1
-//					AND DATE_FORMAT(v8.death_date,'%Y-%m-%d')>= '".date("Y-m-d",strtotime($datefrom))."'
-//					AND DATE_FORMAT(v8.death_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."') sumpaindead,
-//				(SELECT COUNT(v9.encounter_nr) FROM dfck_bttv_view v9 WHERE v9.vncode = v.vncode AND v9.encounter_class_nr = 1
-//					AND DATE_FORMAT(v9.death_date,'%Y-%m-%d')>= '".date("Y-m-d",strtotime($datefrom))."'
-//					AND DATE_FORMAT(v9.death_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."' AND v9.sex='f') sumpaindeadf,
-//
-//
-//				(SELECT COUNT(v12.encounter_nr) FROM dfck_bttv_view v12 WHERE v12.vncode = v.vncode AND v12.encounter_class_nr = 1
-//					AND ((DATE_FORMAT(NOW(),'%Y') - SUBSTR(v12.birthyear,1,4)) < 15 )
-//					AND DATE_FORMAT(v12.death_date,'%Y-%m-%d')>= ".date("Y-m-d",strtotime($datefrom))."
-//					AND DATE_FORMAT(v12.death_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."') sumpainkiddead,
-//				(SELECT COUNT(v13.encounter_nr) FROM dfck_bttv_view v13 WHERE v13.vncode = v.vncode AND v13.encounter_class_nr = 1
-//					AND ((DATE_FORMAT(NOW(),'%Y') - SUBSTR(v13.birthyear,1,4)) < 5 )
-//					AND DATE_FORMAT(v13.death_date,'%Y-%m-%d')>= ".date("Y-m-d",strtotime($datefrom))."
-//					AND DATE_FORMAT(v13.death_date,'%Y-%m-%d')<= '".date("Y-m-d",strtotime($dateto))."' ) sumpainkiddead5
 
 $sqlsumkkb = "SELECT bt.vncode, COUNT(e.encounter_nr) sumkkb FROM `care_encounter` `e`
                                 LEFT JOIN `dfck_icd10_group_bttv` `bt` ON `bt`.`icd10detail` LIKE CONCAT('%',`e`.`referrer_diagnosis_code`,'%')
@@ -233,6 +210,22 @@ if ($rs = $db->Execute($sqlkkbkid)) {
         $arrkkbkid[($row['vncode'])] = $row['kkbkid'];
     }
 }
+
+$sqlkkbdead= "SELECT bt.vncode, COUNT(e.encounter_nr) kkbdead FROM `care_encounter` `e`
+                                LEFT JOIN `dfck_icd10_group_bttv` `bt` ON `bt`.`icd10detail` LIKE CONCAT('%',`e`.`referrer_diagnosis_code`,'%')
+                                AND `e`.`referrer_diagnosis_code` <> _utf8''
+                                LEFT JOIN `care_person` `p` ON `e`.`pid` = `p`.`pid`
+                                WHERE bt.vncode!='' AND bt.vncode!='NULL' AND
+                                DATE_FORMAT(p.death_date,'%Y-%m-%d')>= '" . date("Y-m-d", strtotime($datefrom)) . "' AND
+                                DATE_FORMAT(p.death_date,'%Y-%m-%d')<= '" . date("Y-m-d", strtotime($dateto)) . "' AND
+                                e.encounter_class_nr = 2 AND e.current_dept_nr = (SELECT nr FROM care_department WHERE id=5)
+                                GROUP BY bt.vncode  ORDER BY `bt`.`vncode`";
+$arrkkbdead=array();
+if($rs=$db->Execute($sqlkkbdead)){
+    while($row=$rs->FetchRow()){
+        $arrkkbdead[($row['vncode'])]=$row['kkbdead'];
+    }
+}
 $sqlntsum = "SELECT bt.vncode, COUNT(e.encounter_nr) ntsum FROM `care_encounter` `e`
                                 LEFT JOIN `dfck_icd10_group_bttv` `bt` ON `bt`.`icd10detail` LIKE CONCAT('%',`e`.`referrer_diagnosis_code`,'%')
                                 AND `e`.`referrer_diagnosis_code` <> _utf8''
@@ -265,6 +258,39 @@ if ($rs = $db->Execute($sqlntf)) {
         $arrntf[($row['vncode'])] = $row['ntf'];
     }
 }
+$sqlntdead  ="SELECT bt.vncode, COUNT(e.encounter_nr) ntdead FROM `care_encounter` `e`
+                                LEFT JOIN `dfck_icd10_group_bttv` `bt` ON `bt`.`icd10detail` LIKE CONCAT('%',`e`.`referrer_diagnosis_code`,'%')
+                                AND `e`.`referrer_diagnosis_code` <> _utf8''
+                                LEFT JOIN `care_person` `p` ON `e`.`pid` = `p`.`pid`
+                                WHERE bt.vncode!='' AND bt.vncode!='NULL' AND
+                                DATE_FORMAT(p.death_date,'%Y-%m-%d')>= '" . date("Y-m-d", strtotime($datefrom)) . "' AND
+                                DATE_FORMAT(p.death_date,'%Y-%m-%d')<= '" . date("Y-m-d", strtotime($dateto)) . "' AND
+                                e.encounter_class_nr = 1
+                                GROUP BY bt.vncode  ORDER BY `bt`.`vncode`";
+$arrntdead=array();
+if($rs=$db->Execute($sqlntdead)){
+    while($row=$rs->FetchRow()){
+        $arrntdead[($row['vncode'])]=$row['ntdead'];
+    }
+}
+
+$sqlntdeadf="SELECT bt.vncode, COUNT(e.encounter_nr) ntdeadf FROM `care_encounter` `e`
+                                LEFT JOIN `dfck_icd10_group_bttv` `bt` ON `bt`.`icd10detail` LIKE CONCAT('%',`e`.`referrer_diagnosis_code`,'%')
+                                AND `e`.`referrer_diagnosis_code` <> _utf8''
+                                LEFT JOIN `care_person` `p` ON `e`.`pid` = `p`.`pid`
+                                WHERE bt.vncode!='' AND bt.vncode!='NULL' AND
+                                DATE_FORMAT(p.death_date,'%Y-%m-%d')>= '" . date("Y-m-d", strtotime($datefrom)) . "' AND
+                                DATE_FORMAT(p.death_date,'%Y-%m-%d')<= '" . date("Y-m-d", strtotime($dateto)) . "' AND
+                                p.sex='f' AND
+                                e.encounter_class_nr = 1
+                                GROUP BY bt.vncode  ORDER BY `bt`.`vncode`";
+$arrdeadf=array();
+if($rs=$db->Execute($sqlntdeadf)){
+    while($row=$rs->FetchRow()){
+        $arrdeadf[($row['vncode'])]=$row['ntdeadf'];
+    }
+}
+
 $sqlntsumkid = "SELECT bt.vncode, COUNT(e.encounter_nr) ntsumkid FROM `care_encounter` `e`
                                 LEFT JOIN `dfck_icd10_group_bttv` `bt` ON `bt`.`icd10detail` LIKE CONCAT('%',`e`.`referrer_diagnosis_code`,'%')
                                 AND `e`.`referrer_diagnosis_code` <> _utf8''
@@ -295,6 +321,38 @@ $arrntsumkid5 = array();
 if ($rs = $db->Execute($sqlntsumkid5)) {
     while ($row = $rs->FetchRow()) {
         $arrntsumkid5[($row['vncode'])] = $row['ntsumkid5'];
+    }
+}
+
+$sqlntkiddead="SELECT bt.vncode, COUNT(e.encounter_nr) ntkiddead FROM `care_encounter` `e`
+                                LEFT JOIN `dfck_icd10_group_bttv` `bt` ON `bt`.`icd10detail` LIKE CONCAT('%',`e`.`referrer_diagnosis_code`,'%')
+                                AND `e`.`referrer_diagnosis_code` <> _utf8''
+                                LEFT JOIN `care_person` `p` ON `e`.`pid` = `p`.`pid`
+                                WHERE bt.vncode!='' AND bt.vncode!='NULL' AND
+                                DATE_FORMAT(p.death_date,'%Y-%m-%d')>= '" . date("Y-m-d", strtotime($datefrom)) . "' AND
+                                DATE_FORMAT(p.death_date,'%Y-%m-%d')<= '" . date("Y-m-d", strtotime($dateto)) . "' AND
+                                e.encounter_class_nr = 1     AND (DATE_FORMAT(NOW(),'%Y') - SUBSTR(p.date_birth,1,4)) < 15
+                                GROUP BY bt.vncode  ORDER BY `bt`.`vncode`";
+$arrntkiddead=array();
+if($rs=$db->Execute($sqlntkiddead)){
+    while($row=$rs->FetchRow()){
+        $arrntkiddead[($row('vncode'))]=$row('ntkiddead');
+    }
+}
+
+$sqlntkiddead5="SELECT bt.vncode, COUNT(e.encounter_nr) ntkiddead5 FROM `care_encounter` `e`
+                                LEFT JOIN `dfck_icd10_group_bttv` `bt` ON `bt`.`icd10detail` LIKE CONCAT('%',`e`.`referrer_diagnosis_code`,'%')
+                                AND `e`.`referrer_diagnosis_code` <> _utf8''
+                                LEFT JOIN `care_person` `p` ON `e`.`pid` = `p`.`pid`
+                                WHERE bt.vncode!='' AND bt.vncode!='NULL' AND
+                                DATE_FORMAT(p.death_date,'%Y-%m-%d')>= '" . date("Y-m-d", strtotime($datefrom)) . "' AND
+                                DATE_FORMAT(p.death_date,'%Y-%m-%d')<= '" . date("Y-m-d", strtotime($dateto)) . "' AND
+                                e.encounter_class_nr = 1     AND (DATE_FORMAT(NOW(),'%Y') - SUBSTR(p.date_birth,1,4)) < 5
+                                GROUP BY bt.vncode  ORDER BY `bt`.`vncode`";
+$arrntkiddead5=array();
+if($rs=$db->Execute($sqlntkiddead5)){
+    while($row=$rs->FetchRow()){
+        $arrntkiddead5[($row('vncode'))]=$row('ntkiddead5');
     }
 }
 $crrsec = "";
@@ -360,15 +418,15 @@ if ($rs = $db->Execute($sql)) {
 						<td align="center">' . ((isset($arrsumkkb[($row['groupcode'])]) && ($id == 'kkb' || $id == 'all')) ? $arrsumkkb[($row['groupcode'])] : '') . '</td>
 						<td align="center">' . ((isset($arrkkbf[($row['groupcode'])]) && ($id == 'kkb' || $id == 'all')) ? $arrkkbf[($row['groupcode'])] : '') . '</td>
 						<td align="center">' . ((isset($arrkkbkid[($row['groupcode'])]) && ($id == 'kkb' || $id == 'all')) ? $arrkkbkid[($row['groupcode'])] : '') . '</td>
-						<td align="center">' . (($row['sumdead'] > 0 && ($id == 'kkb' || $id == 'all')) ? $row['sumdead'] : '') . '</td>
+						<td align="center">' . ((isset($arrkkbdead[($row['groupcode'])]) && ($id == 'kkb' || $id == 'all')) ? $arrkkbdead[($row['groupcode'])] : '') . '</td>
 						<td align="center">' . ((isset($arrntsum[($row['groupcode'])]) && ($id == 'dtnt' || $id == 'all')) ? $arrntsum[($row['groupcode'])] : '') . '</td>
 						<td align="center">' . ((isset($arrntf[($row['groupcode'])]) && ($id == 'dtnt' || $id == 'all')) ? $arrntf[($row['groupcode'])] : '') . '</td>
-						<td align="center">' . (($row['sumpaindead'] > 0 && ($id == 'dtnt' || $id == 'all')) ? $row['sumpaindead'] : '') . '</td>
-						<td align="center">' . (($row['sumpaindeadf'] > 0 && ($id == 'dtnt' || $id == 'all')) ? $row['sumpaindeadf'] : '') . '</td>
+						<td align="center">' . ((isset($arrntdead[($row['groupcode'])]) && ($id == 'dtnt' || $id == 'all')) ? $arrntdead[($row['groupcode'])] : '') . '</td>
+						<td align="center">' . ((isset($arrdeadf[($row['groupcode'])]) && ($id == 'dtnt' || $id == 'all')) ? $arrdeadf[($row['groupcode'])] : '') . '</td>
 						<td align="center">' . ((isset($arrntsumkid[($row['groupcode'])]) && ($id == 'dtnt' || $id == 'all')) ? $arrntsumkid[($row['groupcode'])] : '') . '</td>
 						<td align="center">' . ((isset($arrntsumkid5[($row['groupcode'])]) && ($id == 'dtnt' || $id == 'all')) ? $arrntsumkid5[($row['groupcode'])] : '') . '</td>
-						<td align="center">' . (($row['sumpainkiddead'] > 0 && ($id == 'dtnt' || $id == 'all')) ? $row['sumpainkiddead'] : '') . '</td>
-						<td align="center">' . (($row['sumpainkiddead5'] > 0 && ($id == 'dtnt' || $id == 'all')) ? $row['sumpainkiddead5'] : '') . '</td>
+						<td align="center">' . ((isset($arrntkiddead[($row['groupcode'])]) && ($id == 'dtnt' || $id == 'all')) ? $arrntkiddead[($row['groupcode'])] : '') . '</td>
+						<td align="center">' . ((isset($arrntkiddead5[($row['groupcode'])]) && ($id == 'dtnt' || $id == 'all')) ? $arrntkiddead5[($row['groupcode'])] : '') . '</td>
 					</tr>';
         }
     }
@@ -399,3 +457,5 @@ if (($numline + 8) >= MAX_ROW_PP) {
 $tpdf->writeHTML($footer);
 
 $tpdf->Output($id . '_bttv_' . $strshortdate . '.pdf', 'I');
+
+
