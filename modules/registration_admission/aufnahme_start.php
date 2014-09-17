@@ -150,8 +150,18 @@ if($pid!='' || $encounter_nr!=''){
 */
 
 		$ins_infor=$person_obj->getInfoInsurEnc($pid);
-			
-		if (($mode=='save') || ($forcesave!='')) {
+        /* Load encounter data */
+        $encounter_obj->loadEncounterData();
+        if($encounter_obj->is_loaded) {
+            $zeile=&$encounter_obj->encounter;
+            //load data
+            extract($zeile);
+            $modify_idhientai=$zeile['52'];
+        }
+
+
+       	if (($mode=='save') || ($forcesave!='')) {
+		//if (($mode=='save') || ($forcesave!='')) {
 			if(!$forcesave) {
 				//clean and check input data variables
 				/**
@@ -365,17 +375,19 @@ if($pid!='' || $encounter_nr!=''){
 			}	// end of if($error)
 		} // end of if($mode)
 
+
+
 	}elseif($encounter_nr!='') {
 		/* Load encounter data */
 		$encounter_obj->loadEncounterData();
-		if($encounter_obj->is_loaded) {
-			$zeile=&$encounter_obj->encounter;
-			//load data
-			extract($zeile);
+            if($encounter_obj->is_loaded) {
+                $zeile=&$encounter_obj->encounter;
+                //load data
+                extract($zeile);
 
 			// Get insurance firm name
 			$insurance_firm_name=$pinsure_obj->getFirmName($insurance_firm_id);
-
+            $modify_idhientai=$zeile['52'];
 			/* GEt the patient's services classes */
 				
 			if(!empty($GLOBAL_CONFIG['patient_financial_class_single_result'])) $encounter_obj->setSingleResult(true);
@@ -1129,9 +1141,12 @@ $smarty->assign('LDPlsEnterRefererDiagnosis',$LDPlsEnterRefererDiagnosis);
 	if($update) $sTemp = $sTemp.'<input type="hidden" name=update value=1>';
 
 	$smarty->assign('sHiddenInputs',$sTemp);
-
-	$smarty->assign('pbSave','<input  type="image" '.createLDImgSrc($root_path,'savedisc.gif','0').' title="'.$LDSaveData.'" align="absmiddle">');
-
+    // xét người nhập dữ liệu và người đăng nhâp giống nhau thi mới cho chỉnh sửa tiếp nhận
+    if($_SESSION['sess_user_name']==$modify_idhientai){
+      $smarty->assign('pbSave','<input  type="image" '.createLDImgSrc($root_path,'savedisc.gif','0').' title="'.$LDSaveData.'" align="absmiddle">');
+    }  else{
+	$smarty->assign('pbSave','<input  type="image" '.createLDImgSrc($root_path,'savedisc.gif','0').' title="'.$LDSaveData.'" align="absmiddle" disabled>');
+   }
 	$smarty->assign('pbRegData','<a href="patient_register_show.php'.URL_APPEND.'&pid='.$pid.'"><img '.createLDImgSrc($root_path,'reg_data.gif','0').'  title="'.$LDRegistration.'"  align="absmiddle"></a>');
 	$smarty->assign('pbCancel','<a href="'.$breakfile.'"><img '.createLDImgSrc($root_path,'cancel.gif','0').'  title="'.$LDCancel.'"  align="absmiddle"></a>');
 	//<!-- Note: uncomment the ff: line if you want to have a reset button  -->
