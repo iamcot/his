@@ -84,18 +84,22 @@ if($mode=='save'){
         if ($pres_id==false)
             $lastId=1;
         else $lastId = $pres_id['prescription_id']+1;
-        $datetime = date("Y-m-d G:i:s"); //$_POST['prescribe_date']
+
+         //$_POST['prescribe_date']
    //echo     $datetime = $_POST['f-calendar-field-1'] ;
       // $a= $_POST['prescribe_date'] ;
+
+
+        //$date_time_create = $_POST['f-calendar-field-1'];
         $pharma_prescription_info = array('prescription_id' => $lastId,
             'prescription_type' => $prescription_type_nr,
             'dept_nr' => $dept_nr,
             'ward_nr' => $ward_nr,
-            'date_time_create'=>$datetime,
+            'date_time_create'=> formatDate2STD($date,$date_format)." ".$time,
             'symptoms' => '',
             'diagnosis' => $diagnosis,
             'note' => $notes,
-            'history' => 'Created by : '.$datetime.' : '.$prescriber,
+            'history' => 'Created by : '.$date_time_create.' : '.$prescriber,
             'doctor' => $prescriber,
             'encounter_nr' => $pn,
             'sum_date' => '1',
@@ -167,8 +171,8 @@ if($mode=='update' && $prescriptionId!=''){
     if($maxelements) {
         //prescription_info
         $objPrescription->usePrescription('prescription_info');
-        $datetime = date("Y-m-d G:i:s"); //$_POST['prescribe_date']
-
+        //$datetime = date("Y-m-d G:i:s"); //$_POST['prescribe_date']
+        //$date_time_create = date("Y-m-d G:i:s");
         $pharma_prescription_info = array(
             'prescription_type' => $prescription_type_nr,
             'symptoms' => '',
@@ -186,7 +190,8 @@ if($mode=='update' && $prescriptionId!=''){
             'issue_user' =>'',
             'issue_note' =>'',
             'receive_user' => '',
-            'phieutheodoi' => '1'
+            'phieutheodoi' => '1',
+             'date_time_create'=>formatDate2STD($date,$date_format)." ".$time,
         );
         $objPrescription->where=' prescription_id='.$prescriptionId;
         if($objPrescription->updateDataFromArray($pharma_prescription_info,$prescriptionId)) {
@@ -604,6 +609,7 @@ function submitMainForm() {
                 $row=$medis->FetchRow();
                 $old_nr = $row['prescription_id'];
                 $rowNr = $row['nr'];
+                $t_row=$row['date_time_create'];
                 $medis->Move($i);
                 do {    //sửa lỗi
                 //$companionBestellnum =  explode(",",unserialize($row['companion']));
@@ -653,6 +659,10 @@ function submitMainForm() {
 					<td><strong>'.$LDTime.'</strong></td>
 					<td><strong>'.$LDRouting.'</strong></td>
 					<td><strong>'.$LDNotes.'</strong></td>
+
+
+
+
 				</tr>';
 
                 do {
@@ -671,6 +681,9 @@ function submitMainForm() {
             <td><FONT SIZE=-1  FACE="Arial"><?php echo $row['time_use']; //Thoi gian ?></font></td>
             <td><FONT SIZE=-1  FACE="Arial"><?php echo  $row['type_use']; //Duong truyen ?> </font></td>
             <td><FONT SIZE=-1  FACE="Arial"><?php echo $row['morenote']; //Ghi chu ?></font></td>
+
+
+
         </tr>
         <?php
         $i++;
@@ -724,6 +737,25 @@ function submitMainForm() {
                 <td><?php echo $LDRouting; ?>: </td>
                 <td><?php echo $LDNotes; ?>: </td>
                 <td rowspan="4"> </td>
+
+                <td colspan="10" align="left"><div class=fva2_ml10><font color="#000099">
+                            <?php echo "Ngày truyền dịch: ";
+
+                            if ($t_rowrow['date_time_create']=="")
+                                $dateshow=date("Y-m-d G:i:s");
+                            else $dateshow=$t_row['date_time_create'];
+
+                            echo $calendar->show_calendar($calendar,$date_format,'date',$dateshow);
+                            if(isset($date_time['date_time_create']))
+                            {echo '<input type="text" size="5" id="time" name="time" value="'.@convertTimeToLocal(formatDate2Local($t_row['date_time_create'],$date_format,0,1)).'">';
+                            }else{
+                                echo '<input type="text" size="5" id="time" name="time" value="'.date("H:i").'">';
+                            }
+                            //end gjergji ?>
+
+                            <br>
+                </td>
+
             </tr>
             <script type="text/javascript">
                 function AutoComplete(){
@@ -795,7 +827,6 @@ function submitMainForm() {
 
                             if(isset($$v['LD_var'])&&!empty($$v['LD_var'])) echo $$v['LD_var'];
                             else echo $v['name'];
-
                             echo '</option>';
                         }
                         ?>
@@ -886,6 +917,9 @@ function submitMainForm() {
                              //elemRemove
                              echo 	'<td valign="middle" ><img src="../../gui/img/common/default/delete2.gif" style="cursor:pointer;" onclick="removeMedicament(\'elem'.$i.'\')" ></td>';
                              echo '</tr>';
+
+
+
 
                     }
                     $generalnote=$old_pres_row['generalnote'];

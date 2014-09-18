@@ -37,11 +37,11 @@ if (isset($_POST['khole']) || isset($_POST['khochan'])) {
     $sql0 = "UPDATE care_pharma_available_product SET available_number=0";
     if ($type == 'khochan') {
         if ($result = mysqli_query($con, $sql1))
-            echo " Tat ca thuoc ton trong kho chan = 0 \n\r<br>";
+            echo " Thành công \n\r<br>";
     } else {
 //        echo $sql1;
         if ($result = mysqli_query($con, $sql0))
-            echo " Tat ca thuoc ton trong kho le = 0 \n\r<br>";
+            echo " Thành công \n\r<br>";
         else echo $sql0;
     }
 
@@ -98,16 +98,28 @@ function importthuoc($arrthuoc, $type = 'khochan')
         $soluong = explode(".", $arrthuoc[12]);
         $soluong = str_replace(",", "", $soluong[0]);
         $solo = $arrthuoc[15];
-
+        $sql4=  "DELETE FROM care_pharma_products_main_sub WHERE number=0";
         $sql2 = "INSERT INTO care_pharma_products_main_sub(product_encoder,lotid,number,price) VALUES('$mathuoc','$solo','$soluong','$dongia') ";
         $sql3 = "INSERT INTO care_pharma_available_product(product_encoder,product_lot_id,available_number,price) VALUES('$mathuoc','$solo','$soluong','$dongia') ";
         if ($type == 'khochan') {
             if (mysqli_query($con, $sql2)) {
+                if($soluong==0)
+                {
+                    if (mysqli_query($con, $sql4)) {
+                        echo "Đã xóa thuốc cũ:".$mathuoc." \t";
+                    }
+                    else echo $sql4;
+                    }
+
                 echo "Thêm thành công thuốc : \t";
                 echo $row[0] . "\t" . $solo . "\t" . $soluong . "\t" . $dongia . "\n\r<br>";
+                }
+
             }
-            else echo $sql2;
-        }
+
+
+
+
         else {
             if (mysqli_query($con, $sql3)) {
                 echo "Thêm thành công thuốc : \t";

@@ -154,7 +154,7 @@ if($result=$db->Execute($sql)){
 }
 
 if($strbvden){
-	$strbvden = $strbvden.str_pad("", (120-strlen(''.$strbvden)), ".", STR_PAD_RIGHT);
+	$strbvden = $strbvden;
 }else{
 	$strbvden = $strbvden.str_pad("", 118, ".", STR_PAD_RIGHT);;
 }
@@ -265,13 +265,11 @@ if($info1){
 			$info_encounter['notes'].= str_pad("", 78-strlen($info_encounter['notes']), " ", STR_PAD_RIGHT);
 		}
 		$fpdf->MultiCell(0,5,"- Dấu hiệu lâm sàng: ".$info_encounter['notes'],0,'L');
-		$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
-		$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
     }
     //else $num_thisline = 0;
     
 }else{
-	$fpdf->Cell(0,5,"- Dấu hiệu lâm sàng: ".str_pad(" ", 128, " ", STR_PAD_RIGHT),0,1,'L');
+	$fpdf->Cell(0,5,"- Dấu hiệu lâm sàng: ".str_pad(" ", 128, ".", STR_PAD_RIGHT),0,1,'L');
 	$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
 	$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'R');
 }
@@ -296,6 +294,7 @@ if($result=$db->Execute($sql)){
 			$fpdf->Cell(0,5,$xnstr.str_pad(" ", (142-strlen($xnstr)), " ", STR_PAD_RIGHT),0,1,'L');
 			if($rows<2){
 				$fpdf->Cell(0,5,"   ".str_pad(".", 157, ".", STR_PAD_RIGHT),0,1,'L');
+                $fpdf->Cell(0,5,"   ".str_pad(".", 157, ".", STR_PAD_RIGHT),0,1,'L');
 			}
         }
         $i++;
@@ -318,33 +317,16 @@ if($info1){
 		if(strlen($cd['0'].' -- '.$cd['1'])<78){
 			$str= str_pad("", 78-strlen($cd['0'].' -- '.$cd['1']), " ", STR_PAD_RIGHT);
 		}
-		$fpdf->MultiCell(0,5,"- Chẩn đoán: ".$cd['0'].' -- '.$cd['1'].$str,0,'L');
-		$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
-		$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
+		$fpdf->MultiCell(0,5,"- Chẩn đoán: ".$cd['0'].'   '.$cd['1'].$str,0,'L');
     }
 }else
 {
 		$fpdf->Cell(0,5,"- Chẩn đoán: ".str_pad(" ", 140, " ", STR_PAD_RIGHT),0,1,'L');
-		$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
-		$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
 }
 
-$fpdf->Cell(0, 5, '- Phương pháp, thủ thuật, kỹ thuật, thuốc đã sử dụng trong điều trị: '.str_pad(" ", 53, " ", STR_PAD_RIGHT),0,1,'L');
-$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
-$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
-
-$fpdf->Cell(0, 5, '- Tình trạng người bệnh lúc chuyển tuyến: '. str_pad(' ', 100, ' ', STR_PAD_RIGHT), 0, 1, 'L');
-$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
-$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
-
-$fpdf->Cell(0, 5, '- Lí do chuyển tuyến: '. str_pad(' ', 100, ' ', STR_PAD_RIGHT), 0, 1, 'L');
-$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
-$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
-
-$fpdf->Cell(0, 5, '- Tình trạng người bệnh lúc chuyển tuyến: '. str_pad(' ', 100, ' ', STR_PAD_RIGHT), 0, 1, 'L');
-$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
-$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
-
+//$fpdf->Cell(0, 5, '- Phương pháp, thủ thuật, kỹ thuật, thuốc đã sử dụng trong điều trị: '.str_pad(" ", 53, " ", STR_PAD_RIGHT),0,1,'L');
+//$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
+//$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
 
 $totalnum = 4;//thuoc 4 hang
 $num_thisline = 0;
@@ -353,19 +335,17 @@ $obj=new Prescription();
 $thuoc=$obj->getDetailPrescriptionInfo1($enc_nr);
 if($thuoc){
     $thuoc1=$db->Execute($thuoc);
-	$rows=$thuoc1->RecordCount();
+    $rows=$thuoc1->RecordCount();
     $xnstr = "";
-	$i=1;
-    while($info_thuoc=$thuoc1->FetchRow()){		
+    $i=1;
+    while($info_thuoc=$thuoc1->FetchRow()){
         $xnstr .= $i.". ".$info_thuoc['product_name'].', ';
         $i++;
     }
-	$fpdf->MultiCell(0,5,"- Thuốc đã dùng: ".$xnstr);
-	if($rows<=3){
-		$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
-	}
-	$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
-	$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
+    $fpdf->MultiCell(0,5,"- Thuốc đã dùng: ".$xnstr);
+    if($rows<=3){
+        $fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
+    }
 //    if(!$xnstr){
 //		$fpdf->Cell(0,5,"- Thuốc đã dùng: ".str_pad(".", 148, ".", STR_PAD_RIGHT),0,1,'L');
 //		$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
@@ -373,74 +353,71 @@ if($thuoc){
 //		$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
 //    }
 //    else $num_thisline = 0;
-   
+
+} else{
+    $fpdf->Cell(0,5,"- Thuốc đã dùng: ".str_pad(" ", 158, " ", STR_PAD_RIGHT),0,1,'L');
+    $fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
+    $fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
 }
+
 $totalnum = 1;//tt 1 hang
 $num_thisline = 0;
 $info1=$enc_obj->_getNotes("encounter_nr=$enc_nr AND type_nr=26");
 if($info1){
     $info_encounter=$info1->FetchRow();
-     if($info_encounter['notes'] != ''){
-     $num_thisline = 1;
-     
-     /*switch($info_encounter['notes'])   {
-        case 1: $kqra = 'Khỏi';break;
-        case 2: $kqra = 'Đở, giãm';break;
-        case 3: $kqra = 'Không thay đổi';break;
-        case 4: $kqra = 'Nặng hơn';break;
-        default: $kqra = '';break;
-    }*/   
-		if(strlen($info_encounter['notes'])<78){
-			$str= str_pad("", 78-strlen($info_encounter['notes']), " ", STR_PAD_RIGHT);
-		}
-		$fpdf->MultiCell(0,5,"- Tình trạng người bệnh: ".$info_encounter['notes'].$str,0,'L');
-		$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
-		$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
+    if($info_encounter['notes'] != ''){
+        $num_thisline = 1;
+
+        /*switch($info_encounter['notes'])   {
+           case 1: $kqra = 'Khỏi';break;
+           case 2: $kqra = 'Đở, giãm';break;
+           case 3: $kqra = 'Không thay đổi';break;
+           case 4: $kqra = 'Nặng hơn';break;
+           default: $kqra = '';break;
+       }*/
+        if(strlen($info_encounter['notes'])<78){
+            $str= str_pad("", 78-strlen($info_encounter['notes']), " ", STR_PAD_RIGHT);
+        }
+        $fpdf->MultiCell(0,5,"- Tình trạng người bệnh lúc chuyển tuyến: ".$info_encounter['notes'].$str,0,'L');
     }
 }else{
-		$fpdf->Cell(0,5,"- Tình trạng người bệnh: ".str_pad(" ", 122, " ", STR_PAD_RIGHT),0,1,'L');
-		$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
-		$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
-	}
-//$fpdf->Cell(0,5,'- Lý do chuyển viện:',0,1,'L');
-//$date=$encounter['discharge_date'];
-//$discharge_types=&$enc_obj->getDischargeTypesData_2();
-//$type_dis=&$enc_obj->getLocation($enc_nr,"AND date_to='$date'");
-//if($type_dis){
-//	$type_dis_nr=$type_dis['discharge_type_nr'];
-//}else{
-//	$type_dis_nr='';
-//}
-//while($dis_type=$discharge_types->FetchRow()){
-//			if($dis_type['nr']==$type_dis_nr){
-//				if(isset($$dis_type['LD_var'])&&!empty($$dis_type['LD_var'])) $sTemp = $sTemp.$$dis_type['LD_var'];
-//					else $sTemp = $sTemp.$dis_type['name'];
-//				break;
-//			}
-//		}
-//if($sTemp){
-//    $fpdf->Cell(10,5,'',0,0,'L');
-//    $fpdf->MultiCell(0,5,' '.$sTemp,0,'L');
-//}else{
-$totalnum = 2;//CD 1 hang
+    $fpdf->Cell(0,5,"- Tình trạng người bệnh lúc chuyển tuyến: ".str_pad(" ", 122, ".", STR_PAD_RIGHT),0,1,'L');
+    $fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
+    $fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
+}
+
+$totalnum = 2;// 2 hang
 $num_thisline = 0;
 $info1=$enc_obj->_getNotes("encounter_nr=$enc_nr AND type_nr=47");
+if($info1)  {
+    $info_encounter=$info1->FetchRow();
+    if($info_encounter['notes']=="lidochuyentuyen1"){
+        $str_chuyentuyen="Đủ điều kiện chuyển tuyến (đúng tuyến)";
+    }
+     else {
+        if($info_encounter['notes']=="lidochuyentuyen2"){
+            $str_chuyentuyen="Không đủ điều kiện chuyển tuyến/chuyển tuyến theo yêu cầu của người bệnh hoặc người đại diện hợp pháp của người bệnh (vượt tuyến)";
+        }
+     }
+     $fpdf->MultiCell(0,5,"- Lí do chuyển tuyến: ".$str_chuyentuyen, 0, 'L');
+}
+else{
+    $fpdf->Cell(0, 5, '- Lí do chuyển tuyến: '. str_pad(' ', 100, '.', STR_PAD_RIGHT), 0, 1, 'L');
+    $fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
+    $fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
+}
+
+$info1=$enc_obj->_getNotes("encounter_nr= $enc_nr AND type_nr=91");
 if($info1){
     $info_encounter=$info1->FetchRow();
-    if($info_encounter['notes'] != ''){
-	 if(strlen($info_encounter['notes'])<78){
-			$str= str_pad("", 78-strlen($info_encounter['notes']), " ", STR_PAD_RIGHT);
-		}
-		$fpdf->MultiCell(0,5,"- Lý do chuyển viện: ".$info_encounter['notes'].$str,0,'L');
-		$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
-    }    
-}else{
-		$fpdf->Cell(0,5,"- Lý do chuyển viện: ".str_pad(" ", 128, " ", STR_PAD_RIGHT),0,1,'L');
-		$fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
-    $fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
-	}
 
-$fpdf->Cell(0,5,"- Chuyển viện hồi: ".substr($encounter['discharge_time'],0,2)."   giờ ".substr($encounter['discharge_time'],3,2)."     phút,     ngày ".substr($encounter['discharge_date'],8,2)."    tháng ".substr($encounter['discharge_date'],5,2)."    năm ".substr($encounter['discharge_date'],0,4),0,1,'L');
+    $fpdf-> MultiCell(0, 5, '- Hướng điều trị: '.$info_encounter['notes']);
+}   else{
+    $fpdf->Cell(0, 5, '- Hướng điều trị: '. str_pad(' ', 100, '.', STR_PAD_RIGHT), 0, 1, 'L');
+    $fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
+    $fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
+}
+$fpdf->Cell(0,5,"- Chuyển viện hồi: ".substr($encounter['discharge_time'],0,2)." giờ ".substr($encounter['discharge_time'],3,2)." phút, ngày ".substr($encounter['discharge_date'],8,2)." tháng ".substr($encounter['discharge_date'],5,2)." năm ".substr($encounter['discharge_date'],0,4),0,1,'L');
 
 $totalnum = 1;//CD 1 hang
 $num_thisline = 0;
@@ -450,10 +427,9 @@ if($info1){
     if($info_encounter['notes'] != ''){
      $num_thisline = (ceil( $fpdf->GetStringWidth($info_encounter['notes']) / ($column_width)));
      $fpdf->MultiCell(0,5,'- Phương tiện vận chuyển:  '.$info_encounter['notes'],0,'L');
-        $fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
     }  
 }else{
-		$fpdf->Cell(0,5,"- Phương tiện vận chuyển: ".str_pad(" ", 119, " ", STR_PAD_RIGHT),0,1,'L');
+		$fpdf->Cell(0,5,"- Phương tiện vận chuyển: ".str_pad(" ", 119, ".", STR_PAD_RIGHT),0,1,'L');
     $fpdf->Cell(0,5,"   ".str_pad(".", 158, ".", STR_PAD_RIGHT),0,1,'L');
 	}
 $totalnum = 1;//CD 1 hang
@@ -475,15 +451,17 @@ $fpdf->Ln();
 $fpdf->SetFont('','I');
 $fpdf->Cell(0,5,'Ngày '.date('d').' tháng '.date('m').' năm '.date('Y').' ',0,1,'R');
 $fpdf->SetFont('','B');
-$fpdf->Cell(60,5,'BÁC SĨ ĐIỀU TRỊ',0,0,'C');
+$fpdf->Cell(60,5,'Y, BÁC SĨ KHÁM, ĐIỀU TRỊ',0,0,'C');
 $fpdf->Cell(60,5,' ',0,0,'C');
-$fpdf->Cell(60,5,'GIÁM ĐỐC BỆNH VIỆN',0,1,'C');
-$fpdf->SetFont('','');
-$fpdf->Cell(0,25,' ',0,1,'C');
+$fpdf->Cell(60,5,'GIÁM ĐỐC/TRƯỞNG KHOA',0,1,'C');
+$fpdf->SetFont('','I');
+//$fpdf->Cell(0,25,' ',0,1,'C');
 //$fpdf->Cell(60,5,'.....................................',0,0,'C');
-$fpdf->Cell(60,5,' ',0,0,'C');
+//$fpdf->Cell(60,5,' ',0,0,'C');
 //$fpdf->Cell(60,5,'.....................................',0,1,'C');
-
+$fpdf->Cell(60,5,'(Ký và ghi rõ họ tên)',0,0,'C');
+$fpdf->Cell(60,5,' ',0,0,'C');
+$fpdf->Cell(60,5,'(Ký tên, đóng dấu)',0,1,'C');
 
 //$fpdf->Output();
 $fpdf->Output('GiayChuyenVien.pdf', 'I');

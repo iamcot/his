@@ -37,8 +37,57 @@ $str .= "<table ><thead>
 require_once($root_path.'include/care_api_classes/class_prescription.php');
 $obj=new Prescription();
 
-$sql="SELECT * from dfck_admit_inout_dept where dept_to = $dept
- 			and DATE_FORMAT(datein,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(datein,'%Y-%m-%d') <='$dateto'  ";
+$sql="SELECT
+  `t`.`nr`                      AS `nr`,
+  `t`.`encounter_nr`            AS `encounter_nr`,
+  `t`.`pid`                     AS `pid`,
+  `t`.`dateaction`              AS `dateaction`,
+  `t`.`datein`                  AS `datein`,
+  `t`.`dateout`                 AS `dateout`,
+  `t`.`dept_from`               AS `dept_from`,
+  `t`.`dept_to`                 AS `dept_to`,
+  `t`.`home`                    AS `home`,
+  `t`.`status`                  AS `status`,
+  `t`.`login_id`                AS `login_id`,
+  `t`.`type_encounter`          AS `type_encounter`,
+  CONCAT(`p`.`name_last`,_utf8' ',`p`.`name_first`) AS `fname`,
+  `p`.`sex`                     AS `sex`,
+  `p`.`insurance_nr`            AS `insurance_nr`,
+  `p`.`insurance_start`         AS `insurance_start`,
+  `p`.`insurance_exp`           AS `insurance_exp`,
+  `p`.`death_date`              AS `death_date`,
+  SUBSTR(`p`.`date_birth`,1,4)  AS `yearbirth`,
+  CONCAT((SELECT `ax`.`name` AS `name`
+  FROM `care_address_phuongxa` `ax`
+  WHERE (`ax`.`nr` = `p`.`addr_phuongxa_nr`)),_utf8', ',
+  (SELECT `q`.`name` AS `name`
+  FROM `care_address_quanhuyen` `q`
+  WHERE (`q`.`nr` = `p`.`addr_quanhuyen_nr`)),_utf8', ',
+  (SELECT `c`.`name` AS `name`
+  FROM `care_address_citytown` `c`
+  WHERE (`c`.`nr` = `p`.`addr_citytown_nr`))) AS `address`,
+  `e`.`referrer_diagnosis`      AS `referrer_diagnosis`,
+  `p`.`nghenghiep`              AS `nghenghiep`,
+  `e`.`loai_kham`               AS `loai_kham`,
+  `e`.`referrer_diagnosis_code` AS `referrer_diagnosis_code`,
+  (SELECT
+     `d`.`LD_var`                  AS `LD_var`
+   FROM `care_department` `d`
+   WHERE (`d`.`nr` = `t`.`dept_to`)) AS `LDdeptin`,
+  (SELECT
+     `d2`.`LD_var`                 AS `LD_var`
+   FROM `care_department` `d2`
+   WHERE (`d2`.`nr` = `t`.`dept_from`)) AS `LDdeptout`
+FROM ((`dfck_encounter_transfer` `t`
+    JOIN `care_person` `p`)
+   JOIN `care_encounter` `e`)
+WHERE ((`t`.`pid` = `p`.`pid`)
+       AND (`e`.`encounter_nr` = `t`.`encounter_nr`)
+       AND `t`.`dept_from` IN(SELECT
+                                `care_department`.`nr`
+                              FROM `care_department`))
+       AND dept_to = ".$dept."
+ 			and DATE_FORMAT(`t`.`datein`,'%Y-%m-%d') >='$datefrom' and DATE_FORMAT(`t`.`datein`,'%Y-%m-%d') <='$dateto'  ";
   global $db;
    $j=1;
  if($rs = $db->Execute($sql)){

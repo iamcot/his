@@ -56,6 +56,16 @@
 			<td class="adm_input">{{$sValidatorCheckBox}} {{$LDYesSure}}</td>
 		</tr>
 	{{/if}}
+        <tr  group="cv" >
+            <td class="adm_item">Nơi đến </td>
+            <td class="adm_input">
+                {{if $released}}
+                {{$noichuyen_note}}
+                {{else}}
+                {{$noichuyen_input}}
+                {{/if}}
+            </td>
+        </tr>
 		<tr>
 			<td class="adm_item">{{$LDDauhieu}}:</td>
                         <td class="adm_input">
@@ -107,18 +117,17 @@
 				{{$sLyDoChuyenVien}}
 				 {{/if}}
 			</td>
-		</tr>		
-		
-		<tr  group="cv" >
-			<td class="adm_item">Nơi đến</td>
-			<td class="adm_input">
-				{{if $released}}
-				{{$noichuyen_note}}
-				{{else}}
-				{{$noichuyen_input}}
-				 {{/if}}
-			</td>
 		</tr>
+        <tr  group="cv" >
+            <td class="adm_item">Hướng điều trị: </td>
+            <td class="adm_input">
+                {{if $released}}
+                {{$huongdieutri_notes}}
+                {{else}}
+                {{$huongdieutri_Input}}
+                {{/if}}
+            </td>
+        </tr>
         <tr  group="cv" >
 			<td class="adm_item">{{$LDPhuongtien}}:</td>
 			<td class="adm_input">

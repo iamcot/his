@@ -67,9 +67,9 @@ if($in_out ==1){  // lưu hóa đơn hiện tại của nội trú với số l�
         {
             $pres = $presresult->FetchRow();
             //info of service
-          //  $eComBill->createBillItem_noitru($patientno,$pres['date_issue'],$pres['product_encoder'],$pres['sum'],$pres['pres_id'],$pres['create_id'],$presdatetime,$pres['available_product_id'],'1');
-
-           $Pres->setPresStatusBill_noitru($pres['pres_id'],'1'); //update trang thái đã lưu những thuốc cấp phát của bệnh nhân nội trú là 1 (1: đã lưu)
+           // $eComBill->createBillItem_noitru($patientno,$pres['date_issue'],$pres['product_encoder'],$pres['sum'],$pres['pres_id'],$pres['create_id'],$presdatetime,$pres['available_product_id'],'1');
+          //  $eComBill->createBillItem($patientno,$pres['prescription_type'],$pres['total_cost'],'1',$pres['total_cost'],$presdatetime,'1',$billno);
+            $Pres->setPresStatusBill_noitru($pres['pres_id'],'1'); //update trang thái đã lưu những thuốc cấp phát của bệnh nhân nội trú là 1 (1: đã lưu)
         }
     }
 }   else{
@@ -114,14 +114,14 @@ if(is_object($cheresult))
 		$Pres->setChemicalStatusBill($pres['prescription_id'],$billno);
 	}
 }
-
-
-$billquery="INSERT INTO care_billing_bill (bill_bill_no, bill_encounter_nr, bill_date_time, bill_amount, bill_discount, bill_outstanding, create_id) VALUES ('$billno','$patientno','$presdate','$total','$discount1','$outstd1','".$_SESSION['sess_login_userid']."')";  //$discount->$discount1,$outstd->$outstd1
+$discount = str_replace(',','',$discount);
+$outstd =   str_replace(',','',$outstd);
+$billquery="INSERT INTO care_billing_bill (bill_bill_no, bill_encounter_nr, bill_date_time, bill_amount, bill_discount, bill_outstanding, create_id) VALUES ('$billno','$patientno','$presdate','$total','$discount','$outstd','".$_SESSION['sess_login_userid']."')";
 
 $core->Transact($billquery);
 $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $billquery, date('Y-m-d H:i:s'));
 
-$eComBill->createPaymentItem($patientno,$receipt_no,$presdatetime,$outstd1,'0','0','0','0',$outstd1,$billno); //$outstd ->outstd1
+$eComBill->createPaymentItem($patientno,$receipt_no,$presdatetime,$outstd,'0','0','0','0',$outstd,$billno);
 $logs->writeline_his($_SESSION['sess_login_userid'], $thisfile, $eComBill->getLastQuery(), date('Y-m-d H:i:s'));
 
 $patmenu="patient_bill_links.php".URL_REDIRECT_APPEND."&patientno=".$patientno."&full_en=".$full_en;

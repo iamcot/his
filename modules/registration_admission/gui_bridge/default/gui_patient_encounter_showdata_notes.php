@@ -125,6 +125,8 @@ if($data_entry){
     $TP_CAMDOANPT="<a href=\"show_notes_camdoanPT.php".URL_APPEND."&pid=$pid&pn=".$_SESSION['sess_en']."&target=$target\">$LDCamDoanPT</a>";
     $TP_TUVONGTRUOC="<a href=\"show_notes_benhantuvong.php".URL_APPEND."&pid=$pid&pn=".$_SESSION['sess_en']."&target=$target\">$LDTuvongtruoc</a>";
     $TP_BAOTU="<a href=\"show_notes_baotu.php".URL_APPEND."&pid=$pid&pn=".$_SESSION['sess_en']."&target=$target\">Giấy báo tử";
+    $TP_CHUYENVIEN="<a href='javascript:printOut1(".'"modules/nursing/nursing-station-patient-release.php'.URL_APPEND."&enc_nr=".$pn.'")'.";'>".$LDDischargeSummary1."</a>";
+
 }else{
     $TP_KDTUVONG="<font color='#333333'>$LDOther1</font>";
     $TP_HOICHAN="<font color='#333333'>$LDConsultNotes1</font>";
@@ -140,12 +142,13 @@ if($data_entry){
     $TP_GIAYCAMDOAN="<font color='#333333'>$LDGiayCamdoan</font>";
     $TP_GIAYRAVIEN="<font color='#333333'>$LDRavien</font>";
     $TP_BAOTU="<font color='#333333'>Giấy báo tử</font>";
-}
-if($enc_status['discharged_type']=='2' || $is_discharged){
-    $TP_CHUYENVIEN="<a href='javascript:printOut1(".'"modules/pdfmaker/chuyenvien/GiayChuyenVien.php'.URL_APPEND."&enc_nr=".$pn.'")'.";'>".$LDDischargeSummary1."</a>";
-}else{
     $TP_CHUYENVIEN="<font color='#333333'>$LDDischargeSummary1</font>";
 }
+//if($enc_status['discharged_type']=='2' || $is_discharged){
+//    $TP_CHUYENVIEN="<a href='javascript:printOut1(".'"modules/pdfmaker/chuyenvien/GiayChuyenVien.php'.URL_APPEND."&enc_nr=".$pn.'")'.";'>".$LDDischargeSummary1."</a>";
+//}else{
+//    $TP_CHUYENVIEN="<font color='#333333'>$LDDischargeSummary1</font>";
+//}
 
 if($batch=$request->FetchRow()){
     $TP_BAOMO="<a href='javascript:printOP(".'"modules/pdfmaker/emr_generic/report_op.php'.URL_APPEND."&enc=".$_SESSION['sess_en'].'&ses_en='.$_SESSION['sess_en'].'&batch_nr='.$batch['batch_nr'].'&subtarget=or")'.";'>".$LDRequestOP."</a>";
