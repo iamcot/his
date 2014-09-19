@@ -66,15 +66,17 @@ function Save(alertsave){
 	if(alertsave=='ok'){
 		var month=document.getElementById('showmonth').value;
 		var year=document.getElementById('showyear').value;
-		document.reportform.action="<? echo $fileforward; ?>&target=save&month="+month+"&year="+year;
+		document.reportform.action="<? echo $fileforward; ?>&target=save&month="+month+"&year="+year+"&maxid=<?php echo $maxid?>";
 		document.reportform.submit();
-	} 
+        alert("Báo cáo đã được lưu!");
+	}
+
 	else alert(alertsave);
 }
 function selectTypeMed() {
 	var temp_i = document.getElementById("type_med").selectedIndex;
 	document.getElementById("select_type").value = document.getElementById("type_med").options[temp_i].value;
-	document.reportform.action='<?php echo $thisfile.'&type='.$type; ?>';
+	document.reportform.action='<?php echo $thisfile.URL_APPEND; ?>';
 	document.reportform.submit();
 }
 -->
@@ -133,10 +135,10 @@ $smarty->assign('inputby',$temp);
 
 	switch($select_type){	
 		case 0: $cond_typeput = ''; break;
-		case 1: $cond_typeput = ' AND typeput=1 '; break;		//su nghiep
-		case 2: $cond_typeput = ' AND typeput=0 '; break;		//bhyt
-		case 3: $cond_typeput = ' AND typeput=2 '; break;		//cbtc
-		default: $cond_typeput = '';
+		case 1: $cond_typeput = ' WHERE BC3.typeput=1 '; break;		//su nghiep
+		case 2: $cond_typeput = ' WHERE BC3.typeput=0 '; break;		//bhyt
+		case 3: $cond_typeput = ' WHERE BC3.typeput=2 '; break;		//cbtc
+		default: $cond_typeput = ' ';
 	}
 
 switch($type){
@@ -153,7 +155,7 @@ $Tong_tondau =0; $Tong_nhap=0; $Tong_xuat=0; $Tong_toncuoi=0;
 
 $listReport = $Pharma->Khole_thuoc_nhapxuatton($type, $cond_typeput, $showmonth, $showyear);
 if(is_object($listReport)){
-	//$maxid=$listReport->RecordCount();
+	$maxid=$listReport->RecordCount();
 	$sTempDiv=''; $stt=1;
 	//ob_start();	
 	while($rowReport = $listReport->FetchRow())	{
@@ -161,53 +163,57 @@ if(is_object($listReport)){
 			//echo current $list_encoder
 			foreach ($list_encoder as $value) {
 				$sTempDiv .=  '<tr bgColor="#ffffff" >';
-				$sTempDiv .= 	'<td align="center">'. $stt.'<input type="hidden" name="encoder'.$stt.'" value="'.$value['encoder'].'"></td>'; //STT
-				$sTempDiv .= 	'<td>'.$value['name'].'</td>';	//Ten thuoc
-				$sTempDiv .=  	'<td align="center">'.$value['unit'].'</td>';  //Don vi
+				$sTempDiv .= 	'<td align="center">'.$stt.'<input type="hidden" name="encoder'.$stt.'" value="'.$value['product_encoder'].'"></td>'; //STT
+				$sTempDiv .= 	'<td>'.$value['product_name'].'</td>';	//Ten thuoc
+				$sTempDiv .=  	'<td align="center">'.$value['unit_name_of_medicine'].'</td>';  //Don vi
 				
 				//So lo
-				if($value['lonhap']!='') $lotid = $value['lonhap'];
-				else $lotid	= $value['loton'];
-				$sTempDiv .=  	'<td align="center">'.$lotid.'</td>';  
+//				if($value['product_lot_id']!='') $lotid = $value['lonhap'];
+				$lotid	= $value['product_lot_id'];
+				$sTempDiv .=  	'<td align="center" width="70cm">'.$lotid.'<input type="hidden" name="product_lot_id'.$stt.'" value="'.$value['product_lot_id'].'"></td>';
 				
 				//Han dung
-				if($value['hannhap']!='') $expdate = $value['hannhap']; 
-				else $expdate	= $value['hanton'];				
-				$sTempDiv .=  	'<td align="center">'.@formatDate2Local($expdate,'dd/mm/yyyy').'</td>';  
+//				if($value['hannhap']!='') $expdate = $value['hannhap'];
+				$expdate	= $value['handung'];
+				$sTempDiv .=  	'<td align="center">'.@formatDate2Local($expdate,'dd/mm/yyyy').'<input type="hidden" name="handung'.$stt.'" value="'.$value['handung'].'"></td>';
 				
 				//Ton dau
-				$sTempDiv .= 	'<td align="right">'.number_format($value['ton']).'</td>';		
+				$sTempDiv .= 	'<td align="right">'.number_format($value['Tondau']).'</td>';
 				if (round($value['giaton'],3)>round($value['giaton'])) $showton = number_format($value['giaton'],3);
 				else $showton = number_format($value['giaton']);
 				$sTempDiv .= 	'<td align="right">'.$showton.'</td>';	
-				$sTempDiv .= 	'<td align="right">'.number_format($value['ton']*$value['giaton']).'</td>';	//TT
+				$sTempDiv .= 	'<td align="right">'.number_format($value['Tondau']*$value['giaton']).'</td>';	//TT
 				
 				//Nhap
-				$sTempDiv .= 	'<td align="right">'.number_format($value['nhap']).'</td>';	
-				if (round($value['gianhap'],3)>round($value['gianhap'])) $shownhap = number_format($value['gianhap'],3);
-				else $shownhap = number_format($value['gianhap']);
+				$sTempDiv .= 	'<td align="right">'.number_format($value['Nhap']).'</td>';
+                if($value['gianhap']!='') $shownhap=number_format($value['gianhap']);
+                else $shownhap=number_format($value['giaTRAVE']);
+//				if (round($value['gianhap'],3)>round($value['gianhap'])) $shownhap = number_format($value['gianhap'],3);
+//				else $shownhap = number_format($value['gianhap']);
 				$sTempDiv .= 	'<td align="right">'.$shownhap.'</td>';	//Gia nhap
-				$sTempDiv .= 	'<td align="right">'.number_format($value['nhap']*$value['gianhap']).'</td>';	//TT nhap
-				
+//				$sTempDiv .= 	'<td align="right">'.number_format($value['Nhap']*$shownhap).'</td>';	//TT nhap
+                if($value['gianhap']!='') $sTempDiv .= 	'<td align="right">'.number_format($value['Nhap']*$value['gianhap']).'</td>';	//TT nhap
+                else $sTempDiv .= 	'<td align="right">'.number_format($value['Nhap']*$value['giaTRAVE']).'</td>';
+
 				//Xuat
-				$sTempDiv .= 	'<td align="right">'.number_format($value['xuat']).'</td>';	
+				$sTempDiv .= 	'<td align="right">'.number_format($value['Xuat']).'</td>';
 				if (round($value['giaxuat'],3)>round($value['giaxuat'])) $showxuat = number_format($value['giaxuat'],3);
 				else $showxuat = number_format($value['giaxuat']);				
 				$sTempDiv .= 	'<td align="right">'.$showxuat.'</td>';	//Gia xuat
-				$sTempDiv .= 	'<td align="right">'.number_format($value['xuat']*$value['giaxuat']).'</td>';	//TT xuat
+				$sTempDiv .= 	'<td align="right">'.number_format($value['Xuat']*$value['giaxuat']).'</td>';	//TT xuat
 				
-				$toncuoi = $value['ton'] + $value['nhap'] - $value['xuat'];
+				$toncuoi = $value['Tondau'] + $value['Nhap'] - $value['Xuat'];
 				if($value['giaton']>0 || $value['gianhap']>0)
 					$giatoncuoi = max($value['giaton'],$value['gianhap']);
 				else $giatoncuoi = $value['giaxuat'];	
-				$sTempDiv .= 	'<td align="right">'.number_format($toncuoi).'</td>';	//Ton cuoi
-				$sTempDiv .= 	'<td align="right">'.number_format($giatoncuoi).'</td>';	//Gia ton cuoi
+				$sTempDiv .= 	'<td align="right">'.number_format($toncuoi).'<input type="hidden" name="toncuoi'.$stt.'" value="'.$toncuoi.'"></td>';	//Ton cuoi
+				$sTempDiv .= 	'<td align="right">'.number_format($giatoncuoi).'<input type="hidden" name="giatoncuoi'.$stt.'" value="'.$giatoncuoi.'"></td>';	//Gia ton cuoi
 				$sTempDiv .= 	'<td align="right">'.number_format($toncuoi*$giatoncuoi).'</td>';	//TT
 				$sTempDiv .= 	'<td></td>';	//Note
 				$sTempDiv .=  '</tr>';
-				$Tong_tondau += $value['ton']*$value['giaton'];
-				$Tong_nhap += $value['nhap']*$value['gianhap'];
-				$Tong_xuat += $value['xuat']*$value['giaxuat'];
+				$Tong_tondau += $value['Tondau']*$value['giaton'];
+				$Tong_nhap += $value['Nhap']*$value['gianhap'];
+				$Tong_xuat += $value['Xuat']*$value['giaxuat'];
 				$Tong_toncuoi += $toncuoi*$giatoncuoi;
 				//$value['ton']*$value['giaton'] + $value['nhap']*$value['gianhap'] - $value['xuat']*$value['giaxuat'];
 				$stt++;
@@ -215,116 +221,135 @@ if(is_object($listReport)){
 			}
 			//reset new encoder
 			unset($list_encoder); $i=1;	
-			$list_encoder[$i]['encoder'] = $rowReport['product_encoder'];
-			$list_encoder[$i]['name'] = $rowReport['product_name'];
-			$list_encoder[$i]['unit'] = $rowReport['unit_name_of_medicine'];
-			$list_encoder[$i]['loton'] = $rowReport['loton'];
-			$list_encoder[$i]['lonhap'] = $rowReport['lonhap'];	
-			$list_encoder[$i]['hanton'] = $rowReport['hanton'];
-			$list_encoder[$i]['hannhap'] = $rowReport['hannhap'];			
-			$list_encoder[$i]['ton'] = $rowReport['ton'];
+			$list_encoder[$i]['product_encoder'] = $rowReport['product_encoder'];
+			$list_encoder[$i]['product_name'] = $rowReport['product_name'];
+			$list_encoder[$i]['unit_name_of_medicine'] = $rowReport['unit_name_of_medicine'];
+			$list_encoder[$i]['product_lot_id'] = $rowReport['product_lot_id'];
+//			$list_encoder[$i]['lonhap'] = $rowReport['lonhap'];
+			$list_encoder[$i]['handung'] = $rowReport['handung'];
+			$list_encoder[$i]['giaTRAVE'] = $rowReport['giaTRAVE'];
+			$list_encoder[$i]['Tondau'] = $rowReport['number'];
 			$list_encoder[$i]['giaton'] = $rowReport['giaton'];
-			$list_encoder[$i]['nhap'] = $rowReport['nhap'];
+			$list_encoder[$i]['Nhap'] = $rowReport['SUMNhap'];
 			$list_encoder[$i]['gianhap'] = $rowReport['gianhap'];
-			$list_encoder[$i]['xuat'] = $rowReport['xuat'];
+			$list_encoder[$i]['Xuat'] = $rowReport['SUMXuat'];
 			$list_encoder[$i]['giaxuat'] = $rowReport['giaxuat'];
 			
 			$oldencode=$rowReport['product_encoder'];
 			
 		}else{		//thuoc cu
-			if(($rowReport['ton']>0 && $list_encoder[$i]['ton']>0) || ($rowReport['nhap']>0 && $list_encoder[$i]['ton']>0) || ($rowReport['nhap']>0 && $list_encoder[$i]['nhap']>0) || (abs($rowReport['gianhap']-$list_encoder[$i]['giaxuat'])>1) || (abs($rowReport['xuat']- $list_encoder[$i]['xuat'])>1) || (abs($rowReport['giaxuat']-$list_encoder[$i]['gianhap'])>1)){
+//			if(($rowReport['Tondau']>0 && $list_encoder[$i]['Tondau']>0) || ($rowReport['Nhap']>0 && $list_encoder[$i]['Tondau']>0) || ($rowReport['Nhap']>0 && $list_encoder[$i]['Nhap']>0) || (abs($rowReport['gianhap']-$list_encoder[$i]['giaxuat'])>1) || (abs($rowReport['Xuat']- $list_encoder[$i]['Xuat'])>1) || (abs($rowReport['giaxuat']-$list_encoder[$i]['gianhap'])>1)){
 				$i++;	//them dong moi
-				$list_encoder[$i]['encoder'] = $rowReport['product_encoder'];
-				$list_encoder[$i]['name'] = $rowReport['product_name'];
-				$list_encoder[$i]['unit'] = $rowReport['unit_name_of_medicine'];
-				$list_encoder[$i]['loton'] = $rowReport['loton'];
-				$list_encoder[$i]['lonhap'] = $rowReport['lonhap'];	
-				$list_encoder[$i]['hanton'] = $rowReport['hanton'];
-				$list_encoder[$i]['hannhap'] = $rowReport['hannhap'];
-				$list_encoder[$i]['ton'] = $rowReport['ton'];
-				$list_encoder[$i]['giaton'] = $rowReport['giaton'];
-				$list_encoder[$i]['nhap'] = $rowReport['nhap'];
-				$list_encoder[$i]['gianhap'] = $rowReport['gianhap'];
-				$list_encoder[$i]['xuat'] = $rowReport['xuat'];	
-				$list_encoder[$i]['giaxuat'] = $rowReport['giaxuat'];	
-			} else {	//cong don vao dong cu
-				if($rowReport['nhap']>0){
-					for ($j=1;$j<=$i;$j++){
-						if ($list_encoder[$j]['nhap']<=0 && $list_encoder[$j]['ton']<=0){
-							$list_encoder[$j]['nhap'] = $rowReport['nhap'];
-							$list_encoder[$j]['gianhap'] = $rowReport['gianhap'];
-							break;
-						}
-					}
-				}
-				if($rowReport['xuat']>0){
-					for ($j=1;$j<=$i;$j++){
-						if ($list_encoder[$j]['xuat']<=0){
-							$list_encoder[$j]['xuat'] += $rowReport['xuat'];
-							$list_encoder[$j]['giaxuat'] = $rowReport['giaxuat'];
-							break;
-						}
-					}
-				}				
-			}
+//				$list_encoder[$i]['encoder'] = $rowReport['product_encoder'];
+//				$list_encoder[$i]['name'] = $rowReport['product_name'];
+//				$list_encoder[$i]['unit'] = $rowReport['unit_name_of_medicine'];
+//				$list_encoder[$i]['loton'] = $rowReport['loton'];
+//				$list_encoder[$i]['lonhap'] = $rowReport['lonhap'];
+//				$list_encoder[$i]['hanton'] = $rowReport['hanton'];
+//				$list_encoder[$i]['hannhap'] = $rowReport['hannhap'];
+//				$list_encoder[$i]['ton'] = $rowReport['ton'];
+//				$list_encoder[$i]['giaton'] = $rowReport['giaton'];
+//				$list_encoder[$i]['nhap'] = $rowReport['nhap'];
+//				$list_encoder[$i]['gianhap'] = $rowReport['gianhap'];
+//				$list_encoder[$i]['xuat'] = $rowReport['xuat'];
+//				$list_encoder[$i]['giaxuat'] = $rowReport['giaxuat'];
+            $list_encoder[$i]['product_encoder'] = $rowReport['product_encoder'];
+            $list_encoder[$i]['product_name'] = $rowReport['product_name'];
+            $list_encoder[$i]['unit_name_of_medicine'] = $rowReport['unit_name_of_medicine'];
+            $list_encoder[$i]['product_lot_id'] = $rowReport['product_lot_id'];
+//			$list_encoder[$i]['lonhap'] = $rowReport['lonhap'];
+            $list_encoder[$i]['handung'] = $rowReport['handung'];
+            $list_encoder[$i]['giaTRAVE'] = $rowReport['giaTRAVE'];
+            $list_encoder[$i]['Tondau'] = $rowReport['number'];
+            $list_encoder[$i]['giaton'] = $rowReport['giaton'];
+            $list_encoder[$i]['Nhap'] = $rowReport['SUMNhap'];
+            $list_encoder[$i]['gianhap'] = $rowReport['gianhap'];
+            $list_encoder[$i]['Xuat'] = $rowReport['SUMXuat'];
+            $list_encoder[$i]['giaxuat'] = $rowReport['giaxuat'];
+//			} else {	//cong don vao dong cu
+//				if($rowReport['Nhap']>0){
+//					for ($j=1;$j<=$i;$j++){
+//						if ($list_encoder[$j]['Nhap']<=0 && $list_encoder[$j]['Tondau']<=0){
+//							$list_encoder[$j]['Nhap'] = $rowReport['Nhap'];
+//							$list_encoder[$j]['gianhap'] = $rowReport['gianhap'];
+//							break;
+//						}
+//					}
+//				}
+//				if($rowReport['Xuat']>0){
+//					for ($j=1;$j<=$i;$j++){
+//						if ($list_encoder[$j]['Xuat']<=0){
+//							$list_encoder[$j]['Xuat'] += $rowReport['Xuat'];
+//							$list_encoder[$j]['giaxuat'] = $rowReport['giaxuat'];
+//							break;
+//						}
+//					}
+//				}
+//			}
 		}
 
-	}	
+	}
 			//$sTempDiv .=  last $list_encoder
 			foreach ($list_encoder as $value) {
-				$sTempDiv .=  '<tr bgColor="#ffffff" >';
-				$sTempDiv .= 	'<td align="center">'. $stt.'<input type="hidden" name="encoder'.$stt.'" value="'.$value['encoder'].'"></td>'; //STT
-				$sTempDiv .= 	'<td>'.$value['name'].'</td>';	//Ten thuoc
-				$sTempDiv .=  	'<td align="center">'.$value['unit'].'</td>';  //Don vi
-				
-				//So lo
-				if($value['lonhap']!='') $lotid = $value['lonhap'];
-				else $lotid	= $value['loton'];
-				$sTempDiv .=  	'<td align="center">'.$lotid.'</td>';  
-				
-				//Han dung
-				if($value['hannhap']!='') $expdate = $value['hannhap']; 
-				else $expdate	= $value['hanton'];				
-				$sTempDiv .=  	'<td align="center">'.@formatDate2Local($expdate,'dd/mm/yyyy').'</td>';  
-				
-				//Ton dau
-				$sTempDiv .= 	'<td align="right">'.number_format($value['ton']).'</td>';		
-				if (round($value['giaton'],3)>round($value['giaton'])) $showton = number_format($value['giaton'],3);
-				else $showton = number_format($value['giaton']);
-				$sTempDiv .= 	'<td align="right">'.$showton.'</td>';	
-				$sTempDiv .= 	'<td align="right">'.number_format($value['ton']*$value['giaton']).'</td>';	//TT
-				
-				//Nhap
-				$sTempDiv .= 	'<td align="right">'.number_format($value['nhap']).'</td>';	
-				if (round($value['gianhap'],3)>round($value['gianhap'])) $shownhap = number_format($value['gianhap'],3);
-				else $shownhap = number_format($value['gianhap']);
-				$sTempDiv .= 	'<td align="right">'.$shownhap.'</td>';	//Gia nhap
-				$sTempDiv .= 	'<td align="right">'.number_format($value['nhap']*$value['gianhap']).'</td>';	//TT nhap
-				
-				//Xuat
-				$sTempDiv .= 	'<td align="right">'.number_format($value['xuat']).'</td>';	
-				if (round($value['giaxuat'],3)>round($value['giaxuat'])) $showxuat = number_format($value['giaxuat'],3);
-				else $showxuat = number_format($value['giaxuat']);				
-				$sTempDiv .= 	'<td align="right">'.$showxuat.'</td>';	//Gia xuat
-				$sTempDiv .= 	'<td align="right">'.number_format($value['xuat']*$value['giaxuat']).'</td>';	//TT xuat
-				
-				$toncuoi = $value['ton'] + $value['nhap'] - $value['xuat'];
-				$giatoncuoi = max($value['giaton'],$value['gianhap'],$value['giaxuat']);
-				$sTempDiv .= 	'<td align="right">'.number_format($toncuoi).'</td>';	//Ton cuoi
-				$sTempDiv .= 	'<td align="right">'.number_format($giatoncuoi).'</td>';	//Gia ton cuoi
-				$sTempDiv .= 	'<td align="right">'.number_format($toncuoi*$giatoncuoi).'</td>';	//TT
-				$sTempDiv .= 	'<td></td>';	//Note
-				$sTempDiv .=  '</tr>';
-				$Tong_tondau += $value['ton']*$value['giaton'];
-				$Tong_nhap += $value['nhap']*$value['gianhap'];
-				$Tong_xuat += $value['xuat']*$value['giaxuat'];
-				$Tong_toncuoi += $toncuoi*$giatoncuoi;
-				$stt++;
+                $sTempDiv .=  '<tr bgColor="#ffffff" >';
+                $sTempDiv .= 	'<td align="center">'. $stt.'<input type="hidden" name="encoder'.$stt.'" value="'.$value['product_encoder'].'"></td>'; //STT
+                $sTempDiv .= 	'<td>'.$value['product_name'].'</td>';	//Ten thuoc
+                $sTempDiv .=  	'<td align="center">'.$value['unit_name_of_medicine'].'</td>';  //Don vi
+
+                //So lo
+//				if($value['product_lot_id']!='') $lotid = $value['lonhap'];
+                $lotid	= $value['product_lot_id'];
+                $sTempDiv .=  	'<td align="center" width="70cm">'.$lotid.'<input type="hidden" name="product_lot_id'.$stt.'" value="'.$value['product_lot_id'].'"></td>';
+
+                //Han dung
+//				if($value['hannhap']!='') $expdate = $value['hannhap'];
+                $expdate	= $value['handung'];
+                $sTempDiv .=  	'<td align="center" name="handung'.$stt.'" value="'.$value['handung'].'">'.@formatDate2Local($expdate,'dd/mm/yyyy').'<input type="hidden" name="handung'.$stt.'" value="'.$value['handung'].'"></td>';
+
+                //Ton dau
+                $sTempDiv .= 	'<td align="right">'.number_format($value['Tondau']).'</td>';
+                if (round($value['giaton'],3)>round($value['giaton'])) $showton = number_format($value['giaton'],3);
+                else $showton = number_format($value['giaton']);
+                $sTempDiv .= 	'<td align="right">'.$showton.'</td>';
+                $sTempDiv .= 	'<td align="right">'.number_format($value['Tondau']*$value['giaton']).'</td>';	//TT
+
+                //Nhap
+                $sTempDiv .= 	'<td align="right">'.number_format($value['Nhap']).'</td>';
+                if($value['gianhap']!='') $shownhap=number_format($value['gianhap']);
+                else $shownhap=number_format($value['giaTRAVE']);
+//                if (round($value['gianhap'],3)>round($value['gianhap'])) $shownhap = number_format($value['gianhap'],3);
+//                else $shownhap = number_format($value['gianhap']);
+                $sTempDiv .= 	'<td align="right">'.$shownhap.'</td>';	//Gia nhap
+                if($value['gianhap']!='') $sTempDiv .= 	'<td align="right">'.number_format($value['Nhap']*$value['gianhap']).'</td>';	//TT nhap
+                else $sTempDiv .= 	'<td align="right">'.number_format($value['Nhap']*$value['giaTRAVE']).'</td>';	//TT nhap
+
+                //Xuat
+                $sTempDiv .= 	'<td align="right">'.number_format($value['Xuat']).'</td>';
+                if (round($value['giaxuat'],3)>round($value['giaxuat'])) $showxuat = number_format($value['giaxuat'],3);
+                else $showxuat = number_format($value['giaxuat']);
+                $sTempDiv .= 	'<td align="right">'.$showxuat.'</td>';	//Gia xuat
+                $sTempDiv .= 	'<td align="right">'.number_format($value['Xuat']*$value['giaxuat']).'</td>';	//TT xuat
+
+                $toncuoi = $value['Tondau'] + $value['Nhap'] - $value['Xuat'];
+                if($value['giaton']>0 || $value['gianhap']>0)
+                    $giatoncuoi = max($value['giaton'],$value['gianhap']);
+                else $giatoncuoi = $value['giaxuat'];
+                $sTempDiv .= 	'<td align="right">'.number_format($toncuoi).'<input type="hidden" name="toncuoi'.$stt.'" value="'.$toncuoi.'"></td>';	//Ton cuoi
+                $sTempDiv .= 	'<td align="right">'.number_format($giatoncuoi).'<input type="hidden" name="giatoncuoi'.$stt.'" value="'.$giatoncuoi.'"></td>';	//Gia ton cuoi
+                $sTempDiv .= 	'<td align="right">'.number_format($toncuoi*$giatoncuoi).'</td>';	//TT
+                $sTempDiv .= 	'<td></td>';	//Note
+                $sTempDiv .=  '</tr>';
+                $Tong_tondau += $value['Tondau']*$value['giaton'];
+                $Tong_nhap += $value['Nhap']*$value['gianhap'];
+                $Tong_xuat += $value['Xuat']*$value['giaxuat'];
+                $Tong_toncuoi += $toncuoi*$giatoncuoi;
+                //$value['ton']*$value['giaton'] + $value['nhap']*$value['gianhap'] - $value['xuat']*$value['giaxuat'];
+                $stt++;
 			}
 	//echo $sTempDiv;
-	//$sTempDiv = $sTempDiv.ob_get_contents();				
+	//$sTempDiv = $sTempDiv.ob_get_contents();
 	//ob_end_clean();
-					
+
 } else {
 	$stt=0;
 	if (!isset($sTempDiv) || $sTempDiv=='')
@@ -354,15 +379,40 @@ $smarty->assign('sHiddenInputs',$sTempHidden);
 
 
 //*********************************************************************************
-if ($alertsave=='ok'){
-	$monthnow=date('m');
+//if ($alertsave=='ok'){
+$result=$Pharma->checkAnyReport_TonKhoLe($cond_typeput);
+if($result!=false){
+$lastmonth=$result['getmonth'];
+$lastyear=$result['getyear'];
+if($lastmonth!=12){
+    $reportmonth=$lastmonth+1;
+    $reportyear=$lastyear;
+}
+else{
+    $reportmonth=1;
+    $reportyear=$lastyear+1;
+}
+}
+    $monthnow=date('m');
 	$yearnow=date('Y');
 	if ($monthnow>$reportmonth && $yearnow>=$reportyear)
 		$alertsave='ok';
-	else 
-		$alertsave=$LDQuaThangMoiBaoCao;
-}
-
+	else
+        header('Content-Type: text/html; charset=utf-8');
+		$alertsave="Báo cáo tháng ".$showmonth."/".$showyear." đã lưu! Xin chọn tháng mới.";
+//}
+//$monthyear="WHERE monthreport='".$showmonth."' AND yearreport='".$showyear."' ";
+//if($anyreport=$Pharma->checkAnyReport_TonKhoLe($monthyear)){
+//    $lastton_id=$anyreport['id'];
+//    $lastton_month=$anyreport['monthreport'];
+//    $lastton_year=$anyreport['yearreport'];
+//}
+//if(($showyear>$lastton_year) || ($showmonth>$lastton_month && $showyear==$lastton_year)){
+//    $alertsave='ok';
+//}
+//else{
+//    $alertsave='update';
+//}
 
 $smarty->assign('pbSubmit','<input type="image" '.createLDImgSrc($root_path,'showreport.gif','0','middle').'>');
 $smarty->assign('pbSave','<a href="javascript:Save(\''.$alertsave.'\');"><img '.createLDImgSrc($root_path,'savedisc.gif','0','middle').' align="middle"></a>');

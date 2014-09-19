@@ -306,14 +306,14 @@ function chkform(d) {
 	
 }
 
-function checkPhat(i)
-{
-    var slPhat=document.getElementById('sum'+i).value;
-    var slTon= document.getElementById('inventory'+i).value;
-    if(slPhat>slTon)
-    alert("Kê thuốc quá lượng tồn kho!");
-    document.getElementById('sum'+i).focus();
-}
+//function checkPhat(i)
+//{
+//    var slPhat=document.getElementById('sum'+i).value;
+//    var slTon= document.getElementById('inventory'+i).value;
+//    if(slPhat>slTon)
+//    alert("Kê thuốc quá lượng tồn kho!");
+//    document.getElementById('sum'+i).focus();
+//}
 function deletePres()
 {
 	var r=confirm("<?php echo $LDWouldDeletePres; ?>");

@@ -137,8 +137,7 @@ $smarty->assign('calendar',$LDDateIssue.': '.$calendar->show_calendar($calendar,
 	$sql=	"SELECT prs.prescription_id, prs.encounter_nr, prs.date_time_create, enc.current_room_nr, 
 				per.name_first, per.name_last, per.sex, per.tuoi  
 			FROM care_pharma_prescription_info AS prs, care_encounter AS enc, care_person AS per 
-			WHERE prs.in_issuepaper<>'0'
-				AND prs.encounter_nr=enc.encounter_nr 
+			WHERE  prs.encounter_nr=enc.encounter_nr
 				".$condition." 
 				AND(prs.prescription_type='0397' OR prs.prescription_type='0398') AND prs.total_cost>0 AND prs.dongphatthuoc='0' 
 				AND per.pid=enc.pid 

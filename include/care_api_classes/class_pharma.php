@@ -3241,33 +3241,96 @@ class Pharma extends Core {
 			$ton_month = 12;
 			$ton_year = $year-1;
 		}
-		switch($typedongtay){
-			case 'tayy': $view_ton ='view_thuoc_khole_ton'; 
-						$dongtayy =' AND main.pharma_type IN (1,2,3) ';
-						$dongtayy_1 = ' AND pharma_type IN (1,2,3) ';
-						break;	
-			case 'dongy': $view_ton ='view_thuoc_khole_ton_dongy'; 
-						$dongtayy = ' AND main.pharma_type IN (4,8,9,10) ';
-						$dongtayy_1 = ' AND pharma_type IN (4,8,9,10) ';
-						break;	
-		}		
-		$this->sql="SELECT DISTINCT source.monthreport, source.product_encoder, T.number AS ton, T.price AS giaton, N.number AS nhap, N.price AS gianhap, X.number AS xuat, X.price AS giaxuat, T.exp_date AS hanton, N.exp_date AS hannhap, T.lotid AS loton, N.lotid AS lonhap, X.lotid AS loxuat, main.product_name, unit.unit_name_of_medicine, main.nuocsx 
-			FROM  ( SELECT * 
-					  FROM $view_ton WHERE $view_ton.monthreport='$ton_month' AND $view_ton.yearreport='$ton_year'
-					  UNION
-					  SELECT *
-					  FROM view_thuoc_khole_nhap WHERE view_thuoc_khole_nhap.monthreport='$month' AND view_thuoc_khole_nhap.yearreport='$year' ".$dongtayy_1."
-					  UNION
-					  SELECT *
-					  FROM view_thuoc_khole_xuat WHERE view_thuoc_khole_xuat.monthreport='$month' AND view_thuoc_khole_xuat.yearreport='$year' ".$dongtayy_1."
-					) AS source
-			LEFT JOIN $view_ton AS T ON source.product_encoder = T.product_encoder AND source.monthreport=T.monthreport AND source.price=T.price AND T.monthreport='$ton_month' AND T.yearreport='$ton_year'
-			LEFT JOIN view_thuoc_khole_nhap AS N ON source.product_encoder = N.product_encoder AND source.monthreport = N.monthreport AND source.price=N.price AND N.monthreport='$month' AND N.yearreport='$year'
-			LEFT JOIN view_thuoc_khole_xuat AS X ON source.product_encoder = X.product_encoder AND source.monthreport = X.monthreport AND source.price=X.price AND X.monthreport='$month' AND X.yearreport='$year'
-			JOIN care_pharma_products_main AS main ON main.product_encoder = source.product_encoder ".$dongtayy." ".$cond_typeput." 
-			JOIN care_pharma_unit_of_medicine AS unit ON unit.unit_of_medicine=main.unit_of_medicine
-			ORDER BY main.product_name, source.product_encoder, source.monthreport ";
-		//echo $this->sql;		
+        if($ton_month==1||$ton_month==3||$ton_month==5||$ton_month==7||$ton_month==8||$ton_month==10||$ton_month==12)
+            $day=31;
+        else if ($ton_month==4||$ton_month==6||$ton_month==9||$ton_month==11)
+            $day=30;
+        else $day=29;
+
+        if($month==1||$month==3||$month==5||$month==7||$month==8||$month==10||$month==12)
+            $day=31;
+        else if ($month==4||$month==6||$month==9||$month==11)
+            $day=30;
+        else $day=29;
+//		switch($typedongtay){
+//			case 'tayy': $view_ton ='view_thuoc_khole_ton';
+//						$dongtayy =' AND main.pharma_type IN (1,2,3) ';
+//						$dongtayy_1 = ' AND pharma_type IN (1,2,3) ';
+//						break;
+//			case 'dongy': $view_ton ='view_thuoc_khole_ton_dongy';
+//						$dongtayy = ' AND main.pharma_type IN (4,8,9,10) ';
+//						$dongtayy_1 = ' AND pharma_type IN (4,8,9,10) ';
+//						break;
+//		}
+        $datetimereport=$year.'-'.$month.'-'.$day;
+        $datetimeton=$ton_year.'-'.$ton_month.'-'.$day;
+		$this->sql="SELECT * FROM
+(/*BC3*/
+SELECT BC2.*,BTraVe.*,(IFNULL(BC2.SUM_NhapT0,0) + IFNULL(BTraVe.SUM_NhapT01,0)) AS SUMNhap FROM
+(/*BC2*/
+SELECT BC1.*,BPhieu.*,(IFNULL(BC1.SUM_XuatT01,0) + IFNULL(BPhieu.SUM_XuatT0,0)) AS SUMXuat FROM
+(/*BC1*/
+SELECT BC.*,BTOA.* FROM
+(SELECT A.*,B.* FROM
+(SELECT Khole.available_product_id,Khole.typeput,Khochan.product_encoder ,Khochan.product_name,Khole.product_lot_id ,Unit.unit_name_of_medicine,Khole.exp_date AS handung
+FROM care_pharma_available_product AS Khole
+LEFT JOIN care_pharma_products_main AS Khochan ON Khochan.product_encoder=Khole.product_encoder
+LEFT JOIN care_pharma_unit_of_medicine AS Unit ON Unit.unit_of_medicine=Khochan.unit_of_medicine
+AND Khole.product_lot_id IS NOT NULL AND Khole.product_lot_id !=''
+GROUP BY Khole.product_lot_id)AS A
+LEFT JOIN
+(SELECT Nhap.pay_out_id,Nhap.lotid AS LotidOFNhap,Nhap.number AS numberNHAP, SUM(IFNULL(Nhap.number,0)) AS SUM_NhapT0,Nhap.price AS gianhap,NhapInfo.date_time FROM care_pharma_pay_out AS Nhap
+LEFT JOIN care_pharma_pay_out_info AS NhapInfo ON NhapInfo.pay_out_id=Nhap.pay_out_id
+WHERE DATE(NhapInfo.date_time)>'$datetimeton'
+AND DATE(NhapInfo.date_time)<='$datetimereport'
+AND NhapInfo.health_station='0' AND NhapInfo.status_finish='1'
+GROUP BY Nhap.lotid) AS B
+ON A.product_lot_id=B.LotidOFNhap
+ORDER BY A.available_product_id) AS BC
+LEFT JOIN
+(SELECT Toa.avai_pro_id AS AVAI_Toa,Toa.number_receive AS NumberOfToa,Toa.lotid AS LotidOFToa,ToaInfo.date_time_create AS CreateTimeOfToa,SUM(IFNULL(Toa.number_receive,0)) AS SUM_XuatT01,Toa.cost AS giaxuat
+FROM  care_pharma_prescription AS Toa
+LEFT JOIN care_pharma_prescription_info AS ToaInfo ON ToaInfo.prescription_id=Toa.prescription_id
+WHERE DATE(ToaInfo.date_time_create)>'$datetimeton'
+AND DATE(ToaInfo.date_time_create)<='$datetimereport'
+AND Toa.number_receive>0
+GROUP BY AVAI_Toa) AS BTOA
+ON BC.available_product_id=BTOA.AVAI_Toa
+) AS BC1
+LEFT JOIN
+(SELECT Phieu.available_product_id AS AVAI_Phieu,Phieu.number_receive AS NumberOfPhieu,Phieu.lot_id AS LotidOFPhieu,SUM(IFNULL(Phieu.number_receive,0)) AS SUM_XuatT0
+FROM  care_pharma_issue_paper AS Phieu
+LEFT JOIN care_pharma_issue_paper_info AS PhieuInfo ON PhieuInfo.issue_paper_id=Phieu.issue_paper_id
+WHERE DATE(PhieuInfo.date_time_create)>'$datetimeton'
+AND DATE(PhieuInfo.date_time_create)<='$datetimereport'
+AND Phieu.number_receive>0
+GROUP BY AVAI_Phieu) AS BPhieu
+ON BC1.available_product_id=BPhieu.AVAI_Phieu
+GROUP BY BC1.available_product_id
+) AS BC2
+LEFT JOIN
+(SELECT  TraVeInfo.date_time_create,TraVe.available_product_id AS AVAI_Trave,TraVe.number AS numberTRAVE,SUM(IFNULL(TraVe.number,0)) AS SUM_NhapT01,TraVe.cost AS giaTRAVE
+FROM care_pharma_dept_returnmed AS TraVe
+LEFT JOIN care_pharma_dept_returnmed_info AS TraVeInfo ON TraVeInfo.return_id=TraVe.return_id
+WHERE TraVeInfo.status_finish='1'
+AND DATE(TraVeInfo.date_time_create)>'$datetimeton'
+AND DATE(TraVeInfo.date_time_create)<='$datetimereport'
+GROUP BY AVAI_Trave) AS BTraVe
+ON BC2.available_product_id=BTraVe.AVAI_Trave
+GROUP BY BC2.available_product_id
+)AS BC3
+LEFT JOIN
+(SELECT Tonle.ton_id,Tonle.product_encoder AS EncoderOfTonle,Tonle.lotid AS LotidOfTonle,Tonle.number,Tonle.price AS giaton,Tonle.create_time AS CreateTimeOfTonle FROM
+care_pharma_khole_ton AS Tonle
+LEFT JOIN care_pharma_khole_ton_info AS Tonleinfo ON Tonleinfo.id=Tonle.ton_id
+WHERE Tonleinfo.monthreport='$ton_month' AND Tonleinfo.yearreport='$ton_year'
+) AS BTonle
+ON BC3.product_lot_id=BTonle.LotidOfTonle AND BC3.product_encoder=BTonle.EncoderOfTonle
+".$cond_typeput."
+GROUP BY BC3.available_product_id
+ORDER BY BC3.product_name
+  ";
+		echo $this->sql;
 		if ($this->result=$db->Execute($this->sql)) {
 			if ($this->result->RecordCount()) {				
 				return $this->result;
@@ -3275,5 +3338,71 @@ class Pharma extends Core {
 		}else{return false;}
 	}
 	
+
+function Khole_thuoc_updatetonkho( $typedongtay,$id, $fromdate, $todate, $monthreport, $yearreport, $typeput){
+    global $db;
+//    switch($typedongtay){
+//        case 'tayy': $tbl_ton_info ='care_pharma_khole_ton_info';  break;
+//        case 'dongy': $tbl_ton_info ='care_pharma_khole_dongy_ton_info'; break;
+//    }
+    $this->sql="UPDATE care_pharma_khole_ton_info
+					SET
+					fromdate = '$fromdate' ,
+					todate = '$todate' ,
+					monthreport = '$monthreport' ,
+					yearreport = '$yearreport' ,
+					typeput = '$typeput'
+					WHERE
+					id = '$id' ";
+    return $this->Transact($this->sql);
+}
+
+function Khole_thuoc_luutonkho_chitiet($typedongtay, $ton_id, $product_encoder, $lotid, $typeput=0, $exp_date, $number, $price){
+    global $db;
+//    switch($typedongtay){
+//        case 'tayy': $tbl_ton ='care_pharma_khole_ton';  break;
+//        case 'dongy': $tbl_ton ='care_pharma_khole_dongy_ton'; break;
+//    }
+    $this->sql="INSERT INTO care_pharma_khole_ton (id, ton_id, product_encoder, lotid, typeput, exp_date, number, price, create_time)
+				VALUES ('', '$ton_id', '$product_encoder', '$lotid', '$typeput', '$exp_date', '$number', '$price', CURRENT_TIMESTAMP)";
+    return $this->Transact($this->sql);
+}
+
+function Khole_thuoc_luutonkho($typedongtay, $fromdate, $todate, $monthreport, $yearreport, $typeput=0){
+    global $db;
+//    switch($typedongtay){
+//        case 'tayy': $tbl_ton_info ='care_pharma_khole_ton_info';  break;
+//        case 'dongy': $tbl_ton_info ='care_pharma_khole_dongy_ton_info'; break;
+//    }
+    $this->sql="INSERT INTO care_pharma_khole_ton_info (id, fromdate, todate, monthreport, yearreport, typeput)
+				VALUES ('', '$fromdate', '$todate', '$monthreport', '$yearreport', '$typeput')";
+    return $this->Transact($this->sql);
+}
+
+function checkAnyReport_TonKhoLe($condition){
+    global $db;
+    $this->sql="SELECT id,monthreport AS getmonth, yearreport AS getyear
+					FROM care_pharma_khole_ton_info
+					 ".$condition."
+					ORDER BY yearreport, monthreport DESC";
+    if ($this->result=$db->Execute($this->sql)) {
+        if ($this->result->RecordCount()) {
+            return $this->result->FetchRow();
+        }else{return false;}
+    }else{return false;}
+}
+
+function deleteAllMedicineInTonKhoLe($typedongtay, $ton_id) {
+    global $db;
+    if(!$ton_id) return FALSE;
+
+//    switch($typedongtay){
+//        case 'tayy': $tbl_ton ='care_pharma_khole_ton';  break;
+//        case 'dongy': $tbl_ton ='care_pharma_khole_dongy_ton'; break;
+//    }
+    $this->sql="DELETE FROM care_pharma_khole_ton
+					WHERE ton_id=$ton_id";
+    return $this->Transact($this->sql);
+}
 }
 ?>

@@ -4628,7 +4628,7 @@ class Encounter extends Notes {
         //add 0810 cot
         function isCorrectIssurent($pid){
         	global $db;
-        	$sql="SELECT p.insurance_nr,(now() >= p.insurance_start) as isafter,(now()<=p.insurance_exp) as isbefore FROM care_person p WHERE p.pid = '$pid'";
+        	$sql="SELECT p.insurance_nr,(CURDATE() >= p.insurance_start) as isafter,(CURDATE()<= p.insurance_exp) as isbefore FROM care_person p WHERE p.pid = '$pid'";
         	//echo $sql;
         	if($this->result = $db->Execute($sql)){
         		$row = $this->result->FetchRow();
