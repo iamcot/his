@@ -165,6 +165,8 @@ if($select_type==1){
         $mathe =str_replace('-','',$resultsql['pinsurance_nr']);
         // ma the BHYT đang ký
         $madk =  str_replace('-','',$resultsql['madkbd']);
+		 //tien benh nhan noi tru chi tra
+        $bnct =   $resultsql['tongchi'] - $resultsql['bhct'];
         $objPHPExcel->getActiveSheet()->setCellValue('A'.($i+2), ($i+1))
             ->setCellValue('B'.($i+2),$resultsql['name_last'].' '.$resultsql['name_first'] )
             ->setCellValue('C'.($i+2),$resultsql['date_birth'] )
@@ -187,7 +189,7 @@ if($select_type==1){
             ->setCellValue('T'.($i+2),($resultsql['giuong']) )
             ->setCellValue('U'.($i+2),($resultsql['khamchuabenh']) )
             ->setCellValue('V'.($i+2),($resultsql['chuyenvien']) )
-            ->setCellValue('W'.($i+2),($resultsql['bnct']) )
+            ->setCellValue('W'.($i+2),($bnct) )
             ->setCellValue('X'.($i+2),$resultsql['bhct'] )
             ->setCellValue('Y'.($i+2),$resultsql[''] )
             ->setCellValue('Z'.($i+2),$resultsql['lidovaovien'] )
