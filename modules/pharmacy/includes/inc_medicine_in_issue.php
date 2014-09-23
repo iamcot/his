@@ -134,6 +134,7 @@ switch ($issue_show['typeput']) {
                     }else {
                         $cbx_price .='<option value="0">0</option>';
                         $giamacdinh =0; $tonkhole =0;
+                        $text_tonkhole_hidden='';
                     }
 
                     $cbx_price .= '</select>';
