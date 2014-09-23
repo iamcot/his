@@ -140,8 +140,8 @@ switch ($issue_show['typeput']) {
                     echo '<tr bgColor="#ffffff" >
 					<td align="center" bgColor="#ffffff">' . $i . '.<input type="hidden" name="medicine_nr[' . $i . ']" value="' . $rowIssue['nr'] . '"></td>
 					<td bgColor="#ffffff"><b>' . $rowIssue['product_name'] . '</b></td>
-					<td align="center" bgColor="#ffffff"><b>' . $rowIssue['note'] . '</b></td>
-					<td align="right" bgColor="#ffffff">' . number_format($rowIssue['sum_number']) . '</td>
+					<td align="center" bgColor="#ffffff"><b>' . $rowIssue['units'] . '</b></td>
+					<td align="right" bgColor="#ffffff">' . number_format($rowIssue['sumpres']) . '</td>
 					<td align="right" bgColor="#ffffff">' . number_format($rowIssue['plus']) . '</td>
 					<td bgColor="#ffffff"><input type="text" id="tonkho' . $i . '" value="' . intval($tonkhole) . '" size="8"  style="text-align:right;border-color:white;border-style:solid;color:red;" readonly></td>
 					<td align="right" width="12%">
@@ -149,9 +149,10 @@ switch ($issue_show['typeput']) {
                           <input type="hidden" name="available_product_id' . $i . '" value="' . $available_product_id . '">
 
 					</td>
-					<td align="right" bgColor="#ffffff"><b>' . number_format($rowIssue['sum_number']) . '</b></td>
+
+					<td align="right" bgColor="#ffffff"><b>' . number_format($rowIssue['number_request']) . '</b></td>
 					<td align="right" bgColor="#ffffff">
-					<input id="receive[' . $i . ']" name="receive[' . $i . ']" type="text" size=3 value="' . $rowIssue['sum_number'] . '">
+					<input id="receive[' . $i . ']" name="receive[' . $i . ']" type="text" size=3 value="' . $rowIssue['number_request'] . '">
 					</td>
 					<td align="center" bgColor="#ffffff">' . $rowIssue['note'] . '</td>
 				</tr>';

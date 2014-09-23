@@ -217,7 +217,7 @@ class Issuepaper extends Core {
 	 * @param int issuepaper number
 	 * @return table result or boolean
 	 */
-      /*
+
 	function getAllMedicineInIssuePaper($nr){
 	    global $db;
 		$this->sql="SELECT * 
@@ -230,10 +230,10 @@ class Issuepaper extends Core {
 		}else{return false;}
 	}
 
-       */
-    function getAllMedicineInIssuePaper($nr){
+    //ham cap nhat lai gia thuoc cho phieu linh cua benh nha
+    function getAllMedicineInIssuePaper1($nr){
         global $db;
-        $this->sql="SELECT DISTINCT pre.nr AS nr, pre.*,pre.cost AS c,iss.plus, iss.sumpres
+        $this->sql="SELECT DISTINCT pre.nr AS nr, pre.*,pre.cost AS c,iss.plus, iss.sumpres,iss.number_request,iss.units
                     FROM care_pharma_issue_paper AS iss, care_pharma_prescription AS pre,care_pharma_prescription_info AS inf
                     WHERE  iss.issue_paper_id = inf.in_issuepaper
                     AND pre.prescription_id = inf.prescription_id

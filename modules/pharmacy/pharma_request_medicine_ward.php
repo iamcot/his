@@ -79,7 +79,20 @@ if(!$mode) {	//$mode='' : load all issuepaper
 if($batchrows && $issue_id){
 		
 	//GET DATA PRESCRIPTION (get all medicine in this issuepaper)
-			
+    $sql = " SELECT prescription_id FROM care_pharma_prescription_info WHERE in_issuepaper='".$issue_id."'";
+    $pre_id = $db->Execute($sql);
+    $count_pre = $pre_id->RecordCount();
+    if($count_pre!=0){
+        if($medicine_in_pres = $IssuePaper->getAllMedicineInIssuePaper1($issue_id)){
+            if($medicine_count = $medicine_in_pres->RecordCount()){
+                $edit_form=1;
+            }
+        }else{
+            $mode='';
+            $issue_id='';
+        }
+    }
+    else{
 	if($medicine_in_pres = $IssuePaper->getAllMedicineInIssuePaper($issue_id)){
 		if($medicine_count = $medicine_in_pres->RecordCount()){
 			$edit_form=1;
@@ -89,7 +102,7 @@ if($batchrows && $issue_id){
 		$issue_id='';
 	}
 }
-
+}
 # Prepare title
 $sTitle = $LDPendingIssueRequest;
 if($batchrows) $sTitle = $sTitle." (".$LDIssueId.': '.$issue_id.")";
