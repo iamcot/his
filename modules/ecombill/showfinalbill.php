@@ -328,7 +328,7 @@ $presqry="SELECT prs.*,prsinfo.date_time_create,prsinfo.sum_date
 			FROM care_pharma_prescription AS prs, care_pharma_prescription_info AS prsinfo, care_pharma_type_of_prescription AS tp
 			WHERE prsinfo.encounter_nr='$patientno' AND prsinfo.prescription_id=prs.prescription_id
 			AND prsinfo.prescription_type=tp.prescription_type
-			AND prsinfo.status_finish=1 AND tp.group_pres=0
+		    AND tp.group_pres=0
 			ORDER BY prs.prescription_id";
 $presresult=$db->Execute($presqry);
 if(is_object($presresult))
