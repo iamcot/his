@@ -327,7 +327,7 @@ $presqry="SELECT prs.*,prsinfo.date_time_create,prsinfo.sum_date
 			FROM care_pharma_prescription AS prs, care_pharma_prescription_info AS prsinfo, care_pharma_type_of_prescription AS tp
 			WHERE prsinfo.encounter_nr='$patientno' AND prsinfo.prescription_id=prs.prescription_id
 			AND prsinfo.prescription_type=tp.prescription_type
-			AND prsinfo.status_finish=0 AND tp.group_pres=0
+			AND prsinfo.status_finish=1 AND tp.group_pres=0
 			ORDER BY prs.prescription_id";
 $presresult=$db->Execute($presqry);
 if(is_object($presresult))
@@ -420,13 +420,21 @@ if(is_object($depotresult))
     for ($i=0;$i<$depotresult->RecordCount();$i++)
     {
         $depot=$depotresult->FetchRow();
+        $ma = $depot['product_encoder'];
         $smarty->assign('LDItemContent',$depot['product_name']);
         $smarty->assign('LDItemDate',formatDate2Local($depot['date_time_create'],$date_format));
         $smarty->assign('LDItemNumberOf',$depot['sum_number']);
         $smarty->assign('LDItemUnitCost',$depot['cost']);
         $smarty->assign('LDItemSumCost',number_format($depot['cost']*$depot['sum_number']));
+        $smarty->assign('LDItemSumCostBHYT',number_format($depot['cost']*$depot['sum_number']*$mh));
+        $smarty->assign('LDItemSumCostKhac','');//nang
+        $smarty->assign('LDItemSumCostTra',number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh)); //nang
+        $tongtienVTYT += $depot['cost']*$depot['sum_number'];
+        $tongtienVTYTBHYT += $depot['cost']*$depot['sum_number']*$mh;  //nang
+        $tongtienVTYTTra += $tongtienVTYT - $tongtienVTYTBHYT;               //nang
         /*
-        if($ma==51 || $ma==52 || $ma ==53 || $ma==65 || $ma=123){ // 51- Dây oxy số 8 10, 52- Dây oxy 2 nhánh(L), 53- Dây oxy 2 nhánh nhi, 65- Dây oxy hai nhánh size (S), 123- lọ đựng nước tiểu
+        // 150 - túi đựng nước tiểu, 47- Dây thông tiểu 12 naleton, 68- Dây thông tiểu Foley 14 16, 71-Dây thông tiểu Foley 12, 69- Dây thông tiểu nữ số 14, 70- Dây thông tiểu số 10 naleton, 54 - Dây cho ăn số 12 , 262- dây cho ăn số 16, 55- Dây cho ăn số 14 , 56- Dây cho ăn số 16, 57-Dây cho ăn số 8
+        if($ma==51 || $ma==52 || $ma ==53 || $ma==65 || $ma==123 || $ma==150  || $ma== 47 || $ma == 68|| $ma == 71|| $ma == 69 || $ma == 70 || $ma == 54 || $ma == 262 || $ma==55 || $ma == 56 || $ma==57 || $ma==61 || $ma == 224 || $ma == 62 || $ma ==60){ // 51- Dây oxy số 8 10, 52- Dây oxy 2 nhánh(L), 53- Dây oxy 2 nhánh nhi, 65- Dây oxy hai nhánh size (S), 123- lọ đựng nước tiểu
             $smarty->assign('LDItemSumCostBHYT',number_format($depot['cost']*$depot['sum_number']*0)); //nang
             $smarty->assign('LDItemSumCostKhac','');//nang
             $smarty->assign('LDItemSumCostTra',number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*0)); //nang
@@ -436,19 +444,14 @@ if(is_object($depotresult))
             $smarty->assign('LDItemSumCostTra',number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh)); //nang
         }
         $tongtienVTYT += $depot['cost']*$depot['sum_number'];
-        if($ma==51 || $ma==52 || $ma ==53 || $ma==65 || $ma =123){
+        // 150 - túi đựng nước tiểu, 47- Dây thông tiểu 12 naleton, 68- Dây thông tiểu Foley 14 16, 71-Dây thông tiểu Foley 12, 69- Dây thông tiểu nữ số 14, 70- Dây thông tiểu số 10 naleton, 54 - Dây cho ăn số 12 , 262- dây cho ăn số 16, 55- Dây cho ăn số 14 , 56- Dây cho ăn số 16, 57-Dây cho ăn số 8
+        if($ma==51 || $ma==52 || $ma ==53 || $ma==65 || $ma==123 || $ma==150  || $ma== 47 || $ma == 68|| $ma == 71|| $ma == 69 || $ma == 70 || $ma == 54 || $ma == 262 || $ma==55 || $ma == 56 || $ma==57 || $ma==61 || $ma == 224 || $ma == 62 || $ma ==60){ // 51- Dây oxy số 8 10, 52- Dây oxy 2 nhánh(L), 53- Dây oxy 2 nhánh nhi, 65- Dây oxy hai nhánh size (S), 123- lọ đựng nước tiểu
             $tongtienVTYTBHYT += $depot['cost']*$depot['sum_number']*0;  //nang
         }   else{
             $tongtienVTYTBHYT += $depot['cost']*$depot['sum_number']*$mh;  //nang
         }
-        $tongtienVTYTTra += $tongtienVTYT - $tongtienVTYTBHYT;               //nang   */
+        $tongtienVTYTTra += $tongtienVTYT - $tongtienVTYTBHYT;               //nang         */
 
-        $smarty->assign('LDItemSumCostBHYT',number_format($depot['cost']*$depot['sum_number']*$mh));
-        $smarty->assign('LDItemSumCostKhac','');//nang
-        $smarty->assign('LDItemSumCostTra',number_format($depot['cost']*$depot['sum_number'] - $depot['cost']*$depot['sum_number']*$mh)); //nang
-        $tongtienVTYT += $depot['cost']*$depot['sum_number'];
-        $tongtienVTYTBHYT += $depot['cost']*$depot['sum_number']*$mh;  //nang
-        $tongtienVTYTTra += $tongtienVTYT - $tongtienVTYTBHYT;               //nang
         ob_start();
         $smarty->display('ecombill/showfinalbill_other_line.tpl');
         $sTempMed = $sTempMed.ob_get_contents();
