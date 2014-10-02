@@ -302,7 +302,7 @@ if($billid == "currentbill") {
 			$smarty->assign('TotalCostData', number_format($totcost));
 			
 			//typename
-			if($type=="HS") { 
+			if($type=="HS") {
 				$smarty->assign('ItemTypeData', $LDMedicalServices);
 			} else if($type=="LT") { 
 				$smarty->assign('ItemTypeData', $LDLaboratoryTests); 
@@ -311,7 +311,29 @@ if($billid == "currentbill") {
 			$smarty->assign('ItemDateData', formatDate2Local($labres['bill_item_date'],$date_format));
 			
 			//total cost of bill = HStotal + LTtotal
-			if($lb1['item_type']=="HS") { $HStotal=$HStotal+($labres['bill_item_unit_cost'])*($labres['bill_item_units']); }  
+			if($lb1['item_type']=="HS") {
+                switch($lb1['item_code'])
+                {
+                    case 'HSCC01':
+                        $HStotal=$HStotal+($labres['bill_item_unit_cost'])*($labres['bill_item_units'])*1;
+                        break;
+                    case 'HSCC02':
+                        $HStotal=$HStotal+($labres['bill_item_unit_cost'])*($labres['bill_item_units'])*2;
+                        break;
+                    case 'HSCC03':
+                        $HStotal=$HStotal+($labres['bill_item_unit_cost'])*($labres['bill_item_units'])*3;
+                        break;
+                    case 'HSCC04':
+                        $HStotal=$HStotal+($labres['bill_item_unit_cost'])*($labres['bill_item_units'])*4;
+                        break;
+                    case 'HSCC05':
+                        $HStotal=$HStotal+($labres['bill_item_unit_cost'])*($labres['bill_item_units'])*5;
+                        break;
+                    default:
+                        $HStotal=$HStotal+($labres['bill_item_unit_cost'])*($labres['bill_item_units']);
+                }
+               // $HStotal=$HStotal+($labres['bill_item_unit_cost'])*($labres['bill_item_units']);
+            }
 			if($lb1['item_type']=="LT") { $LTtotal=$LTtotal+($labres['bill_item_unit_cost'])*($labres['bill_item_units']); }
 			
 			//Check thanh toan
@@ -397,13 +419,81 @@ if($billid == "currentbill") {
             $smarty->assign('CostPerUnitData', number_format($tongthuoc*$list_info[$x]['cost']));
             $smarty->assign('UnitsData', $tongthuoc);
             $smarty->assign('TotalCostData',number_format($tongthuoc*$list_info[$x]['cost']));
-            $smarty->assign('ItemTypeData',$pres['type_name']);
+            $smarty->assign('ItemTypeData',$list_info[$x]['unit']);
             ob_start();
             $smarty->display('ecombill/bill_payment_header_line_hoadon.tpl');
             $sListRows = $sListRows.ob_get_contents();
             ob_end_clean();
             $stt++;
         }
+
+        //VTYT nội trú
+        $medresult = $PresMed->getAllPresOfEncounterByBillId($patientno,'0');	  //list lai cac toa chua thanh toan, da duoc cap nhat gia
+        if(is_object($medresult))
+        {
+           // $Med_total=0;
+            $smarty->assign('flag_g', true);
+            $smarty->assign('GroupName',$LDPrescriptionMed);
+            for($i=0;$i<$medresult->RecordCount();$i++)
+            {
+                $pres = $medresult->FetchRow();
+                $Med_total=$Med_total+$pres['total_cost'];
+
+                $itemdate_y = strtotime($pres['date_time_create']);
+                if(($itemdate_y>=$BHtungay_x) && ($itemdate_y<=$BHdenngay_x))
+                    $total_for_insur += ($pres['total_cost']);
+
+                //info of service
+                $infodetail='<a href="javascript:viewDetailMed('.$patientno.','.$pres['prescription_id'].')">
+			<img '.createComIcon($root_path,'info3.gif','0','',TRUE).'></a>';
+                $smarty->assign('DescriptionData', $infodetail.' '.$LDPresId.': '.$pres['prescription_id']);
+                $smarty->assign('CostPerUnitData', number_format($pres['total_cost']));
+                $smarty->assign('UnitsData', '1');
+                $smarty->assign('TotalCostData', number_format($pres['total_cost']));
+                $smarty->assign('ItemTypeData',$pres['type_name']);
+                $smarty->assign('ItemCheck', '<input type="checkbox" name="cbx'.$count.'" checked onclick="ChangeSum(this,'.$pres['total_cost'].')" '.$readonly.'> <input type="hidden" name="item'.$count.'" value="med_id_'.$pres['prescription_id'].'">');
+                $count++;
+
+                if($i>0)
+                    $smarty->assign('flag_g', false);
+
+                ob_start();
+                $smarty->display('ecombill/bill_payment_header_line_hoadon.tpl');
+                $sListRows = $sListRows.ob_get_contents();
+                ob_end_clean();
+            }
+        }
+        /*
+        //VTYT theo list hienj ra
+        $depotqry="SELECT med.*,medinfo.date_time_create,medinfo.sum_date FROM care_med_prescription AS med, care_med_prescription_info AS medinfo WHERE medinfo.encounter_nr='$patientno' AND medinfo.prescription_id=med.prescription_id ORDER BY med.prescription_id";
+        $depotresult=$db->Execute($depotqry);
+        $Med_total=0;
+        //$smarty->assign('flag_g', true);
+        // $smarty->assign('GroupName',$LDPrescriptionMed);
+        for($i=0;$i<$depotresult->RecordCount();$i++)
+        {
+            $pres = $depotresult->FetchRow();
+            $ma = $pres['product_encoder'];
+           /*
+            if($ma==51 || $ma==52 || $ma ==53 || $ma==65 || $ma==123){ // 51- Dây oxy số 8 10, 52- Dây oxy 2 nhánh(L), 53- Dây oxy 2 nhánh nhi, 65- Dây oxy hai nhánh size (S), 123- lọ đựng nước tiểu
+                $kgiam = $kgiam + ($pres['sum_number']* $pres['cost'])*$mh;
+            }
+            // 150 - túi đựng nước tiểu, 47- Dây thông tiểu 12 naleton, 68- Dây thông tiểu Foley 14 16, 71-Dây thông tiểu Foley 12, 69- Dây thông tiểu nữ số 14, 70- Dây thông tiểu số 10 naleton, 54 - Dây cho ăn số 12 , 262- dây cho ăn số 16, 55- Dây cho ăn số 14 , 56- Dây cho ăn số 16, 57-Dây cho ăn số 8
+            if($ma==51 || $ma==52 || $ma ==53 || $ma==65 || $ma==123 || $ma==150  || $ma== 47 || $ma == 68|| $ma == 71|| $ma == 69 || $ma == 70 || $ma == 54 || $ma == 262 || $ma==55 || $ma == 56 || $ma==57 || $ma==61 || $ma == 224 || $ma == 62 || $ma ==60){ // 51- Dây oxy số 8 10, 52- Dây oxy 2 nhánh(L), 53- Dây oxy 2 nhánh nhi, 65- Dây oxy hai nhánh size (S), 123- lọ đựng nước tiểu
+                $kgiam = $kgiam + ($pres['sum_number']* $pres['cost'])*$mh;                                                                                                                                                                                         // 61 - Dây hút nhớt số 12, 224- Dây hút nhớt 14, 62- Dây hút nhớt 14 có van, 60- Dây hút nhớt số 8
+            }
+            $Med_total=$Med_total+$pres['sum_number']* $pres['cost'];
+            //info of service
+            $smarty->assign('DescriptionData','+ '.$pres['product_name']);
+            $smarty->assign('CostPerUnitData', number_format($pres['sum_number']* $pres['cost']));
+            $smarty->assign('UnitsData',$pres['sum_number']);
+            $smarty->assign('TotalCostData',number_format($pres['sum_number']* $pres['cost']));
+            $smarty->assign('ItemTypeData',$pres['note']);
+            ob_start();
+            $smarty->display('ecombill/bill_payment_header_line_hoadon.tpl');
+            $sListRows = $sListRows.ob_get_contents();
+            ob_end_clean();
+    } */
     }
     //nếu ngoại trú thì hiện thuốc lấy nguyên toa ==>n
     else{
@@ -441,8 +531,73 @@ if($billid == "currentbill") {
 			ob_end_clean(); 
 		}
 	}
+
+       //VTYT Ngoại trú toa
+        $medresult = $PresMed->getAllPresOfEncounterByBillId($patientno,'0');	  //list lai cac toa chua thanh toan, da duoc cap nhat gia
+        if(is_object($medresult))
+        {
+           // $Med_total=0;
+            $smarty->assign('flag_g', true);
+            $smarty->assign('GroupName',$LDPrescriptionMed);
+            for($i=0;$i<$medresult->RecordCount();$i++)
+            {
+                $pres = $medresult->FetchRow();
+                $Med_total=$Med_total+$pres['total_cost'];
+
+                $itemdate_y = strtotime($pres['date_time_create']);
+                if(($itemdate_y>=$BHtungay_x) && ($itemdate_y<=$BHdenngay_x))
+                    $total_for_insur += ($pres['total_cost']);
+
+                //info of service
+                $infodetail='<a href="javascript:viewDetailMed('.$patientno.','.$pres['prescription_id'].')">
+			    <img '.createComIcon($root_path,'info3.gif','0','',TRUE).'></a>';
+                $smarty->assign('DescriptionData', $infodetail.' '.$LDPresId.': '.$pres['prescription_id']);
+                $smarty->assign('CostPerUnitData', number_format($pres['total_cost']));
+                $smarty->assign('UnitsData', '1');
+                $smarty->assign('TotalCostData', number_format($pres['total_cost']));
+                $smarty->assign('ItemTypeData',$pres['type_name']);
+                $smarty->assign('ItemCheck', '<input type="checkbox" name="cbx'.$count.'" checked onclick="ChangeSum(this,'.$pres['total_cost'].')" '.$readonly.'> <input type="hidden" name="item'.$count.'" value="med_id_'.$pres['prescription_id'].'">');
+                $count++;
+
+                if($i>0)
+                    $smarty->assign('flag_g', false);
+
+                ob_start();
+                $smarty->display('ecombill/bill_payment_header_line_hoadon.tpl');
+                $sListRows = $sListRows.ob_get_contents();
+                ob_end_clean();
+            }
+        }
+          /*
+        //VTYT ngoại theo list hien ra
+        $depotqry="SELECT med.*,medinfo.date_time_create,medinfo.sum_date FROM care_med_prescription AS med, care_med_prescription_info AS medinfo WHERE medinfo.encounter_nr='$patientno' AND medinfo.prescription_id=med.prescription_id ORDER BY med.prescription_id";
+        $depotresult=$db->Execute($depotqry);
+            $Med_total=0;
+            //$smarty->assign('flag_g', true);
+           // $smarty->assign('GroupName',$LDPrescriptionMed);
+            for($i=0;$i<$depotresult->RecordCount();$i++)
+            {
+                $pres = $depotresult->FetchRow();
+                $ma = $pres['product_encoder'];
+                // 150 - túi đựng nước tiểu, 47- Dây thông tiểu 12 naleton, 68- Dây thông tiểu Foley 14 16, 71-Dây thông tiểu Foley 12, 69- Dây thông tiểu nữ số 14, 70- Dây thông tiểu số 10 naleton, 54 - Dây cho ăn số 12 , 262- dây cho ăn số 16, 55- Dây cho ăn số 14 , 56- Dây cho ăn số 16, 57-Dây cho ăn số 8
+                if($ma==51 || $ma==52 || $ma ==53 || $ma==65 || $ma==123 || $ma==150  || $ma== 47 || $ma == 68|| $ma == 71|| $ma == 69 || $ma == 70 || $ma == 54 || $ma == 262 || $ma==55 || $ma == 56 || $ma==57 || $ma==61 || $ma == 224 || $ma == 62 || $ma ==60){ // 51- Dây oxy số 8 10, 52- Dây oxy 2 nhánh(L), 53- Dây oxy 2 nhánh nhi, 65- Dây oxy hai nhánh size (S), 123- lọ đựng nước tiểu
+                    $kgiam = $kgiam + ($pres['sum_number']* $pres['cost'])*$mh;                                                                                                                                                                                         // 61 - Dây hút nhớt số 12, 224- Dây hút nhớt 14, 62- Dây hút nhớt 14 có van, 60- Dây hút nhớt số 8
+                }
+
+                $Med_total=$Med_total+$pres['sum_number']* $pres['cost'];
+                //info of service
+                $smarty->assign('DescriptionData','+ '.$pres['product_name']);
+                $smarty->assign('CostPerUnitData', number_format($pres['sum_number']* $pres['cost']));
+                $smarty->assign('UnitsData',$pres['sum_number']);
+                $smarty->assign('TotalCostData',number_format($pres['sum_number']* $pres['cost']));
+                $smarty->assign('ItemTypeData',$pres['note']);
+                ob_start();
+                $smarty->display('ecombill/bill_payment_header_line_hoadon.tpl');
+                $sListRows = $sListRows.ob_get_contents();
+                ob_end_clean();
+            }         */
     }
-	//FOR MEDIPOT
+	//FOR MEDIPOT  VTYT
     //2014-03-25: CoT, khong can phai tinh lai gia hien tai vi BHYT da chinh sua trong toa
 //	$medresult = $PresMed->getAllPresOfEncounterByBillId($patientno,'0');		//list cac toa chua thanh toan
 //	if(is_object($medresult)) {	//update currrent medicine cost, total cost of this pres
@@ -451,6 +606,7 @@ if($billid == "currentbill") {
 //			$PresMed->updateCostPres($pres['prescription_id']);
 //		}
 //	}
+    /*
 	$medresult = $PresMed->getAllPresOfEncounterByBillId($patientno,'0');	  //list lai cac toa chua thanh toan, da duoc cap nhat gia
 	if(is_object($medresult))
 	{
@@ -486,8 +642,8 @@ if($billid == "currentbill") {
 			ob_end_clean(); 
 		}
 	}
-	
-	//FOR CHEMICAL
+	   */
+	//FOR CHEMICAL Hóa chất
     //2014-03-25: CoT, khong can phai tinh lai gia hien tai vi BHYT da chinh sua trong toa
 //	$cheresult = $Pres->getAllChemicalOfEncounterByBillId($patientno,'0');		//list cac toa chua thanh toan
 //	if(is_object($cheresult)) {	//update currrent medicine cost, total cost of this pres
@@ -580,7 +736,7 @@ if($billid == "currentbill") {
               $smarty->assign('CostPerUnitData', number_format($tongthuoc*$list_info[$x]['cost']));
               $smarty->assign('UnitsData', $tongthuoc);
               $smarty->assign('TotalCostData',number_format($tongthuoc*$list_info[$x]['cost']));
-              $smarty->assign('ItemTypeData','');
+              $smarty->assign('ItemTypeData',$list_info[$x]['unit']);
               ob_start();
               $smarty->display('ecombill/bill_payment_header_line_hoadon.tpl');
               $sListRows = $sListRows.ob_get_contents();
@@ -599,13 +755,38 @@ if($billid == "currentbill") {
               $oldbd=$oldbdqueryresult->FetchRow();
 
               $itemdescresult = $eComBill->listServiceItemsByCode($oldbd['bill_item_code']);
+              $cpu = $oldbd['bill_item_unit_cost'];
+              $nounits = $oldbd['bill_item_units'];
+              //Tính tiền Oxy
+              $temp_cost= $cpu*$nounits;
+              switch($oldbd['bill_item_code'])
+              {
+                  case 'HSCC01':
+                      $totcost=$temp_cost*1;
+                      break;
+                  case 'HSCC02':
+                      $totcost=$temp_cost*2;
+                      break;
+                  case 'HSCC03':
+                      $totcost=$temp_cost*3;
+                      break;
+                  case 'HSCC04':
+                      $totcost=$temp_cost*4;
+                      break;
+                  case 'HSCC05':
+                      $totcost=$temp_cost*5;
+                      break;
+                  default:
+                      $totcost=$cpu*$nounits;
+              }
               if(is_object($itemdescresult)) $it=$itemdescresult->FetchRow();
 
 
               $smarty->assign('DescriptionData', '+ '.$it['item_description']);
               $smarty->assign('CostPerUnitData', number_format($oldbd['bill_item_unit_cost']));
               $smarty->assign('UnitsData', $oldbd['bill_item_units']);
-              $smarty->assign('TotalCostData', number_format($oldbd['bill_item_amount']));
+              $smarty->assign('TotalCostData', number_format( $totcost));
+             // $smarty->assign('TotalCostData', number_format($oldbd['bill_item_amount']));
 
               if($it['item_type']=="HS") {
                   $smarty->assign('ItemTypeData', $LDMedicalServices);
@@ -615,7 +796,29 @@ if($billid == "currentbill") {
               //itemdate
               $smarty->assign('ItemDateData', formatDate2Local($oldbd['bill_item_date'],$date_format));
 
-              if($lb1['item_type']=="HS") { $HStotal=$HStotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units']); }
+              if($lb1['item_type']=="HS") {
+                  switch($oldbd['bill_item_code'])
+                  {
+                      case 'HSCC01':
+                          $HStotal=$HStotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units'])*1;
+                          break;
+                      case 'HSCC02':
+                          $HStotal=$HStotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units'])*2;
+                          break;
+                      case 'HSCC03':
+                          $HStotal=$HStotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units'])*3;
+                          break;
+                      case 'HSCC04':
+                          $HStotal=$HStotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units'])*4;
+                          break;
+                      case 'HSCC05':
+                          $HStotal=$HStotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units'])*5;
+                          break;
+                      default:
+                        $HStotal=$HStotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units']);
+                  }
+                  //$HStotal=$HStotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units']);
+              }
               if($lb1['item_type']=="LT") { $LTtotal=$LTtotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units']); }
 
               //groupname
@@ -651,13 +854,39 @@ if($billid == "currentbill") {
 		$oldbd=$oldbdqueryresult->FetchRow();
 
 		$itemdescresult = $eComBill->listServiceItemsByCode($oldbd['bill_item_code']);
+
+        $cpu = $oldbd['bill_item_unit_cost'];
+        $nounits = $oldbd['bill_item_units'];
+        //Tính tiền Oxy
+        $temp_cost= $cpu*$nounits;
+        switch($oldbd['bill_item_code'])
+        {
+            case 'HSCC01':
+                $totcost=$temp_cost*1;
+                break;
+            case 'HSCC02':
+                $totcost=$temp_cost*2;
+                break;
+            case 'HSCC03':
+                $totcost=$temp_cost*3;
+                break;
+            case 'HSCC04':
+                $totcost=$temp_cost*4;
+                break;
+            case 'HSCC05':
+                $totcost=$temp_cost*5;
+                break;
+            default:
+                $totcost=$cpu*$nounits;
+        }
 		if(is_object($itemdescresult)) $it=$itemdescresult->FetchRow();
 
 		
 		$smarty->assign('DescriptionData', '+ '.$it['item_description']);
 		$smarty->assign('CostPerUnitData', number_format($oldbd['bill_item_unit_cost']));
 		$smarty->assign('UnitsData', $oldbd['bill_item_units']);
-		$smarty->assign('TotalCostData', number_format($oldbd['bill_item_amount']));
+        $smarty->assign('TotalCostData', number_format( $totcost));
+        // $smarty->assign('TotalCostData', number_format($oldbd['bill_item_amount']));
 
 		if($it['item_type']=="HS") { 
 			$smarty->assign('ItemTypeData', $LDMedicalServices);
@@ -667,7 +896,28 @@ if($billid == "currentbill") {
 		//itemdate
 		$smarty->assign('ItemDateData', formatDate2Local($oldbd['bill_item_date'],$date_format));
 		
-		if($lb1['item_type']=="HS") { $HStotal=$HStotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units']); }  
+		if($lb1['item_type']=="HS") { switch($oldbd['bill_item_code'])
+        {
+            case 'HSCC01':
+                $HStotal=$HStotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units'])*1;
+                break;
+            case 'HSCC02':
+                $HStotal=$HStotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units'])*2;
+                break;
+            case 'HSCC03':
+                $HStotal=$HStotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units'])*3;
+                break;
+            case 'HSCC04':
+                $HStotal=$HStotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units'])*4;
+                break;
+            case 'HSCC05':
+                $HStotal=$HStotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units'])*5;
+                break;
+            default:
+                $HStotal=$HStotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units']);
+        }
+            //$HStotal=$HStotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units']);
+        }
 		if($lb1['item_type']=="LT") { $LTtotal=$LTtotal+($oldbd['bill_item_unit_cost'])*($oldbd['bill_item_units']); }
 		//groupname
 		$flag_g = false;
@@ -817,13 +1067,16 @@ if($billid == "currentbill"){
 } else {
 	$smarty->assign('LDOldBill', TRUE);
 	$smarty->assign('outstd',number_format($oldbilloutstanding));
-	
-	$sTempMoney = convertMoney($oldbilloutstanding);
+  //  $smarty->assign('outstd',number_format($LDTotalBillAmountData - $discount));
+
+
+    $sTempMoney = convertMoney($oldbilloutstanding);
 	$smarty->assign('money_outstd_Reader',$sTempMoney);
 	
 	$LDAmountDueData = $LDTotalBillAmountData-$oldbilloutstanding-$discount; // còn lại
 	$smarty->assign('LDAmountDue',$LDAmountDue);
 	$smarty->assign('LDAmountDueData',number_format($LDAmountDueData));
+    //$smarty->assign('LDAmountDueData',($LDAmountDueData));
 	$outstanding = $oldbilloutstanding;     //thanh toán
 	
 	$sTempMoney = convertMoney($LDAmountDueData);

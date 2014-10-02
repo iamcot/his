@@ -389,7 +389,7 @@ class eComBill extends Core {
 					AND serv.item_group_nr != 37
 					AND serv.item_group_nr != 42
 					AND serv.item_group_nr != 43
-					GROUP BY g.group_name ";
+					GROUP BY bill.bill_item_code ";
 
         if ($this->result=$db->Execute($this->sql)) {
             if ($this->result->RecordCount()) {

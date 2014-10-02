@@ -482,6 +482,29 @@ if(is_object($itemresult))
         $item=$itemresult->FetchRow();
         $groupnr = $item['item_group_nr'];
         $item_code =  $item['item_code'] ;
+
+        $total= $item['s'];
+        switch($item['item_code'])
+        {
+            case 'HSCC01':
+                $totcost=$total*1;
+                break;
+            case 'HSCC02':
+                $totcost=$total*2;
+                break;
+            case 'HSCC03':
+                $totcost=$total*3;
+                break;
+            case 'HSCC04':
+                $totcost=$total*4;
+                break;
+            case 'HSCC05':
+                $totcost=$total*5;
+                break;
+            default:
+                $totcost=$total;
+        }
+
         //tinh tiền cộng 1
 
         if($groupnr==35 || $groupnr==36){   //giường
@@ -498,8 +521,8 @@ if(is_object($itemresult))
             $cong2NB = $cong2 - $cong2BHYT;
         }
         else{
-            $cong2 +=$item['s'];
-            $cong2BHYT += $item['s']*$mh;
+            $cong2 +=$totcost;
+            $cong2BHYT +=$totcost*$mh;
             $cong2NB = $cong2 - $cong2BHYT;
         }
 
@@ -532,11 +555,11 @@ if(is_object($itemresult))
 						<td colspan="1" align="left">- '.$item['group_name'].'</td>
 						<td colspan="1" align="center">'.formatDate2Local($item['bill_item_date'],'dd/mm',false,false,$sepChars).'</td>
 						<td align="center">'.$item['bill_item_units'].'</td>
-						<td align="right">'.number_format($item['s']).'</td>
-						<td align="right">'.number_format($item['s']).'</td>
-                        <td align="right">'.number_format($item['s']*$mh).'</td>
+						<td align="right">'.number_format($totcost).'</td>
+						<td align="right">'.number_format($totcost).'</td>
+                        <td align="right">'.number_format($totcost*$mh).'</td>
                         <td align="right">0</td>
-                        <td align="right">'.number_format($item['s'] - $item['s']*$mh).'</td>
+                        <td align="right">'.number_format($totcost - $totcost*$mh).'</td>
 					  </tr>';
         }
         /*
@@ -550,7 +573,7 @@ if(is_object($itemresult))
                         <td align="right">0</td>
                         <td align="right">'.number_format($item['s'] - $item['s']*$mh).'</td>
 					  </tr>'; */
-        $tongtienxndv +=  $item['s'];
+        $tongtienxndv +=  $totcost;
        if($groupnr==41){  //không cho giảm BHYT của chuyển viện
             $tongtienxndvBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*0;   //nang
         }
@@ -558,7 +581,7 @@ if(is_object($itemresult))
            $tongtienxndvBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*0;   //nang
            }
       else{
-            $tongtienxndvBHYT +=  $item['s']*$mh;  //nang
+            $tongtienxndvBHYT +=  $totcost*$mh;  //nang
         }
         $tongtienxndvTra = $tongtienxndv - $tongtienxndvBHYT;
 
@@ -935,6 +958,28 @@ $html3='<table width="100%">
             $item=$itemresult->FetchRow();
             $groupnr = $item['item_group_nr'];
             $item_code =  $item['item_code'] ;
+            $total= $item['s'];
+            switch($item['item_code'])
+            {
+                case 'HSCC01':
+                    $totcost=$total*1;
+                    break;
+                case 'HSCC02':
+                    $totcost=$total*2;
+                    break;
+                case 'HSCC03':
+                    $totcost=$total*3;
+                    break;
+                case 'HSCC04':
+                    $totcost=$total*4;
+                    break;
+                case 'HSCC05':
+                    $totcost=$total*5;
+                    break;
+                default:
+                    $totcost=$total;
+            }
+
             //tinh tiền cộng 1 ,cộng 2
 
             if($groupnr==35 || $groupnr==36 || $groupnr==40 ){  //giường, công khám
@@ -953,22 +998,22 @@ $html3='<table width="100%">
                 $cong2NB = $cong2 - $cong2BHYT;
             }
             else{
-                $cong2 +=$item['s'];
-                $cong2BHYT += $item['s']*$mh;
+                $cong2 +=$totcost;
+                $cong2BHYT += $totcost*$mh;
                 $cong2NB = $cong2 - $cong2BHYT;
             }
             $row_item='<tr>
 						<td colspan="1" align="left">- '.$item['group_name'].'</td>
 						<td colspan="1" align="center">'.formatDate2Local($item['bill_item_date'],'dd/mm',false,false,$sepChars).'</td>
 						<td align="center">'.$item['bill_item_units'].'</td>
-						<td align="right">'.number_format($item['s']).'</td>
-						<td align="right">'.number_format($item['s']).'</td>
-                        <td align="right">'.number_format($item['s']*$mh).'</td>
+						<td align="right">'.number_format($totcost).'</td>
+						<td align="right">'.number_format($totcost).'</td>
+                        <td align="right">'.number_format($totcost*$mh).'</td>
                         <td align="right">0</td>
-                        <td align="right">'.number_format($item['s'] - $item['s']*$mh).'</td>
+                        <td align="right">'.number_format($totcost - $totcost*$mh).'</td>
 					  </tr>';
             //$tongtienxndv += $tongtienxndv+ $item['bill_item_units']*$item['bill_item_unit_cost'];
-            $tongtienxndv +=  $item['s'];
+            $tongtienxndv +=  $totcost;
             if($groupnr==41){  //không cho giảm BHYT của chuyển viện
                 $tongtienxndvBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*0;   //nang
             }
@@ -976,7 +1021,7 @@ $html3='<table width="100%">
                 $tongtienxndvBHYT +=  $item['bill_item_units']*$item['bill_item_unit_cost']*0;   //nang
             }
             else{
-                $tongtienxndvBHYT +=  $item['s']*$mh;  //nang
+                $tongtienxndvBHYT +=  $totcost*$mh;  //nang
             }
             $tongtienxndvTra = $tongtienxndv - $tongtienxndvBHYT;
 
