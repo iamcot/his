@@ -88,8 +88,8 @@ $sqlsumbh="SELECT COUNT(DISTINCT t.encounter_nr) sumbh
 FROM (dfck_encounter_transfer AS t   JOIN care_person AS p)   JOIN care_encounter AS e
 WHERE (t.pid = p.pid)  AND (e.encounter_nr=t.encounter_nr)
 		AND t.dept_from IN(SELECT care_department.nr  AS nr FROM care_department)
-		AND DATE_FORMAT(t.datein,'%Y-%m-%d') >= '$datefrom' AND DATE_FORMAT(t.datein,'%Y-%m-%d') <='$dateto' AND t.dept_to>0
-		AND t.dept_from = 2	AND p.insurance_nr != ''";
+		AND DATE_FORMAT(t.datein,'%Y-%m-%d') >= '$datefrom' AND DATE_FORMAT(t.datein,'%Y-%m-%d') <='$dateto'  AND  DATE_FORMAT(t.insurance_exp,'%Y-%m-%d') > '$dateto'
+		AND t.dept_to>0 AND t.dept_from = 2	AND p.insurance_nr != ''";
 if($rs=$db->Execute($sqlsumbh)){
     while($row=$rs->FetchRow())
         $sumbh=$row['sumbh'];
@@ -110,8 +110,8 @@ $sqlsumknoibh="SELECT COUNT(DISTINCT t.encounter_nr) sumknoibh
 FROM (dfck_encounter_transfer AS t   JOIN care_person AS p)   JOIN care_encounter AS e
 WHERE (t.pid = p.pid)  AND (e.encounter_nr=t.encounter_nr)
 		AND t.dept_from IN(SELECT care_department.nr  AS nr FROM care_department)
-		AND DATE_FORMAT(t.datein,'%Y-%m-%d') >= '$datefrom' AND DATE_FORMAT(t.datein,'%Y-%m-%d') <='$dateto' AND t.dept_to>0
-		AND t.dept_from = 2	AND e.loai_kham=1 AND p.insurance_nr != '' ";
+		AND DATE_FORMAT(t.datein,'%Y-%m-%d') >= '$datefrom' AND DATE_FORMAT(t.datein,'%Y-%m-%d') <='$dateto' AND  DATE_FORMAT(t.insurance_exp,'%Y-%m-%d') > '$dateto'
+		AND t.dept_to>0 AND t.dept_from = 2	AND e.loai_kham=1 AND p.insurance_nr != '' ";
 if($rs=$db->Execute($sqlsumknoibh)){
     while($row=$rs->FetchRow())
         $sumknoibh=$row['sumknoibh'];
@@ -132,8 +132,8 @@ $sqlsumkngbh="SELECT COUNT(DISTINCT t.encounter_nr) sumkngbh
 FROM (dfck_encounter_transfer AS t   JOIN care_person AS p)   JOIN care_encounter AS e
 WHERE (t.pid = p.pid)  AND (e.encounter_nr=t.encounter_nr)
 AND t.dept_from IN(SELECT care_department.nr  AS nr FROM care_department)
-		AND DATE_FORMAT(t.datein,'%Y-%m-%d') >= '$datefrom' AND DATE_FORMAT(t.datein,'%Y-%m-%d') <='$dateto' AND t.dept_to>0
-AND t.dept_from = 2	AND e.loai_kham=2 AND p.insurance_nr != '' ";
+		AND DATE_FORMAT(t.datein,'%Y-%m-%d') >= '$datefrom' AND DATE_FORMAT(t.datein,'%Y-%m-%d') <='$dateto'     AND  DATE_FORMAT(t.insurance_exp,'%Y-%m-%d') > '$dateto'
+		AND t.dept_to>0   AND t.dept_from = 2	AND e.loai_kham=2 AND p.insurance_nr != '' ";
 if($rs=$db->Execute($sqlsumkngbh)){
     while($row=$rs->FetchRow())
         $sumkngbh=$row['sumkngbh'];

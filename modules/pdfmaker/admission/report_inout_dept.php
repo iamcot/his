@@ -33,12 +33,12 @@ $tpdf = new TCPDF('L', 'mm', 'A4', true, 'UTF-8',false);
 switch ($id) {
 	case 'vaokhoa':
 		# code...
-	$khoa = "VÀO KHOA";
+	$khoa = "VÀO";
 
 		break;
 	case 'rakhoa':
 		# code...
-	$khoa = "RA KHOA";
+	$khoa = "RA";
 		break;
 	case 'vaovien': $khoa="VÀO VIỆN";break;
 	case 'ravien':

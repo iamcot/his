@@ -1216,29 +1216,26 @@ $s=$s_obj->BASIC_String();
 	*/
 	function PIDbyData(&$data,$deadtoo=FALSE){
 		global $db, $sql_LIKE, $dbf_nodate;
-        if($data['insurance_nr']==null)   {
-            $this->sql="SELECT pid,name_last,name_first,date_birth,sex, insurance_nr FROM care_person WHERE name_last LIKE '".$data['name_last']."'
-					AND name_first LIKE '".$data['name_first']."'
-					AND date_birth LIKE '".$data['date_birth']."'
-					AND sex='".$data['sex']."'";
-        }
-        else {
+        if($data['insurance_nr']!= null)   {
             $this->sql="SELECT pid,name_last,name_first,date_birth,sex, insurance_nr FROM care_person WHERE insurance_nr LIKE '".$data['insurance_nr']."'";
             if(!$deadtoo) $this->sql.=" AND death_date='$dbf_nodate'";
-            if($res['pbd']=$db->Excecute($this->sql)){
-                if(!$res['pbd']->RecordCount()){
-
+            if($res['pbd']=$db->Execute($this->sql)){
+                if($res['pbd']->RecordCount()) {
+                    return $res['pbd'];//
                 }
             }
         }
-
+        $this->sql="SELECT pid,name_last,name_first,date_birth,sex, insurance_nr FROM $this->tb_person WHERE name_last $sql_LIKE '".$data['name_last']."'
+					AND name_first $sql_LIKE '".$data['name_first']."'
+					AND date_birth $sql_LIKE '".$data['date_birth']."'
+					AND sex $sql_LIKE '".$data['sex']."'";
         if(!$deadtoo) $this->sql.=" AND death_date='$dbf_nodate'";
-		if($res['pbd']=$db->Execute($this->sql)){
-		    if($res['pbd']->RecordCount()) {
-				return $res['pbd'];//
-			}else{return false;}
-		}else{return false;}
-	}
+        if($res['pbd']=$db->Execute($this->sql)){
+            if($res['pbd']->RecordCount()) {
+                return $res['pbd'];//
+            }else{return false;}
+        }else{return false;}
+    }
 	/**
 	* Sets the  filename if the person in the databank
 	*
