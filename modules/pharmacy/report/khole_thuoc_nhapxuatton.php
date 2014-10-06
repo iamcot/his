@@ -60,7 +60,12 @@ function chkform(d) {
 function printOut(select_type,month,year)
 {
 	urlholder="<?php echo $root_path;?>modules/pdfmaker/duoc/khole_thuoc_xuatnhapton.php<?php echo URL_APPEND; ?>&type=medicine&select_type="+select_type+"&month="+month+"&year="+year;
-	testprintpdf=window.open(urlholder,"NhapXuatTon","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
+    testprintpdf=window.open(urlholder,"NhapXuatTon","width=1000,height=760,menubar=yes,resizable=yes,scrollbars=yes");
+<!--    document.reportform.action="--><?php //echo 'khole_NXT_xuat_Excel.php'.URL_APPEND; ?><!--&select_type="+select_type+"&month="+month+"&year="+year;-->
+}
+function XuatExcel(select_type,month,year){
+        document.reportform.action="<?php echo 'khole_NXT_xuat_Excel.php'.URL_APPEND; ?>&select_type="+select_type+"&month="+month+"&year="+year;
+        document.reportform.submit();
 }
 function Save(alertsave){
 	if(alertsave=='ok'){
@@ -110,6 +115,7 @@ $smarty->assign('LDGiaNhap',$LDGiaNhap);
 $smarty->assign('LDGiaXuat',$LDGiaXuat);
 $smarty->assign('LDGiaTonCuoi',$LDGiaTonCuoi);
 $smarty->assign('LDNumberOf',$LDNumberOf);
+
 
 //Report in
 if(!isset($select_type) || $select_type=='')
@@ -373,7 +379,8 @@ $sTempHidden = '<input type="hidden" name="sid" value="'.$sid.'">
 		<input type="hidden" name="lang" value="'.$lang.'">
 		<input type="hidden" name="maxid" value="'.$maxid.'">
 		<input type="hidden" id="select_type" name="select_type" value="'.$select_type.'">
-		<input type="hidden" name="user_report" value="'.$_SESSION['sess_user_name'].'">';
+		<input type="hidden" name="user_report" value="'.$_SESSION['sess_user_name'].'">
+		<input type="hidden" id="select_type" name="select_type" value="'.$select_type.'" ';
 
 $smarty->assign('sHiddenInputs',$sTempHidden);
 
@@ -417,6 +424,9 @@ else{
 $smarty->assign('pbSubmit','<input type="image" '.createLDImgSrc($root_path,'showreport.gif','0','middle').'>');
 $smarty->assign('pbSave','<a href="javascript:Save(\''.$alertsave.'\');"><img '.createLDImgSrc($root_path,'savedisc.gif','0','middle').' align="middle"></a>');
 $smarty->assign('pbPrint','<a href="javascript:window.printOut(\''.$select_type.'\',\''.$showmonth.'\',\''.$showyear.'\');"><img '.createLDImgSrc($root_path,'printout.gif','0','middle').' align="middle"></a>');
+//$smarty->assign('pbExcel','<input type="button" value="Xuất File Excel" style="background-color:gray" onclick="XuatExcel(\''.$select_type.'\',\''.$showmonth.'\',\''.$showyear.'\')">');
+$smarty->assign('pbExcel','<a href="javascript:XuatExcel(\''.$select_type.'\',\''.$showmonth.'\',\''.$showyear.'\')">Xuất Excel</a>');
+
 $smarty->assign('pbCancel','<a href="'.$breakfile.'" ><img '.createLDImgSrc($root_path,'close2.gif','0','middle').' title="'.$LDBackTo.'" align="middle"></a>');
 
 # Assign the page template to mainframe block
