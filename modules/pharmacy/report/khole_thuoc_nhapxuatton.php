@@ -15,6 +15,7 @@ $thisfile= basename(__FILE__);
 $breakfile='../report_khole.php'.URL_APPEND;
 $fileforward='khole_baocaothuoc_save.php'.URL_APPEND;
 $date_format='dd-mm-yyyy';
+$thatfile='../khole_thuoc_xuatnhapton.php';
 
 
 
@@ -53,8 +54,9 @@ $date_format='dd-mm-yyyy';
 </style>
 <script  language="javascript">
 <!--
+
 function chkform(d) {
-	document.reportform.action=<?php echo $thisfile; ?>;
+	document.reportform.action=<?php echo 'khole_thuoc_xuatnhapton.php'.URL_APPEND ?>;
 	document.reportform.submit();
 }
 function printOut(select_type,month,year)
