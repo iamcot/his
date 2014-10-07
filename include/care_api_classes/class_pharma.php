@@ -3330,7 +3330,7 @@ ON BC3.product_lot_id=BTonle.LotidOfTonle AND BC3.product_encoder=BTonle.Encoder
 GROUP BY BC3.available_product_id
 ORDER BY BC3.product_name
   ";
-		echo $this->sql;
+//		echo $this->sql;
 		if ($this->result=$db->Execute($this->sql)) {
 			if ($this->result->RecordCount()) {				
 				return $this->result;
