@@ -55,6 +55,7 @@
 	<tr>
 		<td>{{$pbSave}}&nbsp;</td>
 		<td>{{$pbPrint}}&nbsp;</td>
+        <td>{{$pbExcel}}&nbsp;</td>
 		<td>{{$pbCancel}}</td>
 	</tr>
 </table>
