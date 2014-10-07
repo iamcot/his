@@ -713,7 +713,7 @@ class Access extends Core {
 		//add 2709 - cot
 	function getDeptFromPersonellID($loginid){
 	global $db;
-	$sql="select a.location_nr from care_personell_assignment a, care_users u where u.personell_nr = a.personell_nr and u.login_id = '$loginid'";
+	$sql="select a.location_nr from care_personell_assignment a, care_users u where u.personell_nr = a.personell_nr  AND a.status != 'deleted' and u.login_id = '$loginid'";
 	if($rs = $db->Execute($sql)){
 		$row= $rs->Fetchrow();
 		$deptnr = $row['location_nr'];
