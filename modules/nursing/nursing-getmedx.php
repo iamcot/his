@@ -746,10 +746,10 @@ function submitMainForm() {
                             else $dateshow=$t_row['date_time_create'];
 
                             echo $calendar->show_calendar($calendar,$date_format,'date',$dateshow);
-                            if(isset($date_time['date_time_create']))
-                            {echo '<input type="text" size="5" id="time" name="time" value="'.@convertTimeToLocal(formatDate2Local($t_row['date_time_create'],$date_format,0,1)).'">';
+                           if(isset($date_time['date_time_create']))
+                            {echo '<input type="text" size="5" id="time1" name="time1" value="'.@convertTimeToLocal(formatDate2Local($t_row['date_time_create'],$date_format,0,1)).'">';
                             }else{
-                                echo '<input type="text" size="5" id="time" name="time" value="'.date("H:i").'">';
+                            echo '<input type="text" size="5" id="time1" name="time1" value="'.date("H:i").'">';
                             }
                             //end gjergji ?>
 
@@ -843,7 +843,7 @@ function submitMainForm() {
 
         <?php echo '<a href="javascript:addPrescription();" ><img style="cursor:pointer;" '. createLDImgSrc($root_path,'add.png','0') . ' title="'.  $LDAdd.'"> '.$LDAdd1.'</a>'; ?>
         <br>
-        <br />
+        <br/>
 
         <table id="prescriptionTable" width="100%">
             <tr>
