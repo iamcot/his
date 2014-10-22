@@ -16,27 +16,27 @@ require_once($root_path.'classes/tcpdf/config/lang/eng.php');
 require_once($root_path.'classes/tcpdf/tcpdf.php');
 include($classpathFPDF.'tfpdf.php');
 $tpdf = new TCPDF('L', 'mm', 'A4', true, 'UTF-8',false);
-    $tpdf->SetTitle("Thống kê bệnh viên");
-    $tpdf->SetAuthor('Vien KH-CN VN - Phong CN Tinh Toan & CN Tri Thuc');
-    $tpdf->SetMargins(5, 8, 3);    
-    // remove default header/footer
-    $tpdf->setPrintHeader(false);
-    $tpdf->setPrintFooter(false);
+$tpdf->SetTitle("Thống kê bệnh viên");
+$tpdf->SetAuthor('Vien KH-CN VN - Phong CN Tinh Toan & CN Tri Thuc');
+$tpdf->SetMargins(5, 8, 3);
+// remove default header/footer
+$tpdf->setPrintHeader(false);
+$tpdf->setPrintFooter(false);
 
-    //set auto page breaks
-    $tpdf->SetAutoPageBreak(FALSE);
-    $tpdf->AddPage('L','A4');
-    $tpdf->SetFont('dejavusans', '', 10);
+//set auto page breaks
+$tpdf->SetAutoPageBreak(FALSE);
+$tpdf->AddPage('L','A4');
+$tpdf->SetFont('dejavusans', '', 10);
 
 switch ($id) {
-	case 'dieutrinoitru':		
-	$khoa = "ĐIỀU TRỊ NỘI TRÚ";
+    case 'dieutrinoitru':
+        $khoa = "ĐIỀU TRỊ NỘI TRÚ";
 
-		break;
+        break;
 
-	default:
-		# code...
-		break;
+    default:
+        # code...
+        break;
 }
 include_once($root_path.'include/care_api_classes/class_department.php');
 $dept_obj= new Department;
@@ -59,134 +59,57 @@ $header_1='<table  >
                 </table>';
 $tpdf->writeHTML($header_1);
 $tpdf->SetFont('dejavusans', '', 10);
-$sql = "SELECT 
-d.nr,  d.LD_var,
-(SELECT COUNT(DISTINCT f1.encounter_nr) 
-    FROM dfck_admit_inout_dept f1 
-    WHERE
-    f1.dept_to = d.nr and f1.dept_to = f1.dept_from AND f1.type_encounter = 1
-    AND DATE_FORMAT(f1.datein,'%Y-%m-%d') >= '".date("Y-m-d",strtotime($datefrom))."' 
-    AND DATE_FORMAT(f1.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."') numvaovien,
-(SELECT COUNT(f2.nr) 
-    FROM dfck_admit_inout_dept f2 
-    WHERE f2.dept_from != f2.dept_to 
-    AND f2.dept_to = d.nr AND f2.type_encounter = 1
-    AND DATE_FORMAT(f2.datein,'%Y-%m-%d') >= '".date("Y-m-d",strtotime($datefrom))."' 
-    AND DATE_FORMAT(f2.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."') numkhoakhacden,
-(SELECT COUNT(DISTINCT f3.encounter_nr) 
-    FROM dfck_admit_inout_dept f3 
-    WHERE f3.dept_to = -1
-    AND f3.dept_from = d.nr AND f3.type_encounter = 1
-    AND DATE_FORMAT(f3.datein,'%Y-%m-%d') >= '".date("Y-m-d",strtotime($datefrom))."' 
-    AND DATE_FORMAT(f3.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."') numravien,
-(SELECT COUNT(DISTINCT f4.encounter_nr) 
-    FROM dfck_admit_inout_dept f4
-    WHERE f4.dept_to = -4
-    AND f4.dept_from = d.nr AND f4.type_encounter = 1
-    AND DATE_FORMAT(f4.datein,'%Y-%m-%d') >= '".date("Y-m-d",strtotime($datefrom))."' 
-    AND DATE_FORMAT(f4.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."') numxinve,
-(SELECT COUNT(f5.nr) 
-    FROM dfck_admit_inout_dept f5 
-    WHERE f5.dept_to = -3
-    AND f5.dept_from = d.nr AND f5.type_encounter = 1
-    AND DATE_FORMAT(f5.datein,'%Y-%m-%d') >='".date("Y-m-d",strtotime($datefrom))."' 
-    AND DATE_FORMAT(f5.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."') numbove,
-(SELECT COUNT(f6.nr) 
-    FROM dfck_admit_inout_dept f6 
-    WHERE f6.dept_to = -5
-    AND f6.dept_from = d.nr AND f6.type_encounter = 1
-    AND DATE_FORMAT(f6.datein,'%Y-%m-%d') >= '".date("Y-m-d",strtotime($datefrom))."' 
-    AND DATE_FORMAT(f6.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."') numduave,
-(SELECT COUNT(f7.nr) 
-    FROM dfck_admit_inout_dept f7 
-    WHERE f7.dept_to >0 AND f7.dept_to != f7.dept_from
-    AND f7.dept_from = d.nr AND f7.type_encounter = 1
-    AND DATE_FORMAT(f7.datein,'%Y-%m-%d') >= '".date("Y-m-d",strtotime($datefrom))."' 
-    AND DATE_FORMAT(f7.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."') numchuyenkhoa,
-(SELECT COUNT(f8.nr) 
-    FROM dfck_admit_inout_dept f8 
-    WHERE f8.dept_to = -2
-    AND f8.dept_from = d.nr AND f8.type_encounter = 1
-    AND DATE_FORMAT(f8.datein,'%Y-%m-%d') >= '".date("Y-m-d",strtotime($datefrom))."' 
-    AND DATE_FORMAT(f8.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."') numchuyenvien,
-(SELECT COUNT(f9.nr) 
-    FROM dfck_admit_inout_dept f9 
-    WHERE f9.dept_to = -6
-    AND f9.dept_from = d.nr AND f9.type_encounter = 1
-    AND DATE_FORMAT(f9.datein,'%Y-%m-%d') >= '".date("Y-m-d",strtotime($datefrom))."' 
-    AND DATE_FORMAT(f9.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."') numtuvong,
-(SELECT COUNT(DISTINCT f10.encounter_nr) 
-    FROM dfck_admit_inout_dept f10
-    WHERE ( ( DATE_FORMAT(f10.datein,'%Y-%m-%d') > '".date("Y-m-d",strtotime($dateto))."' AND f10.dept_from = d.nr 
-        AND ( SELECT DATE_FORMAT(f11.datein,'%Y-%m-%d') 
-        from dfck_admit_inout_dept f11 
-        where f11.encounter_nr = f10.encounter_nr 
-        and f11.dept_to = f10.dept_from  and f11.status=1
-        order by f11.datein DESC limit 0,1 ) < '".date("Y-m-d",strtotime($dateto))."'
-        ) 
-    OR (f10.status=0 AND f10.dept_to = d.nr and DATE_FORMAT(f10.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."'))   
-    AND f10.type_encounter = 1
-    ) numcuoiky,
-(SELECT COUNT(DISTINCT f12.encounter_nr) 
-    FROM dfck_admit_inout_dept f12
-    WHERE ( ( DATE_FORMAT(f12.datein,'%Y-%m-%d') > '".date("Y-m-d",strtotime($datefrom))."' AND f12.dept_from = d.nr 
-        AND ( SELECT DATE_FORMAT(f13.datein,'%Y-%m-%d') 
-        from dfck_admit_inout_dept f13 
-        where f13.encounter_nr = f12.encounter_nr 
-        and f13.dept_to = f12.dept_from   and f13.status=1
-        order by f13.datein DESC limit 0,1 ) < '".date("Y-m-d",strtotime($datefrom))."'
-        ) 
-    OR ( f12.status=0 AND f12.dept_to = d.nr and DATE_FORMAT(f12.datein,'%Y-%m-%d') < '".date("Y-m-d",strtotime($datefrom))."' ) ) AND f12.type_encounter = 1
-        ) numdauky,
-(SELECT 
-    SUM(DATEDIFF((SELECT IF(f14.status = 0,'".date("Y-m-d",strtotime($dateto))."' ,(IF( DATE_FORMAT(f15.datein,'%Y-%m-%d')>'".date("Y-m-d",strtotime($dateto))."','".date("Y-m-d",strtotime($dateto))."',DATE_FORMAT(f15.datein,'%Y-%m-%d'))))
-        FROM dfck_admit_inout_dept f15 
-        WHERE f15.encounter_nr = f14.encounter_nr 
-        AND (( f15.dept_from = f14.dept_to AND f15.nr != f14.nr AND f14.status=1) OR (f14.status=0))
-        AND DATE_FORMAT(f15.datein,'%Y-%m-%d') >= DATE_FORMAT(f14.datein,'%Y-%m-%d')
-        ORDER BY f15.nr ASC LIMIT 0,1
-        ), 
-        IF( DATE_FORMAT(f14.datein,'%Y-%m-%d')<='".date("Y-m-d",strtotime($datefrom))."','".date("Y-m-d",strtotime($datefrom))."',DATE_FORMAT(f14.datein,'%Y-%m-%d'))) + 1 )
-    FROM dfck_admit_inout_dept f14 
-    WHERE (
-    (DATE_FORMAT(f14.datein,'%Y-%m-%d')<='".date("Y-m-d",strtotime($datefrom))."' 
-        AND ( (f14.status=0 AND f14.dept_to = d.nr )
-            OR ( (SELECT f1b.datein FROM dfck_admit_inout_dept f1b 
-                WHERE f1b.encounter_nr=f14.encounter_nr 
-                AND f1b.dept_from = f14.dept_to 
-                AND f1b.status = 1 ORDER BY f1b.nr DESC LIMIT 0,1)>='".date("Y-m-d",strtotime($datefrom))."' )  ) ) 
-    OR (DATE_FORMAT(f14.datein,'%Y-%m-%d')>='".date("Y-m-d",strtotime($datefrom))."' AND DATE_FORMAT(f14.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."')
-    )
-    AND f14.type_encounter = 1
-    AND f14.dept_to = d.nr ) songaydt,
-(SELECT 
-    SUM(DATEDIFF(
-        (SELECT DATE_FORMAT(f15.datein,'%Y-%m-%d')
-        FROM dfck_admit_inout_dept f15 
-        WHERE f15.encounter_nr = f14.encounter_nr 
-        and f15.dept_to < 0 and DATE_FORMAT(f15.datein,'%Y-%m-%d') >= DATE_FORMAT(f14.datein,'%Y-%m-%d') 
-        and DATE_FORMAT(f15.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."'
-        ORDER BY f15.nr ASC LIMIT 0,1
-        ), 
-        IF( DATE_FORMAT(f14.datein,'%Y-%m-%d')<='".date("Y-m-d",strtotime($datefrom))."','".date("Y-m-d",strtotime($datefrom))."',DATE_FORMAT(f14.datein,'%Y-%m-%d'))) + 1 )
-    FROM dfck_admit_inout_dept f14 
-    WHERE (
-    (DATE_FORMAT(f14.datein,'%Y-%m-%d')<='".date("Y-m-d",strtotime($datefrom))."' 
-        AND ( (f14.status=0 AND f14.dept_to = d.nr )
-            OR ( (SELECT f1b.datein FROM dfck_admit_inout_dept f1b 
-                WHERE f1b.encounter_nr=f14.encounter_nr 
-                AND f1b.dept_from = f14.dept_to 
-                AND f1b.status = 1 ORDER BY f1b.nr DESC LIMIT 0,1)>='".date("Y-m-d",strtotime($datefrom))."' )  ) ) 
-    OR (DATE_FORMAT(f14.datein,'%Y-%m-%d')>='".date("Y-m-d",strtotime($datefrom))."' AND DATE_FORMAT(f14.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."')
-    )
-    AND f14.type_encounter = 1
-    AND f14.dept_to = d.nr ) songaydtrv,
+
+$a="SELECT COUNT(DISTINCT t.encounter_nr)
+    FROM (dfck_encounter_transfer AS t   JOIN care_person AS p)   JOIN care_encounter AS e, care_department AS d
+	WHERE (t.pid = p.pid)  AND (e.encounter_nr=t.encounter_nr)
+    AND t.dept_from IN(SELECT care_department.nr  AS nr FROM care_department)AND
+    t.dept_to = d.nr AND t.dept_to = t.dept_from AND t.type_encounter = 1
+    AND DATE_FORMAT(t.datein,'%Y-%m-%d') >= '".date("Y-m-d",strtotime($datefrom))."'
+    AND DATE_FORMAT(t.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."' ";
+$sql="SELECT d.nr, d.LD_var,
+(SELECT COUNT(DISTINCT t.encounter_nr) FROM (dfck_encounter_transfer AS t JOIN care_person AS p) JOIN care_encounter AS e WHERE (t.pid = p.pid) AND (e.encounter_nr=t.encounter_nr) AND t.dept_from IN(SELECT care_department.nr AS nr FROM care_department)AND t.dept_to = d.nr AND t.dept_to = t.dept_from AND t.type_encounter = 1 AND DATE_FORMAT(t.datein,'%Y-%m-%d') >= '".date("Y-m-d",strtotime($datefrom))."' AND DATE_FORMAT(t.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."' ) numvaovien,
+(SELECT COUNT(t.nr) FROM (dfck_encounter_transfer AS t JOIN care_person AS p) JOIN care_encounter AS e WHERE (t.pid = p.pid) AND (e.encounter_nr=t.encounter_nr) AND t.dept_from IN(SELECT care_department.nr AS nr FROM care_department)AND t.dept_from != t.dept_to AND t.dept_to = d.nr AND t.type_encounter = 1 AND DATE_FORMAT(t.datein,'%Y-%m-%d') >= '".date("Y-m-d",strtotime($datefrom))."' AND DATE_FORMAT(t.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."') numkhoakhacden,
+(SELECT COUNT(DISTINCT t.encounter_nr) FROM (dfck_encounter_transfer AS t JOIN care_person AS p) JOIN care_encounter AS e WHERE (t.pid = p.pid) AND (e.encounter_nr=t.encounter_nr) AND t.dept_from IN(SELECT care_department.nr AS nr FROM care_department)AND t.dept_to = -1 AND t.dept_from = d.nr AND t.type_encounter = 1 AND DATE_FORMAT(t.datein,'%Y-%m-%d') >= '".date("Y-m-d",strtotime($datefrom))."' AND DATE_FORMAT(t.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."') numravien,
+(SELECT COUNT(DISTINCT t.encounter_nr) FROM (dfck_encounter_transfer AS t JOIN care_person AS p) JOIN care_encounter AS e WHERE (t.pid = p.pid) AND (e.encounter_nr=t.encounter_nr) AND t.dept_from IN(SELECT care_department.nr AS nr FROM care_department)AND t.dept_to = -4 AND t.dept_from = d.nr AND t.type_encounter = 1 AND DATE_FORMAT(t.datein,'%Y-%m-%d') >= '".date("Y-m-d",strtotime($datefrom))."' AND DATE_FORMAT(t.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."') numxinve,
+(SELECT COUNT(t.nr) FROM (dfck_encounter_transfer AS t JOIN care_person AS p) JOIN care_encounter AS e WHERE (t.pid = p.pid) AND (e.encounter_nr=t.encounter_nr) AND t.dept_from IN(SELECT care_department.nr AS nr FROM care_department)AND t.dept_to = -3 AND t.dept_from = d.nr AND t.type_encounter = 1 AND DATE_FORMAT(t.datein,'%Y-%m-%d') >='".date("Y-m-d",strtotime($datefrom))."' AND DATE_FORMAT(t.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."') numbove,
+(SELECT COUNT(t.nr) FROM (dfck_encounter_transfer AS t JOIN care_person AS p) JOIN care_encounter AS e WHERE (t.pid = p.pid) AND (e.encounter_nr=t.encounter_nr) AND t.dept_from IN(SELECT care_department.nr AS nr FROM care_department)AND t.dept_to = -5 AND t.dept_from = d.nr AND t.type_encounter = 1 AND DATE_FORMAT(t.datein,'%Y-%m-%d') >= '".date("Y-m-d",strtotime($datefrom))."' AND DATE_FORMAT(t.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."') numduave,
+(SELECT COUNT(t.nr) FROM (dfck_encounter_transfer AS t JOIN care_person AS p) JOIN care_encounter AS e WHERE (t.pid = p.pid) AND (e.encounter_nr=t.encounter_nr) AND t.dept_from IN(SELECT care_department.nr AS nr FROM care_department)AND t.dept_to >0 AND t.dept_to != t.dept_from AND t.dept_from = d.nr AND t.type_encounter = 1 AND DATE_FORMAT(t.datein,'%Y-%m-%d') >= '".date("Y-m-d",strtotime($datefrom))."' AND DATE_FORMAT(t.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."') numchuyenkhoa,
+(SELECT COUNT(t.nr) FROM (dfck_encounter_transfer AS t JOIN care_person AS p) JOIN care_encounter AS e WHERE (t.pid = p.pid) AND (e.encounter_nr=t.encounter_nr) AND t.dept_from IN(SELECT care_department.nr AS nr FROM care_department)AND t.dept_to = -2 AND t.dept_from = d.nr AND t.type_encounter = 1 AND DATE_FORMAT(t.datein,'%Y-%m-%d') >= '".date("Y-m-d",strtotime($datefrom))."' AND DATE_FORMAT(t.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."') numchuyenvien,
+(SELECT COUNT(t.nr) FROM (dfck_encounter_transfer AS t JOIN care_person AS p) JOIN care_encounter AS e WHERE (t.pid = p.pid) AND (e.encounter_nr=t.encounter_nr) AND t.dept_from IN(SELECT care_department.nr AS nr FROM care_department)AND t.dept_to = -6 AND t.dept_from = d.nr AND t.type_encounter = 1 AND DATE_FORMAT(t.datein,'%Y-%m-%d') >= '".date("Y-m-d",strtotime($datefrom))."' AND DATE_FORMAT(t.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."') numtuvong,
+(SELECT COUNT(DISTINCT t.encounter_nr) FROM (dfck_encounter_transfer AS t JOIN care_person AS p) JOIN care_encounter AS e WHERE (t.pid = p.pid) AND (e.encounter_nr=t.encounter_nr) AND t.dept_from IN(SELECT care_department.nr AS nr FROM care_department)AND ( ( DATE_FORMAT(t.datein,'%Y-%m-%d') > '".date("Y-m-d",strtotime($dateto))."' AND t.dept_from = d.nr AND ( SELECT DATE_FORMAT(t1.datein,'%Y-%m-%d') FROM (dfck_encounter_transfer AS t1 JOIN care_person AS p) JOIN care_encounter AS e WHERE (t.pid = p.pid) AND (e.encounter_nr=t.encounter_nr) AND t.dept_from IN(SELECT care_department.nr AS nr FROM care_department)AND t.encounter_nr = t1.encounter_nr AND t1.dept_to = t.dept_from AND t1.status=1 ORDER BY t1.datein DESC LIMIT 0,1 ) < '".date("Y-m-d",strtotime($dateto))."' ) OR (t.status=0 AND t.dept_to = d.nr AND DATE_FORMAT(t.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."')) AND t.type_encounter = 1 ) numcuoiky,
+(SELECT COUNT(DISTINCT t.encounter_nr)
+	FROM (dfck_encounter_transfer AS t JOIN care_person AS p) JOIN care_encounter AS e
+	WHERE (t.pid = p.pid) AND (e.encounter_nr=t.encounter_nr) AND t.dept_from IN(SELECT care_department.nr AS nr FROM care_department)
+		AND ( ( DATE_FORMAT(t.datein,'%Y-%m-%d') > '".date("Y-m-d",strtotime($datefrom))."' AND t.dept_from = d.nr
+			AND ( SELECT DATE_FORMAT(t1.datein,'%Y-%m-%d') FROM (dfck_encounter_transfer AS t1 JOIN care_person AS p) JOIN care_encounter AS e
+				WHERE (t.pid = p.pid) AND (e.encounter_nr=t.encounter_nr) AND t.dept_from IN(SELECT care_department.nr AS nr FROM care_department)
+				AND t1.encounter_nr = t.encounter_nr AND t1.dept_to = t.dept_from AND t1.status=1 ORDER BY t1.datein DESC LIMIT 0,1 ) < '".date("Y-m-d",strtotime($datefrom))."' )
+			OR ( t.status=0 AND t.dept_to = d.nr AND DATE_FORMAT(t.datein,'%Y-%m-%d') < '".date("Y-m-d",strtotime($datefrom))."' ) )
+		AND t.type_encounter = 1  ) numdauky,
+
+
+(SELECT SUM(DATEDIFF((SELECT IF(t1.status = 0,'".date("Y-m-d",strtotime($dateto))."' ,(IF( DATE_FORMAT (t.datein,'%Y-%m-%d')>'".date("Y-m-d",strtotime($dateto))."','".date("Y-m-d",strtotime($dateto))."',DATE_FORMAT(t.datein,'%Y-%m-%d'))))
+					FROM (dfck_encounter_transfer AS t   JOIN care_person AS p)   JOIN care_encounter AS e, care_department AS d
+					WHERE (t.pid = p.pid)  AND (e.encounter_nr=t.encounter_nr) AND t.dept_from IN(SELECT care_department.nr  AS nr FROM care_department) AND t.encounter_nr = t1.encounter_nr
+						AND (( t.dept_from = t1.dept_to AND t.nr != t1.nr AND t1.status=1) OR (t1.status=0))AND DATE_FORMAT(t.datein,'%Y-%m-%d') >= DATE_FORMAT(t1.datein,'%Y-%m-%d')
+					ORDER BY t.nr ASC LIMIT 0,1 ), IF( DATE_FORMAT(t1.datein,'%Y-%m-%d')<='".date("Y-m-d",strtotime($datefrom))."','".date("Y-m-d",strtotime($datefrom))."',DATE_FORMAT(t1.datein,'%Y-%m-%d'))) + 1 )
+	FROM (dfck_encounter_transfer AS t1   JOIN care_person AS p)   JOIN care_encounter AS e, care_department AS d
+	WHERE (t1.pid = p.pid)  AND (e.encounter_nr=t1.encounter_nr)AND t1.dept_from IN(SELECT care_department.nr  AS nr FROM care_department)	AND ( (	DATE_FORMAT(t1.datein,'%Y-%m-%d')<='".date("Y-m-d",strtotime($datefrom))."'
+			AND ((t1.status=0 AND t1.dept_to = d.nr ) OR ( (SELECT t2.datein FROM (dfck_encounter_transfer AS t2   JOIN care_person AS p)   JOIN care_encounter AS e, care_department AS d				WHERE (t2.pid = p.pid)  AND (e.encounter_nr=t2.encounter_nr)
+						AND t2.dept_from IN(SELECT care_department.nr  AS nr FROM care_department)AND t2.encounter_nr=t1.encounter_nr AND t2.dept_from = t1.dept_to AND t2.status = 1 ORDER BY t2.nr DESC LIMIT 0,1)>='".date("Y-m-d",strtotime($datefrom))."' ) ) )
+		OR (DATE_FORMAT(t1.datein,'%Y-%m-%d')>='".date("Y-m-d",strtotime($datefrom))."' AND DATE_FORMAT(t1.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."') )     AND t1.type_encounter = 1 AND t1.dept_to = d.nr ) songaydt,
+(SELECT SUM(DATEDIFF( (SELECT DATE_FORMAT(t.datein,'%Y-%m-%d') FROM (dfck_encounter_transfer AS t   JOIN care_person AS p)   JOIN care_encounter AS e, care_department AS d
+	WHERE (t.pid = p.pid)  AND (e.encounter_nr=t.encounter_nr)
+    AND t.dept_from IN(SELECT care_department.nr  AS nr FROM care_department)AND t.encounter_nr = t1.encounter_nr AND t.dept_to < 0 AND DATE_FORMAT(t.datein,'%Y-%m-%d') >= DATE_FORMAT(t1.datein,'%Y-%m-%d') AND DATE_FORMAT(t.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."' ORDER BY t.nr ASC LIMIT 0,1 ), IF( DATE_FORMAT(t1.datein,'%Y-%m-%d')<='".date("Y-m-d",strtotime($datefrom))."','".date("Y-m-d",strtotime($datefrom))."',DATE_FORMAT(t1.datein,'%Y-%m-%d'))) + 1 ) FROM (dfck_encounter_transfer AS t1   JOIN care_person AS p)   JOIN care_encounter AS e, care_department AS d
+	WHERE (t1.pid = p.pid)  AND (e.encounter_nr=t1.encounter_nr)
+    AND t1.dept_from IN(SELECT care_department.nr  AS nr FROM care_department)AND ( (DATE_FORMAT(t1.datein,'%Y-%m-%d')<='".date("Y-m-d",strtotime($datefrom))."' AND ( (t1.status=0 AND t1.dept_to = d.nr ) OR ( (SELECT t2.datein FROM (dfck_encounter_transfer AS t2   JOIN care_person AS p)   JOIN care_encounter AS e, care_department AS d
+	WHERE (t2.pid = p.pid)  AND (e.encounter_nr=t2.encounter_nr)
+    AND t2.dept_from IN(SELECT care_department.nr  AS nr FROM care_department)AND t2.encounter_nr=t1.encounter_nr AND t2.dept_from = t1.dept_to AND t2.status = 1 ORDER BY t2.nr DESC LIMIT 0,1)>='".date("Y-m-d",strtotime($datefrom))."' ) ) ) OR (DATE_FORMAT(t1.datein,'%Y-%m-%d')>='".date("Y-m-d",strtotime($datefrom))."' AND DATE_FORMAT(t1.datein,'%Y-%m-%d') <= '".date("Y-m-d",strtotime($dateto))."') ) AND t1.type_encounter = 1 AND t1.dept_to = d.nr ) songaydtrv,
 d.name_formal
 FROM care_department d
 WHERE d.type = 1
-ORDER BY d.nr
-";
-//echo $sql;
+ORDER BY d.nr";
 $header_2 = '<tr>
                 <td rowspan="2" align="center" width="20%"><br><br>KHOA</td>
                 <td rowspan="2" align="center" width="5%">BN<br> đầu<br> kỳ</td>
@@ -207,7 +130,7 @@ $header_2 = '<tr>
                 <td align="center" width="5%">Tử<br>vong</td>
             </tr>
             ';
-            $content="";
+$content="";
 global $db;
 $s1=$s2=$s3=$s4=$s5=$s6=$s7=$s8=$s9=$s10=$s11=$s12=$s13=0;
 if($qr = $db->Execute($sql)){
